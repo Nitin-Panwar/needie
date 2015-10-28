@@ -1,0 +1,98 @@
+<!-- top level section -->
+<section>
+	<!-- Search bar section -->
+	<section>		
+		<input type="text" class="form-control" ng-model="searchedItem" placeholder="search by metric, workflow OR discovery board e.g. Incident, MTTR" typeahead="item as item.name for item in searchableItems() | filter:{name:$viewValue}" typeahead-template-url="app/explore/search_template.html"  typeahead-min-length=2 typeahead-on-select="placeholderAdd($item)">
+	</section>
+
+	<!-- temporary Placeholder area -->
+	<section>
+		<!-- section for workflow -->
+		<p></p>
+		<section ng-repeat="item in placeholder['workflow']">
+			<section class="panel panel-default">
+				<section class="panel-heading">
+					<h3 class="panel-title pull-left">
+						{{item.name | uppercase}}						
+					</h3>
+					<span type="" class="btn pull-right intelicon-close-outlined" ng-click="placeholderRemove(item, 'workflow')"></span>
+					<section class="clearfix"></section>
+				</section>
+				<section class="panel-body">
+					<ul class="list-inline">
+						<li ng-repeat="metricID in item['metric']"><a class="btn btn-default" ng-click="showworkflowmetric(metricID)">{{getmetricById(metricID).name}}</a></li>
+					</ul>
+				</section>
+			</section>	
+		</section>
+
+		<!-- section for placeholder metrics -->
+		<section class="block-border container-fluid" ng-if="placeholder['metric'].length > 0">
+			<section class="row">
+				<section class="pull-right btn-group">					
+					<button type="button" class="btn btn-primary btn-priority"><i class="glyphicon glyphicon-floppy-save" ng-click="createDBoard('sm')" bs-modal="modal" data-toggle="tooltip" data-placement="top" title="Save As Dashboard"></i></button>	
+					<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Separator"><i class="glyphicon glyphicon-minus" ng-click="addSeparator()"></i></button>	
+					<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Text Box"><i class="glyphicon glyphicon-font" ng-click="addTextBoxes()" placeholder="Add Text Box"></i></button>						
+				</section>	
+			</section>				
+			<section class="row">&nbsp;</section>
+
+			<!-- Dashboard Section -->
+			<section class="row-fluid center-block text-center metric-card" gridster="SASAgridsterOpts">
+				<!-- This section provides separator for gridster -->
+				<section class="" gridster-item ng-repeat="item in placeholder.separators" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">		
+					<hr style="height:5px;border:none;color:#333;background-color:#333;" NOSHADE class="mover-handle">
+				</section>
+
+				<!--  -->
+				<section class="" gridster-item ng-repeat="item in placeholder.textBoxes" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">						
+					<a href="#" editable-textarea="item.text" e-rows="7" e-cols="40" class="mover-handle">
+						{{ item.text || 'Text Goes Here' }}
+					</a>
+				</section>
+
+				<!-- Add metrics in placeholder area -->
+				<section class="panel panel-primary" gridster-item ng-repeat="item in placeholder['metric']" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="10" >
+					<section class="panel-heading inline">						
+						<h3 class="panel-title">
+							<!-- <section class="pull-left"> -->
+								<span class="glyphicon glyphicon-move pull-left mover-handle"></span>
+								<span>{{item.name}}</span>
+						<!-- </h3> -->
+							<!-- </section>													 -->
+							<section class="pull-right btn-group">								
+								<a><span class="glyphicon glyphicon-cog metric-card-btn"></span></a>
+								&nbsp;&nbsp;
+								<a><span class="glyphicon glyphicon-fullscreen metric-card-btn"></span></a>
+							</section>
+						</h3>
+					</section>
+					<!-- metric Card Body -->
+					<section class="panel-body">
+						<!-- {{item | json}} -->
+					<!-- 	<section ng-repeat="(key, value) in item.items">
+							
+						</section> -->
+						<!-- <section class="panel panel-primary" ng-repeat="(key, value) in item.items" gridster-item="key" col="key"> -->
+							<!-- <section class="panel-heading"> -->
+								<!-- {{key}} -->
+							<!-- </section> -->
+							<!-- <section class="panel-body"> -->
+								<!-- {{metricvalue | json}} -->
+								<!-- {{value | json}} -->
+								{{item | json}}								
+							<!-- </section> -->
+						<!-- </section> -->
+					</section>
+				</section>
+			</section>
+			
+		</section>
+		
+	</section>
+	
+</section>
+
+
+
+

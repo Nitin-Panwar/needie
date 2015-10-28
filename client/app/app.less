@@ -1,0 +1,37 @@
+@import 'bootstrap/less/bootstrap.less';
+@import 'font-awesome/less/font-awesome.less';
+
+@icon-font-path: '/bower_components/bootstrap/fonts/';
+@fa-font-path: '/bower_components/font-awesome/fonts';
+
+// injector
+@import 'admin/admin.less';
+@import 'admin/dataSet/dataSet.less';
+@import 'admin/dataSource/dataSource.less';
+@import 'explore/explore.less';
+@import 'main/main.less';
+@import 'modal/modal.less';
+// endinjector
+// 
+/**
+ * Below styles are used to emphasise a particular button.
+ * It brings attention to a particular button
+ */
+.btn-priority {
+  animation: glowing 1500ms infinite;
+}
+
+@keyframes glowing {
+  0% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+  50% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
+  100% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+}
+
+// injector
+@import 'admin/admin.less';
+@import 'admin/dataSet/dataSet.less';
+@import 'admin/dataSource/dataSource.less';
+@import 'explore/explore.less';
+@import 'main/main.less';
+@import 'modal/modal.less';
+// endinjector

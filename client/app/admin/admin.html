@@ -1,0 +1,15 @@
+<section class="col-md-12 row">
+	<section class="col-md-12" style="border-width: 1px; border-color: #0071C5">
+		<ul class="nav nav-tabs nav-tabs-intel nav-justified" role="tablist">
+		  <li ng-click="listDataSources()" ng-class="{'active': showDataSource}"><a href="#" role="tab" data-toggle="tab">Data Sources</a></li>
+		  <li ng-click="listDataSets()" ng-class="{'active': showDataSet}"><a href="#" role="tab" data-toggle="tab">Data Sets</a></li>  
+		</ul>
+
+	</section>
+	<section class="col-md-12">
+		<waitloader ng-show="waitLoader"></waitloader>
+		<span ng-include="'app/admin/dataSourceList.html'" ng-show="showDataSource"></span>
+		<span ng-include="'app/admin/dataSetList.html'" ng-show="showDataSet"></span>
+		<pre class="" ng-show="!defaultview">Select above tabs for details</pre>
+	</section>	
+</section>

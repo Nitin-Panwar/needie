@@ -1,0 +1,151 @@
+<section class="col-md-12 row">
+	<section class="">
+		<header class="title-bar intel-border-blue intel-bg-light col-md-12">
+			<span class="title-bar-title">Data Sets</span>	
+			<a href="/addDataSet" class="btn btn-primary pull-right" style="margin-top: 5px;">Create New</a>
+		</header>		
+	</section>
+
+	<!-- Data Set Details -->
+	<section class="col-md-12">		
+		<!-- Select Dataset -->
+ 		<form class="form-horizontal">
+			<div class="form-group">
+				<label for="datasetbox" class="col-md-3 control-label">Select DataSet</label>	
+				<section class="col-md-9">
+					<select ng-options="dataSet.dataSet_name for dataSet in dataSets" ng-model="selectedDataSet" class="form-control" id="datasetbox"></select>	
+				</section>			
+			</div>
+ 		</form>
+ 		
+		<!-- Dataset properties -->
+		<section ng-if="selectedDataSet">
+			<fieldset >
+				<legend>{{selectedDataSet.dataSet_name}} Properties</legend>
+				<section class="btn-group">
+					<button type="" class="btn btn-default" ng-click="sampledata = true">Sample Data</button>
+					<button type="" class="btn btn-default" ng-click="dataprofile = true">Data Profile</button>			
+					<button type="" class="btn btn-default" ng-click="ershow = true">Entity Relationships</button>
+					<button type="" class="btn btn-default" ng-click="datamassage = true">Data Massaging</button>
+					<button type="" class="btn btn-default" ng-click="dqshow = true">Data Quality</button>
+					<button type="" class="btn btn-default" ng-click="hrshow = true">Hierarchies</button>
+					<button type="" class="btn btn-default" ng-click="kpishow = true">KPIs</button>
+				</section>
+				<p></p>
+				<section>
+					<fieldset ng-show="sampledata">
+						<section class="row">
+							<section class="col-sm-11">
+								<legend>Sample Data</legend>	
+							</section>
+							<section class="col-sm-1">								
+								<button type="button" class="btn btn-danger" ng-click="sampledata = false"><i class="intelicon-close-outlined danger"></i> Close</button>
+							</section>
+						</section>
+						
+					</fieldset>
+					<fieldset ng-show="dataprofile">
+						<section class="row">
+							<section class="col-sm-11">
+								<legend>Data Profile</legend>	
+							</section>
+							<section class="col-sm-1">								
+								<button type="button" class="btn btn-danger" ng-click="dataprofile = false"><i class="intelicon-close-outlined danger"></i> Close</button>
+							</section>
+						</section>
+					</fieldset>			
+					<fieldset ng-show="ershow">
+						<section class="row">
+							<section class="col-sm-11">
+								<legend>Entity Relationships</legend>	
+							</section>
+							<section class="col-sm-1">								
+								<button type="button" class="btn btn-danger" ng-click="ershow = false"><i class="intelicon-close-outlined danger"></i> Close</button>
+							</section>
+						</section>						
+					</fieldset>
+					<fieldset ng-show="datamassage">
+						<section class="row">
+							<section class="col-sm-11">
+								<legend>Data Massaging</legend>	
+							</section>
+							<section class="col-sm-1">								
+								<button type="button" class="btn btn-danger" ng-click="datamassage = false"><i class="intelicon-close-outlined danger"></i> Close</button>
+							</section>
+						</section>						
+					</fieldset>
+					<fieldset ng-show="dqshow">
+						<section class="row">
+							<section class="col-sm-11">
+								<legend>Data Quality</legend>	
+							</section>
+							<section class="col-sm-1">								
+								<button type="button" class="btn btn-danger" ng-click="dqshow = false"><i class="intelicon-close-outlined danger"></i> Close</button>
+							</section>
+						</section>						
+					</fieldset>
+					<fieldset ng-show="hrshow">
+						<section class="row">
+							<section class="col-sm-11">
+								<legend>Hierarchies</legend>	
+							</section>
+							<section class="col-sm-1">								
+								<button type="button" class="btn btn-danger" ng-click="hrshow = false"><i class="intelicon-close-outlined danger"></i> Close</button>
+							</section>
+						</section>						
+					</fieldset>
+					<fieldset ng-show="kpishow">
+						<section class="row">
+							<section class="col-sm-11">
+								<legend>KPIs</legend>	
+							</section>
+							<section class="col-sm-1">								
+								<button type="button" class="btn btn-danger" ng-click="kpishow = false"><i class="intelicon-close-outlined danger"></i> Close</button>
+							</section>
+						</section>
+					</fieldset>
+				</section>
+			</fieldset>
+			<fieldset>
+				<legend>{{selectedDataSet.dataSet_name}} Jobs</legend>
+				<section>			
+					<p><button type="" class="btn btn-primary clearfix" ng-click="addjob = true">Add Job</button></p>			
+					<form class="form-inline">
+						<fieldset ng-show="addjob" >
+							<legend>Select Job Type</legend>
+							<section class="form-group">						
+								<select name="jobtype" class="form-control">
+									<option value="1">Sentiment Analysis</option>							
+								</select>					
+								<section class="form-group">
+									<button type="" class="btn btn-success" ng-click="addjob = false">Save</button>	
+									<button type="" class="btn btn-warning" ng-click="addjob = false">Cancel</button>	
+								</section>					
+							</section>
+						</fieldset>	
+					</form>
+					<ul class="list-group clearfix">
+						<li class="list-group-item">
+							<label>Sentiment Analysis : Column1</label>
+							<section class="btn-group pull-right">
+								<button type="" class="btn btn-default">Expand</button>
+								<button type="" class="btn btn-default">Delete</button>
+								<button type="" class="btn btn-default">Schedule</button>
+								<button type="" class="btn btn-default">Subscribe</button>
+							</section>
+						</li>
+						<li class="list-group-item">
+							<label>Sentiment Analysis : Column2</label>
+							<section class="btn-group pull-right">
+								<button type="" class="btn btn-default">Expand</button>
+								<button type="" class="btn btn-default">Delete</button>
+								<button type="" class="btn btn-default">Schedule</button>
+								<button type="" class="btn btn-default">Subscribe</button>
+							</section>
+						</li>
+					</ul>
+				</section>
+			</fieldset>
+		</section>
+	</section>
+</section>
