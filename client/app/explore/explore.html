@@ -30,7 +30,7 @@
 		<section class="block-border container-fluid" ng-if="placeholder['metric'].length > 0">
 			<section class="row">
 				<section class="pull-right btn-group">					
-					<button type="button" class="btn btn-primary btn-priority"><i class="glyphicon glyphicon-floppy-save" ng-click="createDBoard('sm')" bs-modal="modal" data-toggle="tooltip" data-placement="top" title="Save As Dashboard"></i></button>	
+					<button type="button" class="btn btn-primary btn-priority"><i class="glyphicon glyphicon-floppy-save" ng-click="createDBoard()" data-toggle="tooltip" data-placement="top" title="Save As Dashboard"></i></button>	
 					<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Separator"><i class="glyphicon glyphicon-minus" ng-click="addSeparator()"></i></button>	
 					<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Text Box"><i class="glyphicon glyphicon-font" ng-click="addTextBoxes()" placeholder="Add Text Box"></i></button>						
 				</section>	
@@ -54,12 +54,9 @@
 				<!-- Add metrics in placeholder area -->
 				<section class="panel panel-primary" gridster-item ng-repeat="item in placeholder['metric']" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="10" >
 					<section class="panel-heading inline">						
-						<h3 class="panel-title">
-							<!-- <section class="pull-left"> -->
+						<h3 class="panel-title">		
 								<span class="glyphicon glyphicon-move pull-left mover-handle"></span>
-								<span>{{item.name}}</span>
-						<!-- </h3> -->
-							<!-- </section>													 -->
+								<span>{{item.name}}</span>		
 							<section class="pull-right btn-group">								
 								<a><span class="glyphicon glyphicon-cog metric-card-btn"></span></a>
 								&nbsp;&nbsp;
@@ -90,6 +87,16 @@
 		</section>
 		
 	</section>
+
+
+	<!-- Dashboard area -->
+	<ul gridster="SASAgridsterOpts">
+		<li gridster-item ng-repeat="item in placeholder['DBoard']" ow="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">
+			<pre>
+				{{item | json}}
+			</pre>			
+		</li>
+	</ul>
 	
 </section>
 

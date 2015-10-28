@@ -14,12 +14,10 @@ angular.module('sasaWebApp')
           'app/service_mgmt_measurement/tempImages/totalMI.png',
           'app/service_mgmt_measurement/tempImages/MIByQtr.png'
         ],
-        size: { x: 4, y: 3 },
-        position: [0, 0]
+        size: { x: 4, y: 3 }        
       },
       {name:'Mean Time To Resolve', alias:'MTTR', id:2,
-        size: { x: 2, y: 1 },
-        position: [0, 0]
+        size: { x: 2, y: 1 }        
       },
       {name: 'Business Severity Impact', alias:'BSI', id:3},
       {name:'Business Recovery Time', id:4},
@@ -55,7 +53,6 @@ angular.module('sasaWebApp')
      * @type {Object}
      */
     $scope.placeholder = {metric: [], workflow: [], DBoard: null, separators: [], textBoxes: []};    
-    $scope.textBoxes = [];
     
     /**
      * This function adds searched metric and workflow items in the placeholder
@@ -121,8 +118,33 @@ angular.module('sasaWebApp')
      * This function creates Discovery Board
      * @return {[type]} [description]
      */
-    $scope.createDBoard = function (argument) {
-      $scope.modal = {title: 'Distinct Values', content: 'Please Wait...'};
+    $scope.createDBoard = function () {
+      console.info('working');
+      var obj = [];
+
+      // first handle metrics
+      for (var i = 0; i < $scope.placeholder.metric.length; i++) {
+        var metric = $scope.placeholder.metric[i];
+        metric.type = 'metric';
+        obj.push(metric);
+      };
+      // second handle separators
+      for (var i = 0; i < $scope.placeholder.separators.length; i++) {
+        var separator = $scope.placeholder.separators[i];
+        separator.type = 'separator';
+        obj.push(separator);
+      };
+      // third handle textboxes
+      for (var i = 0; i < $scope.placeholder.textBoxes.length; i++) {
+        var textBox = $scope.placeholder.textBoxes[i];
+        textBox.type = 'textBox';
+        obj.push(textBox);
+      };
+
+      // make it a dashboard
+      $scope.placeholder = {metric: [], workflow: [], DBoard: null, separators: [], textBoxes: []};
+      $scope.placeholder.DBoard = obj;
+      console.info($scope.placeholder.DBoard);
     };
 
     /**
@@ -131,8 +153,8 @@ angular.module('sasaWebApp')
     $scope.addSeparator = function () {
       var obj = {
           size: { x: 6, y: 3 },
-          position: [0, 0],
-          type: 'separator'
+          // position: [0, 0],
+          // type: 'separator'
         };
       $scope.placeholder.separators.push(obj);
     };
@@ -143,8 +165,7 @@ angular.module('sasaWebApp')
     $scope.addTextBoxes = function () {
       var obj = {
           size: { x: 1, y: 8 },
-          position: [0, 0],
-          type: 'textbox',
+          // position: [0, 0],          
           text: null
         };
       $scope.placeholder.textBoxes.push(obj);
