@@ -27,7 +27,7 @@
 		</section>
 
 		<!-- section for placeholder metrics -->
-		<section class="block-border container-fluid" ng-if="placeholder['metric'].length > 0">
+		<section class="container-fluid" ng-if="placeholder['metric'].length > 0">
 			<section class="row">
 				<section class="pull-right btn-group">					
 					<button type="button" class="btn btn-primary btn-priority"><i class="glyphicon glyphicon-floppy-save" ng-click="createDBoard()" data-toggle="tooltip" data-placement="top" title="Save As Dashboard"></i></button>	
@@ -40,47 +40,20 @@
 			<!-- Dashboard Section -->
 			<section class="row-fluid center-block text-center metric-card" gridster="SASAgridsterOpts">
 				<!-- This section provides separator for gridster -->
-				<section class="" gridster-item ng-repeat="item in placeholder.separators" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">		
-					<hr style="height:5px;border:none;color:#333;background-color:#333;" NOSHADE class="mover-handle">
+				<section class="" gridster-item ng-repeat="item in placeholder.separators" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">
+					<section dashboard-separator></section>
 				</section>
 
 				<!--  -->
-				<section class="" gridster-item ng-repeat="item in placeholder.textBoxes" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">						
-					<a href="#" editable-textarea="item.text" e-rows="7" e-cols="40" class="mover-handle">
+				<section class="" gridster-item ng-repeat="item in placeholder.textBoxes" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">
+					<a href="#" editable-textarea="item.text" e-rows="7" e-cols="10" class="mover-handle">
 						{{ item.text || 'Text Goes Here' }}
 					</a>
 				</section>
 
 				<!-- Add metrics in placeholder area -->
-				<section class="panel panel-primary" gridster-item ng-repeat="item in placeholder['metric']" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="10" >
-					<section class="panel-heading inline">						
-						<h3 class="panel-title">		
-								<span class="glyphicon glyphicon-move pull-left mover-handle"></span>
-								<span>{{item.name}}</span>		
-							<section class="pull-right btn-group">								
-								<a><span class="glyphicon glyphicon-cog metric-card-btn"></span></a>
-								&nbsp;&nbsp;
-								<a><span class="glyphicon glyphicon-fullscreen metric-card-btn"></span></a>
-							</section>
-						</h3>
-					</section>
-					<!-- metric Card Body -->
-					<section class="panel-body">
-						<!-- {{item | json}} -->
-					<!-- 	<section ng-repeat="(key, value) in item.items">
-							
-						</section> -->
-						<!-- <section class="panel panel-primary" ng-repeat="(key, value) in item.items" gridster-item="key" col="key"> -->
-							<!-- <section class="panel-heading"> -->
-								<!-- {{key}} -->
-							<!-- </section> -->
-							<!-- <section class="panel-body"> -->
-								<!-- {{metricvalue | json}} -->
-								<!-- {{value | json}} -->
-								{{item | json}}								
-							<!-- </section> -->
-						<!-- </section> -->
-					</section>
+				<section gridster-item ng-repeat="item in placeholder['metric']" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="10" >
+					<section metric-card metric-id="metricId1234"></section>
 				</section>
 			</section>
 			

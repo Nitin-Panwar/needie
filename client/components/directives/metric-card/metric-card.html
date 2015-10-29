@@ -1,0 +1,33 @@
+<section ng-model="metricModel">	
+	<section class="panel panel-default">
+		<section class="panel-heading">
+			<ul class="panel-title list-inline">
+				<li class="pull-left"><span class="glyphicon glyphicon-move pull-left mover-handle"></span></li>
+				<li class=""><span>{{metricId}}</span></li>
+				<li class="btn-group pull-right metric-card-btn-group">
+					<a><span class="glyphicon glyphicon-cog btn metric-card-btn"></span></a>									
+					<a><span class="glyphicon glyphicon-remove-sign btn metric-card-btn"></span></a>
+				</li>
+			</ul>		
+		</section>
+	<!-- metric Card Body -->
+	<section class="panel-body">
+		<!-- {{item | json}} -->
+	<!-- 	<section ng-repeat="(key, value) in item.items">
+			
+		</section> -->
+		<!-- <section class="panel panel-primary" ng-repeat="(key, value) in item.items" gridster-item="key" col="key"> -->
+			<!-- <section class="panel-heading"> -->
+				<!-- {{key}} -->
+			<!-- </section> -->
+			<!-- <section class="panel-body"> -->
+				<!-- {{metricvalue | json}} -->
+				<!-- {{value | json}} -->
+				{{metricId | json}}								
+			<!-- </section> -->
+		<!-- </section> -->
+	</section>
+	</section>
+
+</section>
+
