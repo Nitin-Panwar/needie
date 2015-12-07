@@ -12,6 +12,7 @@ angular.module('sasaWebApp')
        */
       $scope.save = function(){
       	$rootScope.placeholder.dashboard.name = data.name;
+        $rootScope.placeholder.dashboard.description = data.description;
         parentService.createDBoard();
         $scope.cancel();
       };

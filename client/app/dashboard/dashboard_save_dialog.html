@@ -5,7 +5,11 @@
 	<pre class="bg-danger" ng-if="data.name === OldName">Give a new name to save as another copy.</pre>
 	<div>
 		<input type="text" placeholder="Dashboard Name" class="form-control" ng-model="data.name">
-	</div>		
+	</div>	
+	<br>
+	<div>
+		<textarea placeholder="Dashboard Description" ng-model="data.description" class="form-control"></textarea>		
+	</div>	
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-primary" ng-click="save()">Save</button>

@@ -22,6 +22,20 @@ angular.module('sasaWebApp')
     	};
 
     	/**
+    	 * this function removes an item from placeholder
+    	 * @param  {[type]} type [description]
+    	 * @param  {[type]} item [description]
+    	 * @return {[type]}      [description]
+    	 */
+    	this.placeholderRemove = function (type, item) {    		
+    		if(type === 'metric'){
+    			var index = $rootScope.placeholder.metric.indexOf(item);    			
+    			$rootScope.placeholder.metric.splice(index, 1);
+    			messageCenterService.add('success','Removed from dashboard',{timeout: 3000})
+    		}
+    	}
+
+    	/**
     	 * [createDBoard description]
     	 * @return {[type]} [description]
     	 */
@@ -41,16 +55,14 @@ angular.module('sasaWebApp')
 	      };
 
 	      dashboardObj.name = $rootScope.placeholder.dashboard.name;
+	      dashboardObj.description = $rootScope.placeholder.dashboard.description;
 	      dashboardObj.filters = $rootScope.globalQuery;
 	      dashboardObj.version = $rootScope.placeholder.dashboardVersion + 1;
 
 	      //Checking if the request is coming for update or create new.
-	      if($rootScope.placeholder.dashboard._id){
-	                
-	        //Creating temporary dashboard dict to save in mongo
-	        dashboardObj.dashboardId = $rootScope.placeholder.dashboard._id;
-	        console.info(dashboardObj);	        
-	      	
+	      if($rootScope.placeholder.dashboard._id){	  
+	      	dashboardObj._id = $rootScope.placeholder.dashboard._id;
+
 	        //Calling update dashboard factory service
 	        $rootScope.myPromise=dashBoardsFactory.update({dashBoard:dashboardObj}).$promise.then(function (data){
 	        	messageCenterService.add('success', 'Dashboard updated successfully', { timeout: 5000 });

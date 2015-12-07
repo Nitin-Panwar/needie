@@ -30,7 +30,6 @@ angular.module('sasaWebApp')
           }
         }
         $rootScope.placeholder.dashboard = data; 
-        console.info(data);
         messageCenterService.add('success','Dashboard loaded successfully',{timeout: 10000});
       }, function (err) {
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
@@ -78,6 +77,10 @@ angular.module('sasaWebApp')
         dlg.result.then(function(data){
           console.info(data);
         });  
+    }
+
+    $scope.removeMetric = function (type, metric) {
+      parentService.placeholderRemove(type, metric);
     }    
 
     

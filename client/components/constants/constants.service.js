@@ -7,6 +7,6 @@ angular.module('sasaWebApp')
 */
   .constant('webServiceURL', {
   	// web service server url
-	'url': 'http://vmssasadevapp1.gar.corp.intel.com:5000',	
+	'url': 'http://localhost:5000',	
 	'config': { 'Content-Type': 'application/json; } charset=UTF-8' }
 });

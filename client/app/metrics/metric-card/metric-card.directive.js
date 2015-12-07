@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('metriccard', function (metricsFactory, $rootScope, dialogs) {
+  .directive('metriccard', function (metricsFactory, $rootScope, dialogs, parentService) {
     return {
       templateUrl: 'app/metrics/metric-card/metric-card.html',
       restrict: 'EA',   
@@ -81,12 +81,19 @@ angular.module('sasaWebApp')
           })
         }
 
+        /**
+         * this function watches for chnages in metric details
+         * @param  {[type]} )                  {                             if(scope.metricData ! [description]
+         * @param  {[type]} function(newValue, oldValue,     scope) {                                                     scope.breachedStatus(newValue);         } [description]
+         * @param  {[type]} true               [description]
+         * @return {[type]}                    [description]
+         */
         scope.$watch(function () {
           if(scope.metricData !== undefined){
             return scope.metricData;  
           }  
-          return null;        
-        }, function(newValue, oldValue, scope) {
+          // return null;        
+        }, function(newValue, oldValue, scope) {          
           scope.breachedStatus(newValue); 
         }, true);
 
@@ -99,20 +106,41 @@ angular.module('sasaWebApp')
           scope.alertBreached = false;         
           
           for(var key in data['measures']){            
-            var measure = data.measures[key];
-            console.info(measure);
+            var measure = data.measures[key];            
             if(measure.threshold !== undefined){
+              // if a user setup a threshold and later deleted it,
+              // it results in null
+              // which is always greater than actual measure value
+              // below we check for those nulls and delete them
+              for(var i in measure.threshold){
+                if(measure.threshold[i] === null){
+                  delete measure.threshold[i];
+                }
+              }
               if(measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value){
                 scope.alertBreached = true;
+                scope.warningBreached = false;
                 break;
               }
               if(measure.threshold.upperWarning <=measure.value || measure.threshold.lowerWarning >= measure.value){
                 scope.warningBreached = true;
+                scope.alertBreached = false;
               }  
             }
             
           }
         }
+
+      /**
+       * this function removes a metric from dashboard
+       * @param  {[type]} type   [description]
+       * @param  {[type]} metric [description]
+       * @return {[type]}        [description]
+       */
+      scope.removeMetric = function (type, metric) {
+        
+        parentService.placeholderRemove(type, metric);
+      }
       }
     }
   });
