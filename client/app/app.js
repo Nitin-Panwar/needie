@@ -5,29 +5,68 @@ angular.module('sasaWebApp', [
   'ngResource',
   'ngSanitize',
   'ui.router',
+  'MessageCenterModule',
+  'dialogs.main',
   'ui.bootstrap',
   'gridster',
-  'xeditable'
+  'xeditable',
+  'cgBusy'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
-      .otherwise('/');
+      .otherwise('/dashboard');
 
-    $locationProvider.html5Mode(true);
-  });
+    $locationProvider.html5Mode(true);    
+  })
+
+
+  /**
+   * Dialog controller config
+   * @param  {[type]} dialogsProvider){                         dialogsProvider.useBackdrop(true);      dialogsProvider.useEscClose(true);      dialogsProvider.useCopy(false);     dialogsProvider.setSize('sm');    } [description]
+   * @return {[type]}                    [description]
+   */
+.config(function(dialogsProvider){
+      // this provider is only available in the 4.0.0+ versions of angular-dialog-service
+      dialogsProvider.useBackdrop(true);
+      dialogsProvider.useEscClose(true);
+      dialogsProvider.useCopy(false);      
+}) // end config
+
+.run(
+  function ($rootScope, $http) {
+    // if($rootScope.user == 'undefined'){
+    //   $http.get("http://10.223.12.51:8099/getUser",{withCredentials:true}).success(function (response) {  
+    //     console.info(response);      
+    //     $rootScope.user=response;        
+    //   });    
+    // }
+    // 
+    console.info($rootScope.user);
+    // $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {     
+    //   if ($rootScope.user == undefined) {
+    //     event.preventDefault();        
+    //     $http.get("http://10.223.12.51:8099/getUser",{withCredentials:true}).success(function (response) {        
+    //       $rootScope.user=response;        
+    //     }); 
+    //   }
+    // });
+  }
+
+);
+
 
 
   angular.module('sasaWebApp').run(['gridsterConfig', function(gridsterConfig) {
     gridsterConfig.columns= 6, // the width of the grid, in columns
-    gridsterConfig.pushing= true, // whether to push other items out of the way on move or resize
-    gridsterConfig.floating= true, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
+    gridsterConfig.pushing= false, // whether to push other items out of the way on move or resize
+    gridsterConfig.floating= false, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
     gridsterConfig.swapping= false, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
     gridsterConfig.width= 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
     gridsterConfig.colWidth= 'auto', // can be an integer or 'auto'.  'auto' uses the pixel width of the element divided by 'columns'
-    gridsterConfig.rowHeight= 20, // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
+    gridsterConfig.rowHeight= 'match', // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
     gridsterConfig.margins= [10, 10], // the pixel distance between each widget
     gridsterConfig.outerMargin= false, // whether margins apply to outer edges of the grid
-    gridsterConfig.isMobile= false, // stacks the grid items if true
+    gridsterConfig.isMobile= true, // stacks the grid items if true
     gridsterConfig.mobileBreakPoint= 600, // if the screen is not wider that this, remove the grid layout and stack the items
     gridsterConfig.mobileModeEnabled= true, // whether or not to toggle mobile mode when screen width is less than mobileBreakPoint
     gridsterConfig.minColumns= 1, // the minimum columns the grid must have
@@ -55,7 +94,12 @@ angular.module('sasaWebApp', [
     }
 }]);
 
+
+
 angular.module('sasaWebApp').run(function(editableOptions, editableThemes) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
   editableThemes.bs3.inputClass = 'input-sm';
 });
+
+
+

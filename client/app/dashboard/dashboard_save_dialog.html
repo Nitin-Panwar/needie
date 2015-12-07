@@ -1,0 +1,13 @@
+<div class="modal-header">
+	<h4 class="modal-title">Save Dashboard</h4>
+</div>
+<div class="modal-body">
+	<pre class="bg-danger" ng-if="data.name === OldName">Give a new name to save as another copy.</pre>
+	<div>
+		<input type="text" placeholder="Dashboard Name" class="form-control" ng-model="data.name">
+	</div>		
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" ng-click="save()">Save</button>
+	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

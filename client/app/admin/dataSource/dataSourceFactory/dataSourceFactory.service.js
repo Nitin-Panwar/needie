@@ -13,7 +13,20 @@ angular.module('sasaWebApp')
         param: {
           DataSource: {}
         }
-      },  
+      }, 
+
+
+      index: {
+        method: 'GET',
+        headers: config,
+        responseType: 'json',
+        isArray : 'True',
+        url :url+'/dataSource', 
+        param: {
+          DataSource: {}
+        }
+      },
+       
       testConnection: {        
         method: 'POST',
         headers: config,

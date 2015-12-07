@@ -13,9 +13,10 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
       <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.min.css" />
       <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
+      <link rel="stylesheet" href="bower_components/angular-dialog-service/dist/dialogs.min.css" />
+      <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -25,26 +26,16 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body ng-app="sasaWebApp" cg-busy="{promise:promise,templateUrl:'assets/waitLoader.html',message:'Please Wait...Press ESC to stop', backdrop:true,delay:0,minDuration:0}" ng-controller="UtilityCtrl" ng-keydown="down($event)">
+  <body ng-app="sasaWebApp">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <section ng-include="'components/navbar/navbar.html'"></section>
+    
     <!-- Add your site or application content here -->
-    <section class="container">
+    <section class="container-fluid" cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
       <section ui-view=""></section>
     </section>
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-XXXXX-X');
-      ga('send', 'pageview');
-    </script>
+    <div mc-messages id="flash-messages"></div>
 
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -55,8 +46,6 @@
       <script src="bower_components/jquery/dist/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-      <script src="bower_components/angular-animate/angular-animate.js"></script>
-      <script src="bower_components/angular-busy/dist/angular-busy.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/javascript-detect-element-resize/detect-element-resize.js"></script>
       <script src="bower_components/angular-gridster/src/angular-gridster.js"></script>
@@ -65,6 +54,16 @@
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
       <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+      <script src="bower_components/angular-route/angular-route.js"></script>
+      <script src="bower_components/message-center/message-center.js"></script>
+      <script src="bower_components/angular-translate/angular-translate.js"></script>
+      <script src="bower_components/angular-dialog-service/dist/dialogs.min.js"></script>
+      <script src="bower_components/angular-dialog-service/dist/dialogs.js"></script>
+      <script src="bower_components/angular-dialog-service/dist/dialogs-default-translations.min.js"></script>
+      <script src="bower_components/angular-dialog-service/dist/dialogs-default-translations.js"></script>
+      <script src="bower_components/d3/d3.js"></script>
+      <script src="bower_components/angular-animate/angular-animate.js"></script>
+      <script src="bower_components/angular-busy/dist/angular-busy.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
@@ -79,14 +78,28 @@
           <script src="app/admin/dataSource/dataSource.controller.js"></script>
           <script src="app/admin/dataSource/dataSource.js"></script>
           <script src="app/admin/dataSource/dataSourceFactory/dataSourceFactory.service.js"></script>
+          <script src="app/dashboard/dashboard.controller.js"></script>
+          <script src="app/dashboard/dashboard.js"></script>
+          <script src="app/dashboard/dashboardSave/dashboardSave.controller.js"></script>
           <script src="app/explore/explore.controller.js"></script>
           <script src="app/explore/explore.js"></script>
-          <script src="app/main/main.controller.js"></script>
-          <script src="app/main/main.js"></script>
+          <script src="app/explore/exploreFactory/exploreFactory.service.js"></script>
+          <script src="app/metrics/metric-card/metric-card.directive.js"></script>
+          <script src="app/metrics/modals/modal.controller.js"></script>
           <script src="components/constants/constants.service.js"></script>
+          <script src="components/directives/barChart/barChart.directive.js"></script>
+          <script src="components/directives/barChart/barChartFactory/barChartFactory.service.js"></script>
+          <script src="components/directives/left-sidebar/left-sidebar.directive.js"></script>
+          <script src="components/directives/lineChart/lineChart.directive.js"></script>
+          <script src="components/directives/lineChart/lineChartFactory/lineChartFactory.service.js"></script>
           <script src="components/filters/titlecase/titlecase.filter.js"></script>
-          <script src="components/modal/modal.service.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
+          <script src="components/services/dashBoardsFactory/dashBoardsFactory.service.js"></script>
+          <script src="components/services/filtersFactory/filtersFactory.service.js"></script>
+          <script src="components/services/metricsFactory/metricsFactory.service.js"></script>
+          <script src="components/services/parentService/parentService.service.js"></script>
+          <script src="components/services/usersFactory/usersFactory.service.js"></script>
+          <script src="components/services/workflow/workflow.service.js"></script>
           <script src="components/utility/utility.controller.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->

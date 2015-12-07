@@ -1,78 +1,144 @@
 <!-- top level section -->
 <section>
 	<!-- Search bar section -->
-	<section>		
-		<input type="text" class="form-control" ng-model="searchedItem" placeholder="search by metric, workflow OR discovery board e.g. Incident, MTTR" typeahead="item as item.name for item in searchableItems() | filter:{name:$viewValue}" typeahead-template-url="app/explore/search_template.html"  typeahead-min-length=2 typeahead-on-select="placeholderAdd($item)">
+	<section ng-show="editDbVariable">		
+		<input type="text" class="form-control" ng-model="searchedItem" placeholder="search by metric, workflow OR discovery board e.g. Incident, MTTR" typeahead="item.name for item in searchableItems() | filter:{name:$viewValue}" typeahead-template-url="app/explore/search_template.html"  typeahead-min-length=2 typeahead-on-select="placeholderAdd($item)" style="border-radius: 10px">
 	</section>
 
-	<!-- temporary Placeholder area -->
-	<section>
-		<!-- section for workflow -->
-		<p></p>
-		<section ng-repeat="item in placeholder['workflow']">
-			<section class="panel panel-default">
-				<section class="panel-heading">
-					<h3 class="panel-title pull-left">
-						{{item.name | uppercase}}						
-					</h3>
-					<span type="" class="btn pull-right intelicon-close-outlined" ng-click="placeholderRemove(item, 'workflow')"></span>
-					<section class="clearfix"></section>
-				</section>
-				<section class="panel-body">
-					<ul class="list-inline">
-						<li ng-repeat="metricID in item['metric']"><a class="btn btn-default" ng-click="showworkflowmetric(metricID)">{{getmetricById(metricID).name}}</a></li>
-					</ul>
-				</section>
-			</section>	
-		</section>
+	<!-- For side bar filter -->
+	<!-- section for List of Metric KPI -->  
+   <!--  <div id="filter" ng-controller="SidebarCtrl">
+    	<div id="filterCaller" class="rotate">Filters</div>
+    		 <ul  class="nav">
+	                <li ng-click="metricKPI(item)"  ng-repeat="item in exploreData"><a href="" id="sidebar_font" >{{item.name}}</a></li>
+	         </ul>
+ 	</div> -->
+
+    <!-- For side bar cross filter -->
+    <section ng-controller="SidebarCtrl" class="filterbar" filterbar="filter">
+	    <a href="#" id="filtercaller">
+	    	<i class="glyphicon glyphicon-filter"><i>Filters</i></i>
+		</a>
+	    <ul class="nav nav-pills nav-stacked">
+	      <li class="active dropdown" ng-repeat="key in notSorted(GlobalFilters) | filter:'!$promise'| filter:'!$resolved'" role="presentation" ng-click="$event.stopPropagation()" > 
+	            <a class="dropdown-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="true" style="background-color:#00B2FF">{{key | uppercase}}
+	            	<span class="glyphicon glyphicon-chevron-down"></span> 
+	            	&nbsp;&nbsp;&nbsp; 
+	            	<span class="badge">{{globalQuery[key].length}}</span>
+				</a>
+				<ul class="dropdown-menu list-group">
+		            <li ng-click="selectAll(key)">
+		            	<a href=""><span class="glyphicon glyphicon-ok"> Select All</a>
+	            	</li>
+		            <li ng-click="unselectAll(key)">
+		            	<a href=""><span class="glyphicon glyphicon-remove"></span> Unselect All</a>
+	            	</li>
+		            <li><div class="dropdown-header">
+		            	<input type="text" class="form-control"ng-model="searchFilter" placeholder="Search..." /></div>
+	            	</li>
+		            <li role="separator" class="divider"></li>
+		            <li ng-repeat="item in GlobalFilters[key]|filter: searchFilter" ng-click="updateQuery(key, item)" class="checkbox text-nowrap smm-filter-item">
+		            	&nbsp;&nbsp;&nbsp;
+		            	<input type="checkbox" name="filter" value="filter" ng-checked="inQuery(key, item)">{{item}}<br>
+	            	</li>
+			    </ul>
+	      </li> 
+	      	<button class="form-control pull-left" ng-click="setFilter()">Apply</button>     
+	    </ul>
+	</section>
+
+	<!-- For side bar cross filter -->
+	  <div class="col-md-4">
+	      <div class="container">
+	        <div class="sidebar" sidebar="state" id="side_bar">
+	            <a href="#" id="navigation-toggle"><span class="glyphicon glyphicon-th-list"></span>
+	            </a>
+	            <ul class="nav nav-pills nav-stacked" id="sidebar_font">
+	            	<li>
+	        			<a  id="sidebar_font" style="background-color:#00B2FF" href="#"ng-click="createNew()">Create New</a>
+	        		</li>
+	        		<li class="dropdown"  role="presentation">
+	            		<a class="dropdown-toggle" href="#" role="button" id="sidebar_font" style="background-color:#00B2FF">Dashboards
+		             	</a>
+	            		<ul class="dropdown-menu list-group" id="default">
+	            			<li  ng-repeat="dashboard in myFavouriteDashboards" ng-click="getDashboard(dashboard._id)"><a href="#" >{{dashboard.name}}<span class="badge pull-right" id="normScore" ng-click="deleteDashboard(dashboard._id)">Remove</span></a>
+	            			</li>
+		            	</ul>
+	        		</li>
+	        		<li class="dropdown" role="presentation">
+	            		<a class="dropdown-toggle ng-binding" href="#" data-toggle="dropdown" id="sidebar_font" style="background-color:#00B2FF" aria-haspopup="true" aria-expanded="true">Favourite Dashboards
+		            	</a>
+		            	<ul class="dropdown-menu list-group" id="favourite">
+		            		<li  ng-repeat="dashboard in myFavouriteDashboards" ng-click="getDashboard(dashboard._id)"><a href="#" >{{dashboard.name}}<span class="badge pull-right" id="normScore" ng-click="deleteDashboard(dashboard._id)">Remove</span></a></li>
+		            	</ul>
+	        		</li>
+	        	</ul>
+	        </div> <!--End sidebar --> 
+	    </div> <!--End col-sm-4 --> 
+	  </div>
+
+	<!-- section for workflow -->
+	<section ng-repeat="item in placeholder['workflow']">
+		<section class="panel panel-default">
+			<section class="panel-heading">
+				<h3 class="panel-title pull-left">
+					{{item.name | titlecase}}						
+				</h3>
+				<span type="" class="btn pull-right intelicon-close-outlined" ng-click="placeholderRemove(item, 'workflow')"></span>
+				<section class="clearfix"></section>
+			</section>
+			<section class="panel-body">
+				<ul class="list-inline">
+					<li ng-repeat="metricID in item['metric']"><a class="btn btn-default" ng-click="showworkflowmetric(metricID)">{{getmetricById(metricID).name}}</a></li>
+				</ul>
+			</section>
+		</section>	
+	</section>
 
 		<!-- section for placeholder metrics -->
-		<section class="container-fluid" ng-if="placeholder['metric'].length > 0">
+		<section class="container-fluid">
 			<section class="row">
-				<section class="pull-right btn-group">					
-					<button type="button" class="btn btn-primary btn-priority"><i class="glyphicon glyphicon-floppy-save" ng-click="createDBoard()" data-toggle="tooltip" data-placement="top" title="Save As Dashboard"></i></button>	
-					<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Separator"><i class="glyphicon glyphicon-minus" ng-click="addSeparator()"></i></button>	
-					<button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Text Box"><i class="glyphicon glyphicon-font" ng-click="addTextBoxes()" placeholder="Add Text Box"></i></button>						
+				<section class="btn-group pull-right">
+					<button type="button" class="btn btn-default btn-md"> <span class="glyphicon glyphicon-filter"   data-toggle="tooltip" data-placement="top" title="Save As Dashboard"></span>Filter</button>
+					<button type="button" class="btn btn-default btn-md" ng-click="createDBoard()" ng-show="editDbVariable"> <span class="glyphicon glyphicon-floppy-save"   data-toggle="tooltip" data-placement="top" title="Save As Dashboard"></span> Save </button>	
+					<button type="button" class="btn btn-default btn-md" ng-click="editDBoard()"><span class="glyphicon glyphicon-edit"  data-toggle="tooltip" data-placement="top" title=Edit dashboard></span> Edit </button>
+					<button type="button" class="btn btn-default btn-md" ng-click="setDBoard('H')"><span class="glyphicon glyphicon-home"  data-toggle="tooltip" data-placement="top" title=Set As HomePage></span> Set HomePage </button>
+					<button type="button" class="btn btn-default btn-md" ng-click="setDBoard('F')"><span class="glyphicon glyphicon-star"  data-toggle="tooltip" data-placement="top" title=Set As Favourite></span> Set Favourite </button>	
+				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBoxes()" ng-show="editDbVariable"><span class="glyphicon glyphicon-font"  data-toggle="tooltip" data-placement="top" title="Add Text Box"></span> Add Text </button>	
 				</section>	
 			</section>				
 			<section class="row">&nbsp;</section>
-
 			<!-- Dashboard Section -->
-			<section class="row-fluid center-block text-center metric-card" gridster="SASAgridsterOpts">
+			<section id="test" class="row-fluid center-block text-center metric-card" gridster="gridsterDashboardOpts" ng-model="placeholder">
 				<!-- This section provides separator for gridster -->
-				<section class="" gridster-item ng-repeat="item in placeholder.separators" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">
-					<section dashboard-separator></section>
-				</section>
-
-				<!--  -->
 				<section class="" gridster-item ng-repeat="item in placeholder.textBoxes" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">
 					<a href="#" editable-textarea="item.text" e-rows="7" e-cols="10" class="mover-handle">
 						{{ item.text || 'Text Goes Here' }}
 					</a>
 				</section>
-
-				<!-- Add metrics in placeholder area -->
-				<section gridster-item ng-repeat="item in placeholder['metric']" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="10" >
-					<section metric-card metric-id="metricId1234"></section>
-				</section>
+				<div>
+					<ul>
+						<li gridster-item ng-repeat="item in placeholder['metric']" row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="30">
+						   <section metric-card  metric-data="item"></section>
+						</li>
+					</ul>
+				</div>
 			</section>
-			
 		</section>
-		
 	</section>
-
-
 	<!-- Dashboard area -->
-	<ul gridster="SASAgridsterOpts">
+	<ul gridster="gridsterDashboardOpts">
 		<li gridster-item ng-repeat="item in placeholder['DBoard']" ow="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y">
 			<pre>
 				{{item | json}}
 			</pre>			
 		</li>
 	</ul>
-	
+	<!-- section for List of Metric KPI -->  
+    <div id="panel">
+    	<div id="panelCaller" class="rotate">List of Metric KPI</div>
+    		 <ul  class="nav">
+	                <li ng-click="metricKPI(item)"  ng-repeat="item in exploreData"><a href="" id="sidebar_font" >{{item.name}}</a></li>
+	         </ul>
+ 	</div>
 </section>
-
-
-
-

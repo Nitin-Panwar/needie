@@ -319,7 +319,7 @@ select{background:#fff!important}
 body{font-family:"Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.5;color:#111}
 button,input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit}
 a{color:#0071c5;text-decoration:none}
-a:focus,a:hover{color:#004579;text-decoration:underline}
+a:focus,a:hover{text-decoration:underline}
 a:focus{outline:dotted thin;outline:-webkit-focus-ring-color auto 5px;outline-offset:-2px}
 .img-responsive{display:block;height:auto}
 .img-thumbnail{padding:4px;line-height:1.5;border:1px solid #b1babf;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out;display:inline-block;height:auto}

@@ -1,0 +1,100 @@
+ <div class="left-sidebar parent">
+	<div style="height: 100%;">
+		<ul class="list-group" ng-click="toggleState()">
+			<!-- my dashboards -->
+	 		<li class="list-group-item" ng-click="getUserDashboards()" ng-class="{'active-sidebar-item': showmydashboards}" data-toggle="tooltip" data-placement="right" title="My Dashboards"><i class="fa fa-tachometer fa-2x"></i></li>	
+	 		<!-- Dashboard Filters -->
+	 		<li class="list-group-item" ng-click="getFilters()" ng-class="{'active-sidebar-item': showfilters}" data-toggle="tooltip" data-placement="right" title="Dashboard Filters"><i class="fa fa-filter fa-2x "></i>	 		
+	 		</li>
+	 		<!-- Metric List -->
+	 		<li class="list-group-item" ng-click="getMetricsList()" ng-class="{'active-sidebar-item': metriclist}" data-toggle="tooltip" data-placement="right" title="Metric List"><i class="fa fa-calculator fa-2x"></i></li> 		
+		</ul>
+	</div>
+
+
+ 	<div ng-show="state" class="" id="sidebar-content">
+ 		<!-- my dashboards -->
+ 		<div ng-show="showmydashboards" > 			
+ 			<fieldset>
+ 				<span class="lead white-text">My Dashboards</span> 				
+ 				<ul class="sidebar-menu">
+ 					<li class="text-uppercase" ng-repeat="dashboard in myDashboardsList"> 
+ 						<a href="/dashboard?dashboardId={{dashboard.dashboardId}}" title="" class="sidebar-hover-effect white-text">{{dashboard.dashboardName}}</a>
+ 					</li>
+ 				</ul>
+ 			</fieldset>
+ 		</div>
+
+ 		<!-- Dashboard Filters -->
+		<section ng-show="showfilters">
+			<fieldset>
+				<span class="lead white-text">Filters</span>
+				<ul class="sidebar-menu">
+					<li ng-repeat="(key, value) in GlobalFilters" class="text-uppercase active dropdown" ng-click="$event.stopPropagation()" role="presentation">
+						<span>
+							<span class="white-text" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{key | uppercase}}</span>
+							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
+							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
+							<label class="badge badge-important pull-right" title="Filters">{{globalQuery[key].length}}</label>
+							<section ng-show="isCollapsed">
+								<ul class="list-group">
+									<li class="list-group-item">						            	
+						            	<div class="input-group">						            		
+											<input type="text" class="form-control" placeholder="Search..." ng-model="searchFilter" aria-describedby="basic-addon2">
+											<span title="Remove search text" class="input-group-addon btn" id="basic-addon2" ng-click="searchFilter = ''"><i class="intelicon-close-outlined"></i></span>
+											<span title="Remove Filters" class="input-group-addon btn" id="basic-addon2" ng-click="unselectAllFilterValues(key)"><i class="intelicon-cancel-filter-solid"></i></span>
+										</div>						            	
+					            	</li>
+									<li class="list-group-item" ng-repeat="item in value|orderBy|filter: searchFilter" ng-click="updateFilterQuery(key, item)">
+										<span class="sidebar-hover-effect blue-text">
+											<span class="glyphicon glyphicon-ok" ng-show="isInQuery(key, item)"></span>
+											&nbsp;
+											{{item}}
+										</span>
+									</li>
+								</ul>
+							</section>
+						</span>
+					</li>					
+				</ul>
+				<button class="form-control pull-left" ng-click="applyFilter()" style="background-color: #006CBC; color:white;">Apply</button>     
+			</fieldset>
+		</section>
+
+ 		<!-- metric list -->
+ 		<div ng-if="metriclist">
+ 			<fieldset>
+ 				<span class="lead white-text">Metrics</span> 				
+ 				<ul class="sidebar-menu">
+ 					<li class="list-group-item" style="background-color: #0071C5;">						            	
+		            	<div class="input-group">						            		
+							<input type="text" class="form-control" placeholder="Search workflow" ng-model="searchFilter" aria-describedby="basic-addon2">
+							<span title="Remove search text" class="input-group-addon btn" id="basic-addon2" ng-click="searchFilter = ''"><i class="intelicon-close-outlined"></i></span>
+						</div>						            	
+	            	</li>
+ 					<li ng-repeat="(key, value) in dashboardList| orderBy:value.name|filter:searchFilter">
+ 						<span class="white-text" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{value.name | uppercase}}</span>
+ 						<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
+						<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
+						<section ng-show="isCollapsed">
+							<ul class="list-group">
+								<li class="list-group-item" ng-repeat="item in value.members" ng-click="addMetric2Dashboard(item.id)">
+									<span class="sidebar-hover-effect blue-text">
+										{{item.name}}
+									</span>									
+								</li>
+							</ul>
+						</section>
+ 						
+ 					</li>
+ 				</ul>
+
+
+ 			</fieldset>
+ 		</div>
+ 	</div>
+
+</div>
+
+
+

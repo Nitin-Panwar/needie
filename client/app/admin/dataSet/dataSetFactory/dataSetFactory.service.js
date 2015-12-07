@@ -16,7 +16,7 @@ angular.module('sasaWebApp')
         }
       },
 
-      getAllDataSet: {
+      index: {
         method: 'GET',
         headers: config,
         url : url+'/dataSet',
@@ -35,17 +35,6 @@ angular.module('sasaWebApp')
           DataSource: {},
           Relation :[]
           }
-      },
-
-      index: {
-        method: 'GET',
-        headers: config,
-        responseType: 'json',
-        isArray : 'True',
-        url :url+'/dataSource', 
-        param: {
-          DataSource: {}
-        }
       },
 
       saveInfoMatrix: {

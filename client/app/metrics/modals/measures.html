@@ -1,0 +1,105 @@
+<div class="modal-header">
+	<h4 class="modal-title">Measures</h4>
+</div>
+<div class="modal-body">
+	<ul class="list-group">	
+		<li class="list-group-item" ng-repeat="measure in data track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active"  ng-class="{'disabled':measureInfo[$index].active==false}">
+			<h5>{{measure.name}}&nbsp;:&nbsp;&nbsp;{{measure.value}}
+				<a href ng-click="toggelActive($index)" class="pull-right">							
+				<span ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined" class="badge">Disable Measure</span>
+				<span ng-hide="measureInfo[$index].active || measureInfo[$index].active == undefined" class="badge" style="background-color: #5cb85c;">Enable Measure</span>
+				</a>
+			</h5>
+			<br>
+			<div ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined">				
+				<div ng-show="measure.datatype === 'int' || measure.datatype === 'float'">
+					<table class="table  table-intel" >
+						<tbody>
+							<tr>
+								<td style="border:none"><b><font size="3.5px">Upper Threshold</font></b> 
+								</td>
+								<td style="border:none" align="center" class="form-group has-warning">
+									<input class="form-control"type="number" ng-model="measureInfo[$index].threshold.upperWarning" style="text-align:right" placeholder="Warning">
+								</td>
+								<td style="border:none" align="center"  class="form-group has-error">
+									<input class="form-control" type="number" ng-model="measureInfo[$index].threshold.upperAlert" style="text-align:right" placeholder="Alert">
+								</td>
+								<td style="border:none" align="center" style="border:none">
+									<a href="" ng-click="measureInfo[$index].threshold.upperAlert=null;measureInfo[$index].threshold.upperWarning=null" style="color:#333; font-size:16px">
+									<span title="Clear Upper Threshold" class="glyphicon glyphicon-remove"></span>
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td style="border:none"><b><font size="3.5px">Lower Threshold</font></b> 
+								</td>
+								<td style="border:none" align="center" class="form-group has-warning">
+									<input class="form-control" type="number" ng-model="measureInfo[$index].threshold.lowerWarning" style="text-align:right" placeholder="Warning">
+									</td>
+								<td style="border:none" align="center" class="form-group has-error">
+									<input class="form-control" type="number" ng-model="measureInfo[$index].threshold.lowerAlert" class="has-error" style="text-align:right" placeholder="Alert">
+								</td>
+								<td style="border:none" align="center">
+									<a href="" ng-click="measureInfo[$index].threshold.lowerAlert=null;measureInfo[$index].threshold.lowerWarning=null" style="color:#333; font-size:16px">
+									<span title="Clear Lower Threshold" class="glyphicon glyphicon-remove"></span>
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<br>
+				<a ng-click="isCollapsed = !isCollapsed" href='' style="color:black; font-style: italic;"> Click here</a> for details
+				<br>
+				<div collapse="!isCollapsed">
+					<table class="table table-bordered table-striped table-intel" style="color:black">							
+						<tbody>
+							<tr>
+								<th>Data Type</th>
+								<td>{{measure.datatype}}</td>
+								</tr>
+								<tr>
+								<th>Type</th>
+								<td>{{measure.type}}</td>
+							</tr>
+							<tr>
+								<th>Measure Mappping</th>
+								<td>
+
+								<table class="table table-bordered table-striped table-intel" ng-repeat="measure_mapping in measure.measure_mappings">
+									<tbody>
+										<tr>
+											<th>Conditions</th>
+											<td>{{measure_mapping.conditions}}</td>			
+										</tr>
+										<tr>
+											<th>Formula</th>
+											<td>{{measure_mapping.formula}}</td>			
+										</tr>
+									</tbody>
+								</table>
+								</td>
+							</tr>
+							<tr>
+								<th>Value</th>
+								<td>{{measure.value}}</td>
+							</tr>
+							<tr>
+								<th>Expression</th>
+								<td>{{measure.expression}}</td>
+							</tr>
+							<tr>
+								<th>Unit</th>
+								<td>{{measure.unit}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>			
+			</div>	
+		</li>
+	</ul>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-primary" ng-click="save('measure')">Apply</button>	
+	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>

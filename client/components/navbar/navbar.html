@@ -1,20 +1,33 @@
-<div class="navbar navbar-default navbar-static-top" ng-controller="NavbarCtrl">
-  <div class="container">
+<div class="navbar navbar-default" ng-controller="NavbarCtrl">
+  <div class="container-fluid">
     <div class="navbar-header">
-      <button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="/" class="navbar-brand">sasa-web</a>
+      <img class="navbar-logo" src="assets/images/intel-logo-white-100.png" alt="">
+      <a href="/" class="navbar-brand">SMM</a>
+
     </div>
-    <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
+    <div class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
             <a ng-href="{{item.link}}">{{item.title}}</a>
-        </li>
+        </li>        
       </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <form id="searchform" class="navbar-form">
+            <div class="form-group" style="display:inline;">
+              <div class="input-group">
+                <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" name="search" ng-model="searchedItem" placeholder="Search Here" typeahead="item as item.name for item in searchableItems() | filter:{name:$viewValue}" typeahead-template-url="app/explore/search_template.html" typeahead-min-length=2 typeahead-on-select="placeholderAdd($item)" autocomplete="off" autofocus="autofocus" type="text" style="border-radius: 30px" aria-autocomplete="list" aria-expanded="false">
+              </div>
+            </div>
+          </form>
+        </li>
+        <li>
+          <a href>{{user}}</a>          
+        </li>
+        <li ng-class="{active: isActive('/help')}" >
+            <a ng-href="/help">Help</a>
+        </li>
+      </ul>      
     </div>
   </div>
 </div>

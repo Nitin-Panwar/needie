@@ -2,13 +2,10 @@
 
 angular.module('sasaWebApp')
   .controller('NavbarCtrl', function ($scope, $location) {
-    $scope.menu = [{
-      'title': 'Home',
-      'link': '/'
-    },
+    $scope.menu = [       
     {
-      'title': 'Explore',
-      'link': '/explore'
+      'title': 'Create Dashboard',
+      'link': '/'
     },
     {
       'title': 'Admin',

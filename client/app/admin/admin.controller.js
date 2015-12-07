@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('AdminCtrl', function ($scope,$rootScope,dataSetFactory) {
+  .controller('AdminCtrl', function ($scope,$rootScope,dataSetFactory,dataSourceFactory) {
     $scope.showDataSourceList=false;
     $scope.showDataSetList=false;
 
@@ -11,8 +11,8 @@ angular.module('sasaWebApp')
      */
   	$scope.listDataSources=function(){
       $scope.resetView();   
-  		$rootScope.promise=dataSetFactory.index().$promise.then(function (data) {        
-        $scope.dataSources= data;     
+  		$rootScope.promise=dataSourceFactory.index().$promise.then(function (data) {        
+        $scope.dataSources= data;  
         $scope.showDataSource = true;   
       }, function () {
           messageCenterService.add('danger', 'DataSource indexing failed', { timeout: 5000 });
@@ -26,7 +26,7 @@ angular.module('sasaWebApp')
      */
      $scope.listDataSets = function (){
       $scope.resetView();      
-     	$rootScope.promise=dataSetFactory.getAllDataSet().$promise.then(function (data) {         
+     	$rootScope.promise=dataSetFactory.index().$promise.then(function (data) {         
        	$scope.dataSets=data; 
         $scope.showDataSet = true;           
       }, function () {
