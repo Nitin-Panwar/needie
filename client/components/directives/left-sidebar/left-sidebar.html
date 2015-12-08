@@ -19,7 +19,7 @@
  				<span class="lead white-text">My Dashboards</span> 				
  				<ul class="sidebar-menu">
  					<li class="text-uppercase" ng-repeat="dashboard in myDashboardsList"> 
- 						<a href="/dashboard?dashboardId={{dashboard.dashboardId}}" title="" class="sidebar-hover-effect white-text">{{dashboard.dashboardName}}</a>
+ 						<a href="/dashboard?dashboardId={{dashboard._id.$oid}}" title="" class="sidebar-hover-effect white-text">{{dashboard.name}}</a>
  					</li>
  				</ul>
  			</fieldset>

@@ -137,9 +137,9 @@ angular.module('sasaWebApp')
        * @param  {[type]} metric [description]
        * @return {[type]}        [description]
        */
-      scope.removeMetric = function (type, metric) {
-        
+      scope.removeMetric = function (type, metric) {        
         parentService.placeholderRemove(type, metric);
+        $rootScope.placeholder.edited = true;
       }
       }
     }

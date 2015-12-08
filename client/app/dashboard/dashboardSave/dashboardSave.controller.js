@@ -11,8 +11,9 @@ angular.module('sasaWebApp')
        * @return {[type]}       [description]
        */
       $scope.save = function(){
-      	$rootScope.placeholder.dashboard.name = data.name;
-        $rootScope.placeholder.dashboard.description = data.description;
+        // in case its a new dashboard, create a new object for dashboard        
+      	$rootScope.placeholder.dashboard["name"] = data.name;
+        $rootScope.placeholder.dashboard["description"] = data.description;
         parentService.createDBoard();
         $scope.cancel();
       };

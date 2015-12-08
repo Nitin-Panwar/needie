@@ -28,16 +28,15 @@
 		<!-- dashboard buttons section -->
 		<section class="row inline">
 			<section class="col-md-2">
-				<span class="text-titlecase lead">{{dashboard.name}}</span> <!-- dashboard name -->
+				<span class="text-capitalize lead">{{placeholder.dashboard.name}}</span> <!-- dashboard name -->
 			</section>
 			<section class=" col-sm-10">	
 				<section class="pull-right btn-group">
-					<button type="button" class="btn btn-primary" ng-click="launchSave()"><i class="fa fa-floppy-o pulse-button"></i> Save</button>	
-				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()"><i class="fa fa-text-width"></i> Add Text</button>
-					<button type="button" class="btn btn-default btn-md" ng-click="editDBoard()"><i class="fa fa-pencil"></i> Edit</button>
-					<button type="button" class="btn btn-default btn-md" ng-click="setDBoard('H')"><i class="fa fa-home"></i> Set HomePage </button>
-					<button type="button" class="btn btn-default btn-md" ng-click="setDBoard('F')"><i class="fa fa-heart"></i> Set Favourite </button>		
-					<button type="button" class="btn btn-default btn-md" ng-click="save2document()"><i class="fa fa-envelope-o"></i> Send Mail </button>		
+					<button type="button" class="btn btn-primary" ng-click="launchSave()" ng-show="placeholder.edited"><i class="fa fa-floppy-o pulse-button"></i> Save</button>	
+				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()"><i class="fa fa-text-width"></i> Add Text</button>					
+					<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()" ng-hide="placeholder.dashboard._id === undefined"><i class="fa fa-home"></i> Set HomePage </button>
+					<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()" ng-hide="placeholder.dashboard._id === undefined"><i class="fa fa-heart"></i> Set Favourite </button>		
+					<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ng-hide="placeholder.dashboard._id === undefined"><i class="fa fa-envelope-o"></i> Send Mail </button>		
 				</section>
 			</section>	
 		</section>				
@@ -53,13 +52,15 @@
 				</li>
 				<!-- metric card area end -->
 				<!-- text boxes area -->
-				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="1" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid">					
-					<span class="glyphicon glyphicon-move mover-handle" style="margin: 10px;"></span>						
-					<a href="#" editable-textarea="item.text" e-rows="5" e-cols="10" class="mover-handle" style="margin: 10px;">						
-						{{ item.text || 'Text Goes Here' }}						
-					</a>
-					<span class="glyphicon glyphicon-trash" ng-click="removeTextBox(item)" style="margin: 10px;"></span>
-				</li>
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="1" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
+					<section>
+						<span class="glyphicon glyphicon-move mover-handle" style="margin: 10px;"></span>						
+						<a href="#" editable-textarea="item.text" e-rows="5" e-cols="10" class="mover-handle" style="margin: 10px;">						
+							{{ item.text || 'Text Goes Here' }}						
+						</a>
+						<span class="glyphicon glyphicon-trash" ng-click="removeTextBox(item)" style="margin: 10px;"></span>	
+					</section>					
+				</li>				
 				<!-- text boxes area end -->
 			</ul>			
 		</section>

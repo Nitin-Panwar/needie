@@ -6,18 +6,18 @@ angular.module('sasaWebApp')
           $rootScope.user=response;        
         });     
     
-    $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, dashboardVersion: 0}; 
+    $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
 
     /**
   	 * Here system checks if there is an existing dashboard that user wants to see
   	 * @param  {[type]} $stateParams.dashboardId [description]
   	 * @return {[type]}                          [description]
-  	 */
+  	 */    
     if($stateParams.dashboardId){
       // $scope.newDashboard = false;
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
-        $scope.dashboard = data;          
+        $rootScope.placeholder.dashboard = data;          
 
         //Add data to placeholder
         for(var i=0;i<data['components'].length;i++)
@@ -34,6 +34,9 @@ angular.module('sasaWebApp')
       }, function (err) {
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
       });
+    }
+    else{
+      $rootScope.placeholder.edit = true;
     }
 
     /**
@@ -56,6 +59,7 @@ angular.module('sasaWebApp')
           type:'textBox'
         };
       $rootScope.placeholder.textBoxes.push(obj);      
+      $rootScope.placeholder.edited = true;
     };
 
     /**
@@ -65,23 +69,38 @@ angular.module('sasaWebApp')
      */
     $scope.removeTextBox = function (item) {
       $rootScope.placeholder.textBoxes.splice($rootScope.placeholder.textBoxes.indexOf(item), 1);
+      $rootScope.placeholder.edited = true;
     };
 
     /**
      * this function saves the dashboard
      * @return {[type]} [description]
      */ 
-    $scope.launchSave = function () {
-      console.info($scope.dashboard);
-      var dlg = dialogs.create('/app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $scope.dashboard,'sm');              
+    $scope.launchSave = function () {      
+      var dlg = dialogs.create('/app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
           console.info(data);
         });  
-    }
+    }  
 
-    $scope.removeMetric = function (type, metric) {
-      parentService.placeholderRemove(type, metric);
-    }    
+    /**
+     * this function sets a dashboard as homepage
+     */
+    $scope.setHomepage = function () {
+      usersFactory.setHomepage({idsid: $rootScope.user, dashboardId: $rootScope.placeholder.dashboard._id}).$promise.then(function (data) {
+        messageCenterService.add('success','Dashboard set as homepage',{timeout: 3000});
+      },function (err) {
+        messageCenterService.add('danger','Could not set dashboard as homepage', {timeout: 10000});
+      })
+    } 
+
+    $scope.setFavorite = function () {
+      usersFactory.save({idsid: $rootScope.user, dashboardId: $rootScope.placeholder.dashboard._id}).$promise.then(function (data) {
+        messageCenterService.add('success','Dashboard set as favorite',{timeout: 3000});
+      },function (err) {
+        messageCenterService.add('danger','Could not set dashboard as favorite',{timeout: 10000});
+      });
+    }
 
     
 

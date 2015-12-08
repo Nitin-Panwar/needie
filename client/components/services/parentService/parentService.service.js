@@ -50,14 +50,14 @@ angular.module('sasaWebApp')
 	      };	      	      
 
 	      // second handle textboxes
-	      for (var i = 0; i < $rootScope.placeholder.textBoxes.length; i++) {	        
-	        dashboardObj.components[dashboardObj.components.length] = $rootScope.placeholder.textboxes[i];	        
+	      for (var i = 0; i < $rootScope.placeholder.textBoxes.length; i++) {	        	      	
+	        dashboardObj.components[dashboardObj.components.length] = $rootScope.placeholder.textBoxes[i];	        
 	      };
 
 	      dashboardObj.name = $rootScope.placeholder.dashboard.name;
 	      dashboardObj.description = $rootScope.placeholder.dashboard.description;
 	      dashboardObj.filters = $rootScope.globalQuery;
-	      dashboardObj.version = $rootScope.placeholder.dashboardVersion + 1;
+	      dashboardObj.version = $rootScope.placeholder.dashboard.version + 1;
 
 	      //Checking if the request is coming for update or create new.
 	      if($rootScope.placeholder.dashboard._id){	  
@@ -76,7 +76,7 @@ angular.module('sasaWebApp')
 	          var dashboardId = data['_id']['$oid'];
 	          messageCenterService.add('success', 'Dashboard saved successfully', { timeout: 5000 }); 
 	          //Save dashboardid in user metadata
-	          $rootScope.myPromise= usersFactory.save({idsid:$rootScope.user,dashboardId:dashboardId,dashboardName:dashboardObj.name}).$promise.then(function (data) {
+	          $rootScope.myPromise= usersFactory.save({idsid:$rootScope.user,dashboardId:dashboardId}).$promise.then(function (data) {
 	            messageCenterService.add('success','Dashboard added to favorites',{timeout:5000});	            
 	          }, function (err) {
 	          	messageCenterService.add('danger', 'Not able to add dashboard to favorites', {timeout: 10000});

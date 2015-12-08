@@ -36,13 +36,14 @@ angular.module('sasaWebApp')
 	    		scope.metriclist = false;
 	    		scope.showfilters = false;
 	    	}
+	    	
 
-	    	console.info('getting user dashboards');
+	    	$rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {	    			    			          	
+	          	scope.myDashboardsList=data['dashboards'];
+	          	console.info(scope.myDashboardsList);
 
-	    	$rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {	    		
-	          scope.myDashboardsList=data['dashboards'];
 	        }, function (){
-	          messageCenterService.add('danger', 'No Data found', { timeout: 5000 });
+	          	messageCenterService.add('danger', 'No Data found', { timeout: 5000 });
 	        })
 	    };
 
@@ -71,6 +72,7 @@ angular.module('sasaWebApp')
 	     */
 	    scope.addMetric2Dashboard = function (argument) {
 	    	parentService.placeholderAdd('metric',argument);
+	    	$rootScope.placeholder.edited = true;
 	    };
 
 	    /**
@@ -163,8 +165,8 @@ angular.module('sasaWebApp')
 		 * @return {[type]}          [description]
 		 */
 	    scope.applyFilter = function (argument) {
-	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;
-	    	console.info($rootScope.applyFilter);
+	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;	
+	    	$rootScope.placeholder.edited = true;    	
 	    }
 
 

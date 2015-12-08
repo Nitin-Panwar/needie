@@ -2,7 +2,9 @@
 	<h4 class="modal-title">Save Dashboard</h4>
 </div>
 <div class="modal-body">
+	<pre ng-if="placeholder.dashboard.owner !== user && data.name === OldName" class="bg-danger">You are not dashboard Owner! You can not save it with same name.</pre>
 	<pre class="bg-danger" ng-if="data.name === OldName">Give a new name to save as another copy.</pre>
+
 	<div>
 		<input type="text" placeholder="Dashboard Name" class="form-control" ng-model="data.name">
 	</div>	
@@ -12,6 +14,6 @@
 	</div>	
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="save()">Save</button>
+	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="placeholder.dashboard.owner === user || data.name !== OldName">Save</button>
 	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>

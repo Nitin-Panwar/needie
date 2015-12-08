@@ -20,8 +20,17 @@ angular.module('sasaWebApp')
         responseType:'json',
         param:{
           idsid:{},
-          dashboardId:{},
-          dashboardName:{}
+          dashboardId:{}          
+        }
+      },
+      setHomepage: {
+        method: 'PUT',
+        headers: config,
+        url: url + '/user/homepage',
+        responseType: 'json',
+        param: {
+          idsid: {},
+          dashboardId: {}
         }
       }
   });
