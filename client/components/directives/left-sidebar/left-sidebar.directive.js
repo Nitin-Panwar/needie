@@ -35,13 +35,11 @@ angular.module('sasaWebApp')
 	    	if(scope.showmydashboards){
 	    		scope.metriclist = false;
 	    		scope.showfilters = false;
-	    	}
-	    	
+	    	}	    	
 
-	    	$rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {	    			    			          	
+	    	$rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {	
+	    		console.info(data);    			    			          	
 	          	scope.myDashboardsList=data['dashboards'];
-	          	console.info(scope.myDashboardsList);
-
 	        }, function (){
 	          	messageCenterService.add('danger', 'No Data found', { timeout: 5000 });
 	        })
@@ -82,7 +80,7 @@ angular.module('sasaWebApp')
 	     */
 	    $rootScope.GlobalFilters = {};
     	$rootScope.globalQuery = {};
-	    scope.getFilters = function (argument) {
+	    scope.getFilters = function () {
 	    	scope.showfilters = !scope.showfilters;	    	
 
 	    	if(scope.showfilters){
@@ -90,13 +88,46 @@ angular.module('sasaWebApp')
 	    		scope.metriclist = false;
 	    	}
 
-	    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         	
-	            $rootScope.GlobalFilters=data;	            
+	    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
+	            // $rootScope.GlobalFilters=data.filters;
+	            scope.FilterData = data.filters;	 
+	            var filterKeys = Object.keys(data.filters[0]);
+	            for (var i = 0; i < filterKeys.length; i++) {	            	
+	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
+	            };	  
+	            console.info($rootScope.GlobalFilters);          
+
 		        }, 
 		        function (err) {
 		        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
 	        });
+
 	    }
+
+	    /**
+	     * find unique items in an array by key	     
+	     * @param  {[type]} array [description]
+	     * @param  {[type]} key   [description]
+	     * @return {[type]}       [description]
+	     */
+	    scope.pluck = function(arr, key, matchKey, value) {
+	    	if(value && matchKey){
+	    		var result = $.map(arr, function(e) { 
+	    			if(e[matchKey] === value)
+	    			return e[key]; 
+	    		});
+	    	} 
+	    	else{
+	    		var result = $.map(arr, function(e) { return e[key]; });
+	    	}
+ 
+			//find unique values			
+		    var o = {}, i, l = result.length, r = [];
+		    for(i=0; i<l;i+=1) o[result[i]] = result[i];
+		    for(i in o) r.push(o[i]);		    
+
+		    return r;
+		}
 
 	    /**
 	     * This function updates filter query
@@ -104,9 +135,10 @@ angular.module('sasaWebApp')
 	     * @param  {[type]} value [description]
 	     * @return {[type]}       [description]
 	     */
-	    scope.updateFilterQuery = function (key, value) {	    	
+	    scope.updateFilterQuery = function (key, value) {
 	         // udpate global search query
 	        if($rootScope.globalQuery.hasOwnProperty(key)){
+
 	            // if the values exists                      
 	            var exists = false;
 	            var index = 0;
@@ -118,8 +150,8 @@ angular.module('sasaWebApp')
 	                }
 	            }
 	            if(!exists)
-	            {
-	                $rootScope.globalQuery[key][$rootScope.globalQuery[key].length] = value; 
+	            {	            	
+	                $rootScope.globalQuery[key][$rootScope.globalQuery[key].length] = value; 	                
 	            }
 	            else{
 	                $rootScope.globalQuery[key].splice(index, 1);
@@ -129,9 +161,47 @@ angular.module('sasaWebApp')
 	            }                                                       
 	        }
 	        else{                           
-	            $rootScope.globalQuery[key] = [value]
+	            $rootScope.globalQuery[key] = [value]	            
 	        }          	        
+	        scope.updateGlobalFilters();
 	    };
+
+	    /**
+	     * this function updates relational filter values
+	     */
+	    scope.updateGlobalFilters = function () {
+	    	console.info($rootScope.globalQuery);
+	    	if(Object.keys($rootScope.globalQuery).length == 0){	    		
+	    		scope.state = false;
+	    		scope.getFilters();	
+	    	}
+
+	    	var data = scope.FilterData;
+	    	var dataHolder = [];
+	    	for(var queryKey in $rootScope.globalQuery){	    		
+	    		var tempArr = Object.keys(data[0])
+	    		tempArr.splice(tempArr.indexOf(queryKey), 1);
+	    		for(var i in $rootScope.globalQuery[queryKey]){
+	    			for(var j in tempArr){
+	    				var result = scope.pluck(data, tempArr[j], queryKey, $rootScope.globalQuery[queryKey][i]);
+	    				if(dataHolder[tempArr[j]]){
+							dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
+							//find unique values			
+						    var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
+						    for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
+						    for(i in o) r.push(o[i]);
+						    dataHolder[tempArr[j]] = r;
+						}
+						else{
+							dataHolder[tempArr[j]] = result;
+						}
+	    			}
+	    		} 
+	    	}
+	    	for(var key in dataHolder){
+	    		$rootScope.GlobalFilters[key] = dataHolder[key];
+	    	}
+	    }
 
 	    /**
 	     * this function checks whether any item is in filter query
@@ -157,6 +227,7 @@ angular.module('sasaWebApp')
 	     */
 	    scope.unselectAllFilterValues = function (key) {
             delete $rootScope.globalQuery[key];
+            scope.updateGlobalFilters();
 	    };
 
 		/**

@@ -2,9 +2,9 @@
 
 angular.module('sasaWebApp')
   .controller('DashboardCtrl', function ($scope, $rootScope, $stateParams, dashBoardsFactory, usersFactory, $http, messageCenterService, parentService, dialogs) {
-  	$http.get("http://10.223.12.51:8099/getUser",{withCredentials:true}).success(function (response) {        
-          $rootScope.user=response;        
-        });     
+  	// $http.get("http://10.223.12.51:8099/getUser",{withCredentials:true}).success(function (response) {        
+   //        $rootScope.user=response;        
+   //      });     
     
     $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
 

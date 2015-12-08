@@ -1,16 +1,16 @@
 'use strict';
 
-describe('Controller: ExploreCtrl', function () {
+describe('Controller: AccessDeniedCtrl', function () {
 
   // load the controller's module
   beforeEach(module('sasaWebApp'));
 
-  var ExploreCtrl, scope;
+  var AccessDeniedCtrl, scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    ExploreCtrl = $controller('ExploreCtrl', {
+    AccessDeniedCtrl = $controller('AccessDeniedCtrl', {
       $scope: scope
     });
   }));

@@ -10,11 +10,22 @@ angular.module('sasaWebApp', [
   'ui.bootstrap',
   'gridster',
   'xeditable',
-  'cgBusy'
+  'cgBusy',
+  'ordinal'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+    //
+    //find user homepage
+    //
+    // $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {                          
+    //     var homepage = '/dashboard?dashboardId='+data.homepage.$oid;         
+    // }, function (){
+    //     messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
+    // })  
+
     $urlRouterProvider
       .otherwise('/dashboard');
+
 
     $locationProvider.html5Mode(true);    
   })
@@ -33,23 +44,24 @@ angular.module('sasaWebApp', [
 }) // end config
 
 .run(
-  function ($rootScope, $http) {
-    // if($rootScope.user == 'undefined'){
-    //   $http.get("http://10.223.12.51:8099/getUser",{withCredentials:true}).success(function (response) {  
-    //     console.info(response);      
-    //     $rootScope.user=response;        
-    //   });    
-    // }
-    // 
-    console.info($rootScope.user);
-    // $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {     
-    //   if ($rootScope.user == undefined) {
-    //     event.preventDefault();        
-    //     $http.get("http://10.223.12.51:8099/getUser",{withCredentials:true}).success(function (response) {        
-    //       $rootScope.user=response;        
-    //     }); 
-    //   }
-    // });
+  function ($rootScope, $http, webServiceURL, messageCenterService, $location) {
+
+    /**
+     * Login user if he's not already logged in
+     * @param  {[type]} $rootScope.user [description]
+     * @return {[type]}                 [description]
+     */
+    if($rootScope.user == undefined){
+      event.preventDefault();        
+      $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {          
+          $rootScope.user = response.data;  
+                 
+      },function (err) {
+          // redirect user to access denied page
+          $location.url('/accessDenied')
+          messageCenterService.add('danger','Could not login!!!',{ status: messageCenterService.status.permanent });
+      })  
+    }
   }
 
 );

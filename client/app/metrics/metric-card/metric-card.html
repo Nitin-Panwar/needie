@@ -34,10 +34,10 @@
                     <li ng-click="changeChart('line')"><a href="#">Line Chart</a></li>
                     <li ng-click="changeChart('bar')"><a href="#">Bar Chart</a></li>
                 </ul>
-            </div> -->  
+            </div> -->                  
             
-                <line-chart ng-show="line" line-data="metricData['distributions'][0]"></line-chart>     
-                <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]"></bar-chart>
+                <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block"></line-chart>     
+                <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block"></bar-chart>
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile'" class="measure-card" 
                         ng-class="{'warning-breached': measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value,
@@ -45,6 +45,13 @@
                         <span style="font-size: 22px;">{{measure.value|number}}{{measure.unit}}</span>
                         <br>
                         <span>{{measure.name}}</span>                            
+                    </li>
+                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type === 'percentile'" class="measure-card">
+                        <table class="table table-bordered text-center" style="margin: 0px;">                                                       
+                            <tr><td ng-repeat="(key, value) in measure.value">{{key|ordinal}}</td></tr>
+                            <tr><td ng-repeat="(key, value) in measure.value">{{value|number}}{{measure.unit}}</td></tr>
+                        </table>
+                        <span>{{measure.name}}</span>
                     </li>
                 </ul>     
             

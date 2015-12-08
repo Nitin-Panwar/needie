@@ -6,6 +6,9 @@ angular.module('sasaWebApp')
       .state('dashboard', {
         url: '/dashboard?:dashboardId',
         templateUrl: 'app/dashboard/dashboard.html',
-        controller: 'DashboardCtrl'
+        controller: 'DashboardCtrl',
+        data: {
+        	requireLogin: true
+      	}
       });
   });

@@ -52,7 +52,7 @@ angular.module('sasaWebApp')
       		    .ticks(5);
 
       		var svg = d3.select(element[0]).append("svg")
-              .attr("viewBox", "0 0 400 370") 
+              .attr("viewBox", "0 0 600 570") 
       		    // .attr("width", width + margin.left + margin.right)
       		    // .attr("height", height + margin.top + margin.bottom)
       		  .append("g")
