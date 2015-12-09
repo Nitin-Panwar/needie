@@ -1,0 +1,119 @@
+@import 'bootstrap/less/bootstrap.less';
+@import 'font-awesome/less/font-awesome.less';
+
+@icon-font-path: '/bower_components/bootstrap/fonts/';
+@fa-font-path: '/bower_components/font-awesome/fonts';
+
+// injector
+@import 'accessDenied/accessDenied.less';
+@import 'admin/admin.less';
+@import 'admin/dataSet/dataSet.less';
+@import 'admin/dataSource/dataSource.less';
+@import 'dashboard/dashboard.less';
+@import 'metrics/metric-card/metric-card.less';
+@import 'metrics/modals/modal.less';
+@import 'directives/barChart/barChart.less';
+@import 'directives/left-sidebar/left-sidebar.less';
+@import 'directives/lineChart/lineChart.less';
+@import 'navbar/navbar.less';
+// endinjector
+// 
+/**
+ * Below styles are used to emphasise a particular button.
+ * It brings attention to a particular button
+ */
+.btn-priority {
+  animation: glowing 1500ms infinite;
+}
+
+//For message centre service 
+#flash-messages{
+	text-align: left;
+	margin: 0;
+	overflow: visible;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 25%
+}
+
+//For bar chart 
+.axis path,
+.axis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+.axis text {
+	font-family: sans-serif;
+	font-size: 11px;
+}
+
+rect {
+	-moz-transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
+}
+rect:hover{
+	fill: orange;
+}// end bar chart less
+
+/**
+ * this is for gridster items
+ */
+.mover-handle{
+	cursor: pointer;
+}
+
+/**
+ * this class creates a pulsating effect for attention
+ */
+.pulse-button {
+  position: relative;  
+  border: none;
+  box-shadow: 0 0 0 0 #2196F3;
+  border-radius: 50%;  
+  background-size:cover;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  -webkit-animation: pulse .5s infinite cubic-bezier(0.66, 0, 0, 1);
+  -moz-animation: pulse .5s infinite cubic-bezier(0.66, 0, 0, 1);
+  -ms-animation: pulse .5s infinite cubic-bezier(0.66, 0, 0, 1);
+  animation: pulse .5s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+.pulse-button:hover 
+{
+  -webkit-animation: none;-moz-animation: none;-ms-animation: none;animation: none;
+}
+@-webkit-keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}}
+@-moz-keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}}
+@-ms-keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}}
+@keyframes pulse {to {box-shadow: 0 0 0 45px rgba(232, 76, 61, 0);}}
+/**
+ * end pulsating button
+ */
+
+button[uib-popover]{
+	z-index: 1011;
+}
+
+@keyframes glowing {
+  0% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+  50% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
+  100% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+}
+
+// injector
+@import 'accessDenied/accessDenied.less';
+@import 'admin/admin.less';
+@import 'admin/dataSet/dataSet.less';
+@import 'admin/dataSource/dataSource.less';
+@import 'dashboard/dashboard.less';
+@import 'metrics/metric-card/metric-card.less';
+@import 'metrics/modals/modal.less';
+@import 'directives/barChart/barChart.less';
+@import 'directives/left-sidebar/left-sidebar.less';
+@import 'directives/lineChart/lineChart.less';
+@import 'navbar/navbar.less';
+// endinjector
