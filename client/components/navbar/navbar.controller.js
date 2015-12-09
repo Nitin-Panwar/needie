@@ -5,7 +5,7 @@ angular.module('sasaWebApp')
     $scope.menu = [       
     {
       'title': 'Create Dashboard',
-      'link': '/'
+      'link': '/dashboard'
     },
     {
       'title': 'Admin',

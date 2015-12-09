@@ -15,13 +15,7 @@ angular.module('sasaWebApp', [
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     //
-    //find user homepage
-    //
-    // $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {                          
-    //     var homepage = '/dashboard?dashboardId='+data.homepage.$oid;         
-    // }, function (){
-    //     messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
-    // })  
+      
 
     $urlRouterProvider
       .otherwise('/dashboard');
@@ -44,7 +38,7 @@ angular.module('sasaWebApp', [
 }) // end config
 
 .run(
-  function ($rootScope, $http, webServiceURL, messageCenterService, $location) {
+  function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory) {
 
     /**
      * Login user if he's not already logged in
@@ -54,7 +48,17 @@ angular.module('sasaWebApp', [
     if($rootScope.user == undefined){
       event.preventDefault();        
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {          
-          $rootScope.user = response.data;  
+          $rootScope.user = response.data;
+          //find user homepage    
+        $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
+            if(data.homepage){
+              var homepage = '/dashboard?dashboardId='+data.homepage.$oid;         
+              $location.url(homepage)  
+            }
+            
+        }, function (){
+            messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
+        })
                  
       },function (err) {
           // redirect user to access denied page

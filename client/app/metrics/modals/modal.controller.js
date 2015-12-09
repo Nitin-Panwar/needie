@@ -2,7 +2,7 @@
 
 angular.module('sasaWebApp')
 
-.controller('ModalCtrl',function($scope,$modalInstance,data){
+.controller('ModalCtrl',function($scope,$modalInstance,data,$rootScope){
       $scope.data = data;  
       $scope.dashBoard = {dashBoardName : ''};
       $scope.measureInfo = {};
@@ -27,6 +27,7 @@ angular.module('sasaWebApp')
        * @return {[type]}       [description]
        */
       $scope.save = function(which){
+        $rootScope.placeholder.edited = true;
         switch(which){
           case 'saveDBName':
             $modalInstance.close($scope.dashBoard.dashBoardName);
