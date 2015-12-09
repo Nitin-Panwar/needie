@@ -1,5 +1,4 @@
-// Generated on 2015-05-26 using generator-angular-fullstack 2.0.13
-//version 1
+// Generated on 2015-10-27 using generator-angular-fullstack 2.0.13
 'use strict';
 
 module.exports = function (grunt) {
@@ -20,9 +19,6 @@ module.exports = function (grunt) {
     injector: 'grunt-asset-injector',
     buildcontrol: 'grunt-build-control'
   });
-
-  //string replacer
-  grunt.loadNpmTasks('grunt-replace');
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
@@ -61,15 +57,15 @@ module.exports = function (grunt) {
     watch: {
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
+          '<%= yeoman.client %>/{app,components,assets}/**/*.js',
+          '!<%= yeoman.client %>/{app,components,assets}/**/*.spec.js',
+          '!<%= yeoman.client %>/{app,components,assets}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'],
         tasks: ['injector:scripts']
       },
       injectCss: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.css'
+          '<%= yeoman.client %>/{app,components,assets}/**/*.css'
         ],
         tasks: ['injector:css']
       },
@@ -86,13 +82,12 @@ module.exports = function (grunt) {
       },
       injectLess: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.less'],
+          '<%= yeoman.client %>/{app,components,assets}/**/*.less'],
         tasks: ['injector:less']
       },
-      
       less: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.less'],
+          '<%= yeoman.client %>/{app,components,assets}/**/*.less'],
         tasks: ['less', 'autoprefixer']
       },
       gruntfile: {
@@ -100,7 +95,7 @@ module.exports = function (grunt) {
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
+          '{.tmp,<%= yeoman.client %>}/{app,components,assets}/**/*.css',
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
           '!{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
@@ -239,8 +234,9 @@ module.exports = function (grunt) {
           src: [
             '<%= yeoman.dist %>/public/{,*/}*.js',
             '<%= yeoman.dist %>/public/{,*/}*.css',
-            '<%= yeoman.dist %>/public/assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
-            //,'<%= yeoman.dist %>/public/assets/fonts/*'
+            '<%= yeoman.dist %>/public/assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            '<%= yeoman.dist %>/public/assets/css/*',
+            '<%= yeoman.dist %>/public/assets/fonts/*'
           ]
         }
       }
@@ -264,6 +260,7 @@ module.exports = function (grunt) {
       options: {
         assetsDirs: [
           '<%= yeoman.dist %>/public',
+          '<%= yeoman.dist %>/public/assets/css',
           '<%= yeoman.dist %>/public/assets/images'
         ],
         // This is so we update image references in our ng-templates
@@ -275,68 +272,14 @@ module.exports = function (grunt) {
       }
     },
 
-    // The following *-min tasks produce minified files in the dist folder
-    // imagemin: {
-    //   dist: {
-    //     files: [{
-    //       expand: true,
-    //       cwd: '<%= yeoman.client %>/assets/images',
-    //       src: '{,*/}*.{png,jpg,jpeg,gif}',
-    //       dest: '<%= yeoman.dist %>/public/assets/images'
-    //     }]
-    //   }
-    // },
 
-    // svgmin: {
-    //   dist: {
-    //     files: [{
-    //       expand: true,
-    //       cwd: '<%= yeoman.client %>/assets/images',
-    //       src: '{,*/}*.svg',
-    //       dest: '<%= yeoman.dist %>/public/assets/images'
-    //     }]
-    //   }
-    // },
-
-    //replacer
-    replace: {
-      development: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('./config/environments/development.json')
-          }]
-        },
+    svgmin: {
+      dist: {
         files: [{
           expand: true,
-          flatten: true,
-          src: ['./config/constants.service.js'],
-          dest: '<%= yeoman.client %>/components/constants/'
-        }]
-      },
-      staging: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('./config/environments/staging.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flatten: true,
-          src: ['./config/constants.service.js'],
-          dest: '<%= yeoman.client %>/components/constants/'
-        }]
-      },
-      production: {
-        options: {
-          patterns: [{
-            json: grunt.file.readJSON('./config/environments/production.json')
-          }]
-        },
-        files: [{
-          expand: true,
-          flatten: true,
-          src: ['./config/constants.service.js'],
-          dest: '<%= yeoman.client %>/components/constants/'
+          cwd: '<%= yeoman.client %>/assets/images',
+          src: '{,*/}*.svg',
+          dest: '<%= yeoman.dist %>/public/assets/images'
         }]
       }
     },
@@ -401,12 +344,10 @@ module.exports = function (grunt) {
             '*.{ico,png,txt}',
             '.htaccess',
             'bower_components/**/*',
-            'assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+            'assets/images/{,*/}*.{webp}',
+            'assets/css/*.*',
             'assets/fonts/**/*',
-            // Added on 16th October
-            'assets/*.*',
-            'index.html',
-			'web.config'
+            'index.html'
           ]
         }, {
           expand: true,
@@ -470,9 +411,8 @@ module.exports = function (grunt) {
         }
       },
       dist: [
-        'less'
-        //'imagemin',
-        //'svgmin'
+        'less',        
+        'svgmin'
       ]
     },
 
@@ -612,7 +552,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'env:all', 'env:prod', 'replace:development','express:prod', 'wait', 'open', 'express-keepalive']);
+      return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
     }
 
     if (target === 'debug') {
@@ -631,7 +571,6 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'env:all',
-      'replace:development',
       'injector:less', 
       'concurrent:server',
       'injector',
@@ -691,100 +630,24 @@ module.exports = function (grunt) {
     ]);
   });
 
-  grunt.registerTask('build', function (target) {
-
-      //update app server url to dev server
-      if (target === 'staging') {
-        grunt.task.run(['replace:staging']);
-      }
-
-      //update app server url to prod server
-      else if (target === 'production') {
-        grunt.task.run(['replace:production']);
-    }
-
-      grunt.task.run([
-      'clean:dist',
-      'injector:less', 
-      'concurrent:dist',
-      'injector',
-      'wiredep',
-      'useminPrepare',
-      'autoprefixer',
-      'ngtemplates',
-      'concat',
-      'ngAnnotate',
-      'copy:dist',
-      // 'cdnify',
-      'cssmin',
-      'uglify',
-      'rev',
-      'usemin'
-    ]);
-  });
-
-  //locally run with dev app server
-  grunt.registerTask('staging', function (target) {
-
-    //locally create dist with dev app server
-    if (target === 'dist') {
-      return grunt.task.run([
-        'build',
-         'env:all',
-         'replace:staging',
-         'env:prod', 
-         'express:prod', 
-         'wait', 
-         'open', 
-         'express-keepalive']);
-    }
-
-    grunt.task.run([
-      'clean:server',
-      'env:all',
-      'replace:staging',
-      'injector:less', 
-      'concurrent:server',
-      'injector',
-      'wiredep',
-      'autoprefixer',
-      'express:dev',
-      'wait',
-      'open',
-      'watch'
-    ]);
-  });
-
-  //locally run with prod app server
-  grunt.registerTask('production', function (target) {
-    //locally create dist with prod app server
-    if (target === 'dist') {
-      return grunt.task.run([
-        'build',
-         'env:all',
-         'replace:production',
-         'env:prod', 
-         'express:prod', 
-         'wait', 
-         'open', 
-         'express-keepalive']);
-    }
-
-    grunt.task.run([
-      'clean:server',
-      'env:all',
-      'replace:production',
-      'injector:less', 
-      'concurrent:server',
-      'injector',
-      'wiredep',
-      'autoprefixer',
-      'express:dev',
-      'wait',
-      'open',
-      'watch'
-    ]);
-  });
+  grunt.registerTask('build', [
+    'clean:dist',
+    'injector:less', 
+    'concurrent:dist',
+    'injector',
+    'wiredep',
+    'useminPrepare',
+    'autoprefixer',
+    'ngtemplates',
+    'concat',
+    'ngAnnotate',
+    'copy:dist',
+    'cdnify',
+    'cssmin',
+    'uglify',
+    'rev',
+    'usemin'
+  ]);
 
   grunt.registerTask('default', [
     'newer:jshint',
