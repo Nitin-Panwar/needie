@@ -1,0 +1,64 @@
+<section ng-model="metricModel">   
+    <section class="panel panel-default" ng-class="{'panel-danger':alertBreached, 'panel-warning': warningBreached}">
+        <section class="panel-heading">
+            <ul class="panel-title list-inline">
+    	        <li class="pull-left"><i class="fa fa-arrows"></i></li>
+    	        <li class=""><span>{{metricData['name']}}</span></li>                                        
+    	        <li class="pull-right" uib-dropdown on-toggle="toggled(open)">                
+                    <a href id="simple-dropdown" uib-dropdown-toggle>
+                        <i class="fa fa-align-justify"></i>
+                    </a>
+                    <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
+                        <li ng-click="launch('actions')" ><a href="#">Actions</a></li>
+                        <li role="separator" class="divider"></li>                    
+                        <li ng-click="launch('data')"><a href="#">Data</a></li>
+                        <li ng-click="launch('filter')"><a href="#">Filters</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li ng-click="launch('measure',metricData,mydata)"><a href="#">Measures</a></li>    
+                        <li class="disabled"><a href="#">Visualizations</a></li>                     
+                        <li role="separator" class="divider"></li>
+                        <li ng-click="launch('metric',metricData)"><a href="#">Metric Details</a></li> 
+                        <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
+                    </ul>                
+    	        </li>                
+            </ul>              
+        </section>
+        <!-- metric Card Body -->
+        <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}"> 
+            <!-- <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle pull-left" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Chart
+                <span class="glyphicon glyphicon-chevron-down"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li ng-click="changeChart('line')"><a href="#">Line Chart</a></li>
+                    <li ng-click="changeChart('bar')"><a href="#">Bar Chart</a></li>
+                </ul>
+            </div> -->                  
+            
+                <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block"></line-chart>     
+                <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block"></bar-chart>
+                <ul class="list-inline" >
+                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile'" class="measure-card" 
+                        ng-class="{'warning-breached': measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value,
+                                    'alert-breached': measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value}" ng-show="measure.active || measure.active == undefined">                               
+                        <span style="font-size: 22px;">{{measure.value|number}}{{measure.unit}}</span>
+                        <br>
+                        <span>{{measure.name}}</span>                         
+                    </li>
+                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type === 'percentile'" class="measure-card" ng-show="measure.active || measure.active == undefined">
+                        <table class="table table-bordered text-center" style="margin: 0px;">                                                       
+                            <tr><td ng-repeat="(key, value) in measure.value">{{key|ordinal}}</td></tr>
+                            <tr><td ng-repeat="(key, value) in measure.value">{{value|number}}{{measure.unit}}</td></tr>
+                        </table>
+                        <span>{{measure.name}}</span>
+                    </li>
+                </ul>     
+            
+        </section>
+        
+    </section>
+</section>
+
+
+

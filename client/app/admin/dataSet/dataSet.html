@@ -1,0 +1,201 @@
+<section class="col-md-12">
+	<legend>Create Data Set</legend><br>
+	<!--Progress bar  -->
+	<progressbar class="progress-striped active" type="info" value="progress">{{progress}}%</progressbar>
+	
+	<!-- show selected data source -->
+	<ul class="list-group" ng-show="!isEmptyObject(selectedDataSource)" ng-click="isCollapse =!isCollapse" >
+			<li class="list-group-item">
+				<table class="table" collapse="!isCollapse">	
+					<thead class="text-info"><strong>Click here to see selected items</strong></thead>
+					<tbody>
+						<tr>
+							<td>Title</td>
+							<td>{{selectedDataSource.title | uppercase}}</td>
+							<td>Created On</td>
+							<td>{{selectedDataSource.created_on | date:'longDate'}}</td>
+						</tr>
+						<tr>
+							<td>Server Type</td>
+							<td>{{selectedDataSource.server_type | uppercase}}</td>
+							<td>Server Name</td>
+							<td>{{selectedDataSource.server_name | uppercase}}</td>
+						</tr>
+						<tr >
+							<td ng-show="isEmpty(selectedDataSource.server_instance_name)">
+							Server Instance Name</td>
+							<td ng-show="isEmpty(selectedDataSource.server_instance_name)">{{selectedDataSource.server_instance_name | uppercase}}</td>
+							<td>Database Name</td>
+							<td>{{selectedDataSource.db_name | uppercase}}</td>
+						</tr>
+						<tr>
+							<td ng-show="isEmpty(selectedDataSource.port)">Port</td>
+							<td ng-show="isEmpty(selectedDataSource.port)">
+							{{selectedDataSource.port}}</td>
+
+							<td ng-show="wizard.step4">Selected Tables</td>
+							<td ng-show="wizard.step4">
+     							<li class="list-unstyled" ng-repeat= "table in selectedDataSource.tables">{{table.schema}}.{{table.table}}</li>	
+  							</td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+		</ul>
+</section>
+<!-- write query -->
+<section class="col-md-12">
+	<section ng-show="query">
+		<span>
+			<textarea onkeyup="autoGrow(this)" rows="10" cols="154" ng-model="insertedQuery">Write your query here !!!</textarea>
+		</span>
+		<button class="btn btn-primary pull-left" ng-click="previousStep3()">Previous</button>
+		<button class="btn btn-primary pull-right" ng-click="insertQuery()">Next</button>
+	</section>
+
+	<section class="col-md-7">
+		<!-- select data sources -->
+		<section ng-show="wizard.step1">
+			<legend>Select Data Source</legend>
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="item in dataSources" ng-click="isCollapsed=!isCollapsed">
+					<table border="0" style="width:100%" collapse="!isCollapsed">
+						<thead class="text-info"><strong >{{item.title | uppercase}}</strong>
+						</thead>
+						<tbody>	
+							<tr>
+								<td>Created On</td>
+								<td>{{item.created_on | date:'longDate'}}</td>
+							</tr>
+							<tr>
+								<td>Server Type</td>
+								<td>{{item.server_type | uppercase}}</td>
+							</tr>
+							<tr>
+								<td>Server Name</td>
+								<td>{{item.server_name | uppercase}}</td>
+							</tr>
+							<tr ng-show="isEmpty(item.server_instance_name)">
+								<td>Server Instance Name</td>
+								<td>{{item.server_instance_name | uppercase}}</td>
+							</tr>
+							<tr>
+								<td>Database Name</td>
+								<td>{{item.db_name | uppercase}}</td>
+							</tr>
+							<tr ng-show="isEmpty(item.port)">
+								<td>Port</td>
+								<td>{{item.port}}</td>
+							</tr>
+							<button ng-show="isCollapsed" ng-click="selectInputMethod(item)" class="btn btn-primary pull-right">Select</button>
+						</tbody>
+			   		</table>
+				</li>
+			</ul>
+		</section>
+		<!-- select prepare data input method -->
+		<section ng-show="wizard.step2">
+			<legend >Build DataSet</legend>
+			<form><span><input class="ngSelectionHeader" type="radio" name ="inputMethod" ng-click="getTablesList()">&nbsp;&nbsp;Build Query</span>
+			&nbsp;&nbsp;
+				<span ><input class="ngSelectionHeader" type="radio" name="inputMethod" ng-click="writeQuery()">&nbsp;&nbsp; Insert Query</span>
+			</form><br><br>
+			<button class="btn btn-primary pull-left" ng-click="previousStep2()">Previous</button>
+		</section>
+		<!-- select tables -->
+		<section ng-show="wizard.step3">
+			<network-graph></network-graph>
+			<button ng-controller="NetworkCtrl" ng-click="getRelations()" class="btn btn-primary pull-right ">Get Relationship</button>
+			<br>
+			<span>
+			<table class="table table-hover">		
+				<thead><strong>Select Tables</strong></thead>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Schema</th>
+						<th>Table</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="table in filteredTodos" >
+						<td><input type="checkbox" name="" value="table" placeholder="" ng-model="selectedTables[begin][$index]"></td>
+						<td>{{table.schema}}</td>
+						<td>{{table.name}}</td>
+					</tr>
+				</tbody>
+			</table>
+			</span>	
+			<!-- For Pagination -->
+			<pagination 
+		      ng-model="currentPage"
+		      total-items="totalitems"
+		      max-size="maxSize"  
+		      boundary-links="true">
+			</pagination>
+			<br>
+			<button  ng-click="previousStep3()" class="btn btn-primary pull-left">Previous</button>
+			<button ng-click="getTableDetails()"class="btn btn-primary pull-right">Next</button>
+		</section>
+		<!-- show Tables  -->
+		<section ng-show="wizard.step4 && !query">
+			<span><legend>Select Columns</legend>
+			<accordion close-others="true" ng-show="show">
+			  <accordion-group heading="{{table.schema_name.toString()+'.'+table.table_name.toString()}}" ng-repeat="table in Relations"> 	
+				<ul class="list-unstyled" ng-repeat= "column in table.column">
+			    <li>	 
+				     <input type="checkbox" name="" value="column" placeholder="" ng-model="selectedColumns[$parent.$index][$index]">
+				     <label>{{column.column_name}}</label>
+			    </li>	
+			  </ul>
+			  </accordion-group>
+			</accordion>
+			<span ng-show="!show">
+			  <p>{{tableText}}</p>
+			</span>
+			</span>	
+			<button ng-click="previousStep4()" class="btn btn-danger pull-left">Previous</button>
+			<button ng-click="infoMatrix()" ng-disabled="!show" class="btn btn-primary pull-right">Next</button>
+		</section>	
+	</section>
+</section>
+
+<!--show Infomatrix-->
+<section ng-show="wizard.step5" class ="col-md-12">
+	<span >
+		<table class="table table-hover" >		
+			<thead >
+				<tr>
+					<th>Schema</th>
+					<th>Table</th>
+					<th>Column</th>
+					<th>Type</th>
+					<th>Primary Key</th>
+					<th>Foreign Key</th>
+					<th>Distinct Values</th>
+					<th>Filter</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody ng-repeat= "column in myInfoMatrix">
+				<tr >
+					<td>{{column.schema_name}}</td>
+					<td>{{column.table_name}}</td>
+					<td>{{column.column_name}}</td>
+					<td>{{column.type}}</td>
+					<td>{{column.primary_key}}</td>
+					<td>{{column.foreign_key}}</td>
+					<td><div class="bs-docs-section" ng-controller="ModalDemoCtrl"><button type="button" class="btn btn-primary" ng-click="distinctValues(column.schema_name,column.table_name,column.column_name)" bs-modal="modal">Distinct Values</button>
+					</div>
+					</td>
+					<td><input type="checkbox" ng-model="column.filter" ng-init="column.filter=false"></td>
+					<td><input type="checkbox" ng-init="column.date=false" ng-click="column.date=getDateFormat()"></td>
+				</tr>
+			</tbody>
+		</table>
+	</span>
+	<button ng-click="previousStep5()" class="btn btn-danger pull-left">Previous</button>
+	<button ng-click="saveInfoMatrix()" ng-csv="myInfoMatrix" filename="dataSet.csv"class="btn btn-primary pull-right">
+	<span class="glyphicon glyphicon-save"></span>Save
+	</button>	
+</section>	

@@ -1,0 +1,91 @@
+<section class="col-md-12">
+	<legend>Data Source Details</legend>
+	<form class="form-horizontal" name="dsAdd" novalidate >
+		
+		<!-- Data Source Title -->
+		<section class="form-group">
+			<label for="ds_title" class="control-label col-sm-2">Title</label>
+			<section class="col-sm-10" ng-class="{'has-success':dsAdd.ds_title.$valid,
+		'has-error':dsAdd.ds_title.$invalid}">			
+				<input type="text" name="ds_title" placeholder="Provide Descriptive Name" id="ds_title" class="form-control" 
+				ng-model="ds.title"
+				ng-minlength="5" 
+				required>
+				<p class="help-block" ng-show="dsAdd.ds_title.$invalid && !dsAdd.ds_title.$pristine">*Minimum 5 characters required</p>
+			</section>			
+		</section>
+
+		<!-- DB Type -->
+		<section class="form-group">
+			<label for="ds_type" class="control-label col-sm-2">Database Type</label>
+			<section class="col-sm-10" ng-class="{'has-success':dsAdd.ds_type.$valid,
+			'has-error':dsAdd.ds_type.$invalid}">
+				<select name="ds_type"  class="form-control"
+	            ng-model="ds.server_type"
+	            ng-options="type.lookupCode as type.description for type in dbDescr" required ></select>
+			</section>
+		</section>
+
+		<!-- Data Source server name -->
+		<section class="form-group">
+			<label for="ds_server" class="control-label col-sm-2">Server</label>
+			<section class="col-sm-10" ng-class="{'has-success':dsAdd.ds_server.$valid,
+		'has-error':dsAdd.ds_server.$invalid}">
+				<input type="text" name="ds_server" value="" placeholder="Server FQDN or IP" id="ds_server" class="form-control" ng-model="ds.server_name" required>
+			</section>			
+		</section>
+
+		<!-- Data Source Instance Name -->
+		<section class="form-group">
+			<label for="ds_instance" class="control-label col-sm-2">Instance Name</label>
+			<section class="col-sm-10">
+				<input type="text" name="ds_instance" value="" placeholder="Optional" id="ds_instance" class="form-control"
+				ng-model="ds.server_instance_name">
+			</section>			
+		</section>
+
+		<!-- Data Source Port Number -->
+		<section class="form-group">
+			<label for="ds_port" class="control-label col-sm-2">Port</label>
+			<section class="col-sm-10" ng-class="{'has-error':dsAdd.ds_port.$invalid}">
+				<input type="number" name="ds_port" value="" placeholder="Optional" id="ds_port" class="form-control" ng-model="ds.port">
+			</section>			
+		</section>
+		
+		<!-- Database Name -->
+		<section class="form-group">
+			<label for="ds_db" class="control-label col-sm-2">Database Name</label>
+			<section class="col-sm-10" ng-class="{'has-success':dsAdd.ds_db.$valid,
+		'has-error':dsAdd.ds_db.$invalid}">
+				<input type="text" name="ds_db" value="" placeholder="" id="ds_db" class="form-control" ng-model="ds.db_name" required>
+			</section>			
+		</section>
+		
+		<!-- Credentials -->
+		<legend>Credentials</legend>
+
+		<!-- User name -->
+		<section class="form-group">
+			<label for="ds_user" class="control-label col-sm-2">User Name</label>
+			<section class="col-sm-10" ng-class="{'has-success':dsAdd.ds_user.$valid,
+		'has-error':dsAdd.ds_user.$invalid}" >
+				<input type="text" name="ds_user" value="" placeholder="User Name" id="ds_user" class="form-control" ng-model="ds.user_name" required>
+			</section>							
+		</section>
+
+		<!-- Password 
+		<section class="form-group">
+			<label for="ds_pwd" class="control-label col-sm-2">Password</label>
+			<section class="col-sm-10" ng-class="{'has-success':dsAdd.ds_pwd.$valid,
+		'has-error':dsAdd.ds_pwd.$invalid}">
+				<input type="password" name="ds_pwd" value="" placeholder="Password"  id="ds_pwd" class="form-control" ng-model="ds.passwd" required>
+			</section>
+		</section>
+		-->
+	<!-- Test connection and save button -->
+	<section class="pull-right">
+		<button ng-click="testConnection(dsAdd)" class="btn btn-default" ng-disabled="dsAdd.$invalid">Test Connection</button>
+		<button ng-click="saveDS(dsAdd)" class="btn btn-success" ng-disabled="dsAdd.$invalid">Save</button>
+	</section>
+	</form>
+</section>

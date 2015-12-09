@@ -1,0 +1,40 @@
+<section class="col-md-12 row">
+	<section class="">
+		<header class="title-bar intel-border-blue intel-bg-light col-md-12">
+			<span class="title-bar-title">Data Sources</span>	
+			<a href="/addDataSource" class="btn btn-primary pull-right" style="margin-top: 5px;">Create New</a>
+		</header>		
+	</section>
+
+	<ul class="list-group col-md-12">
+		<li class="list-group-item" ng-repeat="dataSource in dataSources" ng-click="isCollapsed = !isCollapsed"> 
+			<label class="title" ng-show="!isCollapsed">{{dataSource.title | uppercase}}</label>		
+			<section class="table-responsive">
+				<table class="table table-intel" collapse="!isCollapsed">		
+					<thead >
+						<tr>
+							<th>Title</th>					
+							<th>Created On</th>
+							<th>Server Type</th>
+							<th>Server Name</th>
+							<th ng-show="isEmpty(dataSource.server_instance_name)">Server Instance Name</th>
+							<th>Database Name</th>
+							<th ng-show="isEmpty(dataSource.port)">Port</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>	
+							<td><label>{{dataSource.title | uppercase}}</label></td>				
+							<td>{{dataSource.created_on | date:'longDate'}}</td>
+							<td>{{dataSource.server_type | uppercase}}</td>
+							<td>{{dataSource.server_name | uppercase}}</td>
+							<td ng-show="isEmpty(dataSource.server_instance_name)">{{dataSource.server_instance_name | uppercase}}</td>
+							<td>{{dataSource.db_name | uppercase}}</td>
+							<td ng-show="isEmpty(dataSource.port)">{{dataSource.port}}</td>
+						</tr>
+					</tbody>
+				</table>			
+			</section>
+		</li>		        		       		 
+	</ul> 
+</section>
