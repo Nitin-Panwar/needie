@@ -30,12 +30,12 @@ angular.module('sasaWebApp', [
    * @param  {[type]} dialogsProvider){                         dialogsProvider.useBackdrop(true);      dialogsProvider.useEscClose(true);      dialogsProvider.useCopy(false);     dialogsProvider.setSize('sm');    } [description]
    * @return {[type]}                    [description]
    */
-.config(function(dialogsProvider){
-      // this provider is only available in the 4.0.0+ versions of angular-dialog-service
-      dialogsProvider.useBackdrop(true);
-      dialogsProvider.useEscClose(true);
-      dialogsProvider.useCopy(false);      
-}) // end config
+.config(['dialogsProvider','$translateProvider',function(dialogsProvider){
+    dialogsProvider.useBackdrop(true);
+    dialogsProvider.useEscClose(false);
+    dialogsProvider.useCopy(false);
+    dialogsProvider.setSize('la');
+  }])//end config
 
 .run(
   function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory) {
