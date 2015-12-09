@@ -436,18 +436,12 @@ module.exports = function (grunt) {
         commit: true,
         push: true,
         connectCommits: false,
-        message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+        message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%',        
       },
-      heroku: {
+      intel: {
         options: {
-          remote: 'heroku',
-          branch: 'master'
-        }
-      },
-      openshift: {
-        options: {
-          remote: 'openshift',
-          branch: 'master'
+          remote: 'origin',
+          branch: 'sprint'
         }
       }
     },

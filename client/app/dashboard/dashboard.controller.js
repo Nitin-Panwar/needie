@@ -77,7 +77,7 @@ angular.module('sasaWebApp')
      * @return {[type]} [description]
      */ 
     $scope.launchSave = function () {      
-      var dlg = dialogs.create('/app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
+      var dlg = dialogs.create('app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
           console.info(data);
         });  
