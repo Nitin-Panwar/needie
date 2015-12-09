@@ -50,19 +50,4 @@ angular.module('sasaWebApp')
       
     })
 
-.config(['dialogsProvider','$translateProvider',function(dialogsProvider){
-    dialogsProvider.useBackdrop(true);
-    dialogsProvider.useEscClose(false);
-    dialogsProvider.useCopy(false);
-    dialogsProvider.setSize('la');
-  }])//end config
 
-  .run(['$templateCache',function($templateCache){
-      $templateCache.put('/app/explore/modals/save.html');
-      $templateCache.put('/app/explore/modals/actions.html');
-      $templateCache.put('/app/explore/modals/data.html');
-      $templateCache.put('/app/explore/modals/filter.html');
-      $templateCache.put('/app/explore/modals/measures.html');
-      $templateCache.put('/app/explore/modals/threshold.html');
-      $templateCache.put('/app/explore/modals/metricDetails.html');
-  }]);

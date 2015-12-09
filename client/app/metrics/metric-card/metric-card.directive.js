@@ -23,19 +23,19 @@ angular.module('sasaWebApp')
              * data dialog
              */
             case 'data':
-              dialogs.create('/app/metrics/modals/data.html','ModalCtrl',{},'sm');
+              dialogs.create('app/metrics/modals/data.html','ModalCtrl',{},'sm');
               break;
             /**
              * filter dialog
              */
             case 'filter':
-              dialogs.create('/app/metrics/modals/filter.html','ModalCtrl',{},'sm');
+              dialogs.create('app/metrics/modals/filter.html','ModalCtrl',{},'sm');
               break;
             /**
              * filter diaglog
              */
             case 'measure':              
-              var dlg = dialogs.create('/app/metrics/modals/measures.html','ModalCtrl', metricData['measures'],'sm');              
+              var dlg = dialogs.create('app/metrics/modals/measures.html','ModalCtrl', metricData['measures'],'sm');              
               dlg.result.then(function(data){
                 for(var i in data){
                   for(var key in data[i]){
@@ -50,7 +50,7 @@ angular.module('sasaWebApp')
             case 'metric':
               delete metricData['distributions'];
               scope.metric=metricData;
-              dialogs.create('/app/metrics/modals/metricDetails.html','ModalCtrl',scope.metric,'sm');
+              dialogs.create('app/metrics/modals/metricDetails.html','ModalCtrl',scope.metric,'sm');
               break;
            }
         };
