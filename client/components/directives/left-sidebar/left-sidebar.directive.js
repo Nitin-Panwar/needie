@@ -37,8 +37,7 @@ angular.module('sasaWebApp')
 	    		scope.showfilters = false;
 	    	}	    	
 
-	    	$rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {	
-	    		console.info(data);    			    			          	
+	    	$rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {		    		
 	          	scope.myDashboardsList=data['dashboards'];
 	        }, function (){
 	          	messageCenterService.add('danger', 'No Data found', { timeout: 5000 });
