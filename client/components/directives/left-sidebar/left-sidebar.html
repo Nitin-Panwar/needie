@@ -29,30 +29,8 @@
 		<section ng-show="showfilters">
 			<fieldset>
 				<span class="lead white-text">Filters</span>
-<!-- 				<ul class="sidebar-menu">
-					<li ng-repeat="key in filterKeys|orderBy" class="text-uppercase active dropdown" ng-click="$event.stopPropagation()" role="presentation">
-						<span>
-							<span class="white-text" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;">{{key | uppercase}}</span>
-							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
-							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
-							<label class="badge badge-important pull-right" title="Filters">{{globalQuery[key].length}}</label>
-							<section ng-show="isCollapsed">
-								<ul class="list-group">
-									<li class="list-group-item">						            	
-						            	<div class="input-group">						            		
-											<input type="text" class="form-control" placeholder="Search..." ng-model="searchFilter" aria-describedby="basic-addon2">
-											<span title="Remove search text" class="input-group-addon btn" id="basic-addon2" ng-click="searchFilter = ''"><i class="intelicon-close-outlined"></i></span>
-											<span title="Remove Filters" class="input-group-addon btn" id="basic-addon2" ng-click="unselectAllFilterValues(key)"><i class="intelicon-cancel-filter-solid"></i></span>
-										</div>						            	
-					            	</li>
-
-								</ul>
-							</section>
-						</span>
-					</li>
-				</ul> -->
 				<ul class="sidebar-menu">
-					<li ng-repeat="(key, value) in GlobalFilters" class="text-uppercase active dropdown" ng-click="$event.stopPropagation()" role="presentation">
+					<li ng-repeat="(key, value) in GlobalFilters" class="text-uppercase active dropdown" ng-click="$event.stopPropagation(); " role="presentation">
 						<span>
 							<span class="white-text" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{key | uppercase}}</span>
 							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
