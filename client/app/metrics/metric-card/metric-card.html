@@ -42,15 +42,15 @@
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile'" class="measure-card" 
                         ng-class="{'warning-breached': measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value,
                                     'alert-breached': measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value}" ng-show="measure.active || measure.active == undefined">                               
-                        <span style="font-size: 22px;">{{measure.value|number}}{{measure.unit}}</span>
+                        <span><b>{{measure.value|number}}{{measure.unit}}</b></span>
                         <br>
                         <span>{{measure.name}}</span>                         
                     </li>
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type === 'percentile'" class="measure-card" ng-show="measure.active || measure.active == undefined">
-                        <table class="table table-bordered text-center" style="margin: 0px;">                                                       
-                            <tr><td ng-repeat="(key, value) in measure.value">{{key|ordinal}}</td></tr>
-                            <tr><td ng-repeat="(key, value) in measure.value">{{value|number}}{{measure.unit}}</td></tr>
-                        </table>
+                        <section class="col-md-3" ng-repeat="(key, value) in measure.value">
+                            {{key|ordinal}}<br>
+                            <b>{{value|number}} {{measure.unit}}</b>
+                        </section>    
                         <span>{{measure.name}}</span>
                     </li>
                 </ul>     
