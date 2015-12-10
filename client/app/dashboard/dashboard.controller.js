@@ -35,9 +35,6 @@ angular.module('sasaWebApp')
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
       });
     }
-    else{
-      $rootScope.placeholder.edit = true;
-    }
 
     /**
      * Print Dashboard to document
