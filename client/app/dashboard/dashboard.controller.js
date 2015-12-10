@@ -94,6 +94,9 @@ angular.module('sasaWebApp')
       })
     } 
 
+    /**
+     * Set a dashboard as favorite
+     */
     $scope.setFavorite = function () {
       usersFactory.save({idsid: $rootScope.user, dashboardId: $rootScope.placeholder.dashboard._id}).$promise.then(function (data) {
         messageCenterService.add('success','Dashboard set as favorite',{timeout: 3000});
@@ -101,6 +104,32 @@ angular.module('sasaWebApp')
         messageCenterService.add('danger','Could not set dashboard as favorite',{timeout: 10000});
       });
     }
+
+    /**
+     *Below it watches for any changes in movement of metrics on the dashboard and resize
+     *
+     */
+    $scope.gridsterDashboardOpts = {
+      resizable: {
+         enabled: true,
+         handles: ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'],
+         start: function(event, $element, widget) {}, // optional callback fired when resize is started,
+         resize: function(event, $element, widget) {}, // optional callback fired when item is resized,
+         stop: function(event, $element, widget) {$rootScope.placeholder.edited = true;} // optional callback fired when item is finished resizing
+      },
+      draggable: {
+         enabled: true, // whether dragging items is supported
+         handle: '.mover-handle', // optional selector for resize handle
+         start: function(event, $element, widget) {}, // optional callback fired when drag is started,
+         drag: function(event, $element, widget) {}, // optional callback fired when item is moved,
+         stop: function(event, $element, widget) {$rootScope.placeholder.edited = true;} // optional callback fired when item is finished dragging
+      }
+    };
+
+
+    $scope.autoSize = function (item) {
+      // body...
+    };
 
     
 

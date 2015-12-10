@@ -44,10 +44,10 @@
 		<!-- dashboard buttons section end -->
 
 		<!-- Dashboard Section -->
-		<section gridster class="center-block text-center" id="dashboard">
+		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard">
 			<ul>
 				<!-- metric card area -->
-				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric">
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric" class="metric-card">
 					<section metriccard  metric-data="item"></section>
 				</li>
 				<!-- metric card area end -->
@@ -55,7 +55,7 @@
 				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="1" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
 					<section>
 						<span class="glyphicon glyphicon-move mover-handle" style="margin: 10px;"></span>						
-						<a href="#" editable-textarea="item.text" e-rows="5" e-cols="10" class="mover-handle" style="margin: 10px;">						
+						<a href="#" editable-textarea="item.text" e-rows="5" e-cols="10" class="mover-handle" style="margin: 10px;" onaftersave="placeholder.edited = true">						
 							{{ item.text || 'Text Goes Here' }}						
 						</a>
 						<span class="glyphicon glyphicon-trash" ng-click="removeTextBox(item)" style="margin: 10px;"></span>	
