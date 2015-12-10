@@ -17,7 +17,9 @@ angular.module('sasaWebApp')
       // $scope.newDashboard = false;
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
-        $rootScope.placeholder.dashboard = data;          
+        $rootScope.placeholder.dashboard = data;    
+        // update filters on front end
+        $rootScope.globalQuery = $rootScope.placeholder.dashboard.filters;      
 
         //Add data to placeholder
         for(var i=0;i<data['components'].length;i++)
@@ -28,8 +30,7 @@ angular.module('sasaWebApp')
           if(data['components'][i]['type']=='textBox'){
             $rootScope.placeholder.textBoxes.push(data['components'][i]);
           }
-        }
-        $rootScope.placeholder.dashboard = data; 
+        }        
         messageCenterService.add('success','Dashboard loaded successfully',{timeout: 10000});
       }, function (err) {
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
