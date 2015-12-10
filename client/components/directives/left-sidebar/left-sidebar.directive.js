@@ -6,6 +6,8 @@ angular.module('sasaWebApp')
       templateUrl: 'components/directives/left-sidebar/left-sidebar.html',
       restrict: 'EA',
       link: function (scope, element, attrs) {
+
+
       	/**
       	 * this variable validates whether filter has been applied.
       	 * @type {Number}
@@ -18,11 +20,20 @@ angular.module('sasaWebApp')
       	 */
       	scope.state = false;
 	    scope.toggleState = function() {	    	
-	    	scope.state = scope.showmydashboards || scope.metriclist || scope.showfilters;
+	    	// scope.state = scope.showmydashboards || scope.metriclist || scope.showfilters;
+	    	// // if sidebar is closed, reset colors.
+	    	// if(!scope.state){
+	    	// 	scope.reset();
+	    	// }	    		    	
+	    	toggleSideBar();
+	    };
+
+	    function toggleSideBar () {
+	    	scope.state = scope.showmydashboards || scope.metriclist || scope.showfilters;	    	
 	    	// if sidebar is closed, reset colors.
 	    	if(!scope.state){
 	    		scope.reset();
-	    	}	    		    	
+	    	}
 	    };
 
 	    /**
@@ -50,6 +61,9 @@ angular.module('sasaWebApp')
 	     * @return {[type]}          [description]
 	     */
 	    scope.getMetricsList = function () {
+	    	getMetrics();
+	    }
+	    function getMetrics() {
 	    	scope.metriclist = !scope.metriclist;	    	
 	    	if(scope.metriclist){
 	    		scope.showmydashboards = false;
@@ -59,7 +73,7 @@ angular.module('sasaWebApp')
 	    	workflow.get().$promise.then(function (data) {
 	    		scope.dashboardList = data;
 	    	},function (err) {
-	    		console.error(err);
+	    		messageCenterService.add('danger', 'Could Not Load Metrics', {timeout: 5000});	    		
 	    	});
 	    }
 
@@ -93,8 +107,7 @@ angular.module('sasaWebApp')
 	            var filterKeys = Object.keys(data.filters[0]);
 	            for (var i = 0; i < filterKeys.length; i++) {	            	
 	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
-	            };	  
-	            console.info($rootScope.GlobalFilters);          
+	            };	  	            
 
 		        }, 
 		        function (err) {

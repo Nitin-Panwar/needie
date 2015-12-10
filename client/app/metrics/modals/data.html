@@ -1,34 +1,59 @@
-<section class="modal-header">
+<div class="modal-header">
 	<h4 class="modal-title">Metric Data</h4>
-</section>
-<section class="modal-body">
-	<section class="well">
-		Drag from left to right to select columns for data table.
-	</section>
-	<section class="inline-parent">
-		<!-- left array list -->
-		<section ui-sortable="sortableOptions" class="pull-left sortable-list" ng-model="leftList" style="min-width:30%;">
-	      <!-- <section class="app" ng-repeat="app in list1">{{$index}} {{app.title}}</section> -->
-	    	<section>Column</section>
-	    	<section>Column</section>
-	    	<section>Column</section>
-	    	<section>Column</section>
-	    	<section>Column</section>
-	    </section>		
-	    <!-- left array list end -->
-
-	    <!-- right array list -->
-		<section ui-sortable="sortableOptions" class="pull-right sortable-list" ng-model="rightList" style="min-width:30%;">
-	      <!-- <section class="app" ng-repeat="app in list1">{{$index}} {{app.title}}</section> -->
-	      <section>Column</section>
-	      <!-- <section>Column</section> -->
-	      <!-- <section>Column</section> -->
-	      <section>Column</section>
-	      <section>Column</section>
-	    </section>
-    </section>
-    <!-- right array list end -->
-</section>
-<section class="modal-footer">
+</div>
+<div class="modal-body">
+	<div class = "container">
+		<div>
+			<button type="button" class="btn btn-default btn-md" ng-click="showData=true">Get Data</button>	
+			<button type="button" class="btn btn-default btn-md" ng-click="showList=true">Edit</button>
+		</div>
+		<div class="multiSelect" style="width:75%">                                    
+			<div class="select" style="width:35%">  
+  				<label class="control-label" for="multiSelectSelected">Available Coloumns</label> 
+				<ul id="contain">
+					<li ng-repeat="data in availableColoumn">
+					<input type="checkbox" ng-model="selectList.status" ng-if="(selectList.status===true)? selectList.name=data.name ">{{data.name}}{{selectList}}
+					</li>
+				</ul>
+    		</div>  
+			<div class="select buttons" style="width:20%">  
+  				<button class="btn mover left" ng-click="remove()" title="Add selected"   >  
+    				<i class="glyphicon glyphicon-arrow-left"></i>  
+  				</button>  
+  				<button class="btn mover right" ng-click="add(selectList, selectedColoumn)" title="Remove selected">  
+    				<i class="glyphicon glyphicon-arrow-right"></i>  
+  				</button> 
+			</div>  
+			<div class="select" style="width:35%"> 
+  				<label class="control-label" for="multiSelectAvailable">Selected Coloumns</label> 
+  		 		<ul id="contain">
+					<li ng-repeat="data1 in selectedColoumn track by $index">
+					<input type="checkbox">{{data1.name}}
+  					</li>
+  				</ul>
+			</div> 
+		</div> 
+		<div ng-show="showData===true">
+			<ul class="list-group">	
+				<li class="list-group-item" ng-repeat="data1 in selectedColoumn track by $index">
+				<table>
+					<caption>table title and/or explanatory text</caption>
+					<thead>
+						<tr>
+							<th>header</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>data</td>
+						</tr>
+					</tbody>
+				</table>
+				</li>
+				</ul>
+		</div>	
+	</div>				
+</div>
+<div class="modal-footer">
 	<button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
-</section>
+</div>
