@@ -71,10 +71,8 @@ angular.module('sasaWebApp')
          * this function gets latest values of metrics
          * @return {[type]} [description]
          */
-        scope.getMetric = function () {
-          var id = scope.metricData._id;
-          scope.metricData = null;
-          scope.metricLoader = metricsFactory.filterShow({metricID: id, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
+        scope.getMetric = function () {                    
+          scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
             scope.metricData = resposne;
           },function (err) {
             console.error(err);
