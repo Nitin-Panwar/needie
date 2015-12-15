@@ -67,6 +67,23 @@ angular.module('sasaWebApp')
           
         });
 
+        //Variable to change vizualization
+        scope.line = false;
+
+        /**
+         * [function to change vizualization]
+         * @param  {[type]} type [description]
+         * @return {[type]}      [description]
+         */
+        scope.changeViz = function (type) {
+          if(type==='line' && !scope.line){
+            scope.line=!scope.line;
+          }
+          if(type==='bar' && scope.line){
+            scope.line=!scope.line;
+          } 
+        }
+
         /**
          * this function gets latest values of metrics
          * @return {[type]} [description]
