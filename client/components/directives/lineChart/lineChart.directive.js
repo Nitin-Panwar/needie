@@ -49,10 +49,22 @@ angular.module('sasaWebApp')
               .orient("left")
               .ticks(10);
 
+          var tip = d3.tip()
+              .attr('class', 'd3-tip')
+              .offset([-10, 0])
+              .html(function(d) {
+                return "<strong>"+y_label+":</strong> <span>" + d.y0.toFixed(3)+ "</span>";
+              })
+
 
           var valueline = d3.svg.line()
               .x(function(d) { return x(d.x0); })
               .y(function(d) { return y(d.y0); });
+
+          // // Define the ttip for the tooltip
+          // var ttip = d3.select(element[0]).append("ttip") 
+          //     .attr("class", "tooltip")       
+          //     .style("opacity", 0);
 
               
           var svg = d3.select(element[0])
@@ -64,6 +76,9 @@ angular.module('sasaWebApp')
                   .attr("transform", 
                         "translate(" + margin.left + "," + margin.top + ")");
 
+
+          svg.call(tip);
+          
           // function for the x grid lines
           function make_x_axis() {
               return d3.svg.axis()
@@ -105,7 +120,19 @@ angular.module('sasaWebApp')
 
           // Add the valueline path.
           svg.append("path")
+              .attr("class","line")
               .attr("d", valueline(data));
+
+          // Add the scatterplot
+          svg.selectAll("dot")  
+              .data(data)     
+              .enter().append("circle")               
+              .attr("r", 5)   
+              .attr("cx", function(d) { return x(d.x0); })     
+              .attr("cy", function(d) { return y(d.y0); }) 
+              .attr("fill","#005290")  
+              .on('mouseover', tip.show)
+              .on('mouseout', tip.hide);
 
           // Add the X Axis
           svg.append("g")

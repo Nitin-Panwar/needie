@@ -34,10 +34,20 @@
                     <li ng-click="changeChart('line')"><a href="#">Line Chart</a></li>
                     <li ng-click="changeChart('bar')"><a href="#">Bar Chart</a></li>
                 </ul>
-            </div> -->                  
+            </div> -->    
+                <section class="col-sm-12">
+                 <section class="col-sm-11">
+                 <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block"></line-chart>
+                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block"></bar-chart>
+                </section>
+                <section class="col-sm-1">
+                  <i class="fa fa-bar-chart pull-right" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')"></i>
+                  <i class="fa fa-line-chart pull-right" style="font-size: 20px;" ng-click="changeViz('line')"></i>
+                </section>
+               </section>              
             
-                <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block"></line-chart>     
-                <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block"></bar-chart>
+                <!-- <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block"></line-chart>     
+                <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block"></bar-chart> -->
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile'" class="measure-card" 
                         ng-class="{'warning-breached': measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value,
