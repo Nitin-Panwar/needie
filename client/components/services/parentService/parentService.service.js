@@ -11,7 +11,7 @@ angular.module('sasaWebApp')
     	this.placeholderAdd = function (type, item) {
     		if(type === 'metric'){
     			var id = item;    			
-    			$rootScope.myPromise = metricsFactory.filterShow({metricID: id, filters: $rootScope.globalQuery}).$promise.then(function (data) { 
+    			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery}).$promise.then(function (data) { 
     				console.info(data);   				
     				$rootScope.placeholder[type].push(data);    				
     				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});

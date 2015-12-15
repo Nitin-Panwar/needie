@@ -15,24 +15,6 @@ angular.module('sasaWebApp')
           width = 350 - margin.left - margin.right,
           height = 320 - margin.top - margin.bottom;
 
-      		// var data=[{"y0":4,"x0":1},
-      		// {"y0":7,"x0":2},
-      		// {"y0":2,"x0":3},
-      		// {"y0":5,"x0":4},
-      		// {"y0":6,"x0":5},
-      		// {"y0":11,"x0":6},
-      		// {"y0":1,"x0":7},
-      		// {"y0":1,"x0":8},
-      		// {"y0":4,"x0":9},
-      		// {"y0":6,"x0":10},
-      		// {"y0":6,"x0":11},
-      		// {"y0":7,"x0":12},
-      		// {"y0":13,"x0":13},
-      		// {"y0":7,"x0":14},
-      		// {"y0":6,"x0":15},
-      		// {"y0":13,"x0":16}]
-
-          // var data=scope.barData['distribution_data']['data']
 
 
       		var x = d3.scale.ordinal()
@@ -51,12 +33,21 @@ angular.module('sasaWebApp')
       		    .orient("left")
       		    .ticks(5);
 
+          var tip = d3.tip()
+              .attr('class', 'd3-tip')
+              .offset([-10, 0])
+              .html(function(d) {
+                return "<strong>"+y_label+":</strong> <span>" + d.y0.toFixed(3)+ "</span>";
+              })
+
       		var svg = d3.select(element[0]).append("svg")
-              .attr("viewBox", "0 0 400 370") 
+              .attr("viewBox", "0 0 350 320") 
       		    // .attr("width", width + margin.left + margin.right)
       		    // .attr("height", height + margin.top + margin.bottom)
       		  .append("g")
       		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          svg.call(tip);
 
       	    // function for the x grid lines
                 function make_x_axis() {
@@ -138,7 +129,9 @@ angular.module('sasaWebApp')
       		      .attr("width", x.rangeBand())
       		      .attr("y", function(d) { return y(d.y0); })
       		      .attr("height", function(d) { return height - y(d.y0); })
-      		      .style("fill","#4682B4");
+      		      // .style("fill","#4682B4")
+                .on('mouseover', tip.show)
+                .on('mouseout', tip.hide);
       	}
 }
 });

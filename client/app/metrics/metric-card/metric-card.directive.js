@@ -67,14 +67,29 @@ angular.module('sasaWebApp')
           
         });
 
+        //Variable to change vizualization
+        scope.line = false;
+
+        /**
+         * [function to change vizualization]
+         * @param  {[type]} type [description]
+         * @return {[type]}      [description]
+         */
+        scope.changeViz = function (type) {
+          if(type==='line' && !scope.line){
+            scope.line=!scope.line;
+          }
+          if(type==='bar' && scope.line){
+            scope.line=!scope.line;
+          } 
+        }
+
         /**
          * this function gets latest values of metrics
          * @return {[type]} [description]
          */
-        scope.getMetric = function () {
-          var id = scope.metricData._id;
-          scope.metricData = null;
-          scope.metricLoader = metricsFactory.filterShow({metricID: id, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
+        scope.getMetric = function () {                    
+          scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
             scope.metricData = resposne;
           },function (err) {
             console.error(err);

@@ -2,37 +2,40 @@
 	<h4 class="modal-title">Metric Data</h4>
 </div>
 <div class="modal-body">
-	<div class = "container">
-		<div>
-			<button type="button" class="btn btn-default btn-md" ng-click="showData=true">Get Data</button>	
-			<button type="button" class="btn btn-default btn-md" ng-click="showList=true">Edit</button>
-		</div>
-		<div class="multiSelect" style="width:75%">                                    
-			<div class="select" style="width:35%">  
+	<div>
+
+		<div style="display: table; margin: 0 auto;">                                    
+			<div style="display: table-cell">  
   				<label class="control-label" for="multiSelectSelected">Available Coloumns</label> 
-				<ul id="contain">
-					<li ng-repeat="data in availableColoumn">
-					<input type="checkbox" ng-model="selectList.status" ng-if="(selectList.status===true)? selectList.name=data.name ">{{data.name}}{{selectList}}
+				<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
+					<li class="list-group-item" ng-repeat="item in availableColoumns.items track by $index" style="background-color: #0071C5; margin: 1px;" ng-click="selection(item, true)" ng-class="{'selected-list-item': availableColoumns.selected.indexOf(item) !== -1}">						
+						<span>{{item}}</span>
 					</li>
 				</ul>
     		</div>  
-			<div class="select buttons" style="width:20%">  
-  				<button class="btn mover left" ng-click="remove()" title="Add selected"   >  
+			<div  style="display: table-cell; vertical-align: middle">  
+  				<button class="btn btn-primary" ng-click="dataGrid(item, false)" title="Add selected"   >  
     				<i class="glyphicon glyphicon-arrow-left"></i>  
   				</button>  
-  				<button class="btn mover right" ng-click="add(selectList, selectedColoumn)" title="Remove selected">  
+  				<button class="btn btn-primary" ng-click="dataGrid(item, true)" title="Remove selected">  
     				<i class="glyphicon glyphicon-arrow-right"></i>  
   				</button> 
 			</div>  
-			<div class="select" style="width:35%"> 
+			<div style="display: table-cell"> 
   				<label class="control-label" for="multiSelectAvailable">Selected Coloumns</label> 
-  		 		<ul id="contain">
-					<li ng-repeat="data1 in selectedColoumn track by $index">
-					<input type="checkbox">{{data1.name}}
+  		 		<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
+					<li ng-repeat="item in selectedColumns.items track by $index" class="list-group-item" style="background-color: #0071C5; margin: 1px;" ng-click="selection(item, false)" ng-class="{'selected-list-item': selectedColumns.selected.indexOf(item) !== -1}">
+						<span>{{item}}</span>
   					</li>
   				</ul>
 			</div> 
 		</div> 
+		<div>
+			<button type="button" class="btn btn-default btn-md" ng-click="showData=true">Get Data</button>	
+			<button type="button" class="btn btn-default btn-md" ng-click="showList=true">Edit</button>
+		</div>		
+
+
 		<div ng-show="showData===true">
 			<ul class="list-group">	
 				<li class="list-group-item" ng-repeat="data1 in selectedColoumn track by $index">
