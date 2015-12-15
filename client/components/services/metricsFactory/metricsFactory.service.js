@@ -6,19 +6,22 @@ angular.module('sasaWebApp')
     var config = webServiceURL.config;
 
     return $resource(url + '/getmetrics', {}, {
-      show: {
-        method:'GET',
-        headers: config,
-        responseType: 'json',
-        param: {
-        }
-      },
-      filterShow: {
+      get: {
         method:'POST',
+        url: url + '/getmetricsnapshot',
         headers: config,
         responseType: 'json',
         param: {
           metricId:{},
+          filters:{}
+        }
+      },
+      getByObject: {
+        method:'POST',
+        headers: config,
+        responseType: 'json',
+        param: {
+          metric:{},
           filters:{}
         }
       }
