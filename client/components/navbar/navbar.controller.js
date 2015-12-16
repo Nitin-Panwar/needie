@@ -6,11 +6,12 @@ angular.module('sasaWebApp')
     {
       'title': 'Create Dashboard',
       'link': '/dashboard'
-    },
-    {
-      'title': 'Admin',
-      'link': '/admin'
-    }];
+    }
+    // {
+    //   'title': 'Admin',
+    //   'link': '/a'
+    // }
+    ];
 
     $scope.isCollapsed = true;
 

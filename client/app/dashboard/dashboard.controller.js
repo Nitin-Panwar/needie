@@ -17,7 +17,7 @@ angular.module('sasaWebApp')
       // $scope.newDashboard = false;
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
-        $rootScope.placeholder.dashboard = data;    
+        $rootScope.placeholder.dashboard = data;   
         // update filters on front end
         $rootScope.globalQuery = $rootScope.placeholder.dashboard.filters;      
 
@@ -122,13 +122,6 @@ angular.module('sasaWebApp')
          drag: function(event, $element, widget) {}, // optional callback fired when item is moved,
          stop: function(event, $element, widget) {$rootScope.placeholder.edited = true;} // optional callback fired when item is finished dragging
       }
-    };
-
-
-    $scope.autoSize = function (item) {
-      // body...
-    };
-
-    
+    };    
 
   });

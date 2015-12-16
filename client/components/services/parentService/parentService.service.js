@@ -9,10 +9,14 @@ angular.module('sasaWebApp')
     	 * @return {[type]}      [description]
     	 */
     	this.placeholderAdd = function (type, item) {
+    		//create dummy dashboard id when adding any metric to it
+    		if(!$rootScope.placeholder.dashboard._id)
+    		{
+    			$rootScope.placeholder.dashboard._id=1;
+    		}	
     		if(type === 'metric'){
     			var id = item;    			
-    			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery}).$promise.then(function (data) { 
-    				console.info(data);   				
+    			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery}).$promise.then(function (data) {   				
     				$rootScope.placeholder[type].push(data);    				
     				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
     			}, function (err) {
@@ -86,6 +90,4 @@ angular.module('sasaWebApp')
 	        });
 	      }
 	    };
-
-    
   });
