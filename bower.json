@@ -29,6 +29,7 @@
   },
   "resolutions": {
     "angular": "1.4.8",
-    "angular-bootstrap": "^0.14.3"
+    "angular-bootstrap": "^0.14.3",
+    "d3": "3.5.5"
   }
 }
