@@ -18,6 +18,7 @@ angular.module('sasaWebApp')
         }
       	$rootScope.placeholder.dashboard["name"] = data.name;
         $rootScope.placeholder.dashboard["description"] = data.description;
+        console.log($rootScope.placeholder)
         parentService.createDBoard();
         $scope.cancel();
         $rootScope.placeholder.edited = false;

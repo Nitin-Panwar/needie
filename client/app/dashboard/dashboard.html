@@ -6,8 +6,7 @@
 		<section left-sidebar>sidebar</section>
 		<!-- left sidebar end -->
 	</section>
-
-	<section class="col-md-11" ng-hide="placeholder.metric.length > 0">
+	<section class="col-md-11" ng-show="!placeholder.dashboard._id">
 		<dl>
 			<blockquote>
 				<p>
@@ -24,7 +23,7 @@
 		</dl>
 	</section>
 	
-	<section class="col-md-11" ng-show="placeholder.metric.length > 0">
+	<section class="col-md-11" ng-show="placeholder.dashboard._id">
 		<!-- dashboard buttons section -->
 		<section class="row inline">
 			<section class="col-md-2">
@@ -47,8 +46,9 @@
 		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard">
 			<ul>
 				<!-- metric card area -->
-				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric" class="metric-card">
-					<section metriccard  metric-data="item"></section>
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">
+					<!-- {{placeholder.metric[$index]}} -->
+					<section metriccard  metric-data="item" metric-index="$index"></section>
 				</li>
 				<!-- metric card area end -->
 				<!-- text boxes area -->
