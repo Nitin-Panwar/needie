@@ -8,7 +8,7 @@ angular.module('sasaWebApp')
     return $resource(url + '/getmetrics', {}, {
       get: {
         method:'POST',
-        url: url + '/getmetricsnapshot',
+        url: url + '/getmetric',
         headers: config,
         responseType: 'json',
         param: {
