@@ -32,8 +32,9 @@
 				<ul class="sidebar-menu">
 					<li ng-repeat="(key, value) in GlobalFilters" class="text-uppercase active dropdown" ng-click="$event.stopPropagation(); " role="presentation">
 						<span>
-							<span class="white-text" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{key | uppercase}}</span>
-							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
+							<span class="white-text" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{key | uppercase}}
+								<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
+							</span>
 							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
 							<label class="badge badge-important pull-right" title="Filters">{{globalQuery[key].length}}</label>
 							<section ng-show="isCollapsed">
@@ -73,8 +74,9 @@
 						</div>						            	
 	            	</li>
  					<li ng-repeat="(key, value) in dashboardList| orderBy:value.name|filter:searchFilter">
- 						<span class="white-text" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{value.name | uppercase}}</span>
- 						<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
+ 						<span class="white-text" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{value.name | uppercase}}
+ 							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
+						</span>
 						<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
 						<section ng-show="isCollapsed">
 							<ul class="list-group">

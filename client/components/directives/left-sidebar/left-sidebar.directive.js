@@ -248,7 +248,8 @@ angular.module('sasaWebApp')
 		 * @return {[type]}          [description]
 		 */
 	    scope.applyFilter = function (argument) {
-	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;	
+	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;
+	    	// $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
 	    	$rootScope.placeholder.edited = true;    	
 	    }
 

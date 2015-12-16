@@ -6,7 +6,7 @@ angular.module('sasaWebApp')
       templateUrl: 'app/metrics/metric-card/metric-card.html',
       restrict: 'EA',   
       replace: true,          
-      scope: {metricData: '='}, 
+      scope: {metricData: '=',metricIndex: '='}, 
       // pre-link: ,     
       link: function (scope, element, attrs) {
 
@@ -62,6 +62,7 @@ angular.module('sasaWebApp')
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {          
           if($rootScope.applyFilter !== 0){
+            $rootScope.placeholder
             scope.getMetric();  
           }
           
@@ -84,13 +85,24 @@ angular.module('sasaWebApp')
           } 
         }
 
+        // scope.$watch(function(){
+        //    $rootScope.placeholder
+        //  });
+
         /**
          * this function gets latest values of metrics
          * @return {[type]} [description]
          */
         scope.getMetric = function () {                    
           scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
-            scope.metricData = resposne;
+            // console.log(scope.metricData)
+            // scope.metricData = resposne;
+            // console.log(scope.metricIndex)
+            // console.log($rootScope.placeholder['metric'][scope.metricIndex])
+            // $rootScope.placeholder['metric'][scope.metricIndex] = 0;
+            $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
+            // console.log($rootScope.placeholder['metric'][scope.metricIndex])
+            // console.log($rootScope.placeholder);
           },function (err) {
             console.error(err);
           })
