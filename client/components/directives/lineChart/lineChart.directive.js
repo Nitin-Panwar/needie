@@ -7,28 +7,12 @@ angular.module('sasaWebApp')
       restrict: 'EA',
       scope:{lineData:'='},
       link: function (scope, element, attrs) {
-        var x_label=scope.lineData['distribution_data']['x_label']
-        var y_label=scope.lineData['distribution_data']['y_label']
-        var data= scope.lineData['distribution_data']['data']
-        // var x_label = scope.lineData['distribution_data'];
-          // var data=[{"y0":4,"x0":1},
-          //   {"y0":7,"x0":2},
-          //   {"y0":2,"x0":3},
-          //   {"y0":5,"x0":4},
-          //   {"y0":6,"x0":5},
-          //   {"y0":11,"x0":6},
-          //   {"y0":1,"x0":7},
-          //   {"y0":1,"x0":8},
-          //   {"y0":4,"x0":9},
-          //   {"y0":6,"x0":10},
-          //   {"y0":6,"x0":11},
-          //   {"y0":7,"x0":12},
-          //   {"y0":13,"x0":13},
-          //   {"y0":7,"x0":14},
-          //   {"y0":6,"x0":15},
-          //   {"y0":13,"x0":16}]
-        // var data=scope.lineData['distribution_data']['data']
-            
+        scope.$watch("lineData",function(newValue,oldValue) {
+        //This gets called when data changes.
+          var x_label=scope.lineData['distribution_data']['x_label']
+          var y_label=scope.lineData['distribution_data']['y_label']
+          var data= scope.lineData['distribution_data']['data']
+              
 
           var margin = {top: 30, right: 20, bottom: 35, left: 50},
           width = 350 - margin.left - margin.right,
@@ -61,11 +45,7 @@ angular.module('sasaWebApp')
               .x(function(d) { return x(d.x0); })
               .y(function(d) { return y(d.y0); });
 
-          // // Define the ttip for the tooltip
-          // var ttip = d3.select(element[0]).append("ttip") 
-          //     .attr("class", "tooltip")       
-          //     .style("opacity", 0);
-
+  
               
           var svg = d3.select(element[0])
               .append("svg")
@@ -75,7 +55,6 @@ angular.module('sasaWebApp')
               .append("g")
                   .attr("transform", 
                         "translate(" + margin.left + "," + margin.top + ")");
-
 
           svg.call(tip);
           
@@ -123,6 +102,9 @@ angular.module('sasaWebApp')
               .attr("class","line")
               .attr("d", valueline(data));
 
+          
+
+
           // Add the scatterplot
           svg.selectAll("dot")  
               .data(data)     
@@ -169,6 +151,7 @@ angular.module('sasaWebApp')
               .attr("text-anchor", "middle")
               .style("font-size", "16px")
               .text(y_label+" vs "+x_label);
-          }
-        };
-      });
+          });
+        }
+      };
+    });
