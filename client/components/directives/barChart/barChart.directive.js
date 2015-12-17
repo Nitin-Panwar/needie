@@ -1,19 +1,20 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('barChart', function () {
+  .directive('barChart', function ($rootScope) {
     return {
-      template: '<div></div>',
+      template: '',
       restrict: 'EA',
       scope:{barData:'='},
       link: function (scope, element, attrs) {
-        var x_label=scope.barData['distribution_data']['x_label']
-        var y_label=scope.barData['distribution_data']['y_label']
-        var data= scope.barData['distribution_data']['data']
-        
-        var margin = {top: 30, right: 20, bottom: 35, left: 50},
-          width = 350 - margin.left - margin.right,
-          height = 320 - margin.top - margin.bottom;
+        scope.$watch("barData",function(newValue,oldValue) {
+          var x_label=scope.barData['distribution_data']['x_label']
+          var y_label=scope.barData['distribution_data']['y_label']
+          var data= scope.barData['distribution_data']['data']
+          
+          var margin = {top: 30, right: 20, bottom: 35, left: 50},
+            width = 350 - margin.left - margin.right,
+            height = 320 - margin.top - margin.bottom;
 
 
 
@@ -46,7 +47,7 @@ angular.module('sasaWebApp')
       		    // .attr("height", height + margin.top + margin.bottom)
       		  .append("g")
       		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+    
           svg.call(tip);
 
       	    // function for the x grid lines
@@ -132,6 +133,7 @@ angular.module('sasaWebApp')
       		      // .style("fill","#4682B4")
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide);
+            });
       	}
 }
 });

@@ -62,7 +62,7 @@ angular.module('sasaWebApp')
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {          
           if($rootScope.applyFilter !== 0){
-            $rootScope.placeholder
+            d3.selectAll("svg").remove()
             scope.getMetric();  
           }
           
