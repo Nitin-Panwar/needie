@@ -43,8 +43,149 @@ angular.module('sasaWebApp')
      * @return {[type]}          [description]
      */
     $scope.save2document = function (argument) {
-      var code = document.getElementById('dashboard').innerHTML;
-      console.info(code);
+        // document.open();
+        // document.write("<h1>Hello World</h1>");
+        // document.close();
+        
+       console.log(document.body)
+        var myWindow = window.open("", "MsgWindow", "width=1000, height=900");
+        myWindow.document.write(document.documentElement.innerHTML);
+        console.log(myWindow.document.body)
+
+      //selecting network div and appending svg to it.
+      // var width = 900;
+      // var height = 1150;
+      // var newWindow=window.open("", "MsgWindow", "location=1,status=1,scrollbars=1, width="+width+", height="+height);
+      // newWindow.moveTo(1300, 150);
+      // var yourDOCTYPE = "<!DOCTYPE html...";
+
+      // var myWindow = window.open("", "MsgWindow", "width=1000, height=900");
+      // myWindow.document.write(document.getElementsByTagName('html')[0]);
+
+      // var printPreview = window.open('about:blank', 'print_preview');
+      // var printDocument = newWindow.document;
+      // printDocument.open();
+      // console.log(document.documentElement.innerHTML)
+      // newWindow.innerHTML = document.documentElement.innerHTML
+      // console.log(newWindow.document)
+      // console.log(newWindow.document.body)
+      // console.log(newWindow.innerHTML)
+      // printDocument.document.body.appendChild(document.body)
+      // (document.documentElement.innerHTML
+      // printDocument.write(document.getElementsByTagName('html')[0]);
+
+      // printDocument.write(yourDOCTYPE+
+      //            "<html>"+
+      //                document.documentElement.innerHTML+
+      //            "</html>");
+      // console.log(newWindow.document.getElementById('body'))
+      // console.log(document.body)
+      html2canvas($(myWindow.document.body),{
+         onrendered:function(canvas){
+            myWindow.document.body.appendChild(canvas);
+         }
+      });
+
+      // var svgElements = d3.select(newWindow.document.body);
+      // console.log(svgElements)
+      // newWindow.document.body.innerHTML = d3.select("body").innerHTML;
+      // var pageD3=d3.select(newWindow.document.body)
+      // var svg = pageD3.append("div")
+      //          .attr("class","test")
+      // .attr('width', width)
+      // .attr('height', height)
+
+      // var finalCanvas = document.createElement("canvas");
+      // finalCanvas.className = "screenShotTempfinalCanvas";
+      //   finalCanvas.width=1000;
+      //   finalCanvas.height=500;
+
+
+    //   svgElements.each(function () {
+    //     var canvas, xml;
+    
+    //     canvas = document.createElement("canvas");
+    //     canvas.className = "screenShotTempCanvas";
+    //     canvas.width=1000;
+    //     canvas.height=500;
+        
+    //     xml = (new XMLSerializer()).serializeToString(this);
+    //     // console.log(xml)
+    //     // Removing the name space as IE throws an error
+    //     // xml = xml.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
+
+    //     //draw the SVG onto a canvas
+    //     canvg(canvas, xml);
+    // //     // console.log(canvas)
+    // //     // d3.select("finalCanvas").append("canvas");
+    //     $(canvas).insertAfter(newWindow.document.body);
+    // //     // console.log(finalCanvas);
+    //     // finalCanvas = canvas;
+    //     //hide the SVG element
+        
+    //     // d3.select(this).attr("className","tempHide");
+    //     // console.log(this);
+    //     // $(this).hide();
+        
+    //   });
+    //   // console.log(finalCanvas);
+    //   // var myImage = finalCanvas.toDataURL("image/png");
+      
+  
+  
+
+    //   html2canvas($(newWindow.document.body), {
+    //    onrendered: function(canvas) {
+    //    // canvas is the final rendered <canvas> element
+    //    var ctx = canvas.getContext('2d');
+    //    ctx.msImageSmoothingEnabled = false;
+    //    ctx.mozImageSmoothingEnabled = false;
+    //    ctx.imageSmoothingEnabled = false;
+            
+    //   // console.log("Canvas")
+    //   // console.log(canvas.toString())
+    //   var myImage = canvas.toDataURL("image/png");
+      
+    //   var dataUrl = canvas.toDataURL();
+    //   var myWindow = window.open("", "MsgWindow2", "width=1000, height=900");
+    //       myWindow.document.write("<img src=\"" + dataUrl + "\"/>");
+      
+    //     },    
+    // allowTaint: true,
+    // logging:true
+    // });
+    
+    //  // $("body").find('.screenShotTempCanvas').remove();
+    //  // $("body").find('.tempHide').show().removeClass('tempHide');
+    //   // console.log(svgElements);
+    //   // svgElements.each(function () {
+
+    //   //   var canvas, xml;
+        
+    //   //   canvas = pageD3.append("canvas")
+    //   //             .attr("className","screenShotTempCanvas")
+    //   //             .attr("width",1000)
+    //   //             .attr("height",500);
+    //   //   // canvas.className = "screenShotTempCanvas";
+    //   //   // canvas.width=1000;
+    //   //   // canvas.height=500;
+        
+    //   //   xml = (new XMLSerializer()).serializeToString(this);
+    //   //   // Removing the name space as IE throws an error
+    //   //   //xml = xml.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
+
+    //   //   //draw the SVG onto a canvas
+    //   //   canvg(canvas, xml);
+    //   //   $(canvas).insertAfter(newWindow.document.body);
+    //   //   // finalCanvas = canvas;
+    //   //   //hide the SVG element
+    //   //   // this.className = "tempHide";
+    //   //   // $(this).hide();
+        
+    //   // });
+
+      // var code = document.getElementById('dashboard').innerHTML;
+      // console.info(code);
     }
 
     /**

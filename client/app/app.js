@@ -39,7 +39,7 @@ angular.module('sasaWebApp', [
 
 .run(
   function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory) {
-
+    $rootScope.user = "GAR\npanwar"
     /**
      * Login user if he's not already logged in
      * @param  {[type]} $rootScope.user [description]

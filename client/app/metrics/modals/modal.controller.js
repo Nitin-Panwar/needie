@@ -21,6 +21,8 @@ angular.module('sasaWebApp')
         }        
       }
 
+      $scope.getMe
+
       /**
        * to apply the dialog
        * @param  {[type]} which [description]
