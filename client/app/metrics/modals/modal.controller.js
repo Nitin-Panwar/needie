@@ -31,6 +31,8 @@ angular.module('sasaWebApp')
         }        
       }
 
+      $scope.getMe
+
       /**
  		* this function populates all metric columns
        * @param  {[type]} argument [description]

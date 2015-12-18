@@ -65,10 +65,10 @@ angular.module('sasaWebApp')
         // 
         scope.$watch(function () {
           return $rootScope.applyFilter;
-        }, function(newValue, oldValue, scope) {          
-          if($rootScope.applyFilter !== 0){
+        }, function(newValue, oldValue, scope) {         
+          if(newValue !== oldValue){
             d3.selectAll("svg").remove()
-            scope.getMetric();  
+            scope.getMetric();
           }
           
         });
