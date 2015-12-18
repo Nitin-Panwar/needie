@@ -1,14 +1,17 @@
 <div class="modal-header">
 	<h4 class="modal-title">Metric Data</h4>
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary" ng-click="save('data')">Apply</button>
+		<button type="button" class="btn btn-default" ng-click="cancel()">Close</button>		
+	</div>
 </div>
-<div class="modal-body">
+<div class="modal-body" ng-init="showData = true" cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
 	<div>
-
-		<div style="display: table; margin: 0 auto;">                                    
+		<div style="display: table; margin: 0 auto;" ng-hide="showData">                                    
 			<div style="display: table-cell">  
   				<label class="control-label" for="multiSelectSelected">Available Coloumns</label> 
 				<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
-					<li class="list-group-item" ng-repeat="item in availableColoumns.items track by $index" style="background-color: #0071C5; margin: 1px;" ng-click="selection(item, true)" ng-class="{'selected-list-item': availableColoumns.selected.indexOf(item) !== -1}">						
+					<li class="list-group-item text-uppercase" ng-repeat="item in availableColoumns.items track by $index" style="background-color: #0071C5; margin: 1px; color: white;" ng-click="selection(item, true)" ng-class="{'selected-list-item': availableColoumns.selected.indexOf(item) !== -1}">						
 						<span>{{item}}</span>
 					</li>
 				</ul>
@@ -24,39 +27,31 @@
 			<div style="display: table-cell"> 
   				<label class="control-label" for="multiSelectAvailable">Selected Coloumns</label> 
   		 		<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
-					<li ng-repeat="item in selectedColumns.items track by $index" class="list-group-item" style="background-color: #0071C5; margin: 1px;" ng-click="selection(item, false)" ng-class="{'selected-list-item': selectedColumns.selected.indexOf(item) !== -1}">
+					<li ng-repeat="item in selectedColumns.items track by $index" class="list-group-item text-uppercase" style="background-color: #0071C5; margin: 1px; color: white;" ng-click="selection(item, false)" ng-class="{'selected-list-item': selectedColumns.selected.indexOf(item) !== -1}">
 						<span>{{item}}</span>
   					</li>
   				</ul>
 			</div> 
 		</div> 
-		<div>
-			<button type="button" class="btn btn-default btn-md" ng-click="showData=true">Get Data</button>	
-			<button type="button" class="btn btn-default btn-md" ng-click="showList=true">Edit</button>
+		<div class="btn-group">
+			<button type="button" class="btn btn-default btn-md" ng-click="getRawData(0); showData=true" ng-hide="selectedColumns.items.length === 0">Get Data</button>	
+			<button type="button" class="btn btn-default btn-md" ng-click="getMetricColumns(); showData=false">Add/Remove Columns</button>				
+			<button type="button" class="btn btn-default btn-md" ng-click="getRawData('all')" ng-hide="selectedColumns.items.length === 0">Export CSV</button>
+			<button type="button" class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</button>
 		</div>		
 
 
-		<div ng-show="showData===true">
-			<ul class="list-group">	
-				<li class="list-group-item" ng-repeat="data1 in selectedColoumn track by $index">
-				<table>
-					<caption>table title and/or explanatory text</caption>
-					<thead>
-						<tr>
-							<th>header</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>data</td>
-						</tr>
-					</tbody>
-				</table>
-				</li>
-				</ul>
+		<div ng-hide="gridOptions.data.length === 0">
+			<span>Showing {{gridOptions.data.length}} Rows</span>						
+			<div ui-grid="gridOptions" id="metric-data-grid" ui-grid-resize-columns ui-grid-exporter ui-grid-move-columns ui-grid-pinning></div>
+			<div class="btn-group">
+				<button class="btn btn-default" ng-disabled="offset == 0" ng-click="getRawData(offset - 100)">Previous</button>
+				<button class="btn btn-default pull-right" ng-disabled="gridOptions.data.length == 0" ng-click="getRawData(offset + 100)">Next</button>				
+			</div>			
 		</div>	
 	</div>				
 </div>
 <div class="modal-footer">
+	<button type="button" class="btn btn-primary" ng-click="save('data')">Apply</button>
 	<button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
 </div>

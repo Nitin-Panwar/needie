@@ -22,8 +22,13 @@ angular.module('sasaWebApp')
             /**
              * data dialog
              */
-            case 'data':
-              dialogs.create('app/metrics/modals/data.html','ModalCtrl',{},'sm');
+            case 'data':              
+              var dlg = dialogs.create('app/metrics/modals/data.html','ModalCtrl',metricData,'sm');
+				      dlg.result.then(function (data) {
+                // update selected columns in placeholder for saving
+                $rootScope.placeholder.metric[mericIndex].gridColumns = data;
+                metricData.gridColumns = data;
+              })
               break;
             /**
              * filter dialog
