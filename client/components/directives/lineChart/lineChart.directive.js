@@ -9,7 +9,6 @@ angular.module('sasaWebApp')
       link: function (scope, element, attrs) {
         scope.$watch("lineData",function(newValue,oldValue) {
           d3.select(element[0]).select("#line").remove();
-          //This gets called when data changes.
           var x_label=scope.lineData['distribution_data']['x_label']
           var y_label=scope.lineData['distribution_data']['y_label']
           var data= scope.lineData['distribution_data']['data']
