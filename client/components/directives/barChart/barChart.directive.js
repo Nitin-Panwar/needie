@@ -8,6 +8,9 @@ angular.module('sasaWebApp')
       scope:{barData:'='},
       link: function (scope, element, attrs) {
         scope.$watch("barData",function(newValue,oldValue) {
+          console.log(scope.barData);
+          d3.select(element[0]).select("#bar").remove();
+          // console.log(scope.barData);
           var x_label=scope.barData['distribution_data']['x_label']
           var y_label=scope.barData['distribution_data']['y_label']
           var data= scope.barData['distribution_data']['data']
@@ -42,6 +45,7 @@ angular.module('sasaWebApp')
               })
 
       		var svg = d3.select(element[0]).append("svg")
+              .attr("id","bar")
               .attr("viewBox", "0 0 350 320") 
       		    // .attr("width", width + margin.left + margin.right)
       		    // .attr("height", height + margin.top + margin.bottom)

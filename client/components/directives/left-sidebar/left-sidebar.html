@@ -30,32 +30,30 @@
 			<fieldset>
 				<span class="lead white-text">Filters</span>
 				<ul class="sidebar-menu">
-					<li ng-repeat="(key, value) in GlobalFilters" class="text-uppercase active dropdown" ng-click="$event.stopPropagation(); " role="presentation">
-						<span ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;">
-							<span class="white-text"  data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{key | uppercase}}
-								<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
-								<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
-								<label class="badge badge-important pull-right" title="Filters">{{globalQuery[key].length}}</label>
-							</span>
-							<section ng-show="isCollapsed">
-								<ul class="list-group">
-									<li class="list-group-item">
-						            	<div class="input-group">	
-											<input type="text" class="form-control" placeholder="Search..." ng-model="searchFilter" aria-describedby="basic-addon2">
-											<span title="Remove search text" class="input-group-addon btn" id="basic-addon2" ng-click="searchFilter = ''"><i class="intelicon-close-outlined"></i></span>
-											<span title="Remove Filters" class="input-group-addon btn" id="basic-addon2" ng-click="unselectAllFilterValues(key)"><i class="intelicon-cancel-filter-solid"></i></span>
-										</div>						            	
-					            	</li>
-									<li class="list-group-item" ng-repeat="item in value|orderBy|filter: searchFilter" ng-click="updateFilterQuery(key, item)">
-										<span class="sidebar-hover-effect blue-text">
-											<span class="glyphicon glyphicon-ok" ng-show="isInQuery(key, item)"></span>
-											&nbsp;
-											{{item}}
-										</span>
-									</li>
-								</ul>
-							</section>
+					<li ng-repeat="(key, value) in GlobalFilters" class="text-uppercase active dropdown" ng-click="$event.stopPropagation();" role="presentation">
+						<span class="white-text"  data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]"ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;">{{key | uppercase}}
+							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
+							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
+							<label class="badge badge-important pull-right" title="Filters">{{globalQuery[key].length}}</label>
 						</span>
+						<section ng-show="isCollapsed">
+							<ul class="list-group">
+								<li class="list-group-item">
+					            	<div class="input-group">	
+										<input type="text" class="form-control" placeholder="Search..." ng-model="searchFilter" aria-describedby="basic-addon2">
+										<span title="Remove search text" class="input-group-addon btn" id="basic-addon2" ng-click="searchFilter = ''"><i class="intelicon-close-outlined"></i></span>
+										<span title="Remove Filters" class="input-group-addon btn" id="basic-addon2" ng-click="unselectAllFilterValues(key)"><i class="intelicon-cancel-filter-solid"></i></span>
+									</div>
+				            	</li>
+								<li class="list-group-item" ng-repeat="item in value|orderBy|filter: searchFilter" ng-click="updateFilterQuery(key, item)">
+									<span class="sidebar-hover-effect blue-text">
+										<span class="glyphicon glyphicon-ok" ng-show="isInQuery(key, item)"></span>
+										&nbsp;
+										{{item}}
+									</span>
+								</li>
+							</ul>
+						</section>
 					</li>					
 				</ul>
 				<button class="form-control pull-left" ng-click="applyFilter()" style="background-color: #006CBC; color:white;">Apply</button>     

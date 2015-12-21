@@ -5,6 +5,7 @@ angular.module('sasaWebApp')
   	$scope.data = data;
   	$scope.OldName = $rootScope.placeholder.dashboard.name;
 
+
     /**
        * to apply the dialog
        * @param  {[type]} which [description]
@@ -18,7 +19,7 @@ angular.module('sasaWebApp')
         }
       	$rootScope.placeholder.dashboard["name"] = data.name;
         $rootScope.placeholder.dashboard["description"] = data.description;
-        console.log($rootScope.placeholder)
+        
         parentService.createDBoard();
         $scope.cancel();
         $rootScope.placeholder.edited = false;
