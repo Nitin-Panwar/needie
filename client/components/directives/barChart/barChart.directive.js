@@ -8,9 +8,7 @@ angular.module('sasaWebApp')
       scope:{barData:'='},
       link: function (scope, element, attrs) {
         scope.$watch("barData",function(newValue,oldValue) {
-          console.log(scope.barData);
           d3.select(element[0]).select("#bar").remove();
-          // console.log(scope.barData);
           var x_label=scope.barData['distribution_data']['x_label']
           var y_label=scope.barData['distribution_data']['y_label']
           var data= scope.barData['distribution_data']['data']
@@ -18,8 +16,6 @@ angular.module('sasaWebApp')
           var margin = {top: 30, right: 20, bottom: 35, left: 50},
             width = 350 - margin.left - margin.right,
             height = 320 - margin.top - margin.bottom;
-
-
 
       		var x = d3.scale.ordinal()
       		    .rangeRoundBands([0, width], .1);

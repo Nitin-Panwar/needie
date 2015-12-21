@@ -37,12 +37,12 @@
             </div> -->    
                 <section class="col-sm-12">
                  <section class="col-sm-10">
-                 <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions.length !== 0"></line-chart>
-                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions.length !== 0"></bar-chart>
+                 <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></line-chart>
+                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></bar-chart>
                 </section>
                 <section class="col-sm-2">
-                  <i class="fa fa-bar-chart pull-right" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')" ng-if="metricData.distributions.length !== 0"></i>
-                  <i class="fa fa-line-chart pull-right" style="font-size: 20px;" ng-click="changeViz('line')" ng-if="metricData.distributions.length !== 0"></i>
+                  <i class="fa fa-bar-chart pull-right" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')" ng-if="metricData.distributions[0]"></i>
+                  <i class="fa fa-line-chart pull-right" style="font-size: 20px;" ng-click="changeViz('line')" ng-if="metricData.distributions[0]"></i>
                 </section>
                 <!-- {{metricData}} -->
                </section>              

@@ -3,11 +3,11 @@
 		<ul class="list-group" ng-click="toggleState()">
 			<!-- my dashboards -->
 	 		<li class="list-group-item" ng-click="getUserDashboards()" ng-class="{'active-sidebar-item': showmydashboards}" data-toggle="tooltip" data-placement="right" title="My Dashboards"><i class="fa fa-tachometer fa-2x"></i></li>	
-	 		<!-- Dashboard Filters -->
-	 		<li class="list-group-item" ng-click="getFilters()" ng-class="{'active-sidebar-item': showfilters}" data-toggle="tooltip" data-placement="right" title="Dashboard Filters"><i class="fa fa-filter fa-2x "></i>	 		
-	 		</li>
 	 		<!-- Metric List -->
-	 		<li class="list-group-item" ng-click="getMetricsList()" ng-class="{'active-sidebar-item': metriclist}" data-toggle="tooltip" data-placement="right" title="Metric List"><i class="fa fa-calculator fa-2x"></i></li> 		
+	 		<li class="list-group-item" ng-click="getMetricsList()" ng-class="{'active-sidebar-item': metriclist}" data-toggle="tooltip" data-placement="right" title="Metric List"><i class="fa fa-calculator fa-2x"></i></li>
+	 		<!-- Dashboard Filters -->
+	 		<li class="list-group-item" ng-click="getFilters()" ng-class="{'active-sidebar-item': showfilters}" data-toggle="tooltip" data-placement="right" title="Dashboard Filters"><i class="fa fa-filter fa-2x "><!-- <i ng-show="showApplyButton" class = "fa fa-exclamation-circle fa-sm text-danger"></i> --></i>	 		
+	 		</li>	
 		</ul>
 	</div>
 
@@ -36,7 +36,7 @@
 							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
 							<label class="badge badge-important pull-right" title="Filters">{{globalQuery[key].length}}</label>
 						</span>
-						<section ng-show="isCollapsed">
+						<section ng-show="isCollapsed" style="height:350px ;overflow:auto;">
 							<ul class="list-group">
 								<li class="list-group-item">
 					            	<div class="input-group">	
@@ -54,9 +54,10 @@
 								</li>
 							</ul>
 						</section>
-					</li>					
-				</ul>
-				<button class="form-control pull-left" ng-click="applyFilter()" style="background-color: #006CBC; color:white;">Apply</button>     
+					</li>
+						<button class="form-control pull-left" ng-click="applyFilter()" style="background-color: #006CBC; color:white;" ng-disabled="!showApplyButton">Apply
+						</button>				
+				</ul>   
 			</fieldset>
 		</section>
 
