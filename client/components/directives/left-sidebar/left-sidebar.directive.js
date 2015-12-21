@@ -182,9 +182,9 @@ angular.module('sasaWebApp')
 	     * this function updates relational filter values
 	     */
 	    scope.updateGlobalFilters = function () {
-	    	console.info($rootScope.globalQuery);
 	    	if(Object.keys($rootScope.globalQuery).length == 0){	    		
-	    		scope.state = false;
+	    		// scope.state = false;
+	    		scope.showfilters = !scope.showfilters;
 	    		scope.getFilters();	
 	    	}
 
@@ -249,7 +249,6 @@ angular.module('sasaWebApp')
 		 */
 	    scope.applyFilter = function (argument) {
 	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;
-	    	// $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
 	    	$rootScope.placeholder.edited = true;    	
 	    }
 

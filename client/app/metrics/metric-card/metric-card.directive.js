@@ -22,8 +22,13 @@ angular.module('sasaWebApp')
             /**
              * data dialog
              */
-            case 'data':
-              dialogs.create('app/metrics/modals/data.html','ModalCtrl',{},'sm');
+            case 'data':              
+              var dlg = dialogs.create('app/metrics/modals/data.html','ModalCtrl',metricData,'sm');
+				      dlg.result.then(function (data) {
+                // update selected columns in placeholder for saving
+                $rootScope.placeholder.metric[mericIndex].gridColumns = data;
+                metricData.gridColumns = data;
+              })
               break;
             /**
              * filter dialog
@@ -60,13 +65,13 @@ angular.module('sasaWebApp')
         // 
         scope.$watch(function () {
           return $rootScope.applyFilter;
-        }, function(newValue, oldValue, scope) {          
-          if($rootScope.applyFilter !== 0){
-            d3.selectAll("svg").remove()
-            scope.getMetric();  
+        }, function(newValue, oldValue, scope) {         
+          if(newValue !== oldValue){
+            scope.getMetric();
           }
           
         });
+
 
         //Variable to change vizualization
         scope.line = false;
@@ -85,24 +90,14 @@ angular.module('sasaWebApp')
           } 
         }
 
-        // scope.$watch(function(){
-        //    $rootScope.placeholder
-        //  });
 
         /**
          * this function gets latest values of metrics
          * @return {[type]} [description]
          */
-        scope.getMetric = function () {                    
+        scope.getMetric = function () {                  
           scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
-            // console.log(scope.metricData)
-            // scope.metricData = resposne;
-            // console.log(scope.metricIndex)
-            // console.log($rootScope.placeholder['metric'][scope.metricIndex])
-            // $rootScope.placeholder['metric'][scope.metricIndex] = 0;
             $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
-            // console.log($rootScope.placeholder['metric'][scope.metricIndex])
-            // console.log($rootScope.placeholder);
           },function (err) {
             console.error(err);
           })
@@ -164,7 +159,7 @@ angular.module('sasaWebApp')
        * @param  {[type]} metric [description]
        * @return {[type]}        [description]
        */
-      scope.removeMetric = function (type, metric) {        
+      scope.removeMetric = function (type, metric) {    
         parentService.placeholderRemove(type, metric);
         $rootScope.placeholder.edited = true;
       }

@@ -11,7 +11,14 @@ angular.module('sasaWebApp', [
   'gridster',
   'xeditable',
   'cgBusy',
-  'ordinal'
+  'ordinal',
+  'ui.grid',
+  'ui.grid.pinning',
+  'ui.grid.resizeColumns',
+  'ui.grid.exporter',
+  'ui.grid.moveColumns',
+  'ngTouch',
+  'ngCsv'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     //
@@ -39,7 +46,7 @@ angular.module('sasaWebApp', [
 
 .run(
   function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory) {
-
+    // $rootScope.user = "GAR\npanwar"
     /**
      * Login user if he's not already logged in
      * @param  {[type]} $rootScope.user [description]
@@ -61,7 +68,7 @@ angular.module('sasaWebApp', [
                  
       },function (err) {
           // redirect user to access denied page
-          $location.url('/accessDenied')
+          // $location.url('/accessDenied')
           messageCenterService.add('danger','Could not login!!!',{ status: messageCenterService.status.permanent });
       })  
     }

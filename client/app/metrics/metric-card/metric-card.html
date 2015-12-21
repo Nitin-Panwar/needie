@@ -11,7 +11,7 @@
                     <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
                         <li ng-click="launch('actions')" ><a href="#">Actions</a></li>
                         <li role="separator" class="divider"></li>                    
-                        <li ng-click="launch('data')"><a href="#">Data</a></li>
+                        <li ng-click="launch('data',metricData)"><a href="#">Data</a></li>
                         <li ng-click="launch('filter')"><a href="#">Filters</a></li>
                         <li role="separator" class="divider"></li>
                         <li ng-click="launch('measure',metricData,mydata)"><a href="#">Measures</a></li>    
@@ -37,13 +37,12 @@
             </div> -->    
                 <section class="col-sm-12">
                  <section class="col-sm-10">
-
-                 <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block"></line-chart>
-                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block"></bar-chart>
+                 <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions.length !== 0"></line-chart>
+                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions.length !== 0"></bar-chart>
                 </section>
                 <section class="col-sm-2">
-                  <i class="fa fa-bar-chart pull-right" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')"></i>
-                  <i class="fa fa-line-chart pull-right" style="font-size: 20px;" ng-click="changeViz('line')"></i>
+                  <i class="fa fa-bar-chart pull-right" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')" ng-if="metricData.distributions.length !== 0"></i>
+                  <i class="fa fa-line-chart pull-right" style="font-size: 20px;" ng-click="changeViz('line')" ng-if="metricData.distributions.length !== 0"></i>
                 </section>
                 <!-- {{metricData}} -->
                </section>              
