@@ -29,6 +29,18 @@ angular.module('sasaWebApp')
 	    	toggleSideBar();
 	    };
 
+	    /**
+	     * [TO show yellow icon if any value is selected]
+	     * @return {[type]} [description]
+	     */
+	    scope.navigationIcon=function(){
+	        for(var key in $rootScope.globalQuery){
+	            if($rootScope.globalQuery[key]!=undefined && key!='comment_type' )
+	                 return true;
+	        }
+	    }
+
+
 	    function toggleSideBar () {
 	    	scope.state = scope.showmydashboards || scope.metriclist || scope.showfilters;	    	
 	    	// if sidebar is closed, reset colors.
