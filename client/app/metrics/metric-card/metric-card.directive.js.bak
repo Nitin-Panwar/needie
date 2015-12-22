@@ -133,9 +133,8 @@ angular.module('sasaWebApp')
           scope.alertBreached = false;         
           
           for(var key in data['measures']){            
-            var measure = data.measures[key];      
-			if(measure.active === undefined){measure.active = true;}      
-            if(measure.threshold !== undefined && measure.active === true){
+            var measure = data.measures[key];            
+            if(measure.threshold !== undefined){
               // if a user setup a threshold and later deleted it,
               // it results in null
               // which is always greater than actual measure value

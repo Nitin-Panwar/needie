@@ -39,8 +39,10 @@
             	<i class="fa fa-bar-chart pull-right" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')" ng-if="metricData.distributions[0]"></i>
                 <i class="fa fa-line-chart pull-right" style="font-size: 20px;" ng-click="changeViz('line')" ng-if="metricData.distributions[0]"></i>
             </section>            
-          </section>                         
-               
+          </section>              
+            
+                <!-- <line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block"></line-chart>     
+                <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block"></bar-chart> -->
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile'" class="measure-card" 
                         ng-class="{'warning-breached': measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value,
