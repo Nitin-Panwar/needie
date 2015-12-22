@@ -14,7 +14,7 @@ angular.module('sasaWebApp')
           var data= scope.barData['distribution_data']['data']
           
           var margin = {top: 30, right: 20, bottom: 35, left: 50},
-            width = 350 - margin.left - margin.right,
+            width = 320 - margin.left - margin.right,
             height = 320 - margin.top - margin.bottom;
 
       		var x = d3.scale.ordinal()
@@ -42,9 +42,9 @@ angular.module('sasaWebApp')
 
       		var svg = d3.select(element[0]).append("svg")
               .attr("id","bar")
-              .attr("viewBox", "0 0 350 320") 
-      		    // .attr("width", width + margin.left + margin.right)
-      		    // .attr("height", height + margin.top + margin.bottom)
+              //.attr("viewBox", "0 0 350 320") 
+      		     .attr("width", width + margin.left + margin.right)
+      		     .attr("height", height + margin.top + margin.bottom)
       		  .append("g")
       		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
