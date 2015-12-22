@@ -3,29 +3,29 @@
         <section class="panel-heading">
             <ul class="panel-title list-inline">
     	        <li class="pull-left"><i class="fa fa-arrows"></i></li>
-    	        <li class=""><span>{{metricData['name']}}</span></li>    
+    	        <li class=""><span>{{metricData['name']}}</span></li> 
                 <li class="pull-right">
-                    <span class="text-danger" ng-if="metricData.filters">
-                        <i class="fa fa-exclamation-circle"></i>                        
-                    </span>                    
-        	        <span class="" uib-dropdown on-toggle="toggled(open)">                
-                        <a href id="simple-dropdown" uib-dropdown-toggle>
-                            <i class="fa fa-align-justify"></i>
-                        </a>
-                        <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
-                            <li ng-click="launch('actions')" ><a href="#">Actions</a></li>
-                            <li role="separator" class="divider"></li>                    
-                            <li ng-click="launch('data',metricData)"><a href="#">Data</a></li>
-                            <li ng-click="launch('filter',metricData)"><a href="#">Filters</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li ng-click="launch('measure',metricData,mydata)"><a href="#">Measures</a></li>    
-                            <li class="disabled"><a href="#">Visualizations</a></li>                     
-                            <li role="separator" class="divider"></li>
-                            <li ng-click="launch('metric',metricData)"><a href="#">Metric Details</a></li> 
-                            <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
-                        </ul>                
-        	        </span>                
-                </li>
+                    <span class="text-danger" ng-if="metricData.filters"><i class="fa fa-exclamation-circle"></i>        
+                    </span>
+                </li>                    
+    	        <li class="pull-right" uib-dropdown on-toggle="toggled(open)"><a href id="simple-dropdown" uib-dropdown-toggle>
+                        <i class="fa fa-align-justify"></i>
+                    </a>
+                    <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown" >
+                        <li ng-click="launch('actions')" ><a href="#">Actions</a></li>
+                        <li role="separator" class="divider"></li>  
+                        <li ng-click="launch('data',metricData)"><a href="#">Data</a></li>
+                        <li ng-click="launch('filter',metricData)"><a href="#">Filters</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li ng-click="launch('measure',metricData,mydata)"><a href="#">Measures</a></li>    
+                        <li class="disabled">
+                            <a href="#">Visualizations</a>
+                        </li>                     
+                        <li role="separator" class="divider"></li>
+                        <li ng-click="launch('metric',metricData)"><a href="#">Metric Details</a></li> 
+                        <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
+                    </ul>                
+	            </li>                
             </ul>              
         </section>
         <!-- metric Card Body -->
