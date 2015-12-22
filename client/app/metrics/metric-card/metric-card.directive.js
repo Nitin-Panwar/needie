@@ -26,18 +26,23 @@ angular.module('sasaWebApp')
               var dlg = dialogs.create('app/metrics/modals/data.html','ModalCtrl',metricData,'sm');
 				      dlg.result.then(function (data) {
                 // update selected columns in placeholder for saving
-                $rootScope.placeholder.metric[mericIndex].gridColumns = data;
-                metricData.gridColumns = data;
+                $rootScope.placeholder.metric[scope.metricIndex].gridColumns = data;
+                scope.metricData.gridColumns = data;
               })
               break;
             /**
              * filter dialog
              */
             case 'filter':
-              dialogs.create('app/metrics/modals/filter.html','ModalCtrl',{},'sm');
+              var dlg = dialogs.create('app/metrics/modals/filter.html','ModalCtrl',metricData,'sm');
+              dlg.result.then(function (data) {
+                $rootScope.placeholder.metric[scope.metricIndex].filters = data;                
+                scope.metricData.filters = data;                    
+                scope.getMetric();
+              });
               break;
             /**
-             * filter diaglog
+             * measure diaglog
              */
             case 'measure':              
               var dlg = dialogs.create('app/metrics/modals/measures.html','ModalCtrl', metricData['measures'],'sm');              
@@ -128,8 +133,9 @@ angular.module('sasaWebApp')
           scope.alertBreached = false;         
           
           for(var key in data['measures']){            
-            var measure = data.measures[key];            
-            if(measure.threshold !== undefined){
+            var measure = data.measures[key];      
+			if(measure.active === undefined){measure.active = true;}      
+            if(measure.threshold !== undefined && measure.active === true){
               // if a user setup a threshold and later deleted it,
               // it results in null
               // which is always greater than actual measure value
