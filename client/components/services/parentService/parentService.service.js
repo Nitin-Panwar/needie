@@ -14,15 +14,52 @@ angular.module('sasaWebApp')
     		{
     			$rootScope.placeholder.dashboard._id=1;
     		}	
-    		if(type === 'metric'){
+    		if(type === 'metric'){    			
     			var id = item;    			
     			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery}).$promise.then(function (data) {   				
-    				$rootScope.placeholder[type].push(data);   				
+    				// validate required size for metric card
+    				var metric = data;
+    				metric.size = {};
+    				var sizeY = 1;
+    				// standard x size
+    				metric.size.x = 2;
+    				// validate y size
+    				var measuresSize = 0;
+    				var chars1 = 0;
+    				var chars2 = 0;
+    				for (var i = 0; i < data.measures.length; i++) {
+    					if(data.measures[i].type === 'percentile'){
+    						sizeY = sizeY + 1;
+    						continue;
+    					}
+
+    					if((String(data.measures[i].value) + String(data.measures[i].unit)).length > String(data.measures[i].name).length){
+    						chars1 = (String(data.measures[i].value) + String(data.measures[i].unit)).length + 1 //add 1 to accomodate left and right margins
+    					}
+    					else{
+    						chars1 = String(data.measures[i].name).length + 1 //add 1 to accomodate left and right margins
+    					}
+    					console.info(chars1 + chars2)
+
+    					if(chars1 + chars2 > 50){
+    						sizeY = sizeY + 1;    						
+    						chars2 = chars1;
+    					}
+    					else{
+    						chars2 = chars1 + chars2;
+    					}    					
+    				};    				
+    				sizeY = data.distributions.length*2 + sizeY;    				
+    				metric.size.y = sizeY;
+
+    				$rootScope.placeholder[type].push(metric);   
+    				
     				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
     			}, function (err) {
     				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
     			})
-    		}    		
+    		}   
+
     	};
 
     	/**

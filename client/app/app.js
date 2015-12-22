@@ -85,7 +85,7 @@ angular.module('sasaWebApp', [
     gridsterConfig.swapping= true, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
     gridsterConfig.width= 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
     gridsterConfig.colWidth= 'auto', // can be an integer or 'auto'.  'auto' uses the pixel width of the element divided by 'columns'
-    gridsterConfig.rowHeight= '195', // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
+    gridsterConfig.rowHeight= '150', // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
     gridsterConfig.margins= [20, 20], // the pixel distance between each widget
     gridsterConfig.outerMargin= true, // whether margins apply to outer edges of the grid
     gridsterConfig.isMobile= true, // stacks the grid items if true
@@ -94,11 +94,11 @@ angular.module('sasaWebApp', [
     gridsterConfig.minColumns= 1, // the minimum columns the grid must have
     gridsterConfig.minRows= 2, // the minimum height of the grid, in rows
     gridsterConfig.maxRows= 50,
-    gridsterConfig.defaultSizeX= 2, // the default width of a gridster item, if not specifed
+    gridsterConfig.defaultSizeX= 1, // the default width of a gridster item, if not specifed
     gridsterConfig.defaultSizeY= 1, // the default height of a gridster item, if not specified
     gridsterConfig.minSizeX= 1, // minimum column width of an item
     gridsterConfig.maxSizeX= null, // maximum column width of an item
-    gridsterConfig.minSizeY= 3, // minumum row height of an item
+    gridsterConfig.minSizeY= 1, // minumum row height of an item
     gridsterConfig.maxSizeY= null, // maximum row height of an item
     gridsterConfig.resizable= {
        enabled: true,
