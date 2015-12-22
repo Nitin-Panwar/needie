@@ -6,7 +6,7 @@ angular.module('sasaWebApp')
       $scope.data = data;        
       $scope.dashBoard = {dashBoardName : ''};
       $scope.measureInfo = {};
-		$scope.offset = 0;
+	  $scope.offset = 0;
       $scope.csvData = {};      
       $scope.availableColoumns = {
         items: [],
@@ -16,6 +16,9 @@ angular.module('sasaWebApp')
         items: [],
         selected: []
       };
+		$scope.filterData = {};
+      $scope.filterQuery = {};
+      $scope.filterSubData = {};
 
       /**
        * toggles active state
@@ -39,8 +42,7 @@ angular.module('sasaWebApp')
        * @return {[type]}          [description]
        */
       $scope.getMetricColumns = function (argument) {
-        if($scope.availableColoumns.items.length !== 0){return;}
-        console.info($scope.data.dataset);
+        if($scope.availableColoumns.items.length !== 0){return;}        
         
         $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
           var columns = response;
@@ -145,6 +147,8 @@ angular.module('sasaWebApp')
             break;
           case 'data':
             $modalInstance.close($scope.selectedColumns.items);
+		  case 'filter':
+            $modalInstance.close($scope.filterQuery);
           default:
             $modalInstance.close();          
         }
@@ -221,6 +225,157 @@ angular.module('sasaWebApp')
           }
         }
       }
+      /**
+       * gets metric filters
+       * @return {[type]} [description]
+       */
+      $scope.getFilters = function () {        
+        $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
+              $scope.FilterData = data;  
+              var filterKeys = Object.keys(data[0]);
+              for (var i = 0; i < filterKeys.length; i++) {               
+                $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
+              };                  
+
+            }, 
+            function (err) {
+              messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+        });
+        
+        if(Object.keys($scope.data.filters).length > 0){
+          for(var key in $scope.data.filters){            
+            $scope.filterQuery[key] = $scope.data.filters[key];
+            console.info($scope.filterQuery);
+          }  
+        }
+      }
+
+      /**
+       * find unique items in an array by key      
+       * @param  {[type]} array [description]
+       * @param  {[type]} key   [description]
+       * @return {[type]}       [description]
+       */
+      $scope.pluck = function(arr, key, matchKey, value) {
+        if(value && matchKey){
+          var result = $.map(arr, function(e) { 
+            if(e[matchKey] === value)
+            return e[key]; 
+          });
+        } 
+        else{
+          var result = $.map(arr, function(e) { return e[key]; });
+        }
+ 
+      //find unique values      
+        var o = {}, i, l = result.length, r = [];
+        for(i=0; i<l;i+=1) o[result[i]] = result[i];
+        for(i in o) r.push(o[i]);       
+
+        return r;
+    }
+
+      /**
+       * This function updates filter query
+       * @param  {[type]} key   [description]
+       * @param  {[type]} value [description]
+       * @return {[type]}       [description]
+       */
+      $scope.updateFilterQuery = function (key, value) {
+           // udpate global search query
+          if($scope.filterQuery.hasOwnProperty(key)){
+
+              // if the values exists                      
+              var exists = false;
+              var index = 0;
+              for (var i = 0; i < $scope.filterQuery[key].length; i++) {
+                  if($scope.filterQuery[key][i] == value){
+                      index = i;                                           
+                      exists = true;
+                      break;
+                  }
+              }
+              if(!exists)
+              {               
+                  $scope.filterQuery[key][$scope.filterQuery[key].length] = value;                  
+              }
+              else{
+                  $scope.filterQuery[key].splice(index, 1);
+                  if($scope.filterQuery[key].length === 0){
+                      delete $scope.filterQuery[key];
+                  }
+              }                                                       
+          }
+          else{     
+              
+              $scope.filterQuery[key] = [value]             
+          }                   
+          $scope.updateGlobalFilters();          
+      };
+
+      /**
+       * this function updates relational filter values
+       */
+      $scope.updateGlobalFilters = function () {
+        if(Object.keys($scope.filterQuery).length == 0){          
+          // $scope.state = false;
+          $scope.showfilters = !$scope.showfilters;
+          $scope.getFilters();  
+        }
+
+        var data = $scope.FilterData;
+        var dataHolder = [];
+        for(var queryKey in $scope.filterQuery){          
+          var tempArr = Object.keys(data[0])
+          tempArr.splice(tempArr.indexOf(queryKey), 1);
+          for(var i in $scope.filterQuery[queryKey]){
+            for(var j in tempArr){
+              var result = $scope.pluck(data, tempArr[j], queryKey, $scope.filterQuery[queryKey][i]);
+              if(dataHolder[tempArr[j]]){
+              dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
+              //find unique values      
+                var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
+                for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
+                for(i in o) r.push(o[i]);
+                dataHolder[tempArr[j]] = r;
+            }
+            else{
+              dataHolder[tempArr[j]] = result;
+            }
+            }
+          } 
+        }
+        for(var key in dataHolder){
+          $scope.filterSubData[key] = dataHolder[key];
+        }
+      }
+
+      /**
+       * this function checks whether any item is in filter query
+       * @param  {[type]} key   [description]
+       * @param  {[type]} value [description]
+       * @return {[type]}       [description]
+       */
+      $scope.isInQuery = function (key, value) {
+        if($scope.filterQuery.hasOwnProperty(key)){
+            for (var i = 0; i < $scope.filterQuery[key].length; i++) {
+                if($scope.filterQuery[key][i] == value){
+                    return true;
+                }
+            };
+        }
+        return false;
+    };
+
+      /**
+       * this function unselects all filter values
+       * @param  {[type]} key [description]
+       * @return {[type]}     [description]
+       */
+      $scope.unselectAllFilterValues = function (key) {
+            delete $scope.filterQuery[key];
+            $scope.updateGlobalFilters();
+      };
       
     })
 

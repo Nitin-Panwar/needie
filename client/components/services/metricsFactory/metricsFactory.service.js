@@ -47,6 +47,16 @@ angular.module('sasaWebApp')
           filters: {},
           offset: undefined
         }      
+		},
+      getFilters:{
+        method: 'POST',
+        url: url + '/metrics/filters',
+        headers: config,
+        responseType: 'json',
+        isArray: true,
+        param:{
+          filterId : undefined
+        }
       }
   });
 });
