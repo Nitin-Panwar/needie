@@ -19,7 +19,7 @@
 	</div>	
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="placeholder.dashboard.owner === user && data.name !== OldName">Save</button>
+	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="data.name !== OldName || data.name === undefined">Save</button>
 	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="placeholder.dashboard.owner === user && data.name === OldName">Overwrite</button>	 
 	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>
