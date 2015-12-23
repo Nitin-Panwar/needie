@@ -3,10 +3,12 @@
 </div>
 <div class="modal-body">
 	<!-- <pre ng-if="placeholder.dashboard.owner !== user && data.name === OldName" class="bg-danger">You are not dashboard Owner! You can not save it with same name.</pre> -->
-	<p class="text-danger" ng-if="placeholder.dashboard.owner !== user && data.name === OldName">You are not dashboard Owner! You can not save it with same name.</p>
+	<p class="text-danger" ng-if="placeholder.dashboard.owner !== user && data.name === OldName && placeholder.dashboard._id!==1 ">You are not dashboard Owner! You can not save it with same name.</p>
 	<br>
 	<!-- <pre class="bg-danger" ng-if="data.name === OldName">Give a new name to save as another copy.</pre> -->
-	<span class="text-primary" ng-if="data.name === OldName"><span class="glyphicon glyphicon-alert"></span> Give a new name to save as another copy.</span>
+	<span class="text-primary" ng-if="data.name === OldName"><i class="fa fa-star"></i>&nbsp; Enter a new name to SAVE as new dashboard or click on OVERWRITE to update the existing dashboard  .</span>
+		<br><br> 
+
 
 	<div>
 		<input type="text" placeholder="Dashboard Name" class="form-control" ng-model="data.name">
@@ -17,6 +19,7 @@
 	</div>	
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="placeholder.dashboard.owner === user || data.name !== OldName">Save</button>
+	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="placeholder.dashboard.owner === user && data.name !== OldName">Save</button>
+	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="placeholder.dashboard.owner === user && data.name === OldName">Overwrite</button>	 
 	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>
