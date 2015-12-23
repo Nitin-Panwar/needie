@@ -42,10 +42,10 @@ angular.module('sasaWebApp')
      * @return {[type]}          [description]
      */
     $scope.save2document = function (argument) {
-      // $(document).ready(function() {
+  
           var testdiv = document.getElementById("testdiv");
           var style = "\n"
-          // console.log(document.styleSheets.length)
+    
           for (var i=0;i<document.styleSheets.length; i++) {
             //console.log(document.styleSheets[i]);
             var rules = document.styleSheets[i].rules;
@@ -274,7 +274,6 @@ angular.module('sasaWebApp')
     $scope.launchSave = function () {      
       var dlg = dialogs.create('app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
-          console.info(data);
         });  
     }  
 

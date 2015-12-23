@@ -1,13 +1,10 @@
 <div class="modal-header">
-	<h4 class="modal-title">Metric Data</h4>
-	<div class="btn-group">
-		<button type="button" class="btn btn-primary" ng-click="save('data')">Apply</button>
-		<button type="button" class="btn btn-default" ng-click="cancel()">Close</button>		
-	</div>
+	<h4 class="modal-title">Metric Data</h4>	
 </div>
-<div class="modal-body" ng-init="showData = true" cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
+<div class="modal-body" ng-init="getMetricColumns()" cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
 	<div>
-		<div style="display: table; margin: 0 auto;" ng-hide="showData">                                    
+
+		<div style="display: table; margin: 0 auto;" ng-show="data.gridColumns.length === 0 || data.gridColumns.length === undefined">                                    
 			<div style="display: table-cell">  
   				<label class="control-label" for="multiSelectSelected">Available Coloumns</label> 
 				<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
