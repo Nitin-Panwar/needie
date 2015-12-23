@@ -14,27 +14,71 @@ angular.module('sasaWebApp')
     		{
     			$rootScope.placeholder.dashboard._id=1;
     		}	
-    		if(type === 'metric'){
+    		if(type === 'metric'){    			
     			var id = item;    			
     			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery}).$promise.then(function (data) {   				
-    				$rootScope.placeholder[type].push(data);    				
+    				// validate required size for metric card
+    				var metric = data;
+    				metric.size = {};
+    				var sizeY = 1;
+
+    				// standard x size
+    				metric.size.x = 2;
+    				// validate y size    				
+    				var chars1 = 0;
+    				var chars2 = 0;
+    				for (var i = 0; i < data.measures.length; i++) {
+    					if(data.measures[i].type === 'percentile'){
+    						sizeY = sizeY + 1;
+    						continue;
+    					}                        
+
+    					if((String(data.measures[i].value) + String(data.measures[i].unit)).length > String(data.measures[i].name).length){
+    						chars1 = (String(data.measures[i].value) + String(data.measures[i].unit)).length + 1 //add 1 to accomodate left and right margins
+    					}
+    					else{
+    						chars1 = String(data.measures[i].name).length + 1 //add 1 to accomodate left and right margins
+    					}
+    					
+
+    					if(chars1 + chars2 > 50){
+    						sizeY = sizeY + 1;    						
+    						chars2 = chars1;
+    					}
+    					else{
+    						chars2 = chars1 + chars2;
+    					}                            					
+    				}; 
+
+    				if(data.distributions.length > 0){
+                        sizeY = sizeY + 2;
+                        console.info(sizeY);
+                    }
+                    console.info(sizeY)
+                    // sizeY = data.distributions.length*2 + sizeY;    				
+    				metric.size.y = sizeY;
+                    
+
+    				$rootScope.placeholder[type].push(metric);   
+    				
     				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
     			}, function (err) {
     				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
     			})
-    		}    		
+    		}   
+
     	};
 
     	/**
-    	 * this function removes an item from placeholder
+    	 * This function removes an item from placeholder
     	 * @param  {[type]} type [description]
     	 * @param  {[type]} item [description]
     	 * @return {[type]}      [description]
     	 */
     	this.placeholderRemove = function (type, item) {    		
     		if(type === 'metric'){
-    			var index = $rootScope.placeholder.metric.indexOf(item);    			
-    			$rootScope.placeholder.metric.splice(index, 1);
+    			var index = $rootScope.placeholder.metric.indexOf(item); 
+                $rootScope.placeholder.metric.splice(index, 1);
     			messageCenterService.add('success','Removed from dashboard',{timeout: 3000})
     		}
     	}
@@ -43,11 +87,14 @@ angular.module('sasaWebApp')
     	 * [createDBoard description]
     	 * @return {[type]} [description]
     	 */
-    	this.createDBoard=function(){	      
+    	this.createDBoard=function(){	
+        
 	      var dashboardObj = {};
 	      dashboardObj.components = [];
-	      for (var i = 0; i < $rootScope.placeholder.metric.length; i++) {
-	      	dashboardObj.components.push($rootScope.placeholder.metric[i]);
+	      var placeholder = {};
+	      angular.copy($rootScope.placeholder, placeholder);
+	      for (var i = 0; i < placeholder.metric.length; i++) {
+	      	dashboardObj.components[i]=placeholder.metric[i];
 	      	dashboardObj.components[i].type = 'metric';	   
 	      	// delete distributions data;
 	      	delete dashboardObj.components[i].distributions;

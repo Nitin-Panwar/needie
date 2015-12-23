@@ -8,15 +8,17 @@ angular.module('sasaWebApp')
       scope:{lineData:'='},
       link: function (scope, element, attrs) {
         scope.$watch("lineData",function(newValue,oldValue) {
-        //This gets called when data changes.
+          d3.select(element[0]).select("#line").remove();
           var x_label=scope.lineData['distribution_data']['x_label']
           var y_label=scope.lineData['distribution_data']['y_label']
           var data= scope.lineData['distribution_data']['data']
               
+          //Getting screen size for responsive design 
+          var screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
 
-          var margin = {top: 30, right: 20, bottom: 35, left: 50},
-          width = 350 - margin.left - margin.right,
-          height = 320 - margin.top - margin.bottom;
+          var margin = {top: 30, right: 20, bottom: 35, left: 80},
+          width = screenWidth/4 - margin.left - margin.right,
+          height = screenWidth/4 - margin.top - margin.bottom;
 
           // var parseDate = d3.time.format("%d-%b-%y").parse;
 
@@ -47,11 +49,11 @@ angular.module('sasaWebApp')
 
   
               
-          var svg = d3.select(element[0])
-              .append("svg")
-                  .attr("viewBox", "0 0 350 320") 
-                  // .attr("width", width + margin.left + margin.right)
-                  // .attr("height", height + margin.top + margin.bottom)
+          var svg = d3.select(element[0]).append("svg")
+                    .attr("id","line")
+                    // .attr("viewBox", "0 0 350 320") 
+                  .attr("width", width + margin.left + margin.right)
+                  .attr("height", height + margin.top + margin.bottom)
               .append("g")
                   .attr("transform", 
                         "translate(" + margin.left + "," + margin.top + ")");

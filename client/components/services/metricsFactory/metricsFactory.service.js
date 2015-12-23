@@ -23,6 +23,39 @@ angular.module('sasaWebApp')
         param: {
           metric:{},
           filters:{}
+		}
+      },
+      getColumns:{
+        method : 'POST',
+        url: url + '/metrics/columns',
+        headers : config,
+        responseType: 'json',
+        isArray: true,
+        param:{
+          dataset: undefined  
+        }        
+      },
+      getRawData: {
+        method: 'POST',
+        url: url + '/metrics/rawdata',
+        headers: config,
+        responseType: 'json',
+        isArray: true,
+        param:{
+          fields: [],
+          metricId: undefined,
+          filters: {},
+          offset: undefined
+        }      
+		},
+      getFilters:{
+        method: 'POST',
+        url: url + '/metrics/filters',
+        headers: config,
+        responseType: 'json',
+        isArray: true,
+        param:{
+          filterId : undefined
         }
       }
   });

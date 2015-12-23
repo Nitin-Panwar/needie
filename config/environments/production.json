@@ -1,4 +1,4 @@
 {
-  "url": "http://143.182.11.247:80",
-  "loginUrl": "http://10.223.12.51:8099/getUser"
+  "url": "http://vmssmmprodweb1.amr.corp.intel.com:5000",
+  "loginUrl": "http://vmssmmprodweb1.amr.corp.intel.com:8099/getUserDetails"
 }

@@ -11,13 +11,7 @@
 			<blockquote>
 				<p>
 					<dt class="text-capitalize">To create new dahsboard</dt>
-					<dd>Select <i>Metrics</i> button on the left sidebar to add new metrics to create dashboard.</dd>
-				</p>
-			</blockquote>
-			<blockquote>
-				<p>
-					<dt class="text-capitalize">To view existing dashboard</dt>
-					<dd>click on <i>My Dashboards</i> button on the left sidebar.</dd>
+					<dd>Select&nbsp;<a href=""><img src="assets/images/metric.png" height="20" width="20" ng-click="metricList()"></a>&nbsp;button on left sidebar.</dd>
 				</p>
 			</blockquote>
 		</dl>
@@ -31,7 +25,7 @@
 			</section>
 			<section class=" col-sm-10">	
 				<section class="pull-right btn-group">
-					<button type="button" class="btn btn-primary" ng-click="launchSave()" ng-show="placeholder.edited"><i class="fa fa-floppy-o pulse-button"></i> Save</button>	
+					<button type="button" class="btn btn-primary" ng-click="launchSave()" ng-show="placeholder.edited"> Save</button>	
 				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()"><i class="fa fa-text-width"></i> Add Text</button>					
 					<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()" ng-hide="placeholder.dashboard._id === undefined"><i class="fa fa-home"></i> Set HomePage </button>
 					<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()" ng-hide="placeholder.dashboard._id === undefined"><i class="fa fa-heart"></i> Set Favourite </button>		
@@ -43,23 +37,25 @@
 		<!-- dashboard buttons section end -->
 
 		<!-- Dashboard Section -->
-		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard">
+		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard" >
 			<ul>
 				<!-- metric card area -->
-				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card" >
 					<!-- {{placeholder.metric[$index]}} -->
-					<section metriccard  metric-data="item" metric-index="$index"></section>
+					<section metriccard  metric-data="item" metric-index="$index" ></section>
 				</li>
 				<!-- metric card area end -->
 				<!-- text boxes area -->
 				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="1" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
-					<section>
-						<span class="glyphicon glyphicon-move mover-handle" style="margin: 10px;"></span>						
-						<a href="#" editable-textarea="item.text" e-rows="5" e-cols="10" class="mover-handle" style="margin: 10px;" onaftersave="placeholder.edited = true">						
-							{{ item.text || 'Text Goes Here' }}						
-						</a>
-						<span class="glyphicon glyphicon-trash" ng-click="removeTextBox(item)" style="margin: 10px;"></span>	
-					</section>					
+					<section style="border-width: 1px; border-color: #DDDDDD; border-style: solid; height:432px">                                                               
+						<section class="panel-heading">
+							<span class="pull-left"><span class="glyphicon glyphicon-move mover-handle"></span></span>
+							<span class="pull-right"><span class="glyphicon glyphicon-trash" ng-click="removeTextBox(item)"></span></span>
+						</section>
+						<section class="panel-body">    
+							<textarea style="width:100%; border:none;" onkeyup="autoGrow(this)" rows="12"  ng-model="item.text" placeholder="Enter Your Text Here" ng-class="placeholder.edited = true"></textarea>
+						</section>
+					</section>          
 				</li>				
 				<!-- text boxes area end -->
 			</ul>			

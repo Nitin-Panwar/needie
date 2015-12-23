@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('NavbarCtrl', function ($scope, $location, $rootScope, usersFactory) {
+  .controller('NavbarCtrl', function ($scope, $location, $rootScope, usersFactory,dashBoardsFactory) {
     $scope.menu = [       
     {
       'title': 'Create Dashboard',
-      'link': '/dashboard'
+      'link': '/'
     }
     // {
     //   'title': 'Admin',
@@ -13,21 +13,23 @@ angular.module('sasaWebApp')
     // }
     ];
 
+    $scope.redirect = function (dashboard) {
+      var url = '/dashboard?dashboardId='+dashboard._id['$oid'];         
+      $location.url(url)
+    }
+
+
+    $scope.searchableItems = function () {
+      $scope.searchLoader=dashBoardsFactory.index().$promise.then(function(data){
+        $scope.searchedDashboard = data;
+      }, function (){
+          messageCenterService.add('danger', 'Dashboard search failed', { timeout: 5000 });
+      }); 
+    };      
+
     $scope.isCollapsed = true;
 
     $scope.isActive = function(route) {
       return route === $location.path();
     };
-
-    $scope.sendToHomepage = function () {
-      //find user homepage    
-      $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
-          if(data.homepage){
-            var homepage = '/dashboard?dashboardId='+data.homepage.$oid;         
-            $location.url(homepage)  
-          }            
-      }, function (){
-          messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
-      })
-    }
   });

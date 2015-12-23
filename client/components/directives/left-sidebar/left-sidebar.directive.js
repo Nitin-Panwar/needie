@@ -19,6 +19,7 @@ angular.module('sasaWebApp')
       	 * @type {Boolean}
       	 */
       	scope.state = false;
+      	scope.showApplyButton = false;
 	    scope.toggleState = function() {	    	
 	    	// scope.state = scope.showmydashboards || scope.metriclist || scope.showfilters;
 	    	// // if sidebar is closed, reset colors.
@@ -27,6 +28,18 @@ angular.module('sasaWebApp')
 	    	// }	    		    	
 	    	toggleSideBar();
 	    };
+
+	    /**
+	     * [TO show yellow icon if any value is selected]
+	     * @return {[type]} [description]
+	     */
+	    scope.navigationIcon=function(){
+	        for(var key in $rootScope.globalQuery){
+	            if($rootScope.globalQuery[key]!=undefined && key!='comment_type' )
+	                 return true;
+	        }
+	    }
+
 
 	    function toggleSideBar () {
 	    	scope.state = scope.showmydashboards || scope.metriclist || scope.showfilters;	    	
@@ -94,8 +107,7 @@ angular.module('sasaWebApp')
 	    $rootScope.GlobalFilters = {};
     	$rootScope.globalQuery = {};
 	    scope.getFilters = function () {
-	    	scope.showfilters = !scope.showfilters;	    	
-
+	    	scope.showfilters = !scope.showfilters;	
 	    	if(scope.showfilters){
 	    		scope.showmydashboards = false;
 	    		scope.metriclist = false;
@@ -148,6 +160,7 @@ angular.module('sasaWebApp')
 	     * @return {[type]}       [description]
 	     */
 	    scope.updateFilterQuery = function (key, value) {
+	    	scope.showApplyButton = true;
 	         // udpate global search query
 	        if($rootScope.globalQuery.hasOwnProperty(key)){
 
@@ -182,9 +195,8 @@ angular.module('sasaWebApp')
 	     * this function updates relational filter values
 	     */
 	    scope.updateGlobalFilters = function () {
-	    	console.info($rootScope.globalQuery);
 	    	if(Object.keys($rootScope.globalQuery).length == 0){	    		
-	    		scope.state = false;
+	    		scope.showfilters = !scope.showfilters;
 	    		scope.getFilters();	
 	    	}
 
@@ -249,8 +261,10 @@ angular.module('sasaWebApp')
 		 */
 	    scope.applyFilter = function (argument) {
 	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;
-	    	// $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
-	    	$rootScope.placeholder.edited = true;    	
+	    	$rootScope.placeholder.edited = true; 
+	    	scope.showfilters = false; 	
+	    	toggleSideBar();  
+
 	    }
 
 
@@ -262,7 +276,8 @@ angular.module('sasaWebApp')
 	    scope.reset = function (argument) {
 	    	scope.showmydashboards = false;		
 	    	scope.metriclist = false;	 
-	    	scope.showfilters = false;   		    	
+	    	scope.showfilters = false; 
+	    	scope.showApplyButton = false;  		    	
 	    };
 
 

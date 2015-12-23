@@ -14,7 +14,6 @@ angular.module('sasaWebApp')
   	 * @return {[type]}                          [description]
   	 */    
     if($stateParams.dashboardId){
-      // $scope.newDashboard = false;
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
         $rootScope.placeholder.dashboard = data;   
@@ -43,9 +42,207 @@ angular.module('sasaWebApp')
      * @return {[type]}          [description]
      */
     $scope.save2document = function (argument) {
-      var code = document.getElementById('dashboard').innerHTML;
-      console.info(code);
+      // $(document).ready(function() {
+          var testdiv = document.getElementById("testdiv");
+          var style = "\n"
+          // console.log(document.styleSheets.length)
+          for (var i=0;i<document.styleSheets.length; i++) {
+            //console.log(document.styleSheets[i]);
+            var rules = document.styleSheets[i].rules;
+            for (var j=0; j<rules.length;j++){
+              style += (rules[j].cssText + "\n");
+              // console.log(style)
+            }
+          }
+          // svgdiv=$("#visualisation");
+          // //$('link[rel=stylesheet]').remove();
+          // svgdiv.prepend("\n<style type='text/css'></style>");
+          // style="body { background-color: lightblue; }"
+          // //style="body { background-color: lightblue; }h1 { color: navy; margin-left: 20px; }"
+          // svgdiv.find("style").html("\n<![CDATA[" + style + "]]>\n");
+
+          // console.log("TESTDIV");
+          // console.log(testdiv);
+          // var svgElements= $(testdiv).find('#bar');
+          var svgElements= d3.selectAll('#bar');
+        
+                
+                
+                
+                
+                /* OPTION 2: */
+                
+          // var myWindow = window.open("", "MsgWindow", "width=1000, height=900");
+          // myWindow.document.write(document.body.innerHTML);
+          var doc = new jsPDF('p', 'pt', 'a4', false);
+
+          doc.setFontSize(40);
+          doc.setDrawColor(0);
+          doc.setFillColor(238, 238, 238);
+          doc.rect(0, 0, 595.28,  841.89, 'F');
+          doc.text(35, 100, "My Report");
+          console.log("IMAGE DATA");
+          var i=0;
+          // console.log(imgData);
+                                
+                svgElements.each(function () {
+                                console.log("working");
+                                
+                                
+                                if(i%2===0 && i!==0){
+                                  doc.addPage('a4')
+                                  i=0;
+                                }
+                                i=i+1;
+                                
+                                var canvas, xml;
+                                
+                                canvas = document.createElement("canvas");
+                                canvas.className = "screenShotTempCanvas";
+                                canvas.width=1000;
+                                canvas.height=500;
+                                
+                                // this.prepend("\n<style type='text/css'></style>");
+                                // this.find("style").html("\n<![CDATA[" + style + "]]>\n");
+
+                                xml = (new XMLSerializer()).serializeToString(this);
+                                // Removing the name space as IE throws an error
+                                //xml = xml.replace(/xmlns=\"http:\/\/www\.w3\.org\/2000\/svg\"/, '');
+
+                                // var svg1 = svgdiv[0].outerHTML; 
+                                 var svg1 = this.outerHTML;
+                                // console.log("SVG FINAL");
+                                // console.log(svg1);
+                                // svg1.prepend("\n<style type='text/css'></style>");
+                                // svg1.find("style").html("\n<![CDATA[" + style + "]]>\n");
+
+                                //draw the SVG onto a canvas
+                                canvg(canvas, svg1);
+
+                                $(canvas).insertAfter(this);
+                                var ctx = canvas.getContext('2d');
+         
+                                    
+                                ctx.msImageSmoothingEnabled = false;
+                                ctx.mozImageSmoothingEnabled = false;
+                                ctx.imageSmoothingEnabled = false;
+                                                                                                                
+                                // console.log(" ENTERED FOR WINDOW DOCUMENT Canvas")
+                                // console.log(canvas.toString())
+                                
+                                var myImage = canvas.toDataURL("image/png");
+                  
+                    // var dataUrl = canvas.toDataURL();
+                    // var myWindow = window.open("", "MsgWindow", "width=1000, height=900");
+                    // document.body.innerHTML ="<img src=\"" + dataUrl + "\"/>";
+                            //myWindow.document.write("<img src=\"" + dataUrl + "\"/>");
+                    // var imgData= finalCanvas.toDataURL("image/png");
+                                myImage.replace(/^data:image\/(png|jpg);base64,/, "");
+                                console.log("calling Pdf function")
+                                if(i%2===0){
+                                    doc.addImage(myImage, 'png', 100, i*300, 280, 210, undefined, "none");
+                                }
+                                else{
+                                  doc.addImage(myImage, 'png', 100, i*200, 280, 210, undefined, "none");
+                                }
+                                //test(canvas)
+                                // finalCanvas = canvas;
+                                //hide the SVG element
+                                // this.className = "tempHide";
+                                // $(this).hide();
+                                
+                });
+              doc.save( 'MyReport.pdf')
+                // console.log("MYWINDOW");
+                // console.log(myWindow.document);
+                // canvas is the final rendered <canvas> element
+                function test(canvas){
+
+                  var ctx = canvas.getContext('2d');
+         
+                                    
+                  ctx.msImageSmoothingEnabled = false;
+                  ctx.mozImageSmoothingEnabled = false;
+                  ctx.imageSmoothingEnabled = false;
+                                                                                                  
+                  // console.log(" ENTERED FOR WINDOW DOCUMENT Canvas")
+                  // console.log(canvas.toString())
+                  
+                  var myImage = canvas.toDataURL("image/png");
+                  
+                  // var dataUrl = canvas.toDataURL();
+                  // var myWindow = window.open("", "MsgWindow", "width=1000, height=900");
+                  // document.body.innerHTML ="<img src=\"" + dataUrl + "\"/>";
+                          //myWindow.document.write("<img src=\"" + dataUrl + "\"/>");
+                  // var imgData= finalCanvas.toDataURL("image/png");
+                  myImage.replace(/^data:image\/(png|jpg);base64,/, "");
+                  console.log("calling Pdf function")
+                  createPDFObject(myImage,"jpg base64","jpg","none") 
+
+                }
+                                                          
+                                                
+                                                
+                                                
+    //             html2canvas(myWindow.document.body, {
+    //                  onrendered: function(canvas) {
+    //                                             // canvas is the final rendered <canvas> element
+                                                          
+                                                
+    //                                             var ctx = canvas.getContext('2d');
+         
+                                    
+    //                                             ctx.msImageSmoothingEnabled = false;
+    //                                             ctx.mozImageSmoothingEnabled = false;
+    //                                             ctx.imageSmoothingEnabled = false;
+                                                                                                                                
+    //                                             // console.log(" ENTERED FOR WINDOW DOCUMENT Canvas")
+    //                                             // console.log(canvas.toString())
+                                                
+    //                                             var myImage = canvas.toDataURL("image/png");
+                                                
+    //                                             // var dataUrl = canvas.toDataURL();
+    //                                             // var myWindow = window.open("", "MsgWindow", "width=1000, height=900");
+    //                                             // document.body.innerHTML ="<img src=\"" + dataUrl + "\"/>";
+    //                                                     //myWindow.document.write("<img src=\"" + dataUrl + "\"/>");
+    //                                             // var imgData= finalCanvas.toDataURL("image/png");
+    //                                             myImage.replace(/^data:image\/(png|jpg);base64,/, "");
+    //                                             console.log("calling Pdf function")
+    //                                             createPDFObject(myImage,"jpg base64","jpg","none") 
+                                                
+    //     },                     
+    //             allowTaint: true,
+    //             logging:true
+    // });
+                $("#testdiv").find('.screenShotTempCanvas').remove();
+    $("#testdiv").find('.tempHide').show().removeClass('tempHide');
+
+      
     }
+    function appendImageToPdf(imgData, type, format, compress) {
+
+     // var doc = new jsPDF('p', 'pt', 'a4', false);
+
+        doc.addImage(imgData, format, 100, 200, 280, 210, undefined, compress);
+
+     // doc.save( type + '.pdf')
+    }
+    function createPDFObject(imgData, type, format, compress) {
+
+      var doc = new jsPDF('p', 'pt', 'a4', false);
+
+      doc.setFontSize(40);
+      doc.setDrawColor(0);
+      doc.setFillColor(238, 238, 238);
+      doc.rect(0, 0, 595.28,  841.89, 'F');
+      doc.text(35, 100, type);
+      console.log("IMAGE DATA");
+      console.log(imgData);
+      //doc.addImage(imgData, format, 100, 200, 280, 210, undefined, compress);
+
+     // doc.save( type + '.pdf')
+    }
+
 
     /**
      * This function adds text boxes in placeholder
@@ -79,6 +276,12 @@ angular.module('sasaWebApp')
         dlg.result.then(function(data){
           console.info(data);
         });  
+    }  
+
+    $scope.autoGrow=function(element) 
+    {
+      element.style.height = "5px";
+      element.style.height = (element.scrollHeight)+"px";
     }  
 
     /**
@@ -122,6 +325,19 @@ angular.module('sasaWebApp')
          drag: function(event, $element, widget) {}, // optional callback fired when item is moved,
          stop: function(event, $element, widget) {$rootScope.placeholder.edited = true;} // optional callback fired when item is finished dragging
       }
-    };    
+    };
+    
+    /**
+     * [metricList description]
+     * @return {[type]} [description]
+     */
+    $scope.metricList = function(){
+      $scope.getMetricsList();
+      $scope.state= true;
+      $scope.metricList =true;
+      $scope.showmydashboards = false;
+      $scope.showfilters = false;
+
+    }  
 
   });
