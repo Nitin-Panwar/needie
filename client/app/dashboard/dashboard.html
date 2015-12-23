@@ -6,7 +6,7 @@
 		<section left-sidebar>sidebar</section>
 		<!-- left sidebar end -->
 	</section>
-	<section class="col-md-11" ng-show="!placeholder.dashboard._id">
+	<section class="col-md-11" ng-show="!placeholder.metric.length===0">
 		<dl>
 			<blockquote>
 				<p>
@@ -17,7 +17,7 @@
 		</dl>
 	</section>
 	
-	<section class="col-md-11" ng-show="placeholder.dashboard._id">
+	<section class="col-md-11" ng-show="placeholder.metric.length >0">
 		<!-- dashboard buttons section -->
 		<section class="row inline">
 			<section class="col-md-2">
