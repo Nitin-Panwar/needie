@@ -108,8 +108,6 @@ angular.module('sasaWebApp')
     	$rootScope.globalQuery = {};
 	    scope.getFilters = function () {
 	    	scope.showfilters = !scope.showfilters;	
-	    	console.log($rootScope.GlobalFilters);
-
 	    	if(scope.showfilters){
 	    		scope.showmydashboards = false;
 	    		scope.metriclist = false;

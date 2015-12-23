@@ -2,7 +2,7 @@
 
 angular.module('sasaWebApp')
 
-.controller('ModalCtrl',function($scope,$modalInstance,data,$rootScope,metricsFactory){
+.controller('ModalCtrl',function($scope,$modalInstance,data,$rootScope,metricsFactory, messageCenterService){
       $scope.data = data;        
       $scope.dashBoard = {dashBoardName : ''};
       $scope.measureInfo = {};

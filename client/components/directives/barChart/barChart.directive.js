@@ -12,10 +12,13 @@ angular.module('sasaWebApp')
           var x_label=scope.barData['distribution_data']['x_label']
           var y_label=scope.barData['distribution_data']['y_label']
           var data= scope.barData['distribution_data']['data']
+
+          //Getting screen size for responsive design 
+          var screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
           
-          var margin = {top: 30, right: 20, bottom: 35, left: 50},
-            width = 320 - margin.left - margin.right,
-            height = 320 - margin.top - margin.bottom;
+          var margin = {top: 30, right: 20, bottom: 35, left: 80},
+            width = screenWidth/4 - margin.left - margin.right,
+            height = screenWidth/4 - margin.top - margin.bottom;
 
       		var x = d3.scale.ordinal()
       		    .rangeRoundBands([0, width], .1);

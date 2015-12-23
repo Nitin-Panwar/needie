@@ -25,7 +25,7 @@ angular.module('sasaWebApp', [
       
 
     $urlRouterProvider
-      .otherwise('/dashboard');
+      .otherwise('/');
 
 
     $locationProvider.html5Mode(true);    
@@ -46,7 +46,6 @@ angular.module('sasaWebApp', [
 
 .run(
   function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory) {
-    // $rootScope.user = "GAR\npanwar"
     /**
      * Login user if he's not already logged in
      * @param  {[type]} $rootScope.user [description]
@@ -59,7 +58,7 @@ angular.module('sasaWebApp', [
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
             if(data.homepage){
-              var homepage = '/dashboard?dashboardId='+data.homepage.$oid;         
+              var homepage = '/?dashboardId='+data.homepage.$oid;         
               $location.url(homepage)  
             }            
         }, function (){
