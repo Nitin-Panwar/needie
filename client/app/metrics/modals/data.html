@@ -4,7 +4,7 @@
 <div class="modal-body" ng-init="getMetricColumns()" cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
 	<div>
 
-		<div style="display: table; margin: 0 auto;" ng-show="data.gridColumns.length === 0 || data.gridColumns.length === undefined">                                    
+		<div style="display: table; margin: 0 auto;" ng-show="data.gridColumns.length === 0 || data.gridColumns.length === undefined || showData===false">                                    
 			<div style="display: table-cell">  
   				<label class="control-label" for="multiSelectSelected">Available Coloumns</label> 
 				<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
