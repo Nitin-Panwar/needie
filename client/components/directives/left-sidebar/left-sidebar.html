@@ -6,7 +6,7 @@
 	 		<!-- Metric List -->
 	 		<li class="list-group-item" ng-click="getMetricsList()" ng-class="{'active-sidebar-item': metriclist}" data-toggle="tooltip" data-placement="right" title="Metric List"><img src="assets/images/metric.png" height="35" width="35"></li>
 	 		<!-- Dashboard Filters -->
-	 		<li class="list-group-item" ng-click="getFilters()" ng-class="{'active-sidebar-item': showfilters}" data-toggle="tooltip" data-placement="right" title="Dashboard Filters"><i class="fa fa-filter fa-2x "></i><i ng-show="navigationIcon()" class="fa fa-exclamation-circle fa-1x text-danger"  tooltip-class="appliedFilter" tooltip-placement="right" uib-tooltip-template="'components/directives/left-sidebar/appliedfilters.html'"></i>	 		
+	 		<li class="list-group-item" ng-click="getFilters()" ng-class="{'active-sidebar-item': showfilters}" ><i class="fa fa-filter fa-2x "></i><i ng-show="navigationIcon()" class="fa fa-exclamation-circle fa-1x text-danger"  tooltip-class="appliedFilter" tooltip-placement="right" uib-tooltip-template="'components/directives/left-sidebar/appliedfilters.html'"></i>	 		
 	 		</li>	
 		</ul>
 	</div>
@@ -17,8 +17,8 @@
  		<div ng-show="showmydashboards" > 			
  			<fieldset>
  				<span class="lead white-text">My Dashboards</span> 				
- 				<ul class="sidebar-menu">
- 					<li class="text-capitalize" ng-repeat="dashboard in myDashboardsList"> 
+ 				<ul class="sidebar-menu" style="max-height:300px ;overflow:auto;">
+ 					<li class="text-capitalize" ng-repeat="dashboard in myDashboardsList" style="max-height:250px ;overflow:auto;"> 
  						<a href="/?dashboardId={{dashboard._id.$oid}}" title="" class="sidebar-hover-effect white-text">{{dashboard.name}}</a>
  					</li>
  				</ul>
@@ -29,7 +29,7 @@
 		<section ng-show="showfilters">
 			<fieldset>
 				<span class="lead white-text">Filters</span>
-				<ul class="sidebar-menu">
+				<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
 					<li ng-repeat="(key, value) in GlobalFilters" class="text-capitalize active dropdown" ng-click="$event.stopPropagation();" role="presentation">
 						<span class="white-text text-capitalize"  data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]"ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;">{{key}}
 							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
@@ -65,7 +65,7 @@
  		<div ng-if="metriclist">
  			<fieldset>
  				<span class="lead white-text">Metrics</span> 				
- 				<ul class="sidebar-menu">
+ 				<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
  					<li class="list-group-item" style="background-color: #0071C5;">						            	
 		            	<div class="input-group">						            		
 							<input type="text" class="form-control" placeholder="Search workflow" ng-model="searchFilter" aria-describedby="basic-addon2">
@@ -78,7 +78,7 @@
 							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
 						</span>
 						<section ng-show="isCollapsed">
-							<ul class="list-group">
+							<ul class="list-group" >
 								<li class="list-group-item text-capitalize" ng-repeat="item in value.members" ng-click="addMetric2Dashboard(item.id)">
 									<span class="sidebar-hover-effect blue-text">
 										{{item.name}}

@@ -279,8 +279,6 @@ angular.module('sasaWebApp')
 	    	scope.showfilters = false; 
 	    	scope.showApplyButton = false;  		    	
 	    };
-
-
       }
     };
   });

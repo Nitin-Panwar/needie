@@ -40,7 +40,7 @@
 		</div>		
 
 
-		<div ng-hide="gridOptions.data.length === 0">
+		<div ng-if="gridOptions.data.length > 0">
 			<span>Showing {{gridOptions.data.length}} Rows</span>						
 			<div ui-grid="gridOptions" id="metric-data-grid" ui-grid-resize-columns ui-grid-exporter ui-grid-move-columns ui-grid-pinning></div>
 			<div class="btn-group">

@@ -9,7 +9,6 @@ angular.module('sasaWebApp', [
   'dialogs.main',
   'ui.bootstrap',
   'gridster',
-  'xeditable',
   'cgBusy',
   'ordinal',
   'ui.grid',
@@ -115,13 +114,3 @@ angular.module('sasaWebApp', [
        stop: function(event, $element, widget) {} // optional callback fired when item is finished dragging
     }
 }]);
-
-
-
-angular.module('sasaWebApp').run(function(editableOptions, editableThemes) {
-  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-  editableThemes.bs3.inputClass = 'input-sm';
-});
-
-
-
