@@ -61,7 +61,6 @@ angular.module('sasaWebApp')
              * metric details dialog
              */
             case 'metric':
-              delete metricData['distributions'];
               scope.metric=metricData;
               dialogs.create('app/metrics/modals/metricDetails.html','ModalCtrl',scope.metric,'sm');
               break;
