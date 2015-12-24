@@ -406,6 +406,7 @@ module.exports = function (grunt) {
             // Added on 16th October
             'assets/*.*',
             'index.html',
+            'help.html',
 			'web.config'
           ]
         }, {

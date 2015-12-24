@@ -1,7 +1,7 @@
 <div class="modal-header">
 	<h4 class="modal-title">Save Dashboard</h4>
 </div>
-<div class="modal-body">
+<div class="modal-body" cg-busy="{promise:save_dashboard,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" >
 	<!-- <pre ng-if="placeholder.dashboard.owner !== user && data.name === OldName" class="bg-danger">You are not dashboard Owner! You can not save it with same name.</pre> -->
 	<p class="text-danger" ng-if="placeholder.dashboard.owner !== user && data.name === OldName && placeholder.dashboard._id!==1 ">You are not dashboard Owner! You can not save it with same name.</p>
 	<br>
@@ -9,7 +9,7 @@
 	<span class="text-primary" ng-if="data.name === OldName"><i class="fa fa-star"></i>&nbsp; Enter a new name to SAVE as new dashboard or click on OVERWRITE to update the existing dashboard  .</span>
 		<br><br> 
 
-
+	<span class="text-primary" ng-if="exist" style="color:red">Dashboard exists with the same name <a href="/?dashboardId={{dashboardUrl}}" target="_blank">click here</a> to view it.</span>
 	<div>
 		<input type="text" placeholder="Dashboard Name" class="form-control" ng-model="data.name">
 	</div>	

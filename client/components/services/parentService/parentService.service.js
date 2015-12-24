@@ -102,15 +102,21 @@ angular.module('sasaWebApp')
 	        dashboardObj.components[dashboardObj.components.length] = $rootScope.placeholder.textBoxes[i];	        
 	      };
 
-	      dashboardObj.name = $rootScope.placeholder.dashboard.name;
-	      dashboardObj.description = $rootScope.placeholder.dashboard.description;
+	      dashboardObj.name = $rootScope.placeholder.dashboard.name;	      
+          if($rootScope.placeholder.dashboard.description){
+            dashboardObj.description = $rootScope.placeholder.dashboard.description;  
+          }
+          else{
+            dashboardObj.description = ""; 
+          }
 	      dashboardObj.filters = $rootScope.globalQuery;
 	      dashboardObj.version = $rootScope.placeholder.dashboard.version + 1;
+          dashboardObj.owner = $rootScope.user;
 
 	      //Checking if the request is coming for update or create new.
-	      if($rootScope.placeholder.dashboard._id){	
-            console.log($rootScope.placeholder);  
+	      if($rootScope.placeholder.dashboard._id){	              
 	      	dashboardObj._id = $rootScope.placeholder.dashboard._id;
+            console.info(dashboardObj);
 
 	        //Calling update dashboard factory service
 	        $rootScope.myPromise=dashBoardsFactory.update({dashBoard:dashboardObj}).$promise.then(function (data){
@@ -119,10 +125,12 @@ angular.module('sasaWebApp')
 	      		messageCenterService.add('danger','Not able to save dashboard',{timeout: 10000});
 	      	})
 	      }
-	      else{   	        
-	        dashboardObj.owner = $rootScope.user;	        
+	      else{   	    
+	        	
+            console.log(dashboardObj)        
 	        $rootScope.myPromise=dashBoardsFactory.save({dashboard:dashboardObj}).$promise.then(function (data) {
 	          var dashboardId = data['_id']['$oid'];
+              console.log(data)
 	          messageCenterService.add('success', 'Dashboard saved successfully', { timeout: 5000 }); 
 	          //Save dashboardid in user metadata
 	          $rootScope.myPromise= usersFactory.save({idsid:$rootScope.user,dashboardId:dashboardId}).$promise.then(function (data) {
@@ -130,8 +138,7 @@ angular.module('sasaWebApp')
                 messageCenterService.add('success','Dashboard added to favorites',{timeout:5000});	            
 	          }, function (err) {
 	          	messageCenterService.add('danger', 'Not able to add dashboard to favorites', {timeout: 10000});
-	          })
-
+	          });
 	        },function (err) {
 	        	messageCenterService.add('danger','Not able to save dashboard', {timeout: 10000});
 	        });
@@ -139,6 +146,7 @@ angular.module('sasaWebApp')
 	    };
 
         this.sendMail=function(idsid,url){
+            console.log(idsid,url)
             dashBoardsFactory.sendMail({idsid:idsid,url:url}).$promise.then(function (data) {
                 messageCenterService.add('success','Email has been sent',{timeout:5000});              
               }, function (err) {
