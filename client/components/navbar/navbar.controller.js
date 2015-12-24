@@ -13,12 +13,29 @@ angular.module('sasaWebApp')
     // }
     ];
 
+    /**
+     * [redirect description]
+     * @param  {[type]} dashboard [description]
+     * @return {[type]}           [description]
+     */
     $scope.redirect = function (dashboard) {
       var url = '/?dashboardId='+dashboard._id['$oid'];         
       $location.url(url)
     }
 
 
+    /**
+     * [clearPlaceholder description]
+     * @return {[type]} [description]
+     */
+    $scope.clearPlaceholder = function(){
+      $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
+    }
+
+    /**
+     * [searchableItems description]
+     * @return {[type]} [description]
+     */
     $scope.searchableItems = function () {
       $scope.searchLoader=dashBoardsFactory.index().$promise.then(function(data){
         $scope.searchedDashboard = data;
