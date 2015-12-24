@@ -1,4 +1,4 @@
 {
-  "url": "http://vmssmmprodweb1.amr.corp.intel.com:5000",
+  "url": "http://sminsights-api.intel.com:5000",
   "loginUrl": "http://vmssmmprodweb1.amr.corp.intel.com:8099/getUserDetails"
 }

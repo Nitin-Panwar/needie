@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .service('parentService', function ($rootScope, metricsFactory, dashBoardsFactory, messageCenterService, usersFactory) {    
+  .service('parentService', function ($location,$rootScope, metricsFactory, dashBoardsFactory, messageCenterService, usersFactory) {    
     	/**
     	 * this function adds new items to placeholder
     	 * @param  {[type]} type [description]
@@ -94,7 +94,7 @@ angular.module('sasaWebApp')
 	      	dashboardObj.components[i]=placeholder.metric[i];
 	      	dashboardObj.components[i].type = 'metric';	   
 	      	// delete distributions data;
-	      	delete dashboardObj.components[i].distributions;
+	      	// delete dashboardObj.components[i].distributions;
 	      };	      	      
 
 	      // second handle textboxes
@@ -108,7 +108,8 @@ angular.module('sasaWebApp')
 	      dashboardObj.version = $rootScope.placeholder.dashboard.version + 1;
 
 	      //Checking if the request is coming for update or create new.
-	      if($rootScope.placeholder.dashboard._id){	  
+	      if($rootScope.placeholder.dashboard._id){	
+            console.log($rootScope.placeholder);  
 	      	dashboardObj._id = $rootScope.placeholder.dashboard._id;
 
 	        //Calling update dashboard factory service
@@ -125,13 +126,23 @@ angular.module('sasaWebApp')
 	          messageCenterService.add('success', 'Dashboard saved successfully', { timeout: 5000 }); 
 	          //Save dashboardid in user metadata
 	          $rootScope.myPromise= usersFactory.save({idsid:$rootScope.user,dashboardId:dashboardId}).$promise.then(function (data) {
-	            messageCenterService.add('success','Dashboard added to favorites',{timeout:5000});	            
+	            $location.url('/?dashboardId='+dashboardId)
+                messageCenterService.add('success','Dashboard added to favorites',{timeout:5000});	            
 	          }, function (err) {
 	          	messageCenterService.add('danger', 'Not able to add dashboard to favorites', {timeout: 10000});
 	          })
+
 	        },function (err) {
 	        	messageCenterService.add('danger','Not able to save dashboard', {timeout: 10000});
 	        });
 	      }
 	    };
+
+        this.sendMail=function(idsid,url){
+            dashBoardsFactory.sendMail({idsid:idsid,url:url}).$promise.then(function (data) {
+                messageCenterService.add('success','Email has been sent',{timeout:5000});              
+              }, function (err) {
+                messageCenterService.add('danger', 'Could not send email', {timeout: 10000});
+            })
+        }
   });

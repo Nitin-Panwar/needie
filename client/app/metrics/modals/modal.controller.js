@@ -3,10 +3,12 @@
 angular.module('sasaWebApp')
 
 .controller('ModalCtrl',function($scope,$modalInstance,data,$rootScope,metricsFactory, messageCenterService){
+      $scope.showColumns = true;
+      $scope.showApplyButton = false;
       $scope.data = data;        
       $scope.dashBoard = {dashBoardName : ''};
       $scope.measureInfo = {};
-	  $scope.offset = 0;
+	    $scope.offset = 0;
       $scope.csvData = {};      
       $scope.availableColoumns = {
         items: [],
@@ -34,21 +36,23 @@ angular.module('sasaWebApp')
         }        
       }
 
-      $scope.getMe
-
       /**
  		* this function populates all metric columns
        * @param  {[type]} argument [description]
        * @return {[type]}          [description]
        */
       $scope.getMetricColumns = function (argument) {
+
         if(!$scope.data.gridColumns){$scope.data.gridColumns = [];}
         if($scope.data.gridColumns.length !== 0){          
           $scope.selectedColumns.items = $scope.data.gridColumns;    
-          return;
+          // return;
         }
-        if($scope.availableColoumns.items.length !== 0){return;}       
-        
+        if($scope.availableColoumns.items.length !== 0){
+
+          return;
+        }       
+
         $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
           var columns = response;
           for(var i in $scope.data.gridColumns){
@@ -105,6 +109,7 @@ angular.module('sasaWebApp')
         $scope.csvData.data = undefined;  
         $scope.gridOptions.data = [];      
         $scope.gridOptions.columnDefs = [];
+        $scope.showColumns = false;
 
         if($scope.selectedColumns.items.length === 0){
           messageCenterService.add('danger','Please select columns', {timeout: 10000});
@@ -113,7 +118,7 @@ angular.module('sasaWebApp')
 
         var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
 
-        $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
+        $rootScope.metricPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
           if(offset === 'all'){
             $scope.csvData.data = response;
             $scope.csvData.headers = Object.keys(response[0]);
@@ -224,7 +229,7 @@ angular.module('sasaWebApp')
        * @return {[type]} [description]
        */
       $scope.getFilters = function () {        
-        $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
+        $rootScope.metricPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
               $scope.FilterData = data;  
               var filterKeys = Object.keys(data[0]);
               for (var i = 0; i < filterKeys.length; i++) {               
@@ -275,6 +280,7 @@ angular.module('sasaWebApp')
        * @return {[type]}       [description]
        */
       $scope.updateFilterQuery = function (key, value) {
+          $scope.showApplyButton = true;
            // udpate global search query
           if($scope.filterQuery.hasOwnProperty(key)){
 
@@ -294,8 +300,10 @@ angular.module('sasaWebApp')
               }
               else{
                   $scope.filterQuery[key].splice(index, 1);
+
                   if($scope.filterQuery[key].length === 0){
-                      delete $scope.filterQuery[key];
+
+                      delete $scope.filterQuery[key];                      
                   }
               }                                                       
           }

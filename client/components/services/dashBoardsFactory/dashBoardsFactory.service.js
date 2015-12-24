@@ -46,6 +46,16 @@ angular.module('sasaWebApp')
           dashboardId:{},
           filters:{}
         }
+      },
+      sendMail:{
+        method:'GET',
+        headers: config,
+        url: url + '/sendemail',
+        responseType: 'json',
+        param: {
+          idsid: {},
+          url: {}
+        }
       }
     });
   });

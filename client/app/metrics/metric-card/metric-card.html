@@ -2,7 +2,6 @@
     <section class="panel panel-default metric-card-panel" ng-class="{'panel-danger':alertBreached, 'panel-warning': warningBreached}" >
         <section class="panel-heading">
             <ul class="panel-title list-inline">
-    	        <!-- <li class="pull-left"><i class="fa fa-arrows"></i></li>&nbsp; -->
                 <li class="pull-left" uib-dropdown on-toggle="toggled(open)"><a href id="simple-dropdown" uib-dropdown-toggle>
                         <i class="fa fa-align-justify"></i>
                     </a>
@@ -20,48 +19,19 @@
                         <li ng-click="launch('metric',metricData)"><a href="#">Metric Details</a></li> 
                         <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
                     </ul>                
-                </li>&nbsp; 
-                <li class="fa fa-bar-chart pull-left" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')" ng-if="metricData.distributions[0]"></li>&nbsp;
-                <li class="fa fa-line-chart pull-left" style="font-size: 20px;" ng-click="changeViz('line')" ng-if="metricData.distributions[0]"></li>
-                <li class=""><span>{{metricData['name']}}</span></li> 
-                <li class="">
-                    <span class="text-danger" ng-if="metricData.filters"><i class="fa fa-exclamation-circle"></i>        
-                    </span>
                 </li> 
-                <!-- <li class="pull-right" uib-dropdown on-toggle="toggled(open)"><a href id="simple-dropdown" uib-dropdown-toggle>
-                        <i class="fa fa-align-justify"></i>
-                    </a>
-                    <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown" >
-                        <li ng-click="launch('actions')" ><a href="#">Actions</a></li>
-                        <li role="separator" class="divider"></li>  
-                        <li ng-click="launch('data',metricData)"><a href="#">Data</a></li>
-                        <li ng-click="launch('filter',metricData)"><a href="#">Filters</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li ng-click="launch('measure',metricData,mydata)"><a href="#">Measures</a></li>    
-                        <li class="disabled">
-                            <a href="#">Visualizations</a>
-                        </li>                     
-                        <li role="separator" class="divider"></li>
-                        <li ng-click="launch('metric',metricData)"><a href="#">Metric Details</a></li> 
-                        <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
-                    </ul>                
-                </li>  -->
-    	        
-                                   
-    	        
-                <!-- <section class="col-sm-1" style="vertical-align: bottom;">
-                <i class="fa fa-bar-chart pull-right" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')" ng-if="metricData.distributions[0]"></i><br>
-                <i class="fa fa-line-chart pull-right" style="font-size: 20px;" ng-click="changeViz('line')" ng-if="metricData.distributions[0]"></i> -->
-            <!-- </section>                -->
+                <li class="fa fa-bar-chart pull-left" style="cursor: pointer"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
+                <li class="fa fa-line-chart pull-left" style="cursor: pointer" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
+                <li class=""><span>{{metricData['name']}}</span></li> 
+                <li class="pull-right">
+                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-filter fa-1x "></i><i class="fa fa-exclamation-circle text-danger" tooltip-class="appliedFilter" tooltip-placement="left-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
+                    </span>
+                </li>        
             </ul>              
         </section>
         <!-- metric Card Body -->
         <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-          	<!-- <section class="col-sm-1" style="vertical-align: bottom;">
-                <i class="fa fa-bar-chart pull-right" style="font-size: 20px; cursor: default"ng-click="changeViz('bar')" ng-if="metricData.distributions[0]"></i><br>
-                <i class="fa fa-line-chart pull-right" style="font-size: 20px;" ng-click="changeViz('line')" ng-if="metricData.distributions[0]"></i>
-            </section> -->
             <!-- <section class="col-sm-11"> -->
             	<line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></line-chart>
                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></bar-chart>
