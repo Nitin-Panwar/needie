@@ -37,7 +37,10 @@ angular.module('sasaWebApp')
               var dlg = dialogs.create('app/metrics/modals/filter.html','ModalCtrl',metricData,'sm');
               dlg.result.then(function (data) {
                 $rootScope.placeholder.metric[scope.metricIndex].filters = data;                
-                scope.metricData.filters = data;                    
+                scope.metricData.filters = data;
+                for(var key in scope.metricData.filters){
+                  if(scope.metricData.filters[key].length === 0){delete scope.metricData.filters[key];}
+                }
                 scope.getMetric();
               });
               break;
@@ -157,6 +160,11 @@ angular.module('sasaWebApp')
             }
             
           }
+        }
+
+        scope.isEmpty = function(object){
+          if(Object.keys(object).length === 0){return true;}
+          return false;
         }
 
       /**

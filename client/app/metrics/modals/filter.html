@@ -1,18 +1,16 @@
 <div class="modal-header">
 	<h4 class="modal-title">Metric Filters</h4>
 </div>
-<div class="modal-body" ng-init="getFilters()" cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">			
-
-
-	<ul class="sidebar-menu">
-		<li ng-repeat="(key, value) in filterSubData" class="text-uppercase active dropdown" ng-click="$event.stopPropagation();" role="presentation">
+<div class="modal-body" ng-init="getFilters()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">			
+	<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
+		<li ng-repeat="(key, value) in filterSubData" class="text-uppercase active dropdown" ng-click="$event.stopPropagation();" role="presentation" style="background-color: #0071C5;color:white;">
 			<span class="wtext-capitalize"  data-toggle="popover" title="Selected Filters" data-content="filterQuery[key]"ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;">{{key}}
 				<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
 				<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
 				<label class="badge badge-important pull-right" title="Filters">{{filterQuery[key].length}}</label>
 			</span>
 			<section ng-show="isCollapsed">
-				<ul class="list-group">
+				<ul class="list-group" style="max-height:150px ;overflow:auto;">
 					<li class="list-group-item">
 		            	<div class="input-group">	
 							<input type="text" class="form-control" placeholder="Search..." ng-model="searchFilter" aria-describedby="basic-addon2">
@@ -37,6 +35,6 @@
 
 </div>
 <div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="save('filter')">Apply</button>
+	<button type="button" class="btn btn-primary" ng-disabled="!showApplyButton" ng-click="save('filter')">Apply</button>
 	<button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
 </div>
