@@ -74,16 +74,18 @@ angular.module('sasaWebApp')
      * this function saves the dashboard
      * @return {[type]} [description]
      */ 
-    $scope.launchSave = function () {      
+    $scope.launchSave = function () {  
+    /**
+     * [searchableItems description]
+     * @return {[type]} [description]
+     */ 
       var dlg = dialogs.create('app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
-          dlg.result.then(function(data){
           $rootScope.placeholder.dashboard["name"] = data.name;
           $rootScope.placeholder.dashboard["description"] = data.description;
           parentService.createDBoard();
           $rootScope.placeholder.edited = false;
-        });  
-        });  
+        });   
     }  
 
     /**

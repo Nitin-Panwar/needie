@@ -44,19 +44,23 @@ angular.module('sasaWebApp', [
   }])//end config
 
 .run(
-  function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory) {
+  function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory,$stateParams) {
     /**
      * Login user if he's not already logged in
      * @param  {[type]} $rootScope.user [description]
      * @return {[type]}                 [description]
      */
+    
     if($rootScope.user == undefined){
       event.preventDefault();        
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {          
           $rootScope.user = response.data;
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
-            if(data.homepage){
+            // if($stateParams.dashboardId){
+            //   return;
+            // }
+            if(data.homepage && !$stateParams.dashboardId){
               var homepage = '/?dashboardId='+data.homepage.$oid;         
               $location.url(homepage)  
             }            
