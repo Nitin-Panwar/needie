@@ -3,6 +3,7 @@
 angular.module('sasaWebApp')
 
 .controller('ModalCtrl',function($scope,$modalInstance,data,$rootScope,metricsFactory, messageCenterService){
+      $scope.showColumns = true;
       $scope.data = data;        
       $scope.dashBoard = {dashBoardName : ''};
       $scope.measureInfo = {};
@@ -34,21 +35,23 @@ angular.module('sasaWebApp')
         }        
       }
 
-      $scope.getMe
-
       /**
  		* this function populates all metric columns
        * @param  {[type]} argument [description]
        * @return {[type]}          [description]
        */
       $scope.getMetricColumns = function (argument) {
+
         if(!$scope.data.gridColumns){$scope.data.gridColumns = [];}
         if($scope.data.gridColumns.length !== 0){          
           $scope.selectedColumns.items = $scope.data.gridColumns;    
-          return;
+          // return;
         }
-        if($scope.availableColoumns.items.length !== 0){return;}       
-        
+        if($scope.availableColoumns.items.length !== 0){
+
+          return;
+        }       
+
         $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
           var columns = response;
           for(var i in $scope.data.gridColumns){
@@ -105,6 +108,7 @@ angular.module('sasaWebApp')
         $scope.csvData.data = undefined;  
         $scope.gridOptions.data = [];      
         $scope.gridOptions.columnDefs = [];
+        $scope.showColumns = false;
 
         if($scope.selectedColumns.items.length === 0){
           messageCenterService.add('danger','Please select columns', {timeout: 10000});
@@ -113,7 +117,7 @@ angular.module('sasaWebApp')
 
         var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
 
-        $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
+        $rootScope.metricPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
           if(offset === 'all'){
             $scope.csvData.data = response;
             $scope.csvData.headers = Object.keys(response[0]);
@@ -125,6 +129,7 @@ angular.module('sasaWebApp')
           for (var column in $scope.selectedColumns.items){
             $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
           }
+          console.log($scope.gridOptions)
         },function (err) {
           console.error(err);
         })        
