@@ -50,7 +50,7 @@ angular.module('sasaWebApp')
       sendMail:{
         method:'GET',
         headers: config,
-        url: url + '/sendemail',
+        url: 'http://vmssmmprodweb1.amr.corp.intel.com:8090/sendemail',
         responseType: 'json',
         param: {
           idsid: {},
