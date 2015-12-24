@@ -1,10 +1,12 @@
 <div class="modal-header">
 	<h4 class="modal-title">Metric Data</h4>	
 </div>
-<div class="modal-body" ng-init="getMetricColumns()" cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
+<div class="modal-body" ng-init="getMetricColumns()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
 	<div>
 
-		<div style="display: table; margin: 0 auto;" ng-show="data.gridColumns.length === 0 || data.gridColumns.length === undefined || showData===false">                                    
+		<div style="display: table; margin: 0 auto;" ng-show="showColumns" >
+
+		<!-- ng-show="data.gridColumns.length === 0 || data.gridColumns.length === undefined || showData===false"  -->                                   
 			<div style="display: table-cell">  
   				<label class="control-label" for="multiSelectSelected">Available Coloumns</label> 
 				<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
@@ -14,10 +16,10 @@
 				</ul>
     		</div>  
 			<div  style="display: table-cell; vertical-align: middle">  
-  				<button class="btn btn-primary" ng-click="dataGrid(item, false)" title="Add selected"   >  
+  				<button class="btn btn-primary" ng-click="dataGrid(item, false)" title="Remove selected"   >  
     				<i class="glyphicon glyphicon-arrow-left"></i>  
   				</button>  
-  				<button class="btn btn-primary" ng-click="dataGrid(item, true)" title="Remove selected">  
+  				<button class="btn btn-primary" ng-click="dataGrid(item, true)" title="Add selected">  
     				<i class="glyphicon glyphicon-arrow-right"></i>  
   				</button> 
 			</div>  
@@ -31,8 +33,8 @@
 			</div> 
 		</div> 
 		<div class="btn-group">
-			<button type="button" class="btn btn-default btn-md" ng-click="getRawData(0); showData=true" ng-hide="selectedColumns.items.length === 0">Get Data</button>	
-			<button type="button" class="btn btn-default btn-md" ng-click="getMetricColumns(); showData=false">Add/Remove Columns</button>				
+			<button type="button" class="btn btn-default btn-md" ng-click="getRawData(0); " ng-hide="selectedColumns.items.length === 0">Get Data</button>	
+			<button type="button" class="btn btn-default btn-md" ng-click="getMetricColumns(); showColumns=true">Add/Remove Columns</button>				
 			<button type="button" class="btn btn-default btn-md" ng-click="getRawData('all')" ng-hide="selectedColumns.items.length === 0">Export CSV</button>
 			<button type="button" class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</button>
 		</div>		

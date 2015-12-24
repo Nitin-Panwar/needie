@@ -94,7 +94,7 @@ angular.module('sasaWebApp')
 	      	dashboardObj.components[i]=placeholder.metric[i];
 	      	dashboardObj.components[i].type = 'metric';	   
 	      	// delete distributions data;
-	      	delete dashboardObj.components[i].distributions;
+	      	// delete dashboardObj.components[i].distributions;
 	      };	      	      
 
 	      // second handle textboxes
