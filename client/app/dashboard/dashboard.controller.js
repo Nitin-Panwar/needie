@@ -277,12 +277,6 @@ angular.module('sasaWebApp')
         });  
     }  
 
-    $scope.autoGrow=function(element) 
-    {
-      element.style.height = "5px";
-      element.style.height = (element.scrollHeight)+"px";
-    }  
-
     /**
      * this function sets a dashboard as homepage
      */
