@@ -14,7 +14,7 @@ angular.module('sasaWebApp')
     ];
 
     $scope.redirect = function (dashboard) {
-      var url = '/dashboard?dashboardId='+dashboard._id['$oid'];         
+      var url = '/?dashboardId='+dashboard._id['$oid'];         
       $location.url(url)
     }
 

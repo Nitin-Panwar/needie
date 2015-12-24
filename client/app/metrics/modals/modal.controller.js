@@ -42,7 +42,12 @@ angular.module('sasaWebApp')
        * @return {[type]}          [description]
        */
       $scope.getMetricColumns = function (argument) {
-        if($scope.availableColoumns.items.length !== 0){return;}        
+        if(!$scope.data.gridColumns){$scope.data.gridColumns = [];}
+        if($scope.data.gridColumns.length !== 0){          
+          $scope.selectedColumns.items = $scope.data.gridColumns;    
+          return;
+        }
+        if($scope.availableColoumns.items.length !== 0){return;}       
         
         $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
           var columns = response;
@@ -120,7 +125,6 @@ angular.module('sasaWebApp')
           for (var column in $scope.selectedColumns.items){
             $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
           }
-          console.info($scope.gridOptions);
         },function (err) {
           console.error(err);
         })        
@@ -162,16 +166,6 @@ angular.module('sasaWebApp')
         $modalInstance.dismiss('Canceled');
       }; // end done
 
-
-
-
-
-
-
-
-
-
-
       /**
        * this function selets items to add to data grid
        * @param  {[type]} item    [description]
@@ -196,7 +190,7 @@ angular.module('sasaWebApp')
           }
           $scope.selectedColumns.selected.length = 0;
         }
-      }
+      };
 
       /**
        * this function selects columns to show in data grid
@@ -245,7 +239,6 @@ angular.module('sasaWebApp')
         if(Object.keys($scope.data.filters).length > 0){
           for(var key in $scope.data.filters){            
             $scope.filterQuery[key] = $scope.data.filters[key];
-            console.info($scope.filterQuery);
           }  
         }
       }

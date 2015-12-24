@@ -6,7 +6,7 @@
 		<section left-sidebar>sidebar</section>
 		<!-- left sidebar end -->
 	</section>
-	<section class="col-md-11" ng-show="!placeholder.dashboard._id">
+	<section class="col-md-11" ng-show="!placeholder.metric.length===0">
 		<dl>
 			<blockquote>
 				<p>
@@ -17,7 +17,7 @@
 		</dl>
 	</section>
 	
-	<section class="col-md-11" ng-show="placeholder.dashboard._id">
+	<section class="col-md-11" ng-show="placeholder.metric.length >0">
 		<!-- dashboard buttons section -->
 		<section class="row inline">
 			<section class="col-md-2">
@@ -47,13 +47,13 @@
 				<!-- metric card area end -->
 				<!-- text boxes area -->
 				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="1" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
-					<section style="border-width: 1px; border-color: #DDDDDD; border-style: solid; height:432px">                                                               
+					<section class="panel">                                                               
 						<section class="panel-heading">
 							<span class="pull-left"><span class="glyphicon glyphicon-move mover-handle"></span></span>
 							<span class="pull-right"><span class="glyphicon glyphicon-trash" ng-click="removeTextBox(item)"></span></span>
 						</section>
 						<section class="panel-body">    
-							<textarea style="width:100%; border:none;" onkeyup="autoGrow(this)" rows="12"  ng-model="item.text" placeholder="Enter Your Text Here" ng-class="placeholder.edited = true"></textarea>
+							<textarea style="width:100%; border:none;" ng-model="item.text" placeholder="Enter Your Text Here" ng-class="placeholder.edited = true" style="resize: both; overflow: auto"></textarea>
 						</section>
 					</section>          
 				</li>				

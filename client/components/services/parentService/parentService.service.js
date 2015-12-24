@@ -27,34 +27,31 @@ angular.module('sasaWebApp')
     				// validate y size    				
     				var chars1 = 0;
     				var chars2 = 0;
-    				for (var i = 0; i < data.measures.length; i++) {
-    					if(data.measures[i].type === 'percentile'){
-    						sizeY = sizeY + 1;
-    						continue;
-    					}                        
+    				// for (var i = 0; i < data.measures.length; i++) {
+    				// 	if(data.measures[i].type === 'percentile'){
+    				// 		sizeY = sizeY + 1;
+    				// 		continue;
+    				// 	}                        
 
-    					if((String(data.measures[i].value) + String(data.measures[i].unit)).length > String(data.measures[i].name).length){
-    						chars1 = (String(data.measures[i].value) + String(data.measures[i].unit)).length + 1 //add 1 to accomodate left and right margins
-    					}
-    					else{
-    						chars1 = String(data.measures[i].name).length + 1 //add 1 to accomodate left and right margins
-    					}
-    					
+    				// 	if((String(data.measures[i].value) + String(data.measures[i].unit)).length > String(data.measures[i].name).length){
+    				// 		chars1 = (String(data.measures[i].value) + String(data.measures[i].unit)).length + 1 //add 1 to accomodate left and right margins
+    				// 	}
+    				// 	else{
+    				// 		chars1 = String(data.measures[i].name).length + 1 //add 1 to accomodate left and right margins
+    				// 	}    					
 
-    					if(chars1 + chars2 > 50){
-    						sizeY = sizeY + 1;    						
-    						chars2 = chars1;
-    					}
-    					else{
-    						chars2 = chars1 + chars2;
-    					}                            					
-    				}; 
+    				// 	if(chars1 + chars2 > 70){
+    				// 		sizeY = sizeY + 1;    						
+    				// 		chars2 = chars1;
+    				// 	}
+    				// 	else{
+    				// 		chars2 = chars1 + chars2;
+    				// 	}          
+    				// }; 
 
     				if(data.distributions.length > 0){
-                        sizeY = sizeY + 2;
-                        console.info(sizeY);
+                        sizeY = sizeY + 3;
                     }
-                    console.info(sizeY)
                     // sizeY = data.distributions.length*2 + sizeY;    				
     				metric.size.y = sizeY;
                     
