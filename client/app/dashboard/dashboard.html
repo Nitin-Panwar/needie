@@ -20,10 +20,13 @@
 	<section class="col-md-11" ng-show="placeholder.metric.length >0">
 		<!-- dashboard buttons section -->
 		<section class="row inline">
-			<section class="col-md-2">
-				<span class="text-capitalize lead">{{placeholder.dashboard.name}}</span> <!-- dashboard name -->
+			<section class="col-md-4">
+			    <!-- dashboard name -->
+				<span class="text-capitalize lead">{{placeholder.dashboard.name}}</span><br>
+				<small ng-if="placeholder.dashboard.description" class="">{{placeholder.dashboard.description|limitTo:100}}<i  tooltip-placement="right"uib-tooltip="{{placeholder.dashboard.description}}"><i class="fa fa-info-circle"></i></i><br></small>
+				<small ng-if="placeholder.dashboard.owner">Owner: {{placeholder.dashboard.owner}}</small>
 			</section>
-			<section class=" col-sm-10">	
+			<section class=" col-sm-8">	
 				<section class="pull-right btn-group">
 					<button type="button" class="btn btn-primary" ng-click="launchSave()" ng-show="placeholder.edited"> Save</button>	
 				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()"><i class="fa fa-text-width"></i> Add Text</button>					

@@ -4,10 +4,11 @@ angular.module('sasaWebApp')
 
 .controller('ModalCtrl',function($scope,$modalInstance,data,$rootScope,metricsFactory, messageCenterService){
       $scope.showColumns = true;
+      $scope.showApplyButton = false;
       $scope.data = data;        
       $scope.dashBoard = {dashBoardName : ''};
       $scope.measureInfo = {};
-	  $scope.offset = 0;
+	    $scope.offset = 0;
       $scope.csvData = {};      
       $scope.availableColoumns = {
         items: [],
@@ -129,7 +130,6 @@ angular.module('sasaWebApp')
           for (var column in $scope.selectedColumns.items){
             $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
           }
-          console.log($scope.gridOptions)
         },function (err) {
           console.error(err);
         })        
@@ -229,7 +229,7 @@ angular.module('sasaWebApp')
        * @return {[type]} [description]
        */
       $scope.getFilters = function () {        
-        $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
+        $rootScope.metricPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
               $scope.FilterData = data;  
               var filterKeys = Object.keys(data[0]);
               for (var i = 0; i < filterKeys.length; i++) {               
@@ -280,6 +280,7 @@ angular.module('sasaWebApp')
        * @return {[type]}       [description]
        */
       $scope.updateFilterQuery = function (key, value) {
+          $scope.showApplyButton = true;
            // udpate global search query
           if($scope.filterQuery.hasOwnProperty(key)){
 
@@ -299,8 +300,10 @@ angular.module('sasaWebApp')
               }
               else{
                   $scope.filterQuery[key].splice(index, 1);
+
                   if($scope.filterQuery[key].length === 0){
-                      delete $scope.filterQuery[key];
+
+                      delete $scope.filterQuery[key];                      
                   }
               }                                                       
           }
