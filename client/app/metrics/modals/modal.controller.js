@@ -235,12 +235,12 @@ angular.module('sasaWebApp')
               for (var i = 0; i < filterKeys.length; i++) {               
                 $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
               };                  
-
             }, 
             function (err) {
               messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
         });
-        
+        if(typeof($scope.data.filters) !== "object"){return;}
+
         if(Object.keys($scope.data.filters).length > 0){
           for(var key in $scope.data.filters){            
             $scope.filterQuery[key] = $scope.data.filters[key];

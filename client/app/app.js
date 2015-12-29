@@ -20,13 +20,8 @@ angular.module('sasaWebApp', [
   'ngCsv'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
-    //
-      
-
-    $urlRouterProvider
+     $urlRouterProvider
       .otherwise('/');
-
-
     $locationProvider.html5Mode(true);    
   })
 
@@ -67,7 +62,7 @@ angular.module('sasaWebApp', [
                  
       },function (err) {
           // redirect user to access denied page
-          // $location.url('/accessDenied')
+          $location.url('/accessDenied')
           messageCenterService.add('danger','Could not login!!!',{ status: messageCenterService.status.permanent });
       })  
     }
