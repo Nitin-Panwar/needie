@@ -46,8 +46,7 @@ angular.module('sasaWebApp', [
      * @return {[type]}                 [description]
      */
     
-    if($rootScope.user == undefined){
-      event.preventDefault();        
+    if($rootScope.user == undefined){      
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {          
           $rootScope.user = response.data;
         //find user homepage    
