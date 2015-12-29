@@ -161,8 +161,22 @@ angular.module('sasaWebApp')
           }
         }
 
-        scope.isEmpty = function(object){
-          if(Object.keys(object).length === 0){return true;}
+        scope.isEmpty = function(argument){
+          switch(typeof(argument)){
+            case "array":
+              if(argument.length === 0){return true;}
+              break;
+            case "object":
+              if(Object.keys(argument).length === 0){return true;}
+              break;
+            case "string":
+              if(argument.trim().length === 0){return true;}                            
+              break;
+            case "number":
+              if(argument === 0){return true;}
+              break;            
+          }
+          if(argument === undefined || argument === null){return true;}
           return false;
         }
 
