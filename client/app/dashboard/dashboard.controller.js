@@ -52,7 +52,7 @@ angular.module('sasaWebApp')
      */    
     $scope.addTextBox = function () {
       var obj = {
-          size: { x: 1, y: 8 },          
+          size: { x: 1, y: 4 },          
           text: null,
           type:'textBox'
         };

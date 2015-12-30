@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('metriccard', function (metricsFactory, $rootScope, dialogs, parentService) {
+  .directive('metriccard', function (metricsFactory, $rootScope, dialogs, parentService, gridsterConfig) {
     return {
       templateUrl: 'app/metrics/metric-card/metric-card.html',
       restrict: 'EA',   
@@ -75,8 +75,7 @@ angular.module('sasaWebApp')
         }, function(newValue, oldValue, scope) {         
           if(newValue !== oldValue){
             scope.getMetric();
-          }
-          
+          }          
         });
 
 
@@ -95,7 +94,7 @@ angular.module('sasaWebApp')
           if(type==='bar' && scope.line){
             scope.line=!scope.line;
           } 
-        }
+        };
 
 
         /**
@@ -108,7 +107,7 @@ angular.module('sasaWebApp')
           },function (err) {
             console.error(err);
           })
-        }
+        };
 
         /**
          * this function watches for chnages in metric details
@@ -136,7 +135,7 @@ angular.module('sasaWebApp')
           
           for(var key in data['measures']){            
             var measure = data.measures[key];      
-			if(measure.active === undefined){measure.active = true;}      
+            if(measure.active === undefined){measure.active = true;}      
             if(measure.threshold !== undefined && measure.active === true){
               // if a user setup a threshold and later deleted it,
               // it results in null
@@ -156,10 +155,9 @@ angular.module('sasaWebApp')
                 scope.warningBreached = true;
                 scope.alertBreached = false;
               }  
-            }
-            
+            }            
           }
-        }
+        };
 
         scope.isEmpty = function(argument){
           switch(typeof(argument)){
@@ -178,7 +176,7 @@ angular.module('sasaWebApp')
           }
           if(argument === undefined || argument === null){return true;}
           return false;
-        }
+        };
 
       /**
        * this function removes a metric from dashboard
@@ -189,7 +187,35 @@ angular.module('sasaWebApp')
       scope.removeMetric = function (type, metric) {    
         parentService.placeholderRemove(type, metric);
         $rootScope.placeholder.edited = true;
-      }
+      };
+      
+      scope.$watch(function () {
+        return element[0].offsetHeight;
+      }, function(newValue, oldValue, scope) {
+        var notRight = false;
+        // check if height is already set
+        if(!scope.metricData.size.y){          
+          notRight = true;
+        }        
+        else{
+          var curHeight = gridsterConfig.rowHeight*scope.metricData.size.y;
+          var diff = curHeight - newValue;
+          // check if new height is higher than current height
+          // or difference of new height and old height is more than a row size.
+          if(newValue > curHeight || diff > gridsterConfig.rowHeight){
+            notRight = true;
+          }  
+        }
+        
+        // set expected height for gridster Item
+        if(notRight){
+          var height = Math.ceil(newValue/gridsterConfig.rowHeight);  
+          $rootScope.placeholder.metric[scope.metricIndex].size.y = height;
+          scope.metricData.size.y = height;
+        }
+      }, false);
+      
+
       }
     }
   });
