@@ -16,7 +16,7 @@
           <form id="searchform" class="navbar-form">
             <div class="form-group" style="display:inline;">
               <div class="input-group" ng-click="searchableItems()">
-                <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" ng-model="searched" placeholder="Search Dashboards" uib-typeahead="name as dashboard.name for dashboard in searchedDashboard | filter:{name:$viewValue}" typeahead-min-length=3 typeahead-loading="searchLoader" typeahead-on-select="redirect($item)" class="form-control" style="border-radius: 30px" aria-autocomplete="list" aria-expanded="false" autocomplete="off">
+                <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" ng-model="searched" placeholder="Search Dashboards" uib-typeahead="name as dashboard.name for dashboard in searchedDashboard | filter:{name:$viewValue}" typeahead-min-length=1 typeahead-loading="searchLoader" typeahead-on-select="redirect($item)" class="form-control" style="border-radius: 30px" aria-autocomplete="list" aria-expanded="false" autocomplete="off">
               </div>
             </div>
           </form>

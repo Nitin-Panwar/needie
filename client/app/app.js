@@ -79,7 +79,7 @@ angular.module('sasaWebApp', [
     gridsterConfig.swapping= true, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
     gridsterConfig.width= 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
     gridsterConfig.colWidth= 'auto', // can be an integer or 'auto'.  'auto' uses the pixel width of the element divided by 'columns'
-    gridsterConfig.rowHeight= 150, // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
+    gridsterConfig.rowHeight= 40, // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
     gridsterConfig.margins= [20, 20], // the pixel distance between each widget
     gridsterConfig.outerMargin= true, // whether margins apply to outer edges of the grid
     gridsterConfig.isMobile= true, // stacks the grid items if true
@@ -96,7 +96,7 @@ angular.module('sasaWebApp', [
     gridsterConfig.maxSizeY= null, // maximum row height of an item
     gridsterConfig.resizable= {
        enabled: true,
-       handles: ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'],
+       handles: ['n', 'e', 's', 'w'],
        start: function(event, $element, widget) {}, // optional callback fired when resize is started,
        resize: function(event, $element, widget) {}, // optional callback fired when item is resized,
        stop: function(event, $element, widget) {} // optional callback fired when item is finished resizing
