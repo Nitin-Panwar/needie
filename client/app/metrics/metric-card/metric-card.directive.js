@@ -189,6 +189,10 @@ angular.module('sasaWebApp')
         $rootScope.placeholder.edited = true;
       };
       
+      /**
+       * It watches for changes in metric hard height to adjust for overflow
+       *
+       */
       scope.$watch(function () {
         return element[0].offsetHeight;
       }, function(newValue, oldValue, scope) {
@@ -205,8 +209,7 @@ angular.module('sasaWebApp')
           if(newValue > curHeight || diff > gridsterConfig.rowHeight){
             notRight = true;
           }  
-        }
-        
+        }        
         // set expected height for gridster Item
         if(notRight){
           var height = Math.ceil(newValue/gridsterConfig.rowHeight);  
