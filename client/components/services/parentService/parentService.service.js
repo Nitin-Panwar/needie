@@ -11,7 +11,8 @@ angular.module('sasaWebApp')
     	this.placeholderAdd = function (type, item) {
     		//create dummy dashboard id when adding any metric to it
     		if(!$rootScope.placeholder.dashboard._id)
-    		{
+    		{ 
+                $rootScope.createNew = false;
     			$rootScope.placeholder.dashboard._id=1;
     		}	
     		if(type === 'metric'){    			
@@ -55,8 +56,6 @@ angular.module('sasaWebApp')
 	      for (var i = 0; i < placeholder.metric.length; i++) {
 	      	dashboardObj.components[i]=placeholder.metric[i];
 	      	dashboardObj.components[i].type = 'metric';	   
-	      	// delete distributions data;
-	      	// delete dashboardObj.components[i].distributions;
 	      };	      	      
 
 	      // second handle textboxes
@@ -86,12 +85,9 @@ angular.module('sasaWebApp')
 	      		messageCenterService.add('danger','Not able to save dashboard',{timeout: 10000});
 	      	})
 	      }
-	      else{   	    
-	        	
-            console.log(dashboardObj)        
+	      else{   	        
 	        $rootScope.myPromise=dashBoardsFactory.save({dashboard:dashboardObj}).$promise.then(function (data) {
-	          var dashboardId = data['_id']['$oid'];
-              console.log(data)
+	          var dashboardId = data['_id'];
 	          messageCenterService.add('success', 'Dashboard saved successfully', { timeout: 5000 }); 
 	          //Save dashboardid in user metadata
 	          $rootScope.myPromise= usersFactory.save({idsid:$rootScope.user,dashboardId:dashboardId}).$promise.then(function (data) {
