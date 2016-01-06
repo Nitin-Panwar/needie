@@ -1,3 +1,4 @@
+
 'use strict';
 
 angular.module('sasaWebApp')
@@ -40,7 +41,7 @@ angular.module('sasaWebApp')
               .attr('class', 'd3-tip')
               .offset([-10, 0])
               .html(function(d) {
-                return "<strong>"+y_label+":</strong> <span>" + d.y0.toFixed(3)+ "</span>";
+                return "<strong>"+y_label+":</strong> <span>" + d.y0.toFixed(0)+ "</span>";
               })
 
       		var svg = d3.select(element[0]).append("svg")

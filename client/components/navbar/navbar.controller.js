@@ -28,7 +28,8 @@ angular.module('sasaWebApp')
      * [clearPlaceholder description]
      * @return {[type]} [description]
      */
-    $scope.clearPlaceholder = function(){
+    $scope.createNew = function(){
+      $rootScope.createNew = true;
       $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
     }
 

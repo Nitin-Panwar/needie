@@ -13,6 +13,7 @@ angular.module('sasaWebApp')
   	 * @return {[type]}                          [description]
   	 */    
     if($stateParams.dashboardId){
+       $rootScope.createNew = false;
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
         $rootScope.placeholder.dashboard = data;   
@@ -141,7 +142,5 @@ angular.module('sasaWebApp')
       $scope.metricList =true;
       $scope.showmydashboards = false;
       $scope.showfilters = false;
-
     }  
-
   });
