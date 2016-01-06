@@ -8,7 +8,7 @@
     <div class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-            <a ng-href="{{item.link}}" ng-click="clearPlaceholder()">{{item.title}}</a>
+            <a ng-href="{{item.link}}" ng-click="createNew()">{{item.title}}</a>
         </li>        
       </ul>
       <ul class="nav navbar-nav navbar-right">
