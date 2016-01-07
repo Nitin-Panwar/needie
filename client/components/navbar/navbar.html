@@ -21,11 +21,15 @@
             </div>
           </form>
         </li>
-        <li>
-          <a href>{{user}}</a>          
+        <li style="margin-top: 13px; color: White;">
+          Welocome: {{user}}&nbsp;&nbsp;
+          <!-- <a href></a>           -->
         </li>
         <li ng-class="{active: isActive('/help')}" >
-            <a ng-href="/app/help">Help</a>
+            <a ng-href="/help">Help</a>
+        </li>
+        <li ng-class="{active: isActive('/contactUs')}" >
+            <a ng-href="/contactUs">Contact Us</a>
         </li>
       </ul>      
     </div>
