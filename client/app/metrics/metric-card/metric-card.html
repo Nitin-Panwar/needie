@@ -20,11 +20,11 @@
                         <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
                     </ul>                
                 </li> 
-                <li class="fa fa-bar-chart pull-left" style="cursor: pointer"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
-                <li class="fa fa-line-chart pull-left" style="cursor: pointer" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
+                <li class="fa fa-bar-chart pull-left" style="cursor: pointer; margin-top:3px;"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
+                <li class="fa fa-line-chart pull-left" style="cursor: pointer; margin-top:3px;" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
                 <li class=""><span>{{metricData['name']}}</span></li> 
                 <li class="pull-right">
-                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-filter fa-1x "></i><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="left-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
+                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="left-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
                     </span>
                 </li>        
             </ul>              
@@ -32,10 +32,8 @@
         <!-- metric Card Body -->
         <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-            <!-- <section class="col-sm-11"> -->
             	<line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></line-chart>
                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></bar-chart>
-            <!-- </section> -->
           </section>                         
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile'" class="measure-card" 
@@ -53,9 +51,7 @@
                         <span>{{measure.name}}</span>
                     </li>
                 </ul>     
-            
         </section>
-        
     </section>
 </section>
 

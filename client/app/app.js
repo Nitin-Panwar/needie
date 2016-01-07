@@ -49,7 +49,6 @@ angular.module('sasaWebApp', [
     if($rootScope.user == undefined){      
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {          
           $rootScope.user = response.data;
-          console.log($rootScope.user)
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
             if(data.homepage && !$stateParams.dashboardId){
