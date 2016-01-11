@@ -112,6 +112,21 @@ angular.module('sasaWebApp')
     }
 
     /**
+     * Delete a dashboard
+     */
+    $scope.delete = function(){
+       $rootScope.myPromise = dashBoardsFactory.delete({idsid: $rootScope.user, dashboardId:$stateParams.dashboardId}).$promise.then(function (data) {         
+        $rootScope.placeholder.dashboard = data; 
+        console.log(data);  
+        $location.url('/')  
+         $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
+        messageCenterService.add('success','Dashboard deleted successfully',{timeout: 10000});
+      }, function (err) {
+        messageCenterService.add('danger','Could not delete dashboard',{timeout: 10000});
+      });
+    }
+
+    /**
      *Below it watches for any changes in movement of metrics on the dashboard and resize
      *
      */
