@@ -47,11 +47,8 @@ angular.module('sasaWebApp')
 
         $rootScope.placeholder.dashboard["name"] = $scope.OldName;
         $rootScope.placeholder.dashboard["description"] =  $scope.OldDescription;
-        // parentService.createDBoard();
-        
-        $rootScope.placeholder.edited = false;
         $modalInstance.dismiss('Canceled');
       
-    }; // end done
+    }; 
 
   });

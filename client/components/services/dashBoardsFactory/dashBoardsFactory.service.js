@@ -19,6 +19,8 @@ angular.module('sasaWebApp')
         headers:config,
         responseType:'json',
         param:{
+          idsid: {},
+          dashboardId:{}
         }
       },
       update:{

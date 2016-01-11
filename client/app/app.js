@@ -68,9 +68,6 @@ angular.module('sasaWebApp', [
   }
 
 );
-
-
-
   angular.module('sasaWebApp').run(['gridsterConfig', function(gridsterConfig) {
  
     gridsterConfig.columns= 6, // the width of the grid, in columns
