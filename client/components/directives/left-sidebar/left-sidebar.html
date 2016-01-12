@@ -6,7 +6,8 @@
 	 		<!-- Metric List -->
 	 		<li class="list-group-item" ng-click="getMetricsList()" ng-class="{'active-sidebar-item': metriclist}" data-toggle="tooltip" data-placement="right" title="Metric List"><img src="assets/images/metric.png" height="35" width="35"></li>
 	 		<!-- Dashboard Filters -->
-	 		<li class="list-group-item" ng-click="getFilters()" ng-show="!navigationIcon()" ng-class="{'active-sidebar-item': showfilters}" title="Filters"><i class="fa fa-filter fa-2x "></i>	 		
+	 		<li class="list-group-item" ng-click="getFilters()" ng-show="!navigationIcon()" ng-class="{'active-sidebar-item': showfilters}" title="Filters"><i class="fa fa-filter fa-2x "></i>
+	 		<!-- <img src="assets/images/metric.png" alt="Mountain View" style="width:20px;height:20px;"> -->	 		
 	 		</li>	
 	 		<li class="list-group-item" ng-click="getFilters()" ng-show="navigationIcon()" ng-class="{'active-sidebar-item': showfilters}"  tooltip-class="appliedFilter" tooltip-placement="right" uib-tooltip-template="'components/directives/left-sidebar/appliedfilters.html'"><i class="fa fa-filter fa-2x "></i><i class="fa fa-exclamation-circle fa-1x"></i>	 		
 	 		</li>
