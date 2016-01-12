@@ -19,7 +19,7 @@
 	</div>	
 </div>
 <div class="modal-footer">	
-	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="data.name.toUpperCase() !== OldName.toUpperCase() || data.name === undefined">Save</button>
-	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="placeholder.dashboard.owner.toUpperCase() === user.toUpperCase() && data.name.toUpperCase() === OldName.toUpperCase()">Overwrite</button>	 
+	<button type="button" class="btn btn-primary" ng-click="save(true)" ng-show="data.name.toUpperCase() !== OldName.toUpperCase() || data.name === undefined">Create</button>
+	<button type="button" class="btn btn-primary" ng-click="save(flase)" ng-show="placeholder.dashboard.owner.toUpperCase() === user.toUpperCase()">Overwrite</button>	 
 	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>
