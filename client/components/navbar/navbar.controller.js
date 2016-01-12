@@ -31,6 +31,7 @@ angular.module('sasaWebApp')
     $scope.createNew = function(){
       $rootScope.createNew = true;
       $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
+      $rootScope.GlobalFilters = {};
     }
 
     /**
