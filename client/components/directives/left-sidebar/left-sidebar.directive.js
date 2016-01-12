@@ -114,23 +114,22 @@ angular.module('sasaWebApp')
 	    		scope.showmydashboards = false;
 	    		scope.metriclist = false;
 	    	}
-	    	// if(scope.navigationIcon()){
+	 
+	    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
+	            // $rootScope.GlobalFilters=data.filters;
+	            scope.FilterData = data.filters;	 
+	            var filterKeys = Object.keys(data.filters[0]);
+	            for (var i = 0; i < filterKeys.length; i++) {	            	
+	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
+	            };
+	            if(scope.navigationIcon()){
+	            	scope.updateGlobalFilters();
+    			}	  	            
+		        }, 
+		        function (err) {
+		        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+	        });
 
-	    	// }
-	    	// else{
-		    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
-		            // $rootScope.GlobalFilters=data.filters;
-		            scope.FilterData = data.filters;	 
-		            var filterKeys = Object.keys(data.filters[0]);
-		            for (var i = 0; i < filterKeys.length; i++) {	            	
-		            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
-		            };
-		            // scope.updateGlobalFilters();	  	            
-			        }, 
-			        function (err) {
-			        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
-		        });
-	        // }
 	    }
 
 	    /**
