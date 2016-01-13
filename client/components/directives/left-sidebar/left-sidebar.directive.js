@@ -19,7 +19,6 @@ angular.module('sasaWebApp')
       	 * @type {Boolean}
       	 */
       	scope.state = false;
-      	scope.showApplyButton = false;
 	    scope.toggleState = function() {	    	
 	    	// scope.state = scope.showmydashboards || scope.metriclist || scope.showfilters;
 	    	// // if sidebar is closed, reset colors.
@@ -164,7 +163,6 @@ angular.module('sasaWebApp')
 	     * @return {[type]}       [description]
 	     */
 	    scope.updateFilterQuery = function (key, value) {
-	    	scope.showApplyButton = true;
 	         // udpate global search query
 	        if($rootScope.globalQuery.hasOwnProperty(key)){
 
@@ -199,11 +197,6 @@ angular.module('sasaWebApp')
 	     * this function updates relational filter values
 	     */
 	    scope.updateGlobalFilters = function () {
-	    	if(Object.keys($rootScope.globalQuery).length == 0){	    		
-	    		scope.showfilters = !scope.showfilters;
-	    		scope.getFilters();	
-	    	}
-
 	    	var data = scope.FilterData;
 	    	var dataHolder = [];
 	    	for(var queryKey in $rootScope.globalQuery){	    		
@@ -280,8 +273,7 @@ angular.module('sasaWebApp')
 	    scope.reset = function (argument) {
 	    	scope.showmydashboards = false;		
 	    	scope.metriclist = false;	 
-	    	scope.showfilters = false; 
-	    	scope.showApplyButton = false;  		    	
+	    	scope.showfilters = false;  		    	
 	    };
       }
     };
