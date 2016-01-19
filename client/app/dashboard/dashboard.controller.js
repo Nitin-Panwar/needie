@@ -1,10 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('DashboardCtrl', function ($scope, $rootScope, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs) {
-  	// $http.get("http://10.223.12.51:8099/getUser",{withCredentials:true}).success(function (response) {        
-   //        $rootScope.user=response;        
-   //      });     
+  .controller('DashboardCtrl', function ($scope, $rootScope, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs) {   
     
     $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
     /**
@@ -115,17 +112,19 @@ angular.module('sasaWebApp')
      * Delete a dashboard
      */
     $scope.delete = function(){
-       $rootScope.myPromise = dashBoardsFactory.delete({idsid: $rootScope.user, dashboardId:$stateParams.dashboardId}).$promise.then(function (data) {         
-        $rootScope.placeholder.dashboard = data; 
-        console.log(data);  
-        $location.url('/')  
-         $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
-        messageCenterService.add('success','Dashboard deleted successfully',{timeout: 10000});
-      }, function (err) {
-        messageCenterService.add('danger','Could not delete dashboard',{timeout: 10000});
-      });
+      // var name = prompt("Please enter dashboard name to confirm");
+      var result = confirm("Do you really want to delete?");
+      if (result) {
+        $rootScope.myPromise = dashBoardsFactory.delete({idsid: $rootScope.user, dashboardId:$stateParams.dashboardId}).$promise.then(function (data) {         
+          $rootScope.placeholder.dashboard = data; 
+          $location.url('/')  
+          $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
+          messageCenterService.add('success','Dashboard deleted successfully.',{timeout: 10000});
+        }, function (err) {
+          messageCenterService.add('danger','Could not delete dashboard.',{timeout: 10000});
+        });
+      }
     }
-
     /**
      *Below it watches for any changes in movement of metrics on the dashboard and resize
      *
