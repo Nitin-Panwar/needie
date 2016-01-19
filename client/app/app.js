@@ -48,11 +48,11 @@ angular.module('sasaWebApp', [
     
     if($rootScope.user == undefined){      
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {          
-          $rootScope.user = response.data.toLowerCase();
+        $rootScope.user = response.data.toLowerCase();
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
             if(data.homepage && !$stateParams.dashboardId){
-              var homepage = '/?dashboardId='+data.homepage.$oid;         
+              var homepage = '/?dashboardId='+data.homepage;         
               $location.url(homepage)  
             }            
         }, function (){

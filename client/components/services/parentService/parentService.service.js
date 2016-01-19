@@ -71,7 +71,13 @@ angular.module('sasaWebApp')
             dashboardObj.description = ""; 
           }
 	      dashboardObj.filters = $rootScope.globalQuery;
-	      dashboardObj.version = $rootScope.placeholder.dashboard.version + 1;
+
+          if($rootScope.placeholder.dashboard.version){
+            dashboardObj.version = $rootScope.placeholder.dashboard.version + 1;
+          }
+          else{
+            dashboardObj.version = 1;
+          }
           dashboardObj.owner = $rootScope.user;
 
 	      //Checking if the request is coming for update or create new.
@@ -87,7 +93,8 @@ angular.module('sasaWebApp')
 	      }
 	      else{   	        
 	        $rootScope.myPromise=dashBoardsFactory.save({dashboard:dashboardObj}).$promise.then(function (data) {
-	          var dashboardId = data['_id']['$oid'];
+	          console.log(data)
+              var dashboardId = data['_id'];
 	          messageCenterService.add('success', 'Dashboard saved successfully', { timeout: 5000 }); 
 	          //Save dashboardid in user metadata
 	          $rootScope.myPromise= usersFactory.save({idsid:$rootScope.user,dashboardId:dashboardId}).$promise.then(function (data) {

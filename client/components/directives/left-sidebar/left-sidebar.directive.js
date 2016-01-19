@@ -193,10 +193,17 @@ angular.module('sasaWebApp')
 	        scope.updateGlobalFilters();
 	    };
 
+	    scope.example1model = []; 
+	    scope.example1data = [ {id: 1, label: "David"}, {id: 2, label: "Jhon"}, {id: 3, label: "Danny"}];
+
 	    /**
 	     * this function updates relational filter values
 	     */
 	    scope.updateGlobalFilters = function () {
+	    	if(Object.keys($rootScope.globalQuery).length == 0){	    		
+	    		scope.showfilters = !scope.showfilters;
+	    		scope.getFilters();	
+	    	}
 	    	var data = scope.FilterData;
 	    	var dataHolder = [];
 	    	for(var queryKey in $rootScope.globalQuery){	    		

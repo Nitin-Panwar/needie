@@ -1,4 +1,4 @@
 {
-  "url": "http://vmssasadevapp1.gar.corp.intel.com:5000",
+  "url": "http://vmssasadevapp1.gar.corp.intel.com:5050",
   "loginUrl": "http://vmssasadevweb1.gar.corp.intel.com:8099/getUser"
 }
