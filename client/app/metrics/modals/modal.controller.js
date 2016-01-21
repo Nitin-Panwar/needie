@@ -53,7 +53,7 @@ angular.module('sasaWebApp')
           return;
         }       
 
-        $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
+        $rootScope.metricPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
           var columns = response;
           for(var i in $scope.data.gridColumns){
               columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
