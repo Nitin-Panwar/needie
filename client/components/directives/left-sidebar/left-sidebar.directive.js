@@ -96,8 +96,8 @@ angular.module('sasaWebApp')
 	    scope.addMetric2Dashboard = function (argument) {
 	    	parentService.placeholderAdd('metric',argument);
 	    	$rootScope.placeholder.edited = true;
-	    	scope.metriclist = !scope.metriclist;
-	    	scope.state = false;
+	    	// scope.metriclist = !scope.metriclist;
+	    	// scope.state = false;
 	    };
 
 	    /**

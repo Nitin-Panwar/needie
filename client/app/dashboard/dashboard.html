@@ -1,6 +1,7 @@
-<section ng-include="'components/navbar/navbar.html'"></section>	
 
-<section class="container-fluid row">
+<!-- <section ng-include="'components/navbar/navbar.html'"></section>	 -->
+
+<section class="container-fluid row"  >
 	<section class="col-md-1">
 		<!-- left sidebar -->
 		<section left-sidebar>sidebar</section>
@@ -17,7 +18,7 @@
 		</dl>
 	</section>
 	
-	<section class="col-md-11" ng-show="placeholder.metric.length >0">
+	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()">
 		<!-- dashboard buttons section -->
 		<section class="row inline">
 			<section class="col-md-4">
@@ -39,11 +40,11 @@
 				</section>
 			</section>	
 		</section>				
-		<section class="row">&nbsp;</section>
+		<section class="row" >&nbsp;</section>
 		<!-- dashboard buttons section end -->
 
 		<!-- Dashboard Section -->
-		<section gridster="gridsterDashboardOpts" class="center-block text-center">
+		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard" >
 			<ul>
 				<!-- metric card area -->
 				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">					
