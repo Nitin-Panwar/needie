@@ -156,7 +156,7 @@ angular.module('sasaWebApp')
             break;
           case 'data':
             $modalInstance.close($scope.selectedColumns.items);
-		  case 'filter':
+		      case 'filter':
             $modalInstance.close($scope.filterQuery);
           default:
             $modalInstance.close();          
@@ -377,7 +377,13 @@ angular.module('sasaWebApp')
             delete $scope.filterQuery[key];
             $scope.updateGlobalFilters();
       };
+
+      $scope.compareThreshold = function ()
+      {
+
+          $scope.threshold = prompt("alert values should be greater than warning");
+
+      }
       
     })
-
 

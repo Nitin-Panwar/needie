@@ -27,7 +27,10 @@
 									<input class="form-control"type="number" ng-model="measureInfo[$index].threshold.upperWarning" style="text-align:right" placeholder="Warning">
 								</td>
 								<td style="border:none" align="center" >
-									<input class="form-control" type="number" ng-model="measureInfo[$index].threshold.upperAlert" style="text-align:right" placeholder="Alert">
+									<input class="form-control" type="number" ng-model="measureInfo[$index].threshold.upperAlert" style="text-align:right" placeholder="Alert" ng-init>
+									<span ng-show="measureInfo[$index].threshold.upperAlert < measureInfo[$index].threshold.upperWarning">Alert should be greater than Warning</span>
+	
+								<!-- 	ng-if="measureInfo[$index].threshold.upperAlert < measureInfo[$index].threshold.upperWarning" ng-init="compareThreshold()" -->
 								</td>
 							</tr>
 							<tr>
@@ -38,6 +41,7 @@
 									</td>
 								<td style="border:none" align="center" >
 									<input class="form-control" type="number" ng-model="measureInfo[$index].threshold.lowerAlert" class="has-error" style="text-align:right" placeholder="Alert">
+									<span ng-show="measureInfo[$index].threshold.lowerAlert > measureInfo[$index].threshold.lowerWarning">Alert should be lesser than Warning</span>
 								</td>
 							</tr>
 						</tbody>

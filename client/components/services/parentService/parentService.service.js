@@ -18,7 +18,8 @@ angular.module('sasaWebApp')
     		if(type === 'metric'){    			
     			var id = item;    			
     			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery}).$promise.then(function (data) {   				
-    				var metric = data;
+    				console.log(data);
+                    var metric = data;
                     data.size = {x: 2};                    
                     $rootScope.placeholder[type].push(data);
     				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
