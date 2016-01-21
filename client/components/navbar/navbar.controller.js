@@ -6,12 +6,7 @@ angular.module('sasaWebApp')
     {
       'title': 'Create Dashboard',
       'link': '/'
-    }
-    // {
-    //   'title': 'Admin',
-    //   'link': '/a'
-    // }
-    ];
+    }];
 
     /**
      * [redirect description]
@@ -32,6 +27,8 @@ angular.module('sasaWebApp')
       $rootScope.createNew = true;
       $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
       $rootScope.GlobalFilters = {};
+      $rootScope.globalQuery = {};
+      //delete $rootScope.globalQuery[key]
     }
 
     /**

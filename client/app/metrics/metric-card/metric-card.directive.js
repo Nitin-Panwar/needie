@@ -103,6 +103,7 @@ angular.module('sasaWebApp')
          */
         scope.getMetric = function () {                  
           scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
+            console.log(response);
             $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
           },function (err) {
             console.error(err);

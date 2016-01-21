@@ -153,8 +153,15 @@ angular.module('sasaWebApp')
     $scope.metricList = function(){
       $scope.getMetricsList();
       $scope.state= true;
-      $scope.metricList =true;
+      $scope.metriclist =true;
       $scope.showmydashboards = false;
       $scope.showfilters = false;
     }  
+
+    $scope.closeLeftSideBar = function(){
+      $scope.state= false;
+      $scope.metriclist =false;
+      $scope.showmydashboards = false;
+      $scope.showfilters = false;
+    }
   });
