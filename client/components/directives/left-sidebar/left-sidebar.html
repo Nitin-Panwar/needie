@@ -16,9 +16,10 @@
 
  	<div ng-show="state" class="" id="sidebar-content">
  		<!-- my dashboards -->
- 		<div ng-show="showmydashboards" > 			
+ 		<div ng-show="showmydashboards" >
  			<fieldset>
- 				<span class="lead white-text">My Dashboards</span> 				
+
+ 				<span class="lead white-text">&nbsp;My Dashboards</span> 				
  				<ul class="sidebar-menu" style="max-height:300px ;overflow:auto;">
  					<li class="" ng-repeat="dashboard in myDashboardsList" > 
  						<a href="/?dashboardId={{dashboard._id.$oid}}" title="" class="sidebar-hover-effect white-text">{{dashboard.name}}</a>
@@ -30,8 +31,13 @@
  		<!-- Dashboard Filters -->
 		<section ng-show="showfilters">
 			<fieldset>
-				<span class="lead white-text">Filters<button class="btn btn-default pull-right" ng-click="applyFilter()">Apply
-				</button></span><hr style="margin-bottom: 5px">
+				<div>
+				<span class="lead white-text" >&nbsp;Filters</span>
+				
+				<button class="btn btn-default pull-right"     style="margin-top:-1px; border-radius: 15px;" ng-click="applyFilter()">Apply
+				</button>
+				<hr style="margin-top: 10px;margin-bottom: 1px">
+				</div>
 				<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
 					<li ng-repeat="(key, value) in GlobalFilters" class="text-capitalize active dropdown" ng-click="$event.stopPropagation();" role="presentation">
 						<span class="white-text text-capitalize"  data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]"ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;">{{key}}
@@ -48,7 +54,7 @@
 										<span title="Remove Filters" class="input-group-addon btn" id="basic-addon2" ng-click="unselectAllFilterValues(key)"><i class="intelicon-cancel-filter-solid"></i></span>
 									</div>
 				            	</li>
-								<li class="list-group-item" ng-repeat="item in value|orderBy|filter: searchFilter" ng-click="updateFilterQuery(key, item)">
+								<li class="list-group-item" ng-repeat="item in value|orderBy|filter: searchFilter" ng-click="updateFilterQuery(key, item)" id="listItem">
 									<span class="sidebar-hover-effect blue-text">
 										<span class="glyphicon glyphicon-ok" ng-show="isInQuery(key, item)"></span>
 										&nbsp;
@@ -65,7 +71,7 @@
  		<!-- metric list -->
  		<div ng-if="metriclist">
  			<fieldset>
- 				<span class="lead white-text">Metrics</span> 				
+ 				<span class="lead white-text">&nbsp;Metrics</span> 				
  				<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
  					<li class="list-group-item" style="background-color: #0071C5;">						            	
 		            	<div class="input-group">						            		
@@ -80,7 +86,7 @@
 						</span>
 						<section ng-show="isCollapsed">
 							<ul class="list-group" >
-								<li class="list-group-item text-capitalize" ng-repeat="item in value.members" ng-click="addMetric2Dashboard(item.id)">
+								<li class="list-group-item text-capitalize" ng-repeat="item in value.members" ng-click="addMetric2Dashboard(item.id)" id="listItem">
 									<span class="sidebar-hover-effect blue-text">
 										{{item.name}}
 									</span>						
