@@ -82,6 +82,7 @@ angular.module('sasaWebApp')
 	    		scope.showfilters = false;
 	    	}
 
+
 	    	workflow.get().$promise.then(function (data) {
 	    		scope.dashboardList = data;
 	    	},function (err) {
@@ -96,9 +97,15 @@ angular.module('sasaWebApp')
 	    scope.addMetric2Dashboard = function (argument) {
 	    	parentService.placeholderAdd('metric',argument);
 	    	$rootScope.placeholder.edited = true;
-	    	// scope.metriclist = !scope.metriclist;
-	    	// scope.state = false;
 	    };
+
+	    //This function is being used to determine whether 
+	    //a metric already been added in dashboard or not.
+	    scope.show = function(item){
+            var pos = $rootScope.placeholder.metric.map(function(e) { return e._id; }).indexOf(item);
+            if(pos !== -1){return true;}
+            else return false;
+	    }
 
 	    /**
 	     * Gets Dashboard filters

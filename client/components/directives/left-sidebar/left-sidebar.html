@@ -34,7 +34,7 @@
 				<div>
 				<span class="lead white-text" >&nbsp;Filters</span>
 				
-				<button class="btn btn-default pull-right"     style="margin-top:-1px; border-radius: 15px;" ng-click="applyFilter()">Apply
+				<button class="btn btn-default pull-right"style="margin-top:-1px; border-radius: 15px;" ng-click="applyFilter()">Apply
 				</button>
 				<hr style="margin-top: 10px;margin-bottom: 1px">
 				</div>
@@ -73,7 +73,7 @@
  			<fieldset>
  				<span class="lead white-text">&nbsp;Metrics</span> 				
  				<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
- 					<li class="list-group-item" style="background-color: #0071C5;">						            	
+ 					<li class="list-group-item" style="background-color: #0071C5;">			      	
 		            	<div class="input-group">						            		
 							<input type="text" class="form-control" placeholder="Search workflow" ng-model="searchFilter" aria-describedby="basic-addon2">
 							<span title="Remove search text" class="input-group-addon btn" id="basic-addon2" ng-click="searchFilter = ''"><i class="intelicon-close-outlined"></i></span>
@@ -87,8 +87,9 @@
 						<section ng-show="isCollapsed">
 							<ul class="list-group" >
 								<li class="list-group-item text-capitalize" ng-repeat="item in value.members" ng-click="addMetric2Dashboard(item.id)" id="listItem">
-									<span class="sidebar-hover-effect blue-text">
-										{{item.name}}
+									<span class="sidebar-hover-effect blue-text" >
+										{{item.name}}&nbsp;&nbsp;&nbsp;
+										<span ng-show="show(item.id)"><i class="fa fa-check"></i></span>
 									</span>						
 								</li>
 							</ul>
