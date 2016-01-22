@@ -8,7 +8,7 @@ angular.module('sasaWebApp')
     	 * @param  {[type]} item [description]
     	 * @return {[type]}      [description]
     	 */
-    	this.placeholderAdd = function (type, item) {
+    	this.placeholderAdd = function (type, item) 
     		//create dummy dashboard id when adding any metric to it
     		if(!$rootScope.placeholder.dashboard._id)
     		{ 
@@ -18,7 +18,6 @@ angular.module('sasaWebApp')
     		if(type === 'metric'){    			
     			var id = item;    			
     			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery}).$promise.then(function (data) {   				
-    				console.log(data);
                     var metric = data;
                     data.size = {x: 2};                    
                     $rootScope.placeholder[type].push(data);
@@ -111,13 +110,11 @@ angular.module('sasaWebApp')
 	    };
 
         this.sendMail=function(idsid,url){
-            console.log(idsid,url)
             dashBoardsFactory.sendMail({idsid:idsid,url:url}).$promise.then(function (data) {
                 messageCenterService.add('success','Email has been sent',{timeout:5000});              
               }, function (err) {
                 messageCenterService.add('danger', 'Could not send email', {timeout: 10000});
             })
         };
-
         this.maxGridHeight = 0;
   });
