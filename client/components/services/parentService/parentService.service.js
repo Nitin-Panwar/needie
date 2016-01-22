@@ -8,7 +8,7 @@ angular.module('sasaWebApp')
     	 * @param  {[type]} item [description]
     	 * @return {[type]}      [description]
     	 */
-    	this.placeholderAdd = function (type, item) 
+    	this.placeholderAdd = function (type, item){
     		//create dummy dashboard id when adding any metric to it
     		if(!$rootScope.placeholder.dashboard._id)
     		{ 
