@@ -37,8 +37,8 @@
           </section>                         
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
-                        ng-class="{'warning-breached': measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value,
-                                    'alert-breached': measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value}" ng-show="measure.active || measure.active == undefined">
+                         ng-class="{'warning-breached': (measure.threshold.upperWarning !== null && measure.threshold.upperWarning <= measure.value) || (measure.threshold.lowerWarning !== null && measure.threshold.lowerWarning >= measure.value),
+                                    'alert-breached': (measure.threshold.upperAlert !== null && measure.threshold.upperAlert <= measure.value) || (measure.threshold.lowerAlert !== null && measure.threshold.lowerAlert >= measure.value)}"  ng-show="measure.active || measure.active == undefined">
                         <span ng-show="measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value || measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value" tooltip-class="Thresold Values" tooltip-placement="right" uib-tooltip-template="'app/metrics/metric-card/threshold.html'">
                             <span><b>{{measure.value|number}}{{measure.unit}}</b></span><br>
                             <span>{{measure.name}}</span>
