@@ -36,7 +36,7 @@
                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></bar-chart>
           </section>                         
                 <ul class="list-inline" >
-                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile'" class="measure-card" 
+                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
                         ng-class="{'warning-breached': measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value,
                                     'alert-breached': measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value}" ng-show="measure.active || measure.active == undefined">
                         <span ng-show="measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value || measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value" tooltip-class="Thresold Values" tooltip-placement="right" uib-tooltip-template="'app/metrics/metric-card/threshold.html'">
@@ -48,13 +48,22 @@
                             <span><b>{{measure.value|number}}{{measure.unit}}</b></span><br>
                             <span>{{measure.name}}</span>
                         </span>                         
-                    </li>
-                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type === 'percentile'" class="measure-card" ng-show="measure.active || measure.active == undefined">
-                        <section class="col-md-3" ng-repeat="(key, value) in measure.value">
-                            {{key|ordinal}}<br>
-                            <b>{{value|number}} {{measure.unit}}</b>
-                        </section>    
-                        <span>{{measure.name}}</span>
+                    </li><br>
+                    <li ng-repeat= "measure in metricData['measures']" class="measure-card"  ng-if="measure.type === 'percentile' || measure.type === 'breakup'"ng-show="measure.active || measure.active == undefined" style="padding-right: 5px;">
+                        <table>
+                            <tr>
+                                <td ng-repeat="(key, value) in measure.value" style="padding-right: 10px;padding-left: 10px;"><span ng-if="measure.type === 'percentile'">{{key | ordinal}}</span>
+                                <span ng-if="measure.type === 'breakup'">{{key}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td ng-repeat="(key, value) in measure.value" style="padding-right: 10px;padding-left: 10px;"><b>{{value|number}} {{measure.unit}}</b>
+                                </td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td colspan="5" rowspan="1">{{measure.name}}</td>
+                            </tr>
+                        </table>
                     </li>
                 </ul>     
         </section>
