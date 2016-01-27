@@ -5,11 +5,13 @@ angular.module('sasaWebApp')
 .controller('ModalCtrl',function($scope,$modalInstance,data,$rootScope,metricsFactory, messageCenterService){
       $scope.showColumns = true;
       $scope.showApplyButton = false;
+      $scope.validate = false;
       $scope.data = data;        
       $scope.dashBoard = {dashBoardName : ''};
       $scope.measureInfo = {};
-	    $scope.offset = 0;
-      $scope.csvData = {};      
+      $scope.offset = 0;
+      $scope.csvData = {};     
+      $scope.tempThreshold ={}; 
       $scope.availableColoumns = {
         items: [],
         selected: []
@@ -18,9 +20,10 @@ angular.module('sasaWebApp')
         items: [],
         selected: []
       };
-		$scope.filterData = {};
+      $scope.filterData = {};
       $scope.filterQuery = {};
       $scope.filterSubData = {};
+      $scope.disableApplyButton =[];
 
       /**
        * toggles active state
@@ -37,7 +40,7 @@ angular.module('sasaWebApp')
       }
 
       /**
- 		* this function populates all metric columns
+                               * this function populates all metric columns
        * @param  {[type]} argument [description]
        * @return {[type]}          [description]
        */
@@ -46,10 +49,8 @@ angular.module('sasaWebApp')
         if(!$scope.data.gridColumns){$scope.data.gridColumns = [];}
         if($scope.data.gridColumns.length !== 0){          
           $scope.selectedColumns.items = $scope.data.gridColumns;    
-          // return;
         }
         if($scope.availableColoumns.items.length !== 0){
-
           return;
         }       
 
@@ -100,7 +101,7 @@ angular.module('sasaWebApp')
         columnDefs: [],
         data: []
       };
-	/**
+                /**
        * this function gets raw metric data for selected columns
        * @return {[type]} [description]
        */
@@ -138,9 +139,9 @@ angular.module('sasaWebApp')
       $scope.exportCSV = function () {
         return metricsFactory.getRawData({})
       };
-		
+                                
 
-/**
+      /**
        * to apply the dialog
        * @param  {[type]} which [description]
        * @return {[type]}       [description]
@@ -152,11 +153,25 @@ angular.module('sasaWebApp')
             $modalInstance.close($scope.dashBoard.dashBoardName);
             break;
           case 'measure':
+            for( var i in $scope.measureInfo){
+                $scope.measureInfo[i].threshold ={};
+                for(var key in $scope.measureInfo[i]){
+                  if(key=='threshold' && $scope.tempThreshold[i]) {
+                    $scope.measureInfo[i].threshold.upperWarning = $scope.tempThreshold[i].uw;
+                    $scope.measureInfo[i].threshold.upperAlert = $scope.tempThreshold[i].ua;
+                    $scope.measureInfo[i].threshold.lowerWarning = $scope.tempThreshold[i].lw;
+                    $scope.measureInfo[i].threshold.lowerAlert = $scope.tempThreshold[i].la;  
+                  }
+                }
+
+            }
+            delete $scope.tempThreshold;
+           
             $modalInstance.close($scope.measureInfo);
             break;
           case 'data':
             $modalInstance.close($scope.selectedColumns.items);
-		      case 'filter':
+          case 'filter':
             $modalInstance.close($scope.filterQuery);
           default:
             $modalInstance.close();          
@@ -170,6 +185,14 @@ angular.module('sasaWebApp')
       $scope.cancel = function(){
         $modalInstance.dismiss('Canceled');
       }; // end done
+
+
+      $scope.compareThreshold = function(){
+        for( var i in $scope.tempThreshold){
+          if(($scope.tempThreshold[i].ua < $scope.tempThreshold[i].uw) || ($scope.tempThreshold[i].la > $scope.tempThreshold[i].lw))
+            return true;    
+        } 
+      }
 
       /**
        * this function selets items to add to data grid
@@ -200,7 +223,7 @@ angular.module('sasaWebApp')
       /**
        * this function selects columns to show in data grid
        * @param  {[type]} item    [description]
-       * @param  {[type]} boolean [description]
+      * @param  {[type]} boolean [description]
        * @return {[type]}         [description]
        */
       $scope.selection = function (item, boolean) {
@@ -264,7 +287,7 @@ angular.module('sasaWebApp')
         else{
           var result = $.map(arr, function(e) { return e[key]; });
         }
- 
+
       //find unique values      
         var o = {}, i, l = result.length, r = [];
         for(i=0; i<l;i+=1) o[result[i]] = result[i];
@@ -344,7 +367,7 @@ angular.module('sasaWebApp')
               dataHolder[tempArr[j]] = result;
             }
             }
-          } 
+         } 
         }
         for(var key in dataHolder){
           $scope.filterSubData[key] = dataHolder[key];
@@ -377,13 +400,4 @@ angular.module('sasaWebApp')
             delete $scope.filterQuery[key];
             $scope.updateGlobalFilters();
       };
-
-      $scope.compareThreshold = function ()
-      {
-
-          $scope.threshold = prompt("alert values should be greater than warning");
-
-      }
-      
     })
-
