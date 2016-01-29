@@ -89,14 +89,9 @@ angular.module('sasaWebApp')
           filtered.sort(function (a, b) {
             return (a['key'] > b['key'] ? 1 : -1);
           });
-          console.log(filtered)
           return filtered;
         }
-        // .filter('orderObjectBy', function() {
-        //   return _.memoize(function(items,flag) {
-            
-        //   };
-        // });
+        
         /**
          * [function to change vizualization]
          * @param  {[type]} type [description]
