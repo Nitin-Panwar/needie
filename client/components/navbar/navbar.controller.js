@@ -34,7 +34,6 @@ angular.module('sasaWebApp')
 
     //Function to close leftsidebar 
     $scope.closelsb =  function(){
-        console.log("close LSB running")
          $rootScope.closeLeftSidebar= true;
     }; 
     
