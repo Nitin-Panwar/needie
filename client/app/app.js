@@ -47,10 +47,10 @@ angular.module('sasaWebApp', [
      */
     
     if($rootScope.user == undefined){      
-      $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
-        $rootScope.userDetails = response.data.user;
-        $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
-        // $rootScope.user = 'gar\\npanwar'
+      // $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
+      //   $rootScope.userDetails = response.data.user;
+        // $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
+        $rootScope.user = 'gar\\npanwar'
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
             if(data.homepage && !$stateParams.dashboardId){
@@ -60,11 +60,11 @@ angular.module('sasaWebApp', [
         }, function (){
             messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
         })      
-      },function (err) {
-          // redirect user to access denied page
-          $location.url('/accessDenied')
-          messageCenterService.add('danger','Could not login!!!',{ status: messageCenterService.status.permanent });
-      })  
+      // },function (err) {
+      //     // redirect user to access denied page
+      //     $location.url('/accessDenied')
+      //     messageCenterService.add('danger','Could not login!!!',{ status: messageCenterService.status.permanent });
+      // })  
     }
   }
 )
