@@ -79,11 +79,24 @@ angular.module('sasaWebApp')
         });
 
 
-        //Variable to change vizualization
-        scope.line = false;
-
-        scope.items = [1,2,3,4,5,6,7,8,9,10]
-
+        //Define custom filer for object sorting
+        scope.customFilter = function(items){
+          var filtered = [];
+          angular.forEach(items, function(value,key) {
+            var obj ={'key':key,'value':value}
+            filtered.push(obj);
+          });
+          filtered.sort(function (a, b) {
+            return (a['key'] > b['key'] ? 1 : -1);
+          });
+          console.log(filtered)
+          return filtered;
+        }
+        // .filter('orderObjectBy', function() {
+        //   return _.memoize(function(items,flag) {
+            
+        //   };
+        // });
         /**
          * [function to change vizualization]
          * @param  {[type]} type [description]

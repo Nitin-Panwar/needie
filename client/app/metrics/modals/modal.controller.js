@@ -163,10 +163,8 @@ angular.module('sasaWebApp')
                     $scope.measureInfo[i].threshold.lowerAlert = $scope.tempThreshold[i].la;  
                   }
                 }
-
             }
             delete $scope.tempThreshold;
-           
             $modalInstance.close($scope.measureInfo);
             break;
           case 'data':

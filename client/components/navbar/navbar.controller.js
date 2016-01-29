@@ -8,6 +8,8 @@ angular.module('sasaWebApp')
       'link': '/'
     }];
 
+    $rootScope.closeLeftSidebar= false;
+
     /**
      * [redirect description]
      * @param  {[type]} dashboard [description]
@@ -28,8 +30,14 @@ angular.module('sasaWebApp')
       $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
       $rootScope.GlobalFilters = {};
       $rootScope.globalQuery = {};
-      //delete $rootScope.globalQuery[key]
     }
+
+    //Function to close leftsidebar 
+    $scope.closelsb =  function(){
+        console.log("close LSB running")
+         $rootScope.closeLeftSidebar= true;
+    }; 
+    
 
     /**
      * [searchableItems description]
