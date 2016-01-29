@@ -86,6 +86,12 @@ angular.module('sasaWebApp')
         });   
     }  
 
+    $scope.$watch(function () {
+          return $rootScope.closeLeftSidebar;
+        }, function() {      
+            $scope.closeLeftSideBar();
+        }); 
+
     /**
      * this function sets a dashboard as homepage
      */
@@ -163,5 +169,6 @@ angular.module('sasaWebApp')
       $scope.metriclist =false;
       $scope.showmydashboards = false;
       $scope.showfilters = false;
+      $rootScope.closeLeftSidebar =false;
     }
   });
