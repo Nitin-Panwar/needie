@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('metriccard', function (metricsFactory, $rootScope, dialogs, parentService) {
+  .directive('metriccard', function (metricsFactory, $rootScope, dialogs, parentService, gridsterConfig) {
     return {
       templateUrl: 'app/metrics/metric-card/metric-card.html',
       restrict: 'EA',   
@@ -75,14 +75,23 @@ angular.module('sasaWebApp')
         }, function(newValue, oldValue, scope) {         
           if(newValue !== oldValue){
             scope.getMetric();
-          }
-          
+          }          
         });
 
 
-        //Variable to change vizualization
-        scope.line = false;
-
+        //Define custom filer for object sorting
+        scope.customFilter = function(items){
+          var filtered = [];
+          angular.forEach(items, function(value,key) {
+            var obj ={'key':key,'value':value}
+            filtered.push(obj);
+          });
+          filtered.sort(function (a, b) {
+            return (a['key'] > b['key'] ? 1 : -1);
+          });
+          return filtered;
+        }
+        
         /**
          * [function to change vizualization]
          * @param  {[type]} type [description]
@@ -95,7 +104,7 @@ angular.module('sasaWebApp')
           if(type==='bar' && scope.line){
             scope.line=!scope.line;
           } 
-        }
+        };
 
 
         /**
@@ -108,7 +117,7 @@ angular.module('sasaWebApp')
           },function (err) {
             console.error(err);
           })
-        }
+        };
 
         /**
          * this function watches for chnages in metric details
@@ -136,7 +145,7 @@ angular.module('sasaWebApp')
           
           for(var key in data['measures']){            
             var measure = data.measures[key];      
-			if(measure.active === undefined){measure.active = true;}      
+            if(measure.active === undefined){measure.active = true;}      
             if(measure.threshold !== undefined && measure.active === true){
               // if a user setup a threshold and later deleted it,
               // it results in null
@@ -156,10 +165,9 @@ angular.module('sasaWebApp')
                 scope.warningBreached = true;
                 scope.alertBreached = false;
               }  
-            }
-            
+            }            
           }
-        }
+        };
 
         scope.isEmpty = function(argument){
           switch(typeof(argument)){
@@ -178,7 +186,7 @@ angular.module('sasaWebApp')
           }
           if(argument === undefined || argument === null){return true;}
           return false;
-        }
+        };
 
       /**
        * this function removes a metric from dashboard
@@ -189,7 +197,38 @@ angular.module('sasaWebApp')
       scope.removeMetric = function (type, metric) {    
         parentService.placeholderRemove(type, metric);
         $rootScope.placeholder.edited = true;
-      }
+      };
+      
+      /**
+       * It watches for changes in metric hard height to adjust for overflow
+       *
+       */
+      scope.$watch(function () {
+        return element[0].offsetHeight;
+      }, function(newValue, oldValue, scope) {
+        var notRight = false;
+        // check if height is already set
+        if(!scope.metricData.size.y){          
+          notRight = true;
+        }        
+        else{
+          var curHeight = gridsterConfig.rowHeight*scope.metricData.size.y;
+          var diff = curHeight - newValue;
+          // check if new height is higher than current height
+          // or difference of new height and old height is more than a row size.
+          if(newValue > curHeight || diff > gridsterConfig.rowHeight){
+            notRight = true;
+          }  
+        }        
+        // set expected height for gridster Item
+        if(notRight){
+          var height = Math.ceil(newValue/gridsterConfig.rowHeight);  
+          $rootScope.placeholder.metric[scope.metricIndex].size.y = height;
+          scope.metricData.size.y = height;
+        }
+      }, false);
+      
+
       }
     }
   });

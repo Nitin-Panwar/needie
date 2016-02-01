@@ -31,7 +31,7 @@
     "angular-scenario": ">=1.2.*"
   },
   "resolutions": {
-    "angular": "1.4.8",
+    "angular": "1.4.9",
     "angular-bootstrap": "^0.14.3",
     "d3": "3.5.5"
   }

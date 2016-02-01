@@ -20,42 +20,61 @@
                         <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
                     </ul>                
                 </li> 
-                <li class="fa fa-bar-chart pull-left" style="cursor: pointer"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
-                <li class="fa fa-line-chart pull-left" style="cursor: pointer" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
-                <li class=""><span>{{metricData['name']}}</span></li> 
-                <li class="pull-right">
-                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-filter fa-1x "></i><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="left-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
+                <li class="fa fa-bar-chart pull-left" style="cursor: pointer; margin-top:3px;"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
+                <li class="fa fa-line-chart pull-left" style="cursor: pointer; margin-top:3px;" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
+                <li class="pull-left">
+                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="left-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
                     </span>
-                </li>        
+                </li> 
+                <li class=""><span>{{metricData['name']}}</span></li> 
             </ul>              
         </section>
         <!-- metric Card Body -->
         <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-            <!-- <section class="col-sm-11"> -->
             	<line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></line-chart>
                 <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></bar-chart>
-            <!-- </section> -->
           </section>                         
                 <ul class="list-inline" >
-                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile'" class="measure-card" 
-                        ng-class="{'warning-breached': measure.threshold.upperWarning <= measure.value || measure.threshold.lowerWarning >= measure.value,
-                                    'alert-breached': measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value}" ng-show="measure.active || measure.active == undefined">                               
-                        <span><b>{{measure.value|number}}{{measure.unit}}</b></span>
-                        <br>
-                        <span>{{measure.name}}</span>                         
+                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
+                         ng-class="{'warning-breached': (measure.threshold.upperWarning !== null && measure.threshold.upperWarning <= measure.value) || (measure.threshold.lowerWarning !== null && measure.threshold.lowerWarning >= measure.value),
+                                    'alert-breached': (measure.threshold.upperAlert !== null && measure.threshold.upperAlert <= measure.value) || (measure.threshold.lowerAlert !== null && measure.threshold.lowerAlert >= measure.value)}"  ng-show="measure.active || measure.active == undefined" tooltip-class="Thresold" tooltip-placement="right" uib-tooltip-template="'app/metrics/metric-card/threshold.html'">
+                            <span><b>{{measure.value|number}}{{measure.unit}}</b></span><br>
+                            <span>{{measure.name}}</span>                      
+                    </li><br>
+                    <li ng-repeat= "measure in metricData['measures']" class="measure-card"  ng-if="measure.type === 'percentile'"ng-show="measure.active || measure.active == undefined" style="padding-right: 5px;" tooltip-class="Thresold Values" tooltip-placement="right" uib-tooltip-template="'app/metrics/metric-card/threshold.html'">
+                        <table>
+                            <tr>
+                                <td ng-repeat="(key, value) in measure.value" style="padding-right: 5px;padding-left: 5px;">{{key | ordinal}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td ng-repeat="(key, value) in measure.value" style="padding-right: 5px;padding-left: 5px;"><b>{{value|number}} {{measure.unit}}</b>
+                                </td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td colspan="5" rowspan="1">{{measure.name}}</td>
+                            </tr>
+                        </table>
                     </li>
-                    <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type === 'percentile'" class="measure-card" ng-show="measure.active || measure.active == undefined">
-                        <section class="col-md-3" ng-repeat="(key, value) in measure.value">
-                            {{key|ordinal}}<br>
-                            <b>{{value|number}} {{measure.unit}}</b>
-                        </section>    
-                        <span>{{measure.name}}</span>
+                    <li ng-repeat= "measure in metricData['measures']" class="measure-card"  ng-if="measure.type === 'breakup'"ng-show="measure.active || measure.active == undefined" style="padding-right: 5px;" tooltip-class="Thresold Values" tooltip-placement="right" uib-tooltip-template="'app/metrics/metric-card/threshold.html'">
+                        <table ng-init="items = customFilter(measure.value)">
+                            <tr>
+                                <td ng-repeat="(key,value) in items" style="padding-right: 5px;padding-left: 5px;">
+                                    {{items[key]['key'].split('@')[1]}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td ng-repeat="(key, value) in items" style="padding-right: 5px;padding-left: 5px;"><b>{{items[key]['value']}} {{measure.unit}}</b>
+                                </td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td colspan="5" rowspan="1">{{measure.name}}</td>
+                            </tr>
+                        </table>
                     </li>
-                </ul>     
-            
+                </ul>    
         </section>
-        
     </section>
 </section>
 

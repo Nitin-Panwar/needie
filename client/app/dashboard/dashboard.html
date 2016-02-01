@@ -1,12 +1,13 @@
-<section ng-include="'components/navbar/navbar.html'"></section>	
 
-<section class="container-fluid row">
+<!-- <section ng-include="'components/navbar/navbar.html'"></section>	 -->
+
+<section class="container-fluid row"  >
 	<section class="col-md-1">
 		<!-- left sidebar -->
 		<section left-sidebar>sidebar</section>
 		<!-- left sidebar end -->
 	</section>
-	<section class="col-md-11" ng-show="placeholder.metric.length===0">
+	<section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()">
 		<dl>
 			<blockquote>
 				<p>
@@ -17,39 +18,41 @@
 		</dl>
 	</section>
 	
-	<section class="col-md-11" ng-show="placeholder.metric.length >0">
+	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()">
 		<!-- dashboard buttons section -->
 		<section class="row inline">
 			<section class="col-md-4">
 			    <!-- dashboard name -->
-				<span class="text-capitalize lead">{{placeholder.dashboard.name}}</span><br>
+				<span class="lead">{{placeholder.dashboard.name}}</span><br>
 				<small ng-if="placeholder.dashboard.description" class="">{{placeholder.dashboard.description|limitTo:100}}<i  tooltip-placement="right"uib-tooltip="{{placeholder.dashboard.description}}"><i class="fa fa-info-circle"></i></i><br></small>
 				<small ng-if="placeholder.dashboard.owner">Owner: {{placeholder.dashboard.owner}}</small>
 			</section>
 			<section class=" col-sm-8">	
 				<section class="pull-right btn-group">
 					<button type="button" class="btn btn-primary" ng-click="launchSave()" ng-show="placeholder.edited"> Save</button>	
-				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()"><i class="fa fa-text-width"></i> Add Text</button>					
-					<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()" ng-hide="placeholder.dashboard._id === undefined"><i class="fa fa-home"></i> Set HomePage </button>
-					<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()" ng-hide="placeholder.dashboard._id === undefined"><i class="fa fa-heart"></i> Set Favourite </button>		
-					<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ng-hide="placeholder.dashboard._id === undefined"><i class="fa fa-envelope-o"></i> Send Mail </button>		
+				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()"><i class="fa fa-text-width"></i> Add Text</button>	
+				  	<span ng-hide ="placeholder.dashboard._id === undefined || placeholder.dashboard._id === 1">			
+						<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()"><i class="fa fa-home"></i> Set HomePage </button>
+						<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()"><i class="fa fa-heart"></i> Set Favourite </button>		
+						<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ><i class="fa fa-envelope-o"></i> Send Mail </button>
+						<button type="button" class="btn btn-default btn-md" ng-click="delete()" ng-hide="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase()"><i class="fa fa-trash"></i> Delete </button>
+					</span>	
 				</section>
 			</section>	
 		</section>				
-		<section class="row">&nbsp;</section>
+		<section class="row" >&nbsp;</section>
 		<!-- dashboard buttons section end -->
 
 		<!-- Dashboard Section -->
 		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard" >
 			<ul>
 				<!-- metric card area -->
-				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card" >
-					<!-- {{placeholder.metric[$index]}} -->
-					<section metriccard  metric-data="item" metric-index="$index" ></section>
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">					
+					<section metriccard  metric-data="item" metric-index="$index" class="metric-card-item"></section>
 				</li>
 				<!-- metric card area end -->
 				<!-- text boxes area -->
-				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="1" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
 					<section class="panel">                                                               
 						<section class="panel-heading">
 							<span class="pull-left"><span class="glyphicon glyphicon-move mover-handle"></span></span>

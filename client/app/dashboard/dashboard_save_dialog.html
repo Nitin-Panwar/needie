@@ -3,10 +3,10 @@
 </div>
 <div class="modal-body" cg-busy="{promise:save_dashboard,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" >
 	<!-- <pre ng-if="placeholder.dashboard.owner !== user && data.name === OldName" class="bg-danger">You are not dashboard Owner! You can not save it with same name.</pre> -->
-	<p class="text-danger" ng-if="placeholder.dashboard.owner !== user && data.name === OldName && placeholder.dashboard._id!==1 ">You are not dashboard Owner! You can not save it with same name.</p>
+	<p class="text-danger" ng-if="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase() && data.name.toUpperCase() === OldName.toUpperCase() && placeholder.dashboard._id!==1 ">You are not dashboard Owner! You can not save it with same name.</p>
 	<br>
 	<!-- <pre class="bg-danger" ng-if="data.name === OldName">Give a new name to save as another copy.</pre> -->
-	<span class="text-primary" ng-if="data.name === OldName"><i class="fa fa-star"></i>&nbsp; Enter a new name to SAVE as new dashboard or click on OVERWRITE to update the existing dashboard  .</span>
+	<span class="text-primary" ng-if="data.name.toUpperCase() === OldName.toUpperCase()"><i class="fa fa-star"></i>&nbsp; Enter a new name to SAVE as new dashboard or click on OVERWRITE to update the existing dashboard  .</span>
 		<br><br> 
 
 	<span class="text-primary" ng-if="exist" style="color:red">Dashboard exists with the same name <a href="/?dashboardId={{dashboardUrl}}" target="_blank">click here</a> to view it.</span>
@@ -18,8 +18,8 @@
 		<textarea placeholder="Dashboard Description" ng-model="data.description" class="form-control"></textarea>		
 	</div>	
 </div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="data.name !== OldName || data.name === undefined">Save</button>
-	<button type="button" class="btn btn-primary" ng-click="save()" ng-show="placeholder.dashboard.owner === user && data.name === OldName">Overwrite</button>	 
+<div class="modal-footer">	
+	<button type="button" class="btn btn-primary" ng-click="save(true)" ng-show="data.name.toUpperCase() !== OldName.toUpperCase() || data.name === undefined">Create</button>
+	<button type="button" class="btn btn-primary" ng-click="save(flase)" ng-show="placeholder.dashboard.owner.toUpperCase() === user.toUpperCase()">Overwrite</button>	 
 	<button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
 </div>

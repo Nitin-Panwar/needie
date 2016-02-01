@@ -6,12 +6,9 @@ angular.module('sasaWebApp')
     {
       'title': 'Create Dashboard',
       'link': '/'
-    }
-    // {
-    //   'title': 'Admin',
-    //   'link': '/a'
-    // }
-    ];
+    }];
+
+    $rootScope.closeLeftSidebar= false;
 
     /**
      * [redirect description]
@@ -28,9 +25,18 @@ angular.module('sasaWebApp')
      * [clearPlaceholder description]
      * @return {[type]} [description]
      */
-    $scope.clearPlaceholder = function(){
+    $scope.createNew = function(){
+      $rootScope.createNew = true;
       $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
+      $rootScope.GlobalFilters = {};
+      $rootScope.globalQuery = {};
     }
+
+    //Function to close leftsidebar 
+    $scope.closelsb =  function(){
+         $rootScope.closeLeftSidebar= true;
+    }; 
+    
 
     /**
      * [searchableItems description]

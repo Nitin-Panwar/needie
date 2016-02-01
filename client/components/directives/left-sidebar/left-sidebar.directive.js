@@ -19,7 +19,6 @@ angular.module('sasaWebApp')
       	 * @type {Boolean}
       	 */
       	scope.state = false;
-      	scope.showApplyButton = false;
 	    scope.toggleState = function() {	    	
 	    	// scope.state = scope.showmydashboards || scope.metriclist || scope.showfilters;
 	    	// // if sidebar is closed, reset colors.
@@ -83,6 +82,7 @@ angular.module('sasaWebApp')
 	    		scope.showfilters = false;
 	    	}
 
+
 	    	workflow.get().$promise.then(function (data) {
 	    		scope.dashboardList = data;
 	    	},function (err) {
@@ -99,6 +99,14 @@ angular.module('sasaWebApp')
 	    	$rootScope.placeholder.edited = true;
 	    };
 
+	    //This function is being used to determine whether 
+	    //a metric already been added in dashboard or not.
+	    scope.show = function(item){
+            var pos = $rootScope.placeholder.metric.map(function(e) { return e._id; }).indexOf(item);
+            if(pos !== -1){return true;}
+            else return false;
+	    }
+
 	    /**
 	     * Gets Dashboard filters
 	     * @param  {[type]} argument [description]
@@ -112,15 +120,17 @@ angular.module('sasaWebApp')
 	    		scope.showmydashboards = false;
 	    		scope.metriclist = false;
 	    	}
-
+	 
 	    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
 	            // $rootScope.GlobalFilters=data.filters;
 	            scope.FilterData = data.filters;	 
 	            var filterKeys = Object.keys(data.filters[0]);
 	            for (var i = 0; i < filterKeys.length; i++) {	            	
 	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
-	            };	  	            
-
+	            };
+	            if(scope.navigationIcon()){
+	            	scope.updateGlobalFilters();
+    			}	  	            
 		        }, 
 		        function (err) {
 		        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
@@ -160,7 +170,6 @@ angular.module('sasaWebApp')
 	     * @return {[type]}       [description]
 	     */
 	    scope.updateFilterQuery = function (key, value) {
-	    	scope.showApplyButton = true;
 	         // udpate global search query
 	        if($rootScope.globalQuery.hasOwnProperty(key)){
 
@@ -191,6 +200,9 @@ angular.module('sasaWebApp')
 	        scope.updateGlobalFilters();
 	    };
 
+	    scope.example1model = []; 
+	    scope.example1data = [ {id: 1, label: "David"}, {id: 2, label: "Jhon"}, {id: 3, label: "Danny"}];
+
 	    /**
 	     * this function updates relational filter values
 	     */
@@ -199,7 +211,6 @@ angular.module('sasaWebApp')
 	    		scope.showfilters = !scope.showfilters;
 	    		scope.getFilters();	
 	    	}
-
 	    	var data = scope.FilterData;
 	    	var dataHolder = [];
 	    	for(var queryKey in $rootScope.globalQuery){	    		
@@ -276,8 +287,7 @@ angular.module('sasaWebApp')
 	    scope.reset = function (argument) {
 	    	scope.showmydashboards = false;		
 	    	scope.metriclist = false;	 
-	    	scope.showfilters = false; 
-	    	scope.showApplyButton = false;  		    	
+	    	scope.showfilters = false;  		    	
 	    };
       }
     };

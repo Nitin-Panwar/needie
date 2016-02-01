@@ -1,14 +1,14 @@
 <div class="navbar navbar-default" ng-controller="NavbarCtrl">
-  <div class="container-fluid">
+  <div class="container-fluid" ng-click="closelsb()">
     <div class="navbar-header">
       <img class="navbar-logo" src="assets/images/intel-logo-white-100.png" alt="">
-      <a href="/" class="navbar-brand" ng-click="sendToHomepage()">SM Insights <sup> <i>Beta</i> </sup></a>
+      <a href="/" class="navbar-brand" ng-click="sendToHomepage()">SM Insights</a>
 
     </div>
     <div class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-            <a ng-href="{{item.link}}" ng-click="clearPlaceholder()">{{item.title}}</a>
+            <a ng-href="{{item.link}}" ng-click="createNew()">{{item.title}}</a>
         </li>        
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -16,16 +16,20 @@
           <form id="searchform" class="navbar-form">
             <div class="form-group" style="display:inline;">
               <div class="input-group" ng-click="searchableItems()">
-                <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" ng-model="searched" placeholder="Search Dashboards" uib-typeahead="name as dashboard.name for dashboard in searchedDashboard | filter:{name:$viewValue}" typeahead-min-length=3 typeahead-loading="searchLoader" typeahead-on-select="redirect($item)" class="form-control" style="border-radius: 30px" aria-autocomplete="list" aria-expanded="false" autocomplete="off">
+                <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" ng-model="searched" placeholder="Search Dashboards" uib-typeahead="name as dashboard.name for dashboard in searchedDashboard | filter:{name:$viewValue}" typeahead-min-length=1 typeahead-loading="searchLoader" typeahead-on-select="redirect($item)" class="form-control" style="border-radius: 30px" aria-autocomplete="list" aria-expanded="false" autocomplete="off">
               </div>
             </div>
           </form>
         </li>
-        <li>
-          <a href>{{user}}</a>          
+        <li style="margin-top: 13px; color: White;">
+          Welcome {{userDetails['firstname']}} &nbsp;&nbsp;
+          <!-- <a href></a>           -->
         </li>
         <li ng-class="{active: isActive('/help')}" >
-            <a ng-href="/app/help">Help</a>
+            <a ng-href="/help">Help</a>
+        </li>
+        <li ng-class="{active: isActive('/contactUs')}" >
+            <a ng-href="/contactUs">Contact Us</a>
         </li>
       </ul>      
     </div>
