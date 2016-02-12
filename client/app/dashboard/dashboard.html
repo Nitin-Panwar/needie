@@ -41,13 +41,15 @@
 			</section>	
 		</section>				
 		<section class="row" >&nbsp;</section>
+		<!-- div id="chart1" class="chartCtrl"></div>
+            <smm-multi-chart options="options1" handle="handle" data="chart1JSON" container="chart1"></smm-multi-chart> -->
 		<!-- dashboard buttons section end -->
 
 		<!-- Dashboard Section -->
 		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard" >
 			<ul>
 				<!-- metric card area -->
-				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">					
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">		
 					<section metriccard  metric-data="item" metric-index="$index" class="metric-card-item"></section>
 				</li>
 				<!-- metric card area end -->

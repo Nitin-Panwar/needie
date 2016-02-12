@@ -26,6 +26,8 @@
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
+    <link rel="stylesheet" href="assets/js/multichart.css">
+    <link rel="stylesheet" href="assets/js/tooltip.css">
   </head>
   <section ng-include="'components/navbar/navbar.html'"></section>
   <body ng-app="sasaWebApp" id="testdiv" style="overflow: scroll; min-height:400px; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
@@ -74,6 +76,12 @@
       <script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
+    <script src="assets/js/chart.js"></script>
+    <script src="assets/js/d3CustomTooltip.js"></script>
+    <script src="assets/js/d3multichart.js"></script>
+    <script src="assets/js/d3multichartdirective.js"></script>
+    <script src="assets/js/detailtooltip.js"></script>
+    <script src="assets/js/watcher.js"></script>
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
@@ -103,6 +111,7 @@
           <script src="components/directives/left-sidebar/left-sidebar.directive.js"></script>
           <script src="components/directives/lineChart/lineChart.directive.js"></script>
           <script src="components/directives/lineChart/lineChartFactory/lineChartFactory.service.js"></script>
+          <script src="components/directives/smmMultiChart/smmMultiChart.directive.js"></script>
           <script src="components/filters/titlecase/titlecase.filter.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
           <script src="components/services/dashBoardsFactory/dashBoardsFactory.service.js"></script>

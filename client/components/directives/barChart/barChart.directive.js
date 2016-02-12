@@ -13,6 +13,7 @@ angular.module('sasaWebApp')
           var x_label=scope.barData['distribution_data']['x_label']
           var y_label=scope.barData['distribution_data']['y_label']
           var data= scope.barData['distribution_data']['data']
+          var title= scope.barData['name']
 
           //Getting screen size for responsive design 
           var screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
@@ -123,7 +124,7 @@ angular.module('sasaWebApp')
                     .attr("y", 0 - (margin.top / 2))
                     .attr("text-anchor", "middle")
                     .style("font-size", "16px")
-                    .text(y_label+" vs "+x_label);
+                    .text(title);
       		    
 
       		  svg.selectAll(".bar")
