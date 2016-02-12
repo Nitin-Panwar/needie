@@ -13,7 +13,7 @@ angular.module('sasaWebApp')
        $rootScope.createNew = false;
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
-        $rootScope.placeholder.dashboard = data;   
+        $rootScope.placeholder.dashboard = data;  
         // update filters on front end
         $rootScope.globalQuery = $rootScope.placeholder.dashboard.filters;      
 

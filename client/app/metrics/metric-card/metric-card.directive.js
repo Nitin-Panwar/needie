@@ -9,7 +9,56 @@ angular.module('sasaWebApp')
       scope: {metricData: '=',metricIndex: '='}, 
       // pre-link: ,     
       link: function (scope, element, attrs) {
-
+        scope.XAxis=['X-Axis','WW','Month','Quarter']
+         //Multi Series Line Chart With Verticle Lines
+          // scope.options1 = {};
+          // scope.options1.xAxis = 'DELTAWW'
+          // scope.options1.yAxis = ["MEASURE"]
+          // scope.options1.series = "CATEGORY"
+          // scope.options1.chartType = ["line"]
+          // scope.options1.lineMarker = true
+          scope.options1 = {};
+          scope.options1.xAxis = 'month' 
+          scope.options1.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+          scope.options1.series = "category"
+          scope.options1.chartType = ["line"]
+          scope.options1.lineMarker = true
+          // scope.options1.vLines = [{"vLineName":"high","vLineValue":1,"DT":"1/1/1806"},
+          //               {"vLineName":"low","vLineValue":1,"DT":"1/1/1802"},
+                              // ]
+          // scope.options1.colorScheme = ["cyan","green","brown","red"]
+          // scope.options1.colorMapping = {"high":"red","low":"blue"}
+          // //scope.options1.showLabels = true
+          // scope.options1.showGridlines = true
+          // // scope.options1.ticks = 7
+          // //scope.options1.yMin = 0
+        // //scope.options1.yMax = 20
+        // scope.options1.timeAxis = true
+        // scope.options1.timeFormat = "%Y"
+        // scope.options1.xLabels = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
+        // scope.data=scope.metricData['distributions'][0]['distribution_data']['data']
+        scope.options5 = {}; 
+        scope.options5.xAxis = ["month","category"]
+        scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+        scope.options5.series = ["month","category"]
+        scope.options5.chartType = ["bar"]
+        scope.options5.showLegend = true;
+        scope.options5.legendFilter = false
+                 
+        scope.changeXaxis=function(type){
+          if(type=='WW'){
+            scope.options5.xAxis = ["work_week","category"]
+            scope.options1.xAxis = 'work_week' 
+          }
+          if(type=='Month'){
+          scope.options5.xAxis = ["month","category"]
+          scope.options1.xAxis = 'month' 
+          }
+          if(type=='Quarter'){
+            scope.options5.xAxis = ["quarter","category"]
+            scope.options1.xAxis = 'quarter'
+          }
+        }
         /**
          * this function launches the dialogs
          * @param  {[type]} which       [description]
@@ -62,6 +111,7 @@ angular.module('sasaWebApp')
              */
             case 'metric':
               scope.metric=metricData;
+              console.log(metricData);
               dialogs.create('app/metrics/modals/metricDetails.html','ModalCtrl',scope.metric,'sm');
               break;
            }
@@ -91,6 +141,7 @@ angular.module('sasaWebApp')
           });
           return filtered;
         }
+
         
         /**
          * [function to change vizualization]
@@ -114,6 +165,7 @@ angular.module('sasaWebApp')
         scope.getMetric = function () {                  
           scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
             $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
+            console.log(resposne)
           },function (err) {
             console.error(err);
           })
