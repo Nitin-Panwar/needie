@@ -40,10 +40,10 @@ angular.module('sasaWebApp')
         scope.options5 = {}; 
         scope.options5.xAxis = ["month","category"]
         scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
-        scope.options5.series = ["month","category"]
+        scope.options5.series = "category"
         scope.options5.chartType = ["bar"]
         scope.options5.showLegend = true;
-        scope.options5.legendFilter = false
+        scope.options5.legendFilter = true
                  
         scope.changeXaxis=function(type){
           if(type=='WW'){

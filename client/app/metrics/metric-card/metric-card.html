@@ -59,9 +59,10 @@
                                 <td ng-repeat="(key, value) in measure.value" style="padding-right: 5px;padding-left: 5px;"><b>{{value|number}} {{measure.unit}}</b>
                                 </td>
                             </tr>
-                            <tr style="text-align: center">
+                            {{measure.name}}
+                            <!-- <tr style="text-align: center">
                                 <td colspan="5" rowspan="1">{{measure.name}}</td>
-                            </tr>
+                            </tr> -->
                         </table>
                     </li>
                     <li ng-repeat= "measure in metricData['measures']" class="measure-card"  ng-if="measure.type === 'breakup'"ng-show="measure.active || measure.active == undefined" style="padding-right: 5px;">
@@ -75,9 +76,10 @@
                                 <td ng-repeat="(key, value) in items" style="padding-right: 5px;padding-left: 5px;"><b>{{items[key]['value']}} {{measure.unit}}</b>
                                 </td>
                             </tr>
-                            <tr style="text-align: center">
+                            <!-- <tr style="text-align: center">
                                 <td colspan="5" rowspan="1">{{measure.name}}</td>
-                            </tr>
+                            </tr> -->
+                            {{measure.name}}
                         </table>
                     </li>
                 </ul>    

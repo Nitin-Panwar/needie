@@ -14,8 +14,6 @@ angular.module('multiChart',[])
 
     link:function(scope, element, attrs){
       scope.$watch('data',function(){
-
-        console.log(scope.data)
         if(scope.data == null || scope.data === undefined || scope.data.length==0)
           return;
 

@@ -38,7 +38,6 @@ angular.module('sasaWebApp')
         }
       },true);
       scope.$watch('data',function(){
-        console.log("data watch working")
       //Appending created div id 
       scope.container =randomId
         if(scope.data == null || scope.data === undefined || scope.data.length==0)
