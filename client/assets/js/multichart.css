@@ -1,0 +1,127 @@
+/*.selectbox_bg {
+    background: url("images/areachart.png");
+    background-position: 0 0;        
+    background-repeat: no-repeat;
+    background-attachment:scroll;
+    background-color:transparent;
+    border: medium none;
+    color: #5D5C5C !important;
+    font-size: 15px;
+    height: 33px;
+    line-height: 33px;
+    padding: 6px 10px;
+    width: 255px;
+}
+
+
+@font-face {
+    font-family: 'multichart';
+    src:url('../fonts/multichart.eot?-qrtaxr');
+    src:url('../fonts/multichart.eot?#iefix-qrtaxr') format('embedded-opentype'),
+        url('../fonts/multichart.ttf?-qrtaxr') format('truetype'),
+        url('../fonts/multichart.woff?-qrtaxr') format('woff'),
+        url('../fonts/multichart.svg?-qrtaxr#multichart') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}*/
+
+[class^="mcicon-"], [class*=" mcicon-"] {
+/*    font-family: 'multichart';
+    speak: none;*/
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    /*-moz-osx-font-smoothing: grayscale;*/
+}
+
+.mcicon-donut-chart:before {
+    content: "\e600";
+}
+.mcicon-bubble-chart:before {
+    content: "\e601";
+}
+.mcicon-area-graph:before {
+    content: "\e602";
+}
+.mcicon-bar-graph:before {
+    content: "\e603";
+}
+.mcicon-line-graph:before {
+    content: "\e604";
+}
+.mcicon-pie-chart:before {
+    content: "\e605";
+}
+
+.chart {
+    position: relative;
+    width:100%;
+    height: 320px;
+}
+
+.chartCtrl {
+    position: relative;
+    width:100%;
+    height: 250px;/*calc( 100% - 50px) !important;*/
+}
+
+.gridlineConfig {
+    fill: none;
+    stroke: black;
+    opacity: 0.4;
+}
+
+.labelConfig{
+    font-size: 10px; 
+    font-family: Intel Clear, 'Helvetica Neue', Helvetica, sans-serif; 
+
+}
+
+.donutlabelConfig{
+    font-size: 10px;
+    font-family: Intel Clear, 'Helvetica Neue', Helvetica, sans-serif; 
+}
+
+.vLines
+{
+    stroke-dasharray: 3;
+}
+
+.hLines
+{
+    stroke-dasharray: 3;
+}
+
+.shapeLines
+{
+    stroke-dasharray: 3;
+}
+
+.legendConfig
+{
+    font-size: 12px;
+    font-family: Intel Clear, 'Helvetica Neue', Helvetica, sans-serif; 
+}
+
+.shapeConfig
+{
+    opacity: 1;
+    stroke: black;
+    stroke-width: 1;
+}
+
+@media (min-width: 1200px){
+
+    .legendConfig{font-size: 11px;
+    }
+}
+
+@media (min-width: 992px){
+    .legendConfig{font-size: 9px;
+    }
+} 

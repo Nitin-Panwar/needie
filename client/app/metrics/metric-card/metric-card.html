@@ -32,8 +32,15 @@
         <!-- metric Card Body -->
         <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-            	<line-chart ng-show="line" line-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></line-chart>
-                <bar-chart ng-show="!line" bar-data="metricData['distributions'][0]" class="center-block" ng-if="metricData.distributions[0]"></bar-chart>
+             <section class="pull-right">
+                <span>Change X-Axis:</span>
+                <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer">WW</span>
+                <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
+                <span class="badge" ng-click="changeXaxis('Quarter')" style="cursor:pointer">Quarter</span>
+            </section>
+            <smm-multi-chart options="options1" handle="handle" data="metricData['distributions'][0]['distribution_data']['data']" ng-show="line"></smm-multi-chart>
+            <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" ng-show="!line"></smm-multi-chart>
+
           </section>                         
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
@@ -52,9 +59,10 @@
                                 <td ng-repeat="(key, value) in measure.value" style="padding-right: 5px;padding-left: 5px;"><b>{{value|number}} {{measure.unit}}</b>
                                 </td>
                             </tr>
-                            <tr style="text-align: center">
+                            {{measure.name}}
+                            <!-- <tr style="text-align: center">
                                 <td colspan="5" rowspan="1">{{measure.name}}</td>
-                            </tr>
+                            </tr> -->
                         </table>
                     </li>
                     <li ng-repeat= "measure in metricData['measures']" class="measure-card"  ng-if="measure.type === 'breakup'"ng-show="measure.active || measure.active == undefined" style="padding-right: 5px;">
@@ -68,9 +76,10 @@
                                 <td ng-repeat="(key, value) in items" style="padding-right: 5px;padding-left: 5px;"><b>{{items[key]['value']}} {{measure.unit}}</b>
                                 </td>
                             </tr>
-                            <tr style="text-align: center">
+                            <!-- <tr style="text-align: center">
                                 <td colspan="5" rowspan="1">{{measure.name}}</td>
-                            </tr>
+                            </tr> -->
+                            {{measure.name}}
                         </table>
                     </li>
                 </ul>    

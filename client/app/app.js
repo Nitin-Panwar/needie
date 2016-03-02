@@ -17,7 +17,10 @@ angular.module('sasaWebApp', [
   'ui.grid.exporter',
   'ui.grid.moveColumns',
   'ngTouch',
-  'ngCsv'
+  'ngCsv',
+  // 'ngMaterial', 
+  // 'ngMessages'
+  // 'material.svgAssetsCache'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
      $urlRouterProvider

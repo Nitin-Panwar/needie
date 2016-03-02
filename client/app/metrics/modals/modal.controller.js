@@ -245,11 +245,12 @@ angular.module('sasaWebApp')
           }
         }
       }
+      
       /**
        * gets metric filters
        * @return {[type]} [description]
        */
-      $scope.getFilters = function () {        
+      $scope.getFilters = function () {     
         $rootScope.metricPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
               $scope.FilterData = data;  
               var filterKeys = Object.keys(data[0]);
