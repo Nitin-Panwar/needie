@@ -29,7 +29,7 @@ angular.module('sasaWebApp')
           // scope.options1.colorScheme = ["cyan","green","brown","red"]
           // scope.options1.colorMapping = {"high":"red","low":"blue"}
           // //scope.options1.showLabels = true
-          // scope.options1.showGridlines = true
+          scope.options1.showGridlines = false
           // // scope.options1.ticks = 7
           // //scope.options1.yMin = 0
         // //scope.options1.yMax = 20
@@ -44,6 +44,11 @@ angular.module('sasaWebApp')
         scope.options5.chartType = ["bar"]
         scope.options5.showLegend = true;
         scope.options5.legendFilter = true
+        scope.options5.showGridlines = false
+        scope.options5.hLines = [
+          { "y" : 2500, "color" : 'red'}, 
+          { "y" : 1500, "color" : 'green'}
+          ]
                  
         scope.changeXaxis=function(type){
           if(type=='WW'){

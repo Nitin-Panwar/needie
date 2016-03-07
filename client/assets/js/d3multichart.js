@@ -5900,9 +5900,6 @@
         }
         return selectedShape.append("svg").attr("width", width).attr("height", height);
     };
-
-
-
     return dimple;
 }));
 // End dimple
