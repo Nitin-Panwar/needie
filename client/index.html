@@ -23,11 +23,12 @@
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
     <link rel="stylesheet" href="assets/css/smm-it-mlaf.min.css">
+    <link rel="stylesheet" href="assets/js/multichart.css">
+    <link rel="stylesheet" href="assets/js/tooltip.css">
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
-    <link rel="stylesheet" href="assets/js/multichart.css">
-    <link rel="stylesheet" href="assets/js/tooltip.css">
+    
   </head>
   <section ng-include="'components/navbar/navbar.html'"></section>
   <body ng-app="sasaWebApp" id="testdiv" style="overflow: scroll; min-height:400px; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
@@ -76,12 +77,25 @@
       <script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
-    <script src="assets/js/chart.js"></script>
-    <script src="assets/js/d3CustomTooltip.js"></script>
-    <script src="assets/js/d3multichart.js"></script>
-    <script src="assets/js/d3multichartdirective.js"></script>
-    <script src="assets/js/detailtooltip.js"></script>
-    <script src="assets/js/watcher.js"></script>
+
+      <!-- build:js app/chart.js -->
+      <script src="assets/js/chart.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/d3CustomTooltip.js -->
+      <script src="assets/js/d3CustomTooltip.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/d3multichart.js -->
+      <script src="assets/js/d3multichart.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/d3multichartdirective.js -->
+      <script src="assets/js/d3multichartdirective.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/detailtooltip.js -->
+      <script src="assets/js/detailtooltip.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/watcher.js -->
+      <script src="assets/js/watcher.js"></script>
+      <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>

@@ -278,4 +278,4 @@ d3.tooltip__ = function()
 
         return tooltip_;
     };
-})()
+})();

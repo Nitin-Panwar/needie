@@ -1373,7 +1373,6 @@
       watcher_.unSubscribe(heightWatcherID);
       return plotChart_;
     }
-
     return plotChart_;
   };
-})()
+})();
