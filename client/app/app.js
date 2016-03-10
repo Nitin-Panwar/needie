@@ -18,6 +18,7 @@ angular.module('sasaWebApp', [
   'ui.grid.moveColumns',
   'ngTouch',
   'ngCsv',
+  'ngMaterial'
   // 'ngMaterial', 
   // 'ngMessages'
   // 'material.svgAssetsCache'

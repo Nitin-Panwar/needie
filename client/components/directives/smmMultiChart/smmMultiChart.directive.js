@@ -7,22 +7,28 @@ angular.module('sasaWebApp')
       data: '=',
       container:'@',
       handle: '=',
-      options:'='
+      options:'=',
+      measures:'=',
     },
     restrict: 'EA',
     replace: true,
 
     link:function(scope, element, attrs){
-      //Creating div id on the fly 
+      var goals=[];
+      //Creating div id on the fly s
       var randomId = "x" + Math.floor(Math.random()*10000);
       d3.select(element[0]).append('div').attr("id",randomId)
-    
-      scope.$watch('options',function(){
-      //Appending created div id 
+
+      scope.$watch('measures',function(){
+        for (var i = 0; i < scope.measures.length; i++) {
+        if(scope.measures[i].goal!=undefined){
+          goals[i]={ "y" : scope.measures[i].goal, "color" : 'red'}
+        }
+      };
+        //Appending created div id 
       scope.container =randomId
         if(scope.data == null || scope.data === undefined || scope.data.length==0)
           return;
-
         if(scope.container == null || scope.container == undefined)
           return;
         if(!scope.stackBarChartObject)
@@ -33,16 +39,24 @@ angular.module('sasaWebApp')
             .data(scope.options.yAxis.length==2?scope.data[0]:scope.data)
             .xAxis(scope.options.xAxis)
             .y2Data(scope.options.yAxis.length==2?scope.data[1]:null)
+            .hLines(goals)
             .colorMapping(scope.options.colorMapping)();
           scope.stackBarChartObject.renderChart();
         }
       },true);
+
+      
+
       scope.$watch('data',function(){
+          for (var i = 0; i < scope.measures.length; i++) {
+            if(scope.measures[i].goal!=undefined){
+              goals[i]={ "y" : scope.measures[i].goal, "color" : 'red'}
+            }
+          };
       //Appending created div id 
       scope.container =randomId
         if(scope.data == null || scope.data === undefined || scope.data.length==0)
           return;
-
         if(scope.container == null || scope.container == undefined)
           return;
         if(!scope.stackBarChartObject)
@@ -53,10 +67,12 @@ angular.module('sasaWebApp')
             .data(scope.options.yAxis.length==2?scope.data[0]:scope.data)
             .xAxis(scope.options.xAxis)
             .y2Data(scope.options.yAxis.length==2?scope.data[1]:null)
+            .hLines(goals)
             .colorMapping(scope.options.colorMapping)();
           scope.stackBarChartObject.renderChart();
         }
       },true);
+
 
       scope.control = scope.handle || {}
 
@@ -107,8 +123,11 @@ angular.module('sasaWebApp')
         if(scope.options.series!=undefined)
           scope.stackBarChartObject.series(scope.options.series)
 
-        if(scope.options.hLines!=undefined)
-          scope.stackBarChartObject.hLines(scope.options.hLines)
+        // if(scope.goal!=undefined){
+        //   console.log("inside if",scope.goal)
+        //   scope.stackBarChartObject.hLines([
+        //     { "y" : scope.goal, "color" : 'red'}])
+        // }
 
         if(scope.options.vLines!=undefined)
           scope.stackBarChartObject.vLines(scope.options.vLines)
