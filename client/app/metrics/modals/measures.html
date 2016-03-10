@@ -3,16 +3,30 @@
 </div>
 <div class="modal-body">
 	<ul class="list-group">	
-		<li class="list-group-item" ng-repeat="measure in data track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active; tempThreshold[$index].uw = measureInfo[$index].threshold.upperWarning; tempThreshold[$index].ua = measureInfo[$index].threshold.upperAlert; tempThreshold[$index].lw = measureInfo[$index].threshold.lowerWarning; tempThreshold[$index].la = measureInfo[$index].threshold.lowerAlert"  ng-class="{'disabled':measureInfo[$index].active==false}" >
+		<li class="list-group-item" ng-repeat="measure in data track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active; tempThreshold[$index].uw = measureInfo[$index].threshold.upperWarning; tempThreshold[$index].ua = measureInfo[$index].threshold.upperAlert; tempThreshold[$index].lw = measureInfo[$index].threshold.lowerWarning; tempThreshold[$index].la = measureInfo[$index].threshold.lowerAlert;goal[$index]=measureInfo[$index].goal"  ng-class="{'disabled':measureInfo[$index].active==false}" >{{measure}}
 			<h5>{{measure.name}}&nbsp;:&nbsp;&nbsp;{{measure.value|number}}{{measure.unit}}			
 				<a href ng-click="toggelActive($index)" class="pull-right">							
 				<span ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined" class="badge" >Disable Measure</span>
 				<span ng-hide="measureInfo[$index].active || measureInfo[$index].active == undefined" class="badge" style="background-color: #5cb85c;">Enable Measure</span>
 				</a>
 			</h5>
-			<div ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined">				
+			<div ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined">		
 				<div ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'">
-					<table class="table  table-intel" >
+					<div ng-cloak>
+					  <md-content style="margin: 16px; padding:16px">
+					    <div layout>
+					      <div flex="10" layout layout-align="center center">
+					        <span class="md-body-1">Goal</span>
+					      </div>
+					      <!-- <md-slider flex min="0" max={{measure.value|number}} ng-model="goal[$index]" aria-label="red" id="red-slider" class>
+					      </md-slider> -->
+					      <div flex="20" layout layout-align="center center">
+					        <input flex type="number" ng-model="goal[$index]" aria-label="red" aria-controls="red-slider">
+					      </div>&nbsp;/Quarter
+					    </div>
+					  </md-content>
+					</div>
+					<!-- <table class="table  table-intel" >
 						<tbody>
 							<tr>
 								<td style="border:none"></td>
@@ -43,7 +57,7 @@
 								</td>
 							</tr>
 						</tbody>
-					</table>
+					</table> -->
 				</div>
 				<a ng-click="isCollapsed = !isCollapsed" href='' style="color:black; font-style: italic;"> Click here</a> for details
 				<br>
@@ -97,4 +111,5 @@
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-primary" ng-click="save('measure')" ng-class="{'disabled':compareThreshold()}">Apply</button>	
-	<button type="button" class="btn btn-default" ng-click="cancel()" >Cancel</button></div>
+	<button type="button" class="btn btn-default" ng-click="cancel()" >Cancel</button>
+</div>

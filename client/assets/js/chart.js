@@ -710,33 +710,50 @@
       {
         y[0].overrideMin = yMin;
         y[0].overrideMax = yMax;
+   
       }
       else if(chart2min!=null && chart2max!=null)
       {
+        console.log(yMax,chart2min)
         y[0].overrideMin = chart2min < y[0]._min ? chart2min : y[0]._min;
         y[0].overrideMax = chart2max > y[0]._max ? chart2max : y[0]._max;
       }
       //hlines data check
+      //
       hLines.forEach(function (d,i){
-        y[0].overrideMax = d.y > y[0].overrideMax ? d.y : y[0].overrideMax;
+        if(d.y>=y[0]._max){
+            y[0].overrideMax = d.y > y[0].overrideMax ? d.y : y[0].overrideMax;
+          }
       });
       y[0].ticks=tickCount;
-
       chart1.draw(800)
 
     }
     
     function addHLines(chart)
     {
+      var temp=0;
       if(chartType[0]=="pie") return;
       hLines.forEach(function (d,i){
+        console.log(y[0]._scale(d.y))
         svg.append("line")
           .attr("x1", chart1._xPixels())
           .attr("y1", y[0]._scale(d.y))
           .attr("x2", chart1._xPixels() + chart1._widthPixels())
           .attr("y2", y[0]._scale(d.y))
           .style("stroke", d.color)
-          .attr("class", "hLines")
+          .attr("dy", "5em")
+          .attr("class", "hLines");
+        // if(temp==0){
+        //   svg.append("text")
+        //     .attr("x", chart1._xPixels()/2 + chart1._widthPixels()/2)
+        //     .attr("y", y[0]._scale(d.y)+10)
+        //     .attr("dy", ".35em")
+        //     .attr("text-anchor", "start")
+        //     .style("fill", d.color)
+        //     .text("Open");  
+        //     temp=1;
+        // }
       });
 
       /*if(chartType[0]=="pie") return;

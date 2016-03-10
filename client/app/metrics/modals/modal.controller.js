@@ -8,10 +8,11 @@ angular.module('sasaWebApp')
       $scope.validate = false;
       $scope.data = data;        
       $scope.dashBoard = {dashBoardName : ''};
-      $scope.measureInfo = {};
+      $scope.measureInfo = [];
       $scope.offset = 0;
       $scope.csvData = {};     
       $scope.tempThreshold ={}; 
+      $scope.goal=[];
       $scope.availableColoumns = {
         items: [],
         selected: []
@@ -24,6 +25,19 @@ angular.module('sasaWebApp')
       $scope.filterQuery = {};
       $scope.filterSubData = {};
       $scope.disableApplyButton =[];
+
+      ///////////////////////////////////////////////////
+      $scope.color = {
+        red: Math.floor(Math.random() * 255),
+        green: Math.floor(Math.random() * 255),
+        blue: Math.floor(Math.random() * 255)
+      };
+      $scope.rating1 = 3;
+      $scope.rating2 = 2;
+      $scope.rating3 = 4;
+      $scope.disabled1 = 0;
+      $scope.disabled2 = 70;
+      ///////////////////////////////////////////////////
 
       /**
        * toggles active state
@@ -155,21 +169,25 @@ angular.module('sasaWebApp')
           case 'measure':
             for( var i in $scope.measureInfo){
                 $scope.measureInfo[i].threshold ={};
+                $scope.measureInfo[i].goal={};
                 for(var key in $scope.measureInfo[i]){
                   if(key=='threshold' && $scope.tempThreshold[i]) {
                     $scope.measureInfo[i].threshold.upperWarning = $scope.tempThreshold[i].uw;
                     $scope.measureInfo[i].threshold.upperAlert = $scope.tempThreshold[i].ua;
                     $scope.measureInfo[i].threshold.lowerWarning = $scope.tempThreshold[i].lw;
                     $scope.measureInfo[i].threshold.lowerAlert = $scope.tempThreshold[i].la;  
+                    $scope.measureInfo[i].goal = $scope.goal[i];
                   }
                 }
             }
             delete $scope.tempThreshold;
+            delete $scope.goal;
             $modalInstance.close($scope.measureInfo);
             break;
           case 'data':
             $modalInstance.close($scope.selectedColumns.items);
           case 'filter':
+            console.log("1")
             $modalInstance.close($scope.filterQuery);
           default:
             $modalInstance.close();          

@@ -32,149 +32,159 @@ angular.module('sasaWebApp')
           scope.options1.showGridlines = false
           // // scope.options1.ticks = 7
           // //scope.options1.yMin = 0
-        // //scope.options1.yMax = 20
-        // scope.options1.timeAxis = true
-        // scope.options1.timeFormat = "%Y"
-        // scope.options1.xLabels = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
-        // scope.data=scope.metricData['distributions'][0]['distribution_data']['data']
-        scope.options5 = {}; 
-        scope.options5.xAxis = ["month","category"]
-        scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
-        scope.options5.series = "category"
-        scope.options5.chartType = ["bar"]
-        scope.options5.showLegend = true;
-        scope.options5.legendFilter = true
-        scope.options5.showGridlines = false
-        scope.options5.hLines = [
-          { "y" : 2500, "color" : 'red'}, 
-          { "y" : 1500, "color" : 'green'}
-          ]
+          // //scope.options1.yMax = 20
+          // scope.options1.timeAxis = true
+          // scope.options1.timeFormat = "%Y"
+          // scope.options1.xLabels = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
+          // scope.data=scope.metricData['distributions'][0]['distribution_data']['data']
+          scope.options5 = {}; 
+          scope.options5.xAxis =  ["quarter","category"]
+          scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+          scope.options5.series = "category"
+          scope.options5.chartType = ["bar"]
+          scope.options5.showLegend = true;
+          scope.options5.legendFilter = true
+          scope.options5.showGridlines = false
+          // scope.options5.colorScheme = ["green","brown","red"]
+          // if(scope.metricData['measures'][0]['goal']!==undefined){
+          //   scope.options5.hLines = [
+          //   { "y" : scope.metricData['measures'][0]['goal'], "color" : 'red'}]
+          // }
+
+          // scope.$watch(scope.metricData['measures'][0]['goal'],function(newValue,oldValue){
+          //   console.log(newValue,oldValue)
+          // })
+        
                  
-        scope.changeXaxis=function(type){
-          if(type=='WW'){
-            scope.options5.xAxis = ["work_week","category"]
-            scope.options1.xAxis = 'work_week' 
+          scope.changeXaxis=function(type){
+            if(type=='WW'){
+              scope.options5.xAxis = ["work_week","category"]
+              scope.options1.xAxis = 'work_week' 
+            }
+            if(type=='Month'){
+            scope.options5.xAxis = ["month","category"]
+            scope.options1.xAxis = 'month' 
+            }
+            if(type=='Quarter'){
+              scope.options5.xAxis = ["quarter","category"]
+              scope.options1.xAxis = 'quarter'
+            }
           }
-          if(type=='Month'){
-          scope.options5.xAxis = ["month","category"]
-          scope.options1.xAxis = 'month' 
-          }
-          if(type=='Quarter'){
-            scope.options5.xAxis = ["quarter","category"]
-            scope.options1.xAxis = 'quarter'
-          }
-        }
-        /**
-         * this function launches the dialogs
-         * @param  {[type]} which       [description]
-         * @param  {[type]} metricData  [description]
-         * @param  {[type]} placeholder [description]
-         * @return {[type]}             [description]
-         */
-        scope.launch = function(which,metricData,placeholder){
-          switch(which){
-            /**
-             * data dialog
-             */
-            case 'data':              
-              var dlg = dialogs.create('app/metrics/modals/data.html','ModalCtrl',metricData,'sm');
-				      dlg.result.then(function (data) {
-                // update selected columns in placeholder for saving
-                $rootScope.placeholder.metric[scope.metricIndex].gridColumns = data;
-                scope.metricData.gridColumns = data;
-              })
-              break;
-            /**
-             * filter dialog
-             */
-            case 'filter':
-              var dlg = dialogs.create('app/metrics/modals/filter.html','ModalCtrl',metricData,'sm');
-              dlg.result.then(function (data) {
-                $rootScope.placeholder.metric[scope.metricIndex].filters = data;                
-                scope.metricData.filters = data;
-                for(var key in scope.metricData.filters){
-                  if(scope.metricData.filters[key].length === 0){delete scope.metricData.filters[key];}
-                }
-                scope.getMetric();
-              });
-              break;
-            /**
-             * measure diaglog
-             */
-            case 'measure':              
-              var dlg = dialogs.create('app/metrics/modals/measures.html','ModalCtrl', metricData['measures'],'sm');              
-              dlg.result.then(function(data){
-                for(var i in data){
-                  for(var key in data[i]){
-                    metricData.measures[i][key] = data[i][key];
+          /**
+           * this function launches the dialogs
+           * @param  {[type]} which       [description]
+           * @param  {[type]} metricData  [description]
+           * @param  {[type]} placeholder [description]
+           * @return {[type]}             [description]
+           */
+          scope.launch = function(which,metricData,placeholder){
+            switch(which){
+              /**
+               * data dialog
+               */
+              case 'data':              
+                var dlg = dialogs.create('app/metrics/modals/data.html','ModalCtrl',metricData,'sm');
+  				      dlg.result.then(function (data) {
+                  // update selected columns in placeholder for saving
+                  $rootScope.placeholder.metric[scope.metricIndex].gridColumns = data;
+                  scope.metricData.gridColumns = data;
+                })
+                break;
+              /**
+               * filter dialog
+               */
+              case 'filter':
+                var dlg = dialogs.create('app/metrics/modals/filter.html','ModalCtrl',metricData,'sm');
+                dlg.result.then(function (data) {
+                  console.log("2")
+                  console.log(data)
+                  // $rootScope.placeholder.metric[scope.metricIndex].filters = data;                
+                  scope.metricData.filters = data;
+                  for(var key in scope.metricData.filters){
+                    if(scope.metricData.filters[key].length === 0){delete scope.metricData.filters[key];}
                   }
-                }
-              });              
-              break;
-            /**
-             * metric details dialog
-             */
-            case 'metric':
-              scope.metric=metricData;
-              console.log(metricData);
-              dialogs.create('app/metrics/modals/metricDetails.html','ModalCtrl',scope.metric,'sm');
-              break;
-           }
-        };
+                  scope.getMetric();
+                });
+                break;
+              /**
+               * measure diaglog
+               */
+              case 'measure':              
+                var dlg = dialogs.create('app/metrics/modals/measures.html','ModalCtrl', metricData['measures'],'sm');              
+                dlg.result.then(function(data){
+                  // console.log(data)
+                  // $rootScope.placeholder['metric'][scope.metricIndex]['measures'] =data;
+                  for(var i in data){
+                    for(var key in data[i]){
+                      metricData.measures[i][key] = data[i][key];
+                    }
+                  }
+                  // scope.getMetric();
+                });              
+                  break;
+              /**
+               * metric details dialog
+               */
+              case 'metric':
+                scope.metric=metricData;
+                dialogs.create('app/metrics/modals/metricDetails.html','ModalCtrl',scope.metric,'sm');
+                break;
+             }
+          };
 
-        // 
-        // this code here watches the changes in global filter values
-        // 
-        scope.$watch(function () {
-          return $rootScope.applyFilter;
-        }, function(newValue, oldValue, scope) {         
-          if(newValue !== oldValue){
-            scope.getMetric();
-          }          
-        });
-
-
-        //Define custom filer for object sorting
-        scope.customFilter = function(items){
-          var filtered = [];
-          angular.forEach(items, function(value,key) {
-            var obj ={'key':key,'value':value}
-            filtered.push(obj);
+          // 
+          // this code here watches the changes in global filter values
+          // 
+          scope.$watch(function () {
+            return $rootScope.applyFilter;
+          }, function(newValue, oldValue, scope) {         
+            if(newValue !== oldValue){
+              scope.getMetric();
+            }          
           });
-          filtered.sort(function (a, b) {
-            return (a['key'] > b['key'] ? 1 : -1);
-          });
-          return filtered;
-        }
+
+
+          //Define custom filer for object sorting
+          scope.customFilter = function(items){
+            var filtered = [];
+            angular.forEach(items, function(value,key) {
+              var obj ={'key':key,'value':value}
+              filtered.push(obj);
+            });
+            filtered.sort(function (a, b) {
+              return (a['key'] > b['key'] ? 1 : -1);
+            });
+            return filtered;
+          }
 
         
-        /**
-         * [function to change vizualization]
-         * @param  {[type]} type [description]
-         * @return {[type]}      [description]
-         */
-        scope.changeViz = function (type) {
-          if(type==='line' && !scope.line){
-            scope.line=!scope.line;
-          }
-          if(type==='bar' && scope.line){
-            scope.line=!scope.line;
-          } 
-        };
+          /**
+           * [function to change vizualization]
+           * @param  {[type]} type [description]
+           * @return {[type]}      [description]
+           */
+          scope.changeViz = function (type) {
+            if(type==='line' && !scope.line){
+              scope.line=!scope.line;
+            }
+            if(type==='bar' && scope.line){
+              scope.line=!scope.line;
+            } 
+          };
 
 
-        /**
-         * this function gets latest values of metrics
-         * @return {[type]} [description]
-         */
-        scope.getMetric = function () {                  
-          scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
-            $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
-            console.log(resposne)
-          },function (err) {
-            console.error(err);
-          })
-        };
+          /**
+           * this function gets latest values of metrics
+           * @return {[type]} [description]
+           */
+          scope.getMetric = function () {                
+            scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
+              $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
+              console.log(resposne);
+            },function (err) {
+              console.error(err);
+            })
+          };
 
         /**
          * this function watches for chnages in metric details
@@ -199,7 +209,6 @@ angular.module('sasaWebApp')
         scope.breachedStatus = function (data) {
           scope.warningBreached = false;
           scope.alertBreached = false;         
-          
           for(var key in data['measures']){            
             var measure = data.measures[key];      
             if(measure.active === undefined){measure.active = true;}      
@@ -213,7 +222,7 @@ angular.module('sasaWebApp')
                   delete measure.threshold[i];
                 }
               }
-              if(measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value){
+              if(measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value || measure.goal<=measure.value){
                 scope.alertBreached = true;
                 scope.warningBreached = false;
                 break;
