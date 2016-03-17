@@ -9,11 +9,9 @@
       showTooltip=true,showDetailTooltip=[],timeAxis=false,timeFormat="%m/%d/%Y",xLabels=[],shape="circle",barGap=0.2,shapeLine=false,
       tooltipFields=[],tooltipSeries=[],orderList=[],autoRotateLabel=true,eventHandler=null,aggrStackLabels=false,axisLabels=true;
     var chartMargins = {left:50, top:50, right:30, bottom:40}  
-
     function plotChart_()
     {
       chartMargins.bottom = axisLabels?chartMargins.bottom:chartMargins.bottom-20;
-
       widthWatcherID = watcher_.Subscribe(container,'width', function () {
         plotChart_.resize();
       });
@@ -27,11 +25,8 @@
 
       if(yAxis.length==0)
         console.log("Cannot plot no Y Axis");
-      // elem = document.getElementById(container);
 
       d3.select("#"+container).select("svg").remove();
-      // svg = dimple.newSvg(container,"100%","100%");
-      
       svg = dimple.newSvg("#"+container,"100%","400px");
 
       svg.selectAll(".hLines").remove();
@@ -651,7 +646,7 @@
       if(bands==null) return;
 
       chartBands = new dimple.chart(svg, bands);
-      //chartBands._showTooltip = true;
+      chartBands._showTooltip = true;
       chartBands.setMargins(chartMargins.left, chartMargins.top, chartMargins.right, chartMargins.bottom);
 
       chartBands.defaultColors = [];
@@ -735,7 +730,6 @@
       var temp=0;
       if(chartType[0]=="pie") return;
       hLines.forEach(function (d,i){
-        console.log(y[0]._scale(d.y))
         svg.append("line")
           .attr("x1", chart1._xPixels())
           .attr("y1", y[0]._scale(d.y))

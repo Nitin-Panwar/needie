@@ -73,10 +73,6 @@ angular.module('sasaWebApp')
      * @return {[type]} [description]
      */ 
     $scope.launchSave = function () {  
-    /**
-     * [searchableItems description]
-     * @return {[type]} [description]
-     */ 
       var dlg = dialogs.create('app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
           $rootScope.placeholder.dashboard["name"] = data.name;
@@ -163,7 +159,10 @@ angular.module('sasaWebApp')
       $scope.showmydashboards = false;
       $scope.showfilters = false;
     }  
-
+    /**
+     * This function closes left side bar 
+     * @return {[type]} [description]
+     */
     $scope.closeLeftSideBar = function(){
       $scope.state= false;
       $scope.metriclist =false;

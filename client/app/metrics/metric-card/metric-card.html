@@ -20,8 +20,8 @@
                         <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
                     </ul>                
                 </li> 
-                <li class="fa fa-bar-chart pull-left" style="cursor: pointer; margin-top:3px;"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
-                <li class="fa fa-line-chart pull-left" style="cursor: pointer; margin-top:3px;" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
+                <!-- <li class="fa fa-bar-chart pull-left" style="cursor: pointer; margin-top:3px;"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
+                <li class="fa fa-line-chart pull-left" style="cursor: pointer; margin-top:3px;" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li> -->
                 <li class="pull-left">
                     <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="left-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
                     </span>
@@ -32,20 +32,20 @@
         <!-- metric Card Body -->
         <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-             <!-- <section class="pull-right">
-                <span>Change X-Axis:</span>
+             <section class="pull-right">
+                <span>X-Axis:</span>
                 <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer">WW</span>
                 <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
                 <span class="badge" ng-click="changeXaxis('Quarter')" style="cursor:pointer">Quarter</span>
-            </section> -->
-            <smm-multi-chart options="options1" handle="handle" data="metricData['distributions'][0]['distribution_data']['data']"  ng-show="line"></smm-multi-chart>
+            </section>
+            <!-- <smm-multi-chart options="options1" handle="handle" data="metricData['distributions'][0]['distribution_data']['data']"  ng-show="line"></smm-multi-chart> -->
             <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" ng-show="!line"></smm-multi-chart>
 
           </section>                         
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
-                         ng-class="{'warning-breached': (measure.threshold.upperWarning !== null && measure.threshold.upperWarning <= measure.value) || (measure.threshold.lowerWarning !== null && measure.threshold.lowerWarning >= measure.value),
-                                    'alert-breached': (measure.threshold.upperAlert !== null && measure.threshold.upperAlert <= measure.value) || (measure.threshold.lowerAlert !== null && measure.threshold.lowerAlert >= measure.value)}"  ng-show="measure.active || measure.active == undefined" tooltip-class="Thresold" tooltip-placement="right" uib-tooltip-template="'app/metrics/metric-card/threshold.html'">
+                         ng-class="{'warning-breached': (measure.goal.value !== null && measure_color_green[$index]),
+                        'alert-breached': (measure.goal.value !== null && measure_color_red[$index])}"  ng-show="measure.active || measure.active == undefined" tooltip-class="Thresold" tooltip-placement="right" uib-tooltip-template="'app/metrics/metric-card/threshold.html'">
                             <span><b>{{measure.value|number}}{{measure.unit}}</b></span><br>
                             <span>{{measure.name}}</span>                      
                     </li><br>

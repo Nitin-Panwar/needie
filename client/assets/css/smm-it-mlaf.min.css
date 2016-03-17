@@ -1479,8 +1479,8 @@ a.list-group-item-danger.active,a.list-group-item-danger.active:focus,a.list-gro
 .panel-info>.panel-heading+.panel-collapse>.panel-body{border-top-color:#00aeef}
 .panel-info>.panel-heading .badge{color:#00aeef;background-color:#111}
 .panel-info>.panel-footer+.panel-collapse>.panel-body{border-bottom-color:#00aeef}
-.panel-warning{border-color:#ffda00}
-.panel-warning>.panel-heading{color:#111;background-color:#ffda00;border-color:#ffda00}
+.panel-warning{border-color:#A6CB45}
+.panel-warning>.panel-heading{color:#111;background-color:#A6CB45;border-color:#A6CB45}
 .panel-warning>.panel-heading+.panel-collapse>.panel-body{border-top-color:#ffda00}
 .panel-warning>.panel-heading .badge{color:#ffda00;background-color:#111}
 .panel-warning>.panel-footer+.panel-collapse>.panel-body{border-bottom-color:#ffda00}
