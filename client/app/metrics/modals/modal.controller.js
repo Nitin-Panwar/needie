@@ -54,7 +54,7 @@ angular.module('sasaWebApp')
       }
 
       /**
-                               * this function populates all metric columns
+      * this function populates all metric columns
        * @param  {[type]} argument [description]
        * @return {[type]}          [description]
        */
@@ -168,17 +168,22 @@ angular.module('sasaWebApp')
             break;
           case 'measure':
             for( var i in $scope.measureInfo){
-                $scope.measureInfo[i].threshold ={};
-                $scope.measureInfo[i].goal={};
-                for(var key in $scope.measureInfo[i]){
-                  if(key=='threshold' && $scope.tempThreshold[i]) {
-                    $scope.measureInfo[i].threshold.upperWarning = $scope.tempThreshold[i].uw;
-                    $scope.measureInfo[i].threshold.upperAlert = $scope.tempThreshold[i].ua;
-                    $scope.measureInfo[i].threshold.lowerWarning = $scope.tempThreshold[i].lw;
-                    $scope.measureInfo[i].threshold.lowerAlert = $scope.tempThreshold[i].la;  
-                    $scope.measureInfo[i].goal = $scope.goal[i];
-                  }
-                }
+              $scope.measureInfo[i].goal=$scope.goal[i];
+              //Not using threshold as of now
+              // $scope.measureInfo[i].threshold ={};
+              // for(var key in $scope.measureInfo[i]){
+              // if(key=='threshold' && $scope.tempThreshold[i]) {
+              //   $scope.measureInfo[i].threshold.upperWarning = $scope.tempThreshold[i].uw;
+              //   $scope.measureInfo[i].threshold.upperAlert = $scope.tempThreshold[i].ua;
+              //   $scope.measureInfo[i].threshold.lowerWarning = $scope.tempThreshold[i].lw;
+              //   $scope.measureInfo[i].threshold.lowerAlert = $scope.tempThreshold[i].la;  
+              //   console.log($scope.goal)
+              //   $scope.measureInfo[i].goal = $scope.goal[i];
+              // }
+              // if(key=='goal'){
+              //   $scope.measureInfo[i].goal = $scope.goal[i];
+              //   console.log($scope.$scope.measureInfo[i])
+              // }
             }
             delete $scope.tempThreshold;
             delete $scope.goal;
