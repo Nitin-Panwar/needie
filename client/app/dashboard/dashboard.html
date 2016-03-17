@@ -1,6 +1,3 @@
-
-<!-- <section ng-include="'components/navbar/navbar.html'"></section>	 -->
-
 <section class="container-fluid row"  >
 	<section class="col-md-1">
 		<!-- left sidebar -->
@@ -50,7 +47,10 @@
 			<ul>
 				<!-- metric card area -->
 				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">		
+				<div ng-if="item.name!==undefined">
 					<section metriccard  metric-data="item" metric-index="$index" class="metric-card-item"></section>
+				</div>
+					
 				</li>
 				<!-- metric card area end -->
 				<!-- text boxes area -->

@@ -10,6 +10,10 @@ angular.module('sasaWebApp')
       // pre-link: ,     
       link: function (scope, element, attrs) {
         scope.XAxis=['X-Axis','WW','Month','Quarter']
+        //For changing measure's color
+        scope.measure_color_green=[]
+        scope.measure_color_red=[]
+        console.log(scope.metricData)
          //Multi Series Line Chart With Verticle Lines
           // scope.options1 = {};
           // scope.options1.xAxis = 'DELTAWW'
@@ -17,19 +21,19 @@ angular.module('sasaWebApp')
           // scope.options1.series = "CATEGORY"
           // scope.options1.chartType = ["line"]
           // scope.options1.lineMarker = true
-          scope.options1 = {};
-          scope.options1.xAxis = 'month' 
-          scope.options1.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
-          scope.options1.series = "category"
-          scope.options1.chartType = ["line"]
-          scope.options1.lineMarker = true
+          // scope.options1 = {};
+          // scope.options1.xAxis = 'month' 
+          // scope.options1.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+          // scope.options1.series = "category"
+          // scope.options1.chartType = ["line"]
+          // scope.options1.lineMarker = true
           // scope.options1.vLines = [{"vLineName":"high","vLineValue":1,"DT":"1/1/1806"},
           //               {"vLineName":"low","vLineValue":1,"DT":"1/1/1802"},
                               // ]
           // scope.options1.colorScheme = ["cyan","green","brown","red"]
           // scope.options1.colorMapping = {"high":"red","low":"blue"}
           // //scope.options1.showLabels = true
-          scope.options1.showGridlines = false
+          // scope.options1.showGridlines = false
           // // scope.options1.ticks = 7
           // //scope.options1.yMin = 0
           // //scope.options1.yMax = 20
@@ -38,7 +42,12 @@ angular.module('sasaWebApp')
           // scope.options1.xLabels = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
           // scope.data=scope.metricData['distributions'][0]['distribution_data']['data']
           scope.options5 = {}; 
-          scope.options5.xAxis =  ["quarter","category"]
+          if(scope.metricData['distributions'][0]['axis']){
+              scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
+          }
+          else{
+             scope.options5.xAxis =  ["quarter","category"]
+          }
           scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
           scope.options5.series = "category"
           scope.options5.chartType = ["bar"]
@@ -59,15 +68,18 @@ angular.module('sasaWebApp')
           scope.changeXaxis=function(type){
             if(type=='WW'){
               scope.options5.xAxis = ["work_week","category"]
-              scope.options1.xAxis = 'work_week' 
+              // scope.options1.xAxis = 'work_week' 
+              scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
             }
             if(type=='Month'){
             scope.options5.xAxis = ["month","category"]
-            scope.options1.xAxis = 'month' 
+            // scope.options1.xAxis = 'month' 
+            scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
             }
             if(type=='Quarter'){
               scope.options5.xAxis = ["quarter","category"]
-              scope.options1.xAxis = 'quarter'
+              // scope.options1.xAxis = 'quarter'
+              scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
             }
           }
           /**
@@ -96,8 +108,6 @@ angular.module('sasaWebApp')
               case 'filter':
                 var dlg = dialogs.create('app/metrics/modals/filter.html','ModalCtrl',metricData,'sm');
                 dlg.result.then(function (data) {
-                  console.log("2")
-                  console.log(data)
                   // $rootScope.placeholder.metric[scope.metricIndex].filters = data;                
                   scope.metricData.filters = data;
                   for(var key in scope.metricData.filters){
@@ -112,7 +122,6 @@ angular.module('sasaWebApp')
               case 'measure':              
                 var dlg = dialogs.create('app/metrics/modals/measures.html','ModalCtrl', metricData['measures'],'sm');              
                 dlg.result.then(function(data){
-                  // console.log(data)
                   // $rootScope.placeholder['metric'][scope.metricIndex]['measures'] =data;
                   for(var i in data){
                     for(var key in data[i]){
@@ -193,48 +202,130 @@ angular.module('sasaWebApp')
          * @param  {[type]} true               [description]
          * @return {[type]}                    [description]
          */
-        scope.$watch(function () {
-          if(scope.metricData !== undefined){
-            return scope.metricData;  
-          }  
-          // return null;        
-        }, function(newValue, oldValue, scope) {          
-          scope.breachedStatus(newValue); 
-        }, true);
+        // scope.$watch(function () {
+        //   if(scope.metricData !== undefined){
+        //     return scope.metricData;  
+        //   }  
+        //   // return null;        
+        // }, function(newValue, oldValue, scope) {          
+        //   scope.breachedStatus(newValue); 
+        // }, true);
 
         /**
          * this function validates changes in measure thresholds
          * @return {[type]} [description]
          */
-        scope.breachedStatus = function (data) {
+        scope.$watch('[options5,metricData["measures"]]',function(){
           scope.warningBreached = false;
-          scope.alertBreached = false;         
-          for(var key in data['measures']){            
-            var measure = data.measures[key];      
-            if(measure.active === undefined){measure.active = true;}      
-            if(measure.threshold !== undefined && measure.active === true){
-              // if a user setup a threshold and later deleted it,
-              // it results in null
-              // which is always greater than actual measure value
-              // below we check for those nulls and delete them
-              for(var i in measure.threshold){
-                if(measure.threshold[i] === null){
-                  delete measure.threshold[i];
+          scope.alertBreached = false;      
+          for(var key in scope.metricData['measures']){ 
+            var measure=scope.metricData.measures[key];
+            if(measure.goal && measure.active){
+              if(measure.goal.value===null){
+                scope.alertBreached = false;
+                scope.warningBreached = false;
+              }
+              else{
+                if(measure.goal.scale===scope.options5.xAxis[0]){
+                  if(scope.metricData['distributions'][0]['current_values']){
+                    var current_value=scope.metricData['distributions'][0]['current_values'][scope.options5.xAxis[0]][measure.name]
+                  }
+                  if(measure.goal.comparision==='<' || measure.goal.comparision==='<='){
+                    if(measure.goal.value <=current_value){
+                      scope.alertBreached = true;
+                      scope.warningBreached = false;
+                      break;
+                    }
+                    else{
+                      scope.alertBreached = false;
+                      scope.warningBreached = true;
+                      break;
+                    } 
+                  }
+                  if(measure.goal.comparision==='>' || measure.goal.comparision==='>='){
+                    if(measure.goal.value >=current_value){
+                      scope.alertBreached = true;
+                      scope.warningBreached = false;
+                      break;
+                    }
+                    else{
+                      scope.alertBreached = false;
+                      scope.warningBreached = true;
+                      break;
+                    } 
+                  }
                 }
               }
-              if(measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value || measure.goal<=measure.value){
-                scope.alertBreached = true;
-                scope.warningBreached = false;
-                break;
-              }
-              if(measure.threshold.upperWarning <=measure.value || measure.threshold.lowerWarning >= measure.value){
-                scope.warningBreached = true;
-                scope.alertBreached = false;
-              }  
-            }            
-          }
-        };
+            }
+            if(measure.active === undefined){measure.active = true;}
+          } 
+        },true);
 
+        
+
+        // scope.breachedStatus = function (data) {
+        //   scope.warningBreached = false;
+        //   scope.alertBreached = false; 
+        //   console.log(measure)     
+        //   for(var key in data['measures']){  
+        //     var measure=data.measures[key];
+        //     if(measure.goal){
+        //       if(measure.goal.scale===scope.options5.xAxis[0]){
+        //         if(data['distributions'][0]['current_values']){
+        //           var current_value=data['distributions'][0]['current_values'][scope.options5.xAxis[0]][measure.name]
+        //         }
+        //         if(measure.goal.comparision==='<' || measure.goal.comparision==='<='){
+        //           if(measure.goal.value <=current_value){
+        //             // scope.measure_color_red[key]=true;
+        //             scope.alertBreached = true;
+        //             scope.warningBreached = false;
+        //             break;
+        //           }
+        //           else{
+        //             // scope.measure_color_green[key]=true;
+        //             scope.alertBreached = false;
+        //             scope.warningBreached = true;
+        //             break;
+        //           } 
+        //         }
+        //         if(measure.goal.comparision==='>' || measure.goal.comparision==='>='){
+        //           if(measure.goal.value >current_value){
+        //             // scope.measure_color_red[key]=true;
+        //             scope.alertBreached = true;
+        //             scope.warningBreached = false;
+        //             break;
+        //           }
+        //           else{
+        //             // scope.measure_color_green[key]=true;
+        //             scope.alertBreached = false;
+        //             scope.warningBreached = true;
+        //             break;
+        //           } 
+        //         }
+        //       }
+        //     }
+        //     if(measure.active === undefined){measure.active = true;}
+        //     // var goal = data.measures[key].goal.value;
+        //     // if(measure.threshold !== undefined && measure.active === true){
+        //       // if a user setup a threshold and later deleted it,
+        //       // it results in null
+        //       // which is always greater than actual measure value
+        //       // below we check for those nulls and delete them
+        //       // for(var i in measure.threshold){
+        //       //   if(measure.threshold[i] === null){
+        //       //     delete measure.threshold[i];
+        //       //   }
+        //       // }
+        //       // if(measure.threshold.upperAlert <= measure.value || measure.threshold.lowerAlert >= measure.value || measure.goal<=measure.value){
+        //       //   scope.alertBreached = true;
+        //       //   scope.warningBreached = false;
+        //       //   break;
+        //       // }
+        //       // if(measure.threshold.upperWarning <=measure.value || measure.threshold.lowerWarning >= measure.value){
+        //       //   scope.warningBreached = true;
+        //       //   scope.alertBreached = false;
+        //       } 
+        //     }       
         scope.isEmpty = function(argument){
           switch(typeof(argument)){
             case "array":

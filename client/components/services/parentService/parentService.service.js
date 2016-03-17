@@ -38,7 +38,8 @@ angular.module('sasaWebApp')
     	this.placeholderRemove = function (type, item) {    		
     		if(type === 'metric'){
     			var index = $rootScope.placeholder.metric.indexOf(item); 
-                $rootScope.placeholder.metric.splice(index, 1);
+                // $rootScope.placeholder.metric.splice(index, 1);
+                $rootScope.placeholder.metric[index].name=undefined;
     			messageCenterService.add('success','Removed from dashboard',{timeout: 3000})
     		}
     	}
@@ -48,14 +49,16 @@ angular.module('sasaWebApp')
     	 * @return {[type]} [description]
     	 */
     	this.createDBoard=function(){	
-        
 	      var dashboardObj = {};
 	      dashboardObj.components = [];
 	      var placeholder = {};
 	      angular.copy($rootScope.placeholder, placeholder);
-	      for (var i = 0; i < placeholder.metric.length; i++) {
-	      	dashboardObj.components[i]=placeholder.metric[i];
-	      	dashboardObj.components[i].type = 'metric';	   
+	      for (var i = 0,j=0; i < placeholder.metric.length; i++) {
+            if(placeholder.metric[i].name!==undefined){
+                dashboardObj.components[j]=placeholder.metric[i];
+                dashboardObj.components[j].type = 'metric';
+                j=j+1;  
+            }  
 	      };	      	      
 
 	      // second handle textboxes
