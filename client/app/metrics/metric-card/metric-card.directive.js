@@ -13,34 +13,7 @@ angular.module('sasaWebApp')
         //For changing measure's color
         scope.measure_color_green=[]
         scope.measure_color_red=[]
-        console.log(scope.metricData)
-         //Multi Series Line Chart With Verticle Lines
-          // scope.options1 = {};
-          // scope.options1.xAxis = 'DELTAWW'
-          // scope.options1.yAxis = ["MEASURE"]
-          // scope.options1.series = "CATEGORY"
-          // scope.options1.chartType = ["line"]
-          // scope.options1.lineMarker = true
-          // scope.options1 = {};
-          // scope.options1.xAxis = 'month' 
-          // scope.options1.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
-          // scope.options1.series = "category"
-          // scope.options1.chartType = ["line"]
-          // scope.options1.lineMarker = true
-          // scope.options1.vLines = [{"vLineName":"high","vLineValue":1,"DT":"1/1/1806"},
-          //               {"vLineName":"low","vLineValue":1,"DT":"1/1/1802"},
-                              // ]
-          // scope.options1.colorScheme = ["cyan","green","brown","red"]
-          // scope.options1.colorMapping = {"high":"red","low":"blue"}
-          // //scope.options1.showLabels = true
-          // scope.options1.showGridlines = false
-          // // scope.options1.ticks = 7
-          // //scope.options1.yMin = 0
-          // //scope.options1.yMax = 20
-          // scope.options1.timeAxis = true
-          // scope.options1.timeFormat = "%Y"
-          // scope.options1.xLabels = [-5,-4,-3,-2,-1,0,1,2,3,4,5]
-          // scope.data=scope.metricData['distributions'][0]['distribution_data']['data']
+    
           scope.options5 = {}; 
           if(scope.metricData['distributions'][0]['axis']){
               scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
@@ -228,7 +201,7 @@ angular.module('sasaWebApp')
               else{
                 if(measure.goal.scale===scope.options5.xAxis[0]){
                   if(scope.metricData['distributions'][0]['current_values']){
-                    var current_value=scope.metricData['distributions'][0]['current_values'][scope.options5.xAxis[0]][measure.name]
+                    var current_value=scope.metricData['distributions'][0]['current_values'][scope.options5.xAxis[0]][measure.label]
                   }
                   if(measure.goal.comparision==='<' || measure.goal.comparision==='<='){
                     if(measure.goal.value <=current_value){
