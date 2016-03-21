@@ -11,7 +11,7 @@
 				</a>
 			</h5>
 			<div ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined">		
-				<div ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'">
+				<div ng-if="measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage'">
 					<div ng-cloak>
 					  	<md-content style="margin: 16px; padding:16px">
 					    	<div layout>
