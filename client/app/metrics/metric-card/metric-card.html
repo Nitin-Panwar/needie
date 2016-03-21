@@ -33,14 +33,17 @@
         <!-- metric Card Body -->
         <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-             <section class="pull-right">
+             <section class="pull-right" ng-if="metricData['distributions'][0]">
                 <span>X-Axis:</span>
                 <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer">WW</span>
                 <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
                 <span class="badge" ng-click="changeXaxis('Quarter')" style="cursor:pointer">Quarter</span>
             </section>
             <!-- <smm-multi-chart options="options1" handle="handle" data="metricData['distributions'][0]['distribution_data']['data']"  ng-show="line"></smm-multi-chart> -->
-            <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" ng-show="!line"></smm-multi-chart>
+            <section ng-if="metricData['distributions'][0]">
+                <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" ng-show="!line"></smm-multi-chart>
+            </section>
+            
 
           </section>                         
                 <ul class="list-inline" >

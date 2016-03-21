@@ -19,10 +19,6 @@ angular.module('sasaWebApp', [
   'ngTouch',
   'ngCsv',
   'xeditable'
-  // 'ngMaterial'
-  // 'ngMaterial', 
-  // 'ngMessages'
-  // 'material.svgAssetsCache'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
      $urlRouterProvider
