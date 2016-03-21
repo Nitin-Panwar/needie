@@ -17,7 +17,8 @@ angular.module('sasaWebApp', [
   'ui.grid.exporter',
   'ui.grid.moveColumns',
   'ngTouch',
-  'ngCsv'
+  'ngCsv',
+  'xeditable'
   // 'ngMaterial'
   // 'ngMaterial', 
   // 'ngMessages'
