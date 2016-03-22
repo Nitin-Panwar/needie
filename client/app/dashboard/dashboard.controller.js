@@ -3,12 +3,10 @@
 angular.module('sasaWebApp')
   .controller('DashboardCtrl', function ($scope, $rootScope, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs) {   
     
+    //Creating placeholder 
     $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
-    /**
-  	 * Here system checks if there is an existing dashboard that user wants to see
-  	 * @param  {[type]} $stateParams.dashboardId [description]
-  	 * @return {[type]}                          [description]
-  	 */    
+    
+    //Here system checks if there is an existing dashboard that user wants to see  
     if($stateParams.dashboardId){
        $rootScope.createNew = false;
       //Making API call to get dashboard data
@@ -16,7 +14,6 @@ angular.module('sasaWebApp')
         $rootScope.placeholder.dashboard = data;  
         // update filters on front end
         $rootScope.globalQuery = $rootScope.placeholder.dashboard.filters;      
-
         //Add data to placeholder
         for(var i=0;i<data['components'].length;i++)
         {
@@ -33,21 +30,14 @@ angular.module('sasaWebApp')
       });
     }
 
-    /**
-     * Print Dashboard to document
-     * @param  {[type]} argument [description]
-     * @return {[type]}          [description]
-     */
+    // Print Dashboard to document
     $scope.save2document = function (argument) {
       var url = $location.absUrl()
       var idsid = $rootScope.user;
       parentService.sendMail(idsid,url);  
     }
 
-
-    /**
-     * This function adds text boxes in placeholder
-     */    
+    //This function adds text boxes in placeholder
     $scope.addTextBox = function () {
       var obj = {
           size: { x: 1, y: 4 },          
@@ -58,20 +48,13 @@ angular.module('sasaWebApp')
       $rootScope.placeholder.edited = true;
     };
 
-    /**
-     * this function removes text boxes
-     * @param  {[type]} item [description]
-     * @return {[type]}      [description]
-     */
+    //This function removes text boxes
     $scope.removeTextBox = function (item) {
       $rootScope.placeholder.textBoxes.splice($rootScope.placeholder.textBoxes.indexOf(item), 1);
       $rootScope.placeholder.edited = true;
     };
 
-    /**
-     * this function saves the dashboard
-     * @return {[type]} [description]
-     */ 
+    //This function saves the dashboard
     $scope.launchSave = function () {  
       var dlg = dialogs.create('app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
@@ -82,15 +65,15 @@ angular.module('sasaWebApp')
         });   
     }  
 
+    //Watch leftsidebar
     $scope.$watch(function () {
           return $rootScope.closeLeftSidebar;
         }, function() {      
             $scope.closeLeftSideBar();
-        }); 
+        }
+    ); 
 
-    /**
-     * this function sets a dashboard as homepage
-     */
+    //This function sets a dashboard as homepage
     $scope.setHomepage = function () {
       usersFactory.setHomepage({idsid: $rootScope.user, dashboardId: $rootScope.placeholder.dashboard._id}).$promise.then(function (data) {
         messageCenterService.add('success','Dashboard set as homepage',{timeout: 3000});
@@ -99,9 +82,7 @@ angular.module('sasaWebApp')
       })
     } 
 
-    /**
-     * Set a dashboard as favorite
-     */
+    //Set a dashboard as favorite
     $scope.setFavorite = function () {
       usersFactory.save({idsid: $rootScope.user, dashboardId: $rootScope.placeholder.dashboard._id}).$promise.then(function (data) {
         messageCenterService.add('success','Dashboard set as favorite',{timeout: 3000});
@@ -110,9 +91,7 @@ angular.module('sasaWebApp')
       });
     }
 
-    /**
-     * Delete a dashboard
-     */
+    //Delete a dashboard
     $scope.delete = function(){
       // var name = prompt("Please enter dashboard name to confirm");
       var result = confirm("Do you really want to delete?");
@@ -127,10 +106,8 @@ angular.module('sasaWebApp')
         });
       }
     }
-    /**
-     *Below it watches for any changes in movement of metrics on the dashboard and resize
-     *
-     */
+
+    //Below it watches for any changes in movement of metrics on the dashboard and resize 
     $scope.gridsterDashboardOpts = {
       resizable: {
          enabled: true,
@@ -148,10 +125,7 @@ angular.module('sasaWebApp')
       }
     };
     
-    /**
-     * [metricList description]
-     * @return {[type]} [description]
-     */
+    //To show metriclist and close other options 
     $scope.metricList = function(){
       $scope.getMetricsList();
       $scope.state= true;
@@ -159,10 +133,8 @@ angular.module('sasaWebApp')
       $scope.showmydashboards = false;
       $scope.showfilters = false;
     }  
-    /**
-     * This function closes left side bar 
-     * @return {[type]} [description]
-     */
+
+    //This function closes left side bar 
     $scope.closeLeftSideBar = function(){
       $scope.state= false;
       $scope.metriclist =false;

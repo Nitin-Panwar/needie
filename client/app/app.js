@@ -26,12 +26,6 @@ angular.module('sasaWebApp', [
     $locationProvider.html5Mode(true);    
   })
 
-
-  /**
-   * Dialog controller config
-   * @param  {[type]} dialogsProvider){                         dialogsProvider.useBackdrop(true);      dialogsProvider.useEscClose(true);      dialogsProvider.useCopy(false);     dialogsProvider.setSize('sm');    } [description]
-   * @return {[type]}                    [description]
-   */
 .config(['dialogsProvider','$translateProvider',function(dialogsProvider){
     dialogsProvider.useBackdrop(true);
     dialogsProvider.useEscClose(false);
@@ -41,12 +35,7 @@ angular.module('sasaWebApp', [
 
 .run(
   function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory,$stateParams) {
-    /**
-     * Login user if he's not already logged in
-     * @param  {[type]} $rootScope.user [description]
-     * @return {[type]}                 [description]
-     */
-    
+    //Login user if not logged in
     if($rootScope.user == undefined){      
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
         $rootScope.userDetails = response.data.user;
