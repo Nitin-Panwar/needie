@@ -24,6 +24,7 @@ angular.module('sasaWebApp')
       $scope.filterQuery = {};
       $scope.filterSubData = {};
       $scope.disableApplyButton =[];
+      $scope.predicate = 'name';
 
       //Toggles active state
       $scope.toggelActive = function (argument) {        
@@ -40,7 +41,7 @@ angular.module('sasaWebApp')
         if(!$scope.data.gridColumns){
           $scope.data.gridColumns = [];
         }
-        if($scope.data.gridColumns.length !== 0){          
+        if($scope.data.gridColumns.length !== 0){
           $scope.selectedColumns.items = $scope.data.gridColumns;    
         }
         if($scope.availableColoumns.items.length !== 0){
@@ -48,6 +49,9 @@ angular.module('sasaWebApp')
         }       
         $rootScope.metricPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
           var columns = response;
+          // for (var i = 0; i < columns.length; i++) {
+          //   $scope.availableColoumns.items.push({"name":columns[i]})
+          // };
           for(var i in $scope.data.gridColumns){
               columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
           }
@@ -140,7 +144,6 @@ angular.module('sasaWebApp')
           case 'data':
             $modalInstance.close($scope.selectedColumns.items);
           case 'filter':
-            console.log("1")
             $modalInstance.close($scope.filterQuery);
           default:
             $modalInstance.close();          

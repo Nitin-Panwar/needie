@@ -8,7 +8,10 @@ angular.module('sasaWebApp')
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
-        var test=scope.metricData['distributions'].length
+        //Varibales to change measure color
+        // scope.measure_color_red=[]
+        // scope.measure_color_green=[]
+
         //Setting options for the bar graph
         scope.options5 = {}; 
         if(scope.metricData['distributions'].length){
@@ -120,7 +123,6 @@ angular.module('sasaWebApp')
         scope.getMetric = function () {                
           scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
             $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
-            console.log(resposne);
           },function (err) {
             console.error(err);
           })
@@ -129,7 +131,9 @@ angular.module('sasaWebApp')
         //This function validates changes in measure thresholds
         scope.$watch('[options5,metricData["measures"]]',function(){
           scope.warningBreached = false;
-          scope.alertBreached = false;      
+          scope.alertBreached = false;    
+          scope.measure_color_red=[]
+          scope.measure_color_green=[]  
           for(var key in scope.metricData['measures']){ 
             var measure=scope.metricData.measures[key];
             if(measure.goal && measure.active){
@@ -142,27 +146,60 @@ angular.module('sasaWebApp')
                   if(scope.metricData['distributions'][0]['current_values']){
                     var current_value=scope.metricData['distributions'][0]['current_values'][scope.options5.xAxis[0]][measure.label]
                   }
-                  if(measure.goal.comparision==='<' || measure.goal.comparision==='<='){
-                    if(measure.goal.value <=current_value){
-                      scope.alertBreached = true;
-                      scope.warningBreached = false;
+                  if(measure.goal.comparision==='<'){
+                    if(current_value < measure.goal.value){
+                      scope.alertBreached = false;
+                      scope.warningBreached = true;
+                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
-                      scope.alertBreached = false;
-                      scope.warningBreached = true;
+                      scope.alertBreached = true;
+                      scope.warningBreached = false;
+                      // scope.measure_color_red[key]=true;
                       break;
                     } 
                   }
-                  if(measure.goal.comparision==='>' || measure.goal.comparision==='>='){
-                    if(measure.goal.value >=current_value){
-                      scope.alertBreached = true;
-                      scope.warningBreached = false;
+                  if(measure.goal.comparision==='<='){
+                    if(current_value <= measure.goal.value){
+                      scope.alertBreached = false;
+                      scope.warningBreached = true;
+                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
+                      scope.alertBreached = true;
+                      scope.warningBreached = false;
+                      // scope.measure_color_red[key]=true;
+                      break;
+                    }
+
+                  }
+                  if(measure.goal.comparision==='>'){
+                    if(current_value > measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
+                      // scope.measure_color_green[key]=true;
+                      break;
+                    }
+                    else{
+                      scope.alertBreached = true;
+                      scope.warningBreached = false;
+                      // scope.measure_color_red[key]=true;
+                      break;
+                    } 
+                  }
+                  if(measure.goal.comparision==='>='){
+                    if(current_value >= measure.goal.value){
+                      scope.alertBreached = false;
+                      scope.warningBreached = true;
+                      // scope.measure_color_green[key]=true;
+                      break;
+                    }
+                    else{
+                      scope.alertBreached = true;
+                      scope.warningBreached = false;
+                      // scope.measure_color_red[key]=true;
                       break;
                     } 
                   }
@@ -221,7 +258,7 @@ angular.module('sasaWebApp')
           }        
           // set expected height for gridster Item
           if(notRight){
-            var height = Math.ceil(newValue/gridsterConfig.rowHeight)+1;  
+            var height = Math.ceil((newValue+5)/gridsterConfig.rowHeight);  
             $rootScope.placeholder.metric[scope.metricIndex].size.y = height;
             scope.metricData.size.y = height;
           }
