@@ -43,8 +43,6 @@
             <section ng-if="metricData['distributions'][0]">
                 <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" ng-show="!line"></smm-multi-chart>
             </section>
-            
-
           </section>                         
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
