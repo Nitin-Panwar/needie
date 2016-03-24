@@ -10,8 +10,8 @@
 			<div style="display: table-cell">  
   				<label class="control-label" for="multiSelectSelected">Available Columns</label> 
 				<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
-					<li class="list-group-item text-uppercase" ng-repeat="item in availableColoumns.items track by $index" style="background-color: #0071C5; margin: 1px; color: white;" ng-click="selection(item, true)" ng-class="{'selected-list-item': availableColoumns.selected.indexOf(item) !== -1}">						
-						<span>{{item}}</span>
+					<li class="list-group-item text-uppercase" ng-repeat="item in availableColoumns.items track by $index | orderBy:'name'" style="background-color: #0071C5; margin: 1px; color: white;" ng-click="selection(item, true)" ng-class="{'selected-list-item': availableColoumns.selected.indexOf(item) !== -1}">						
+						<span>{{item.name}}</span>
 					</li>
 				</ul>
     		</div>  
