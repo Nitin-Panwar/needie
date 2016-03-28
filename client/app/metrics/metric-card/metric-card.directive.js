@@ -109,15 +109,15 @@ angular.module('sasaWebApp')
           return filtered;
         }
 
-        //function to change vizualization
-        scope.changeViz = function (type) {
-          if(type==='line' && !scope.line){
-            scope.line=!scope.line;
-          }
-          if(type==='bar' && scope.line){
-            scope.line=!scope.line;
-          } 
-        };
+        // //function to change vizualization
+        // scope.changeViz = function (type) {
+        //   if(type==='line' && !scope.line){
+        //     scope.line=!scope.line;
+        //   }
+        //   if(type==='bar' && scope.line){
+        //     scope.line=!scope.line;
+        //   } 
+        // };
 
         //This function gets latest values of metrics
         scope.getMetric = function () {                
@@ -238,29 +238,31 @@ angular.module('sasaWebApp')
           $rootScope.placeholder.edited = true;
         };
       
-        // It watches for changes in metric card height to adjust for overflow
+        //It watches for changes in metric card height to adjust for overflow
         scope.$watch(function () {
           return element[0].offsetHeight;
         }, function(newValue, oldValue, scope) {
-          var notRight = false;
-          // check if height is already set
-          if(!scope.metricData.size.y){          
-            notRight = true;
-          }        
-          else{
-            var curHeight = gridsterConfig.rowHeight*scope.metricData.size.y;
-            var diff = curHeight - newValue;
-            // check if new height is higher than current height
-            // or difference of new height and old height is more than a row size.
-            if(newValue > curHeight || diff > gridsterConfig.rowHeight){
+          if(newValue!==oldValue){
+            var notRight = false;
+            // check if height is already set
+            if(!scope.metricData.size.y){          
               notRight = true;
-            }  
-          }        
-          // set expected height for gridster Item
-          if(notRight){
-            var height = Math.ceil((newValue+5)/gridsterConfig.rowHeight);  
-            $rootScope.placeholder.metric[scope.metricIndex].size.y = height;
-            scope.metricData.size.y = height;
+            }        
+            else{
+              var curHeight = gridsterConfig.rowHeight*scope.metricData.size.y;
+              var diff = curHeight - newValue;
+              // check if new height is higher than current height
+              // or difference of new height and old height is more than a row size.
+              if(newValue > curHeight || diff > gridsterConfig.rowHeight){
+                notRight = true;
+              }  
+            }        
+            // set expected height for gridster Item
+            if(notRight){
+              var height = Math.ceil((newValue+5)/gridsterConfig.rowHeight);  
+              $rootScope.placeholder.metric[scope.metricIndex].size.y = height;
+              scope.metricData.size.y = height;
+            }
           }
         }, false);
       }
