@@ -2,7 +2,7 @@
 	<h4 class="modal-title">Metric Filters</h4>
 </div>
 <div class="modal-body" ng-init="getFilters()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">			
-	<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">{{filterSubData}}
+	<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
 		<li ng-repeat="(key, value) in filterSubData" class="text-uppercase active dropdown" ng-click="$event.stopPropagation();" role="presentation" style="background-color: #0071C5;color:white;">
 			<span class="wtext-capitalize"  data-toggle="popover" title="Selected Filters" data-content="filterQuery[key]"ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;">{{key}}
 				<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>

@@ -7,11 +7,11 @@
 		<div style="display: table; margin: 0 auto;" ng-show="showColumns" >
 
 		<!-- ng-show="data.gridColumns.length === 0 || data.gridColumns.length === undefined || showData===false"  -->                                   
-			<div style="display: table-cell">  
+			<div style="display: table-cell">
   				<label class="control-label" for="multiSelectSelected">Available Columns</label> 
 				<ul class="list-group" style="border-style: dashed; border-width: 1px; max-height: 250px; overflow: auto">
 					<li class="list-group-item text-uppercase" ng-repeat="item in availableColoumns.items track by $index | orderBy:'name'" style="background-color: #0071C5; margin: 1px; color: white;" ng-click="selection(item, true)" ng-class="{'selected-list-item': availableColoumns.selected.indexOf(item) !== -1}">						
-						<span>{{item.name}}</span>
+						<span>{{item}}</span>
 					</li>
 				</ul>
     		</div>  
