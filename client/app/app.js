@@ -74,7 +74,7 @@ angular.module('sasaWebApp', [
     gridsterConfig.mobileModeEnabled= true, // whether or not to toggle mobile mode when screen width is less than mobileBreakPoint
     gridsterConfig.minColumns= 1, // the minimum columns the grid must have
     gridsterConfig.minRows= 2, // the minimum height of the grid, in rows
-    gridsterConfig.maxRows= 50,
+    gridsterConfig.maxRows= 250, 
     gridsterConfig.defaultSizeX= 1, // the default width of a gridster item, if not specifed
     gridsterConfig.defaultSizeY= 1, // the default height of a gridster item, if not specified
     gridsterConfig.minSizeX= 1, // minimum column width of an item

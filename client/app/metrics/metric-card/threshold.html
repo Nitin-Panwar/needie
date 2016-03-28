@@ -1,5 +1,5 @@
 <div>
 	<h7><b>{{measure.name}}</b></h7>
 	<br>
-	<span >Goal:&nbsp;{{measure.goal.comparision}}&nbsp;{{measure.goal.value}} &nbsp;/&nbsp;{{measure.goal.scale}}<br></span>
+	<span ng-if="measure.goal.value" >Goal:&nbsp;{{measure.goal.comparision}}&nbsp;{{measure.goal.value}} &nbsp;/&nbsp;{{measure.goal.scale}}<br></span>
 </div>	
