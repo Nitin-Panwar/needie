@@ -61,7 +61,7 @@ angular.module('sasaWebApp', [
   angular.module('sasaWebApp').run(['gridsterConfig', function(gridsterConfig) {
  
     gridsterConfig.columns= 6, // the width of the grid, in columns
-    gridsterConfig.pushing= true, // whether to push other items out of the way on move or resize
+    gridsterConfig.pushing= false, // whether to push other items out of the way on move or resize
     gridsterConfig.floating= true, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
     gridsterConfig.swapping= true, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
     gridsterConfig.width= 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
