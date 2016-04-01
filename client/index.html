@@ -18,17 +18,22 @@
       <link rel="stylesheet" href="bower_components/angular-dialog-service/dist/dialogs.min.css" />
       <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
       <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+      <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+      <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
     <link rel="stylesheet" href="assets/css/smm-it-mlaf.min.css">
+    <link rel="stylesheet" href="assets/js/multichart.css">
+    <link rel="stylesheet" href="assets/js/tooltip.css">
       <!-- injector:css -->
       <!-- endinjector -->
     <!-- endbuild -->
+    
   </head>
   <section ng-include="'components/navbar/navbar.html'"></section>
-  <body ng-app="sasaWebApp" id="testdiv" style="overflow: scroll; min-height:400px; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
+  <body ng-app="sasaWebApp" id="testdiv" style="overflow: scroll; min-height:4000px; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -72,8 +77,31 @@
       <script src="bower_components/pdfmake/build/pdfmake.js"></script>
       <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
       <script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
+      <script src="bower_components/angular-aria/angular-aria.js"></script>
+      <script src="bower_components/angular-messages/angular-messages.js"></script>
+      <script src="bower_components/angular-material/angular-material.js"></script>
+      <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
+
+      <!-- build:js app/chart.js -->
+      <script src="assets/js/chart.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/d3CustomTooltip.js -->
+      <script src="assets/js/d3CustomTooltip.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/d3multichart.js -->
+      <script src="assets/js/d3multichart.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/d3multichartdirective.js -->
+      <script src="assets/js/d3multichartdirective.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/detailtooltip.js -->
+      <script src="assets/js/detailtooltip.js"></script>
+      <!-- endbuild -->
+      <!-- build:js app/watcher.js -->
+      <script src="assets/js/watcher.js"></script>
+      <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
@@ -103,6 +131,7 @@
           <script src="components/directives/left-sidebar/left-sidebar.directive.js"></script>
           <script src="components/directives/lineChart/lineChart.directive.js"></script>
           <script src="components/directives/lineChart/lineChartFactory/lineChartFactory.service.js"></script>
+          <script src="components/directives/smmMultiChart/smmMultiChart.directive.js"></script>
           <script src="components/filters/titlecase/titlecase.filter.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
           <script src="components/services/dashBoardsFactory/dashBoardsFactory.service.js"></script>

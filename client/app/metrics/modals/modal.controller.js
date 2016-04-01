@@ -1,17 +1,17 @@
 'use strict';
 
 angular.module('sasaWebApp')
-
 .controller('ModalCtrl',function($scope,$modalInstance,data,$rootScope,metricsFactory, messageCenterService){
       $scope.showColumns = true;
       $scope.showApplyButton = false;
       $scope.validate = false;
       $scope.data = data;        
       $scope.dashBoard = {dashBoardName : ''};
-      $scope.measureInfo = {};
+      $scope.measureInfo = [];
       $scope.offset = 0;
       $scope.csvData = {};     
       $scope.tempThreshold ={}; 
+      $scope.goal=[];
       $scope.availableColoumns = {
         items: [],
         selected: []
@@ -24,12 +24,9 @@ angular.module('sasaWebApp')
       $scope.filterQuery = {};
       $scope.filterSubData = {};
       $scope.disableApplyButton =[];
+      $scope.predicate = 'name';
 
-      /**
-       * toggles active state
-       * @param  {[type]} argument [description]
-       * @return {[type]}          [description]
-       */
+      //Toggles active state
       $scope.toggelActive = function (argument) {        
         if($scope.measureInfo[argument].active == undefined){
           $scope.measureInfo[argument].active = false;
@@ -39,29 +36,26 @@ angular.module('sasaWebApp')
         }        
       }
 
-      /**
-                               * this function populates all metric columns
-       * @param  {[type]} argument [description]
-       * @return {[type]}          [description]
-       */
+      //This function populates all metric columns
       $scope.getMetricColumns = function (argument) {
-
-        if(!$scope.data.gridColumns){$scope.data.gridColumns = [];}
-        if($scope.data.gridColumns.length !== 0){          
+        if(!$scope.data.gridColumns){
+          $scope.data.gridColumns = [];
+        }
+        if($scope.data.gridColumns.length !== 0){
           $scope.selectedColumns.items = $scope.data.gridColumns;    
         }
         if($scope.availableColoumns.items.length !== 0){
           return;
         }       
-
         $rootScope.metricPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
           var columns = response;
+          // for (var i = 0; i < columns.length; i++) {
+          //   $scope.availableColoumns.items.push({"name":columns[i]})
+          // };
           for(var i in $scope.data.gridColumns){
               columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
           }
-
           $scope.availableColoumns.items = columns;          
-
           if($scope.data.gridColumns){
             $scope.selectedColumns.items = $scope.data.gridColumns;
           }
@@ -70,10 +64,7 @@ angular.module('sasaWebApp')
         })
       };
 
-      /**
-       * these are options for data grid
-       * @type {Object}
-       */
+      //These are options for data grid
       $scope.gridOptions = {
         enableSorting: true,
         enableColumnResizing: true,
@@ -101,31 +92,25 @@ angular.module('sasaWebApp')
         columnDefs: [],
         data: []
       };
-                /**
-       * this function gets raw metric data for selected columns
-       * @return {[type]} [description]
-       */
+
+      //This function gets raw metric data for selected columns
       $scope.getRawData = function (offset) {
         $scope.offset = offset;
         $scope.csvData.data = undefined;  
         $scope.gridOptions.data = [];      
         $scope.gridOptions.columnDefs = [];
         $scope.showColumns = false;
-
         if($scope.selectedColumns.items.length === 0){
           messageCenterService.add('danger','Please select columns', {timeout: 10000});
           return;
         }
-
         var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
-
         $rootScope.metricPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
           if(offset === 'all'){
             $scope.csvData.data = response;
             $scope.csvData.headers = Object.keys(response[0]);
             return;
           }
-
           $scope.gridOptions.data = response;       
           // create column definitions
           for (var column in $scope.selectedColumns.items){
@@ -141,11 +126,7 @@ angular.module('sasaWebApp')
       };
                                 
 
-      /**
-       * to apply the dialog
-       * @param  {[type]} which [description]
-       * @return {[type]}       [description]
-       */
+      //To apply the dialog
       $scope.save = function(which){
         $rootScope.placeholder.edited = true;
         switch(which){
@@ -154,17 +135,10 @@ angular.module('sasaWebApp')
             break;
           case 'measure':
             for( var i in $scope.measureInfo){
-                $scope.measureInfo[i].threshold ={};
-                for(var key in $scope.measureInfo[i]){
-                  if(key=='threshold' && $scope.tempThreshold[i]) {
-                    $scope.measureInfo[i].threshold.upperWarning = $scope.tempThreshold[i].uw;
-                    $scope.measureInfo[i].threshold.upperAlert = $scope.tempThreshold[i].ua;
-                    $scope.measureInfo[i].threshold.lowerWarning = $scope.tempThreshold[i].lw;
-                    $scope.measureInfo[i].threshold.lowerAlert = $scope.tempThreshold[i].la;  
-                  }
-                }
+              $scope.measureInfo[i].goal=$scope.goal[i];
             }
             delete $scope.tempThreshold;
+            delete $scope.goal;
             $modalInstance.close($scope.measureInfo);
             break;
           case 'data':
@@ -176,15 +150,12 @@ angular.module('sasaWebApp')
         }
       };
       
-      /**
-       * to close the dialog
-       * @return {[type]} [description]
-       */
+      // To close the dialog
       $scope.cancel = function(){
         $modalInstance.dismiss('Canceled');
-      }; // end done
+      }; // end cancel
 
-
+      //To compare threshold vlaues
       $scope.compareThreshold = function(){
         for( var i in $scope.tempThreshold){
           if(($scope.tempThreshold[i].ua < $scope.tempThreshold[i].uw) || ($scope.tempThreshold[i].la > $scope.tempThreshold[i].lw))
@@ -192,12 +163,7 @@ angular.module('sasaWebApp')
         } 
       }
 
-      /**
-       * this function selets items to add to data grid
-       * @param  {[type]} item    [description]
-       * @param  {[type]} boolean [description]
-       * @return {[type]}         [description]
-       */
+      //This function selets items to add to data grid
       $scope.dataGrid = function (item, boolean) {
         if(boolean){
           // select column to show in data grid
@@ -218,12 +184,7 @@ angular.module('sasaWebApp')
         }
       };
 
-      /**
-       * this function selects columns to show in data grid
-       * @param  {[type]} item    [description]
-      * @param  {[type]} boolean [description]
-       * @return {[type]}         [description]
-       */
+      //This function selects columns to show in data grid
       $scope.selection = function (item, boolean) {
         if(boolean){          
           // select column to show in data grid          
@@ -245,11 +206,12 @@ angular.module('sasaWebApp')
           }
         }
       }
+      
       /**
        * gets metric filters
        * @return {[type]} [description]
        */
-      $scope.getFilters = function () {        
+      $scope.getFilters = function () {     
         $rootScope.metricPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
               $scope.FilterData = data;  
               var filterKeys = Object.keys(data[0]);
@@ -269,12 +231,7 @@ angular.module('sasaWebApp')
         }
       }
 
-      /**
-       * find unique items in an array by key      
-       * @param  {[type]} array [description]
-       * @param  {[type]} key   [description]
-       * @return {[type]}       [description]
-       */
+      //Find unique items in an array by key      
       $scope.pluck = function(arr, key, matchKey, value) {
         if(value && matchKey){
           var result = $.map(arr, function(e) { 

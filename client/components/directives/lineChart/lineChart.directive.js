@@ -12,6 +12,7 @@ angular.module('sasaWebApp')
           var x_label=scope.lineData['distribution_data']['x_label']
           var y_label=scope.lineData['distribution_data']['y_label']
           var data= scope.lineData['distribution_data']['data']
+          var title= scope.lineData['name']
               
           //Getting screen size for responsive design 
           var screenWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
@@ -75,7 +76,6 @@ angular.module('sasaWebApp')
                 .orient("left")
                 .ticks(10)
           }
-
 
           // Scale the range of the data
           x.domain([0, d3.max(data, function(d) { return d.x0; })]);
@@ -152,7 +152,7 @@ angular.module('sasaWebApp')
               .attr("y", 0 - (margin.top / 2))
               .attr("text-anchor", "middle")
               .style("font-size", "16px")
-              .text(y_label+" vs "+x_label);
+              .text(title);
           });
         }
       };

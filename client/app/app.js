@@ -17,7 +17,8 @@ angular.module('sasaWebApp', [
   'ui.grid.exporter',
   'ui.grid.moveColumns',
   'ngTouch',
-  'ngCsv'
+  'ngCsv',
+  'xeditable'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
      $urlRouterProvider
@@ -25,12 +26,6 @@ angular.module('sasaWebApp', [
     $locationProvider.html5Mode(true);    
   })
 
-
-  /**
-   * Dialog controller config
-   * @param  {[type]} dialogsProvider){                         dialogsProvider.useBackdrop(true);      dialogsProvider.useEscClose(true);      dialogsProvider.useCopy(false);     dialogsProvider.setSize('sm');    } [description]
-   * @return {[type]}                    [description]
-   */
 .config(['dialogsProvider','$translateProvider',function(dialogsProvider){
     dialogsProvider.useBackdrop(true);
     dialogsProvider.useEscClose(false);
@@ -40,12 +35,7 @@ angular.module('sasaWebApp', [
 
 .run(
   function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory,$stateParams) {
-    /**
-     * Login user if he's not already logged in
-     * @param  {[type]} $rootScope.user [description]
-     * @return {[type]}                 [description]
-     */
-    
+    //Login user if not logged in
     if($rootScope.user == undefined){      
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
         $rootScope.userDetails = response.data.user;
@@ -71,7 +61,7 @@ angular.module('sasaWebApp', [
   angular.module('sasaWebApp').run(['gridsterConfig', function(gridsterConfig) {
  
     gridsterConfig.columns= 6, // the width of the grid, in columns
-    gridsterConfig.pushing= true, // whether to push other items out of the way on move or resize
+    gridsterConfig.pushing= false, // whether to push other items out of the way on move or resize
     gridsterConfig.floating= true, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
     gridsterConfig.swapping= true, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
     gridsterConfig.width= 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
@@ -84,7 +74,7 @@ angular.module('sasaWebApp', [
     gridsterConfig.mobileModeEnabled= true, // whether or not to toggle mobile mode when screen width is less than mobileBreakPoint
     gridsterConfig.minColumns= 1, // the minimum columns the grid must have
     gridsterConfig.minRows= 2, // the minimum height of the grid, in rows
-    gridsterConfig.maxRows= 50,
+    gridsterConfig.maxRows= 250, 
     gridsterConfig.defaultSizeX= 1, // the default width of a gridster item, if not specifed
     gridsterConfig.defaultSizeY= 1, // the default height of a gridster item, if not specified
     gridsterConfig.minSizeX= 1, // minimum column width of an item
