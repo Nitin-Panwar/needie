@@ -11,17 +11,22 @@ angular.module('sasaWebApp')
         //Varibales to change measure color
         // scope.measure_color_red=[]
         // scope.measure_color_green=[]
-
+        // if(scope.metricData['distributions'].length)
         //Setting options for the bar graph
         scope.options5 = {}; 
-        if(scope.metricData['distributions'].length){
-          if(scope.metricData['distributions'][0]['axis']){
-              scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
+        if(scope.metricData['distributions']){
+          if(scope.metricData['distributions'].length){
+            console.log(scope.metricData['distributions'])
+            if(scope.metricData['distributions'][0]!==null){
+              if(scope.metricData['distributions'][0]['axis']){
+                  scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
+              }
+              else{
+                 scope.options5.xAxis =  ["quarter","category"]
+              }
+              scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+            }
           }
-          else{
-             scope.options5.xAxis =  ["quarter","category"]
-          }
-          scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
         }
         scope.options5.series = "category"
         scope.options5.chartType = ["bar"]
