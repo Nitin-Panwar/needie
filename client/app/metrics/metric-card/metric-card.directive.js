@@ -16,7 +16,6 @@ angular.module('sasaWebApp')
         scope.options5 = {}; 
         if(scope.metricData['distributions']){
           if(scope.metricData['distributions'].length){
-            console.log(scope.metricData['distributions'])
             if(scope.metricData['distributions'][0]!==null){
               if(scope.metricData['distributions'][0]['axis']){
                   scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
