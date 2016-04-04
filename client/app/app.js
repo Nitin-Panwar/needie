@@ -49,7 +49,7 @@ angular.module('sasaWebApp', [
             }            
         }, function (){
             messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
-        })      
+        })     
       },function (err) {
           // redirect user to access denied page
           $location.url('/accessDenied')
@@ -61,9 +61,9 @@ angular.module('sasaWebApp', [
   angular.module('sasaWebApp').run(['gridsterConfig', function(gridsterConfig) {
  
     gridsterConfig.columns= 6, // the width of the grid, in columns
-    gridsterConfig.pushing= false, // whether to push other items out of the way on move or resize
+    gridsterConfig.pushing= true, // whether to push other items out of the way on move or resize
     gridsterConfig.floating= true, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
-    gridsterConfig.swapping= true, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
+    gridsterConfig.swapping= false, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
     gridsterConfig.width= 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
     gridsterConfig.colWidth= 'auto', // can be an integer or 'auto'.  'auto' uses the pixel width of the element divided by 'columns'
     gridsterConfig.rowHeight= 40, // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
