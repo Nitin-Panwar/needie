@@ -96,7 +96,6 @@ angular.module('sasaWebApp')
 	      }
 	      else{   	        
 	        $rootScope.myPromise=dashBoardsFactory.save({dashboard:dashboardObj}).$promise.then(function (data) {
-	          console.log(data)
               var dashboardId = data['_id'];
 	          messageCenterService.add('success', 'Dashboard saved successfully', { timeout: 5000 }); 
 	          //Save dashboardid in user metadata

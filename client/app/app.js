@@ -18,7 +18,9 @@ angular.module('sasaWebApp', [
   'ui.grid.moveColumns',
   'ngTouch',
   'ngCsv',
-  'xeditable'
+  'xeditable',
+  'ngMaterial', 
+  'md.data.table'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
      $urlRouterProvider

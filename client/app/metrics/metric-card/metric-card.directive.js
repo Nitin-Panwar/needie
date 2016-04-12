@@ -256,7 +256,7 @@ angular.module('sasaWebApp')
               var curHeight = gridsterConfig.rowHeight*scope.metricData.size.y;
               var diff = curHeight - newValue;
               // check if new height is higher than current height
-              // or difference of new height and old height is more than a row size.
+              // or difference of new height and old height is more than a rowro size.
               if(newValue > curHeight || diff > gridsterConfig.rowHeight){
                 notRight = true;
               }  
