@@ -23,7 +23,7 @@ angular.module('sasaWebApp')
           if(data['components'][i]['type']=='textBox'){
             $rootScope.placeholder.textBoxes.push(data['components'][i]);
           }
-        }        
+        }  
         messageCenterService.add('success','Dashboard loaded successfully',{timeout: 10000});
       }, function (err) {
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
