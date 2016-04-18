@@ -13,6 +13,9 @@ angular.module('sasaWebApp')
     //Different scales to show data in score card format
     $scope.scales=['Work_week','Month','Quarter'];
 
+    //Getting screen size for responsive design 
+    var screenWidth_temp = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+    $scope.screenWidth = screenWidth_temp*(11/12)
     //By dafault selected option from template
     $scope.selection = $scope.items[0];
     //Here system checks if there is an existing dashboard that user wants to see  
