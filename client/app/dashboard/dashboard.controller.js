@@ -239,7 +239,7 @@ angular.module('sasaWebApp')
       //To show the header in score card
       $scope.scorecard_header = []
       for (var i=0,j=current-previous+1; i< previous; i++,j++) {
-          $scope.scorecard_header[i]=scale+j+"'2016";
+          $scope.scorecard_header[i]=scale+j;
       }
 
       //To transform data 
