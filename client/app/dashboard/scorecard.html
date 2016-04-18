@@ -1,0 +1,18 @@
+<section>
+	<table ng-click="transformData()" class="table table-bordered table-hover">
+	<thead class="thead-inverse">
+		 <tr>
+		   <!--  <th></th> -->
+		    <th>Metric Name</th>
+		    <th>Measure Name</th>
+		    <th ng-repeat="header in scorecard_header track by $index">{{header}}</th>
+		  </tr>
+	</thead>
+ 
+  	<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)">
+   		 <td class="word-wrap:break-word" rowspan="{{rowspan}}" ng-if="measure[0] != ''">{{measure['0']}}</td>
+   		 <td>{{measure['1']}}</td>
+   		 <td ng-repeat="(key, value) in measure['2']" ng-if="key>=start_index">{{value|number}}</td>
+  	</tr>
+</table>
+</section>

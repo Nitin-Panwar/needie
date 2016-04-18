@@ -1,0 +1,27 @@
+<!-- Dashboard Section -->
+<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard" >
+	<ul>
+		<!-- metric card area -->
+		<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">		
+		<div ng-if="item.name!==undefined">
+			<section metriccard  metric-data="item" metric-index="$index" class="metric-card-item"></section>
+		</div>
+			
+		</li>
+		<!-- metric card area end -->
+		<!-- text boxes area -->
+		<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
+			<section class="panel">                                                               
+				<section class="panel-heading">
+					<span class="pull-left"><span class="glyphicon glyphicon-move mover-handle"></span></span>
+					<span class="pull-right"><span class="glyphicon glyphicon-trash" ng-click="removeTextBox(item)"></span></span>
+				</section>
+				<section class="panel-body">    
+					<textarea style="width:100%; border:none;" ng-model="item.text" placeholder="Enter Your Text Here" ng-class="placeholder.edited = true" style="resize: both; overflow: auto"></textarea>
+				</section>
+			</section>          
+		</li>				
+		<!-- text boxes area end -->
+	</ul>			
+</section>  
+<!-- dashboard section end -->
