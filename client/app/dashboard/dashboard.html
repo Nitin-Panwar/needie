@@ -1,9 +1,12 @@
-<section class="container-fluid row"  >
+<section class="container-fluid row">
+	<!-- left sidebar -->
 	<section class="col-md-1">
-		<!-- left sidebar -->
 		<section left-sidebar>sidebar</section>
-		<!-- left sidebar end -->
 	</section>
+
+	<!-- left sidebar end -->
+
+	<!-- Create new dashboard start-->
 	<section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()">
 		<dl>
 			<blockquote>
@@ -14,13 +17,15 @@
 			</blockquote>
 		</dl>
 	</section>
+
+	<!-- Create new dashboard start end-->
 	
 	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()">
 		<!-- dashboard buttons section -->
 		<section class="row inline">
 			<section class="col-md-4">
 			    <!-- dashboard name -->
-				<i class="fa fa-file"></i>&nbsp;&nbsp;<span class="lead">{{placeholder.dashboard.name}}</span><br>
+				<i class="fa fa-file" ng-if="placeholder.dashboard.name"></i>&nbsp;&nbsp;<span class="lead">{{placeholder.dashboard.name}}</span><br>
 				<small ng-if="placeholder.dashboard.description" class="">{{placeholder.dashboard.description|limitTo:100}}&nbsp;&nbsp;<i tooltip-placement="right"uib-tooltip="{{placeholder.dashboard.description}}">
 				<i class="fa fa-info-circle"></i></i><br>
 				</small>
@@ -37,29 +42,55 @@
 						<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()"><i class="fa fa-heart"></i> Set Favourite </button>		
 						<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ><i class="fa fa-envelope-o"></i> Send Mail </button>
 						<button type="button" class="btn btn-default btn-md" ng-click="delete()" ng-hide="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase()"><i class="fa fa-trash"></i> Delete </button>
-					</span>	
+					</span>
+					<select class="changeView" ng-model="selection" ng-options="item for item in items">
+					</select>	
 				</section>
 			</section>	
 		</section>				
 		<section class="row" >&nbsp;</section>
-		<!-- div id="chart1" class="chartCtrl"></div>
-            <smm-multi-chart options="options1" handle="handle" data="chart1JSON" container="chart1"></smm-multi-chart> -->
-		<!-- dashboard buttons section end -->
+		<!-- <hr/> -->
+		<!-- <div ng-switch on="selection"> -->
+		<!-- <div ng-if="selection=='Score card'">
+    		<span class="md-body-1" style="font-size:large">Show Previous</span>&nbsp;&nbsp;&nbsp;
+				<select style="font-size:larger" ng-options="number for number in previous_numbers" ng-model="number">
+			</select>&nbsp;&nbsp;&nbsp;
+			<select style="font-size:larger" ng-model="scale" ng-options="scale for scale in scales">
+			</select>&nbsp;&nbsp;&nbsp;
+			<button type="button" class="btn btn-primary" ng-click="changeCardData(number,scale)">Apply</button>
+	    </div> -->
+	    <div ng-if="selection=='Score card'">
+			<table class="table table-bordered table-hover" style="overflow:scroll">
+				<thead class="thead-inverse">
+					<tr>
+						<th>Metric Name</th>
+						<th>Measure Name</th>
+						<th ng-repeat="header in scorecard_header track by $index">{{header}}</th>
+					</tr>
+				</thead>
+				<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)">
+				   	<td class="word-wrap:break-word" rowspan="{{rowspan}}" ng-if="measure[0] != ''">{{measure['0']}}</td>
+				    <td>{{measure['1']}}<br>
+						<span ng-if="measure.goal.value" >(Target{{measure.goal.comparision}}{{measure.goal.value}}/{{measure.goal.scale}})</span>
+					</td>
+				   	<td ng-repeat="(key, value) in measure['2']" ng-show="key>=start_index" ng-class="{'red':targetMet, 'green': targetMiss}" ng-init="targetMet=evaluateTarget(measure,value)">{{value|number}}</td>
+				</tr>
+			</table>
+	    </div>
 
-		<!-- Dashboard Section -->
-		<!-- <section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard" >
-			<ul>
+      	<!-- Dashboard Section -->
+		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard">
+			<ul ng-if="selection=='Metric card'" >
 				<!-- metric card area -->
-				<!-- <li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">		
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">		
 				<div ng-if="item.name!==undefined">
 					<section metriccard  metric-data="item" metric-index="$index" class="metric-card-item"></section>
 				</div>
-					
-				</li> -->
+				</li>
 				<!-- metric card area end -->
 				<!-- text boxes area -->
-				<!-- <li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
-					<section class="panel">                                                               
+				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.textBoxes" style="border-width: 1px;border-color: #DDDDDD; border-style: solid" >					
+					<section class="panel">                                       
 						<section class="panel-heading">
 							<span class="pull-left"><span class="glyphicon glyphicon-move mover-handle"></span></span>
 							<span class="pull-right"><span class="glyphicon glyphicon-trash" ng-click="removeTextBox(item)"></span></span>
@@ -68,35 +99,14 @@
 							<textarea style="width:100%; border:none;" ng-model="item.text" placeholder="Enter Your Text Here" ng-class="placeholder.edited = true" style="resize: both; overflow: auto"></textarea>
 						</section>
 					</section>          
-				</li>	 -->			
+				</li>				
 				<!-- text boxes area end -->
-			<!-- </ul>			
-		</section> --> 
-		<md-table-container>
-		  <table md-table>
-		    <thead md-head md-order="myOrder">
-		      <!-- when the user clicks this cell, the myOrder variable will get the value 'nameToLower' -->
-		      <th md-column>Options</th>
-		      <th md-column>Metric Name</th>
-		      <th md-column>Measures</th>
-		      <!-- the variable myOrder will not be changed when this cell is clicked -->
-		      <!-- <th md-column ng-repeat="item in placeholder.metric track by $index">{{item.name}}</th> -->
-		    </thead>
-		    <tbody md-body>
-		      <!-- we can let ng-repeat sort the columns for us -->
-		      <tr md-row ng-repeat="item in placeholder.metric track by $index">
-		      	<td md-cell>{{dessert.calories.value}}</td>
-		      	<td md-cell>{{item.name}}</td>
-		        <td md-cell>{{dessert.calories.value}}</td>
-		        <td md-cell>{{dessert.fat.value | number: 1}}</td>
-		        <td md-cell>{{dessert.carbs.value}}</td>
-	          </tr>
-		    </tbody>
-		  </table>
-		</md-table-container>
+			</ul>			
+		</section>  
 		<!-- dashboard section end -->
 	</section>
 </section>
+
 
 
 
