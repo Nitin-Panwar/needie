@@ -14,7 +14,7 @@ angular.module('sasaWebApp')
     $scope.scales=['Work_week','Month','Quarter'];
 
     //By dafault selected option from template
-    $scope.selection = $scope.items[1];
+    $scope.selection = $scope.items[0];
     //Here system checks if there is an existing dashboard that user wants to see  
     if($stateParams.dashboardId){
        $rootScope.createNew = false;
