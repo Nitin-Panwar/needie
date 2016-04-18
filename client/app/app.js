@@ -19,7 +19,7 @@ angular.module('sasaWebApp', [
   'ngTouch',
   'ngCsv',
   'xeditable',
-  'ngMaterial', 
+  'ngMaterial',
   'md.data.table'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {

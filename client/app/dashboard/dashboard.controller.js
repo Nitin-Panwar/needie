@@ -6,6 +6,15 @@ angular.module('sasaWebApp')
     //Creating placeholder 
     $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
     
+    //For ng-switch
+    $scope.items = ['Metric card', 'Score card'];
+    $scope.previous_numbers=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+
+    //Different scales to show data in score card format
+    $scope.scales=['Work_week','Month','Quarter'];
+
+    //By dafault selected option from template
+    $scope.selection = $scope.items[1];
     //Here system checks if there is an existing dashboard that user wants to see  
     if($stateParams.dashboardId){
        $rootScope.createNew = false;
@@ -141,5 +150,132 @@ angular.module('sasaWebApp')
       $scope.showmydashboards = false;
       $scope.showfilters = false;
       $rootScope.closeLeftSidebar =false;
+    }
+
+    //Dictionary to store meta data of score card
+    $scope.scorecard_info={'previous':15,'scale':'WW','current':16}
+
+    $scope.$watch('placeholder.metric', function(newValue, oldValue) {
+      if(newValue!==oldValue){
+        $scope.transformData();
+      }
+    }, true);
+
+    //Evaluate target is the function which is responsible to change the color
+    //in score card format 
+    $scope.evaluateTarget=function(measure,current_value){
+      if(measure.goal){
+          if(measure.goal.comparision==='<'){
+            if(current_value < measure.goal.value){
+              return false;
+            }
+            else{
+              return true;
+            } 
+          }
+          if(measure.goal.comparision==='<='){
+            if(current_value <= measure.goal.value){
+               return false;
+            }
+            else{
+              return true;
+            }
+          }
+          if(measure.goal.comparision==='>'){
+            if(current_value > measure.goal.value){
+               return false;
+            }
+            else{
+               return true;
+            } 
+          }
+          if(measure.goal.comparision==='>='){
+            if(current_value >= measure.goal.value){
+               return false;
+            }
+            else{
+               return true;
+            } 
+          }
+      }
+      else{
+        return ;
+      }
+    }
+
+    /**
+     * row
+     * @param  {[type]} index [description]
+     * @return {[type]}       [description]
+     */
+    $scope.rowspanCalculator = function (index) {
+      var total = 1;
+      if ($scope.measureList[index][0]) {        
+        for (var i = index+1; i < $scope.measureList.length; i++) {
+          if($scope.measureList[i][0] == ""){
+            total = total + 1;
+          }
+          else{
+            return total;
+          }
+        };
+      };
+      return total;
+    }
+
+    $scope.changeCardData=function(number,scale){
+      console.log(number,scale)
+
+    }
+
+    //Function to transform data to show in score card
+    //TO Do -- Change 0,1,2 to metric,measure,data,goal 
+    $scope.transformData=function(){
+      var scale= $scope.scorecard_info['scale']
+      var previous = $scope.scorecard_info['previous']
+      var current = $scope.scorecard_info['current']
+      $scope.start_index =current-previous+1
+
+      //To show the header in score card
+      $scope.scorecard_header = []
+      for (var i=0,j=current-previous+1; i< previous; i++,j++) {
+          $scope.scorecard_header[i]=scale+j+"'2016";
+      }
+
+      //To transform data 
+      $scope.measureList =[]
+      var metrics= $rootScope.placeholder.metric
+  
+      for (var i = 0; i<metrics.length; i++) {
+        for (var j = 0; j < metrics[i].measures.length; j++) {
+          if(metrics[i].measures[j].type=='number' && metrics[i].measures[j].scorecard_data){
+            if(metrics[i].measures[j].scorecard_data.length>0){
+              if(j==0){
+                var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
+              }
+              else{
+                var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
+              }
+              $scope.measureList.push(obj);
+            }
+          }
+        }
+      };
+      for (var i = 0; i < $scope.measureList.length; i++) {
+        var temp_array=[]
+        var flag = true;
+        for (var j = 0; j < $scope.measureList[i]['2'].length; j++) {
+          var pos =$scope.measureList[i]['2'][j]['work_week'];
+          if(pos==current){
+            flag = false;
+          }
+          temp_array[pos]= $scope.measureList[i]['2'][j]['value'];
+        };
+        if(flag){
+          temp_array[current]= 0;
+        }
+        var temp_var=_.extend({}, temp_array)
+        $scope.measureList[i]['2']= temp_var
+      };
     }
   });
