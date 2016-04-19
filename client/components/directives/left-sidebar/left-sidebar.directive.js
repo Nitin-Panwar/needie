@@ -271,7 +271,6 @@ angular.module('sasaWebApp')
 		 * @return {[type]}          [description]
 		 */
 	    scope.applyFilter = function (argument) {
-	    	console.log("working")
 	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;
 	    	$rootScope.placeholder.edited = true; 
 	    	scope.showfilters = false; 	
