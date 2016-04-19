@@ -250,7 +250,8 @@ angular.module('sasaWebApp')
       var metrics= $rootScope.placeholder.metric
   
       for (var i = 0; i<metrics.length; i++) {
-        for (var j = 0; j < metrics[i].measures.length; j++) {
+        if(metrics[i].name!==undefined){
+          for (var j = 0; j < metrics[i].measures.length; j++) {
           if(metrics[i].measures[j].type=='number' && metrics[i].measures[j].scorecard_data){
             if(metrics[i].measures[j].scorecard_data.length>0){
               if(j==0){
@@ -262,7 +263,8 @@ angular.module('sasaWebApp')
               $scope.measureList.push(obj);
             }
           }
-        }
+          }
+        } 
       };
       for (var i = 0; i < $scope.measureList.length; i++) {
         var temp_array=[]
