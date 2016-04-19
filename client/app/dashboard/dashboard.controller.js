@@ -156,7 +156,7 @@ angular.module('sasaWebApp')
     }
 
     //Dictionary to store meta data of score card
-    $scope.scorecard_info={'previous':15,'scale':'WW','current':16}
+    $scope.scorecard_info={'previous':15,'scale':'WW','current':17}
 
     $scope.$watch('placeholder.metric', function(newValue, oldValue) {
       if(newValue!==oldValue){
@@ -167,7 +167,13 @@ angular.module('sasaWebApp')
     //Evaluate target is the function which is responsible to change the color
     //in score card format 
     $scope.evaluateTarget=function(measure,current_value){
-      if(measure.goal){
+      console.log(measure)
+      if(measure.goal!==undefined){
+        //TO DO---Change it to actual scale
+        if(measure.goal.scale!=='WW'){
+          return false;
+        }
+        else{
           if(measure.goal.comparision==='<'){
             if(current_value < measure.goal.value){
               return false;
@@ -200,10 +206,11 @@ angular.module('sasaWebApp')
                return true;
             } 
           }
-      }
+        }
+      } 
       else{
-        return ;
-      }
+        return false;
+      } 
     }
 
     /**
