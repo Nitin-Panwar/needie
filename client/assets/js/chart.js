@@ -27,7 +27,7 @@
         console.log("Cannot plot no Y Axis");
 
       d3.select("#"+container).select("svg").remove();
-      svg = dimple.newSvg("#"+container,"400px","400px");
+      svg = dimple.newSvg("#"+container,"100%","400px");
 
       svg.selectAll(".hLines").remove();
       //svg.selectAll(".vLines").remove();

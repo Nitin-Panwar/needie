@@ -51,14 +51,14 @@
 		<section class="row" >&nbsp;</section>
 		<!-- <hr/> -->
 		<!-- <div ng-switch on="selection"> -->
-		<!-- <div ng-if="selection=='Score card'">
+		<div ng-if="selection=='Score card'">
     		<span class="md-body-1" style="font-size:large">Show Previous</span>&nbsp;&nbsp;&nbsp;
 				<select style="font-size:larger" ng-options="number for number in previous_numbers" ng-model="number">
 			</select>&nbsp;&nbsp;&nbsp;
 			<select style="font-size:larger" ng-model="scale" ng-options="scale for scale in scales">
 			</select>&nbsp;&nbsp;&nbsp;
 			<button type="button" class="btn btn-primary" ng-click="changeCardData(number,scale)">Apply</button>
-	    </div> -->
+	    </div>
 	    <div ng-if="selection=='Score card'">
 			<table class="table table-bordered table-hover" style="overflow:scroll;max-width:screenWidth">
 				<thead class="thead-inverse">
