@@ -2,28 +2,33 @@
 
 angular.module('sasaWebApp')
   .controller('DashboardCtrl', function ($scope, $rootScope, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs) {   
-    
     //Creating placeholder 
     $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
-    
     //For ng-switch
-    $scope.items = ['Metric card', 'Score card'];
-    $scope.previous_numbers=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-
-    //Different scales to show data in score card format
-    $scope.scales=['Work_week','Month','Quarter'];
-
+    $scope.view_types = ['metriccard', 'scorecard'];
+    $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 15,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 0,"sequence":3}],'view_type': 'metriccard'}
+    //Dictionary to store meta data of score card
+    // $scope.scorecard_info={'previous':15,'scale':'WW'}
+    //variable to watch, while changing score_card data
+    $rootScope.var_changeData =0
+    $rootScope.applyFilter = 0;
     //Getting screen size for responsive design 
     var screenWidth_temp = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-    $scope.screenWidth = screenWidth_temp*(11/12)
-    //By dafault selected option from template
-    $scope.selection = $scope.items[0];
+    $scope.screenWidth = screenWidth_temp*(10/12)
+
+    // $scope.view_type = $scope.meta.view_type;
+    
+    $rootScope.score_card_test =0;
     //Here system checks if there is an existing dashboard that user wants to see  
     if($stateParams.dashboardId){
        $rootScope.createNew = false;
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
-        $rootScope.placeholder.dashboard = data;  
+        $rootScope.placeholder.dashboard = data; 
+        if($rootScope.placeholder.dashboard.meta){
+          $rootScope.meta =  $rootScope.placeholder.dashboard.meta
+        }
+  
         // update filters on front end
         $rootScope.globalQuery = $rootScope.placeholder.dashboard.filters;      
         //Add data to placeholder
@@ -67,7 +72,7 @@ angular.module('sasaWebApp')
     };
 
     //This function saves the dashboard
-    $scope.launchSave = function () {  
+    $scope.launchSave = function () {
       var dlg = dialogs.create('app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
           $rootScope.placeholder.dashboard["name"] = data.name;
@@ -155,25 +160,28 @@ angular.module('sasaWebApp')
       $rootScope.closeLeftSidebar =false;
     }
 
-    //Dictionary to store meta data of score card
-    $scope.scorecard_info={'previous':15,'scale':'WW','current':17}
-
-    $scope.$watch('placeholder.metric', function(newValue, oldValue) {
+    $scope.$watch('placeholder.metric', function(newValue, oldValue){
+      //To stop unnessesry API call.
+      if($rootScope.placeholder.metric.length==0){
+        return;
+      }
+      //To call API when any metric is added or removed.
       if(newValue!==oldValue){
+        console.log(oldValue,newValue)
+        //Call function to get the score card data 
         $scope.transformData();
       }
     }, true);
 
     //Evaluate target is the function which is responsible to change the color
     //in score card format 
-    $scope.evaluateTarget=function(measure,current_value){
-      console.log(measure)
-      if(measure.goal!==undefined){
+    $scope.evaluateTarget=function(measure,current_value,index){
+      var work_weeks = $rootScope.meta.details[0].window_size
+      var months = $rootScope.meta.details[1].window_size
+      var quarters = $rootScope.meta.details[2].window_size
+      if(measure.goal!==undefined && current_value!== '--'){
         //TO DO---Change it to actual scale
-        if(measure.goal.scale!=='WW'){
-          return false;
-        }
-        else{
+        if(measure.goal.scale=='work_week' && index < work_weeks){
           if(measure.goal.comparision==='<'){
             if(current_value < measure.goal.value){
               return false;
@@ -207,17 +215,81 @@ angular.module('sasaWebApp')
             } 
           }
         }
-      } 
+        if(measure.goal.scale=='month' && index >= work_weeks && index < work_weeks+months ){
+          if(measure.goal.comparision==='<'){
+            if(current_value < measure.goal.value){
+              return false;
+            }
+            else{
+              return true;
+            } 
+          }
+          if(measure.goal.comparision==='<='){
+            if(current_value <= measure.goal.value){
+               return false;
+            }
+            else{
+              return true;
+            }
+          }
+          if(measure.goal.comparision==='>'){
+            if(current_value > measure.goal.value){
+               return false;
+            }
+            else{
+               return true;
+            } 
+          }
+          if(measure.goal.comparision==='>='){
+            if(current_value >= measure.goal.value){
+               return false;
+            }
+            else{
+               return true;
+            } 
+          }
+        }
+        if(measure.goal.scale=='quarter' && index >= work_weeks+months && index < work_weeks+months+quarters){
+          if(measure.goal.comparision==='<'){
+            if(current_value < measure.goal.value){
+              return false;
+            }
+            else{
+              return true;
+            } 
+          }
+          if(measure.goal.comparision==='<='){
+            if(current_value <= measure.goal.value){
+               return false;
+            }
+            else{
+              return true;
+            }
+          }
+          if(measure.goal.comparision==='>'){
+            if(current_value > measure.goal.value){
+               return false;
+            }
+            else{
+               return true;
+            } 
+          }
+          if(measure.goal.comparision==='>='){
+            if(current_value >= measure.goal.value){
+               return false;
+            }
+            else{
+               return true;
+            } 
+          }
+        }
+      }
       else{
         return false;
       } 
     }
 
-    /**
-     * row
-     * @param  {[type]} index [description]
-     * @return {[type]}       [description]
-     */
+    //rowspan calculator for score card
     $scope.rowspanCalculator = function (index) {
       var total = 1;
       if ($scope.measureList[index][0]) {        
@@ -233,34 +305,67 @@ angular.module('sasaWebApp')
       return total;
     }
 
-    $scope.changeCardData=function(number,scale){
-      console.log(number,scale)
+    //This function changes score_card data
+    $scope.changeCardData=function(){
+      $rootScope.var_changeData=$rootScope.var_changeData+1;
+    }
 
+    //This function to check wheather a key,value pair exists in
+    //passed object or not
+    $scope.isExist=function(key,value,list){
+      for (var i = 0; i < list.length; i++) {
+        if(list[i][key]==value){
+          return list[i]['value'].toFixed(0);
+        }
+      };
+      return '--';
     }
 
     //Function to transform data to show in score card
     //TO Do -- Change 0,1,2 to metric,measure,data,goal 
     $scope.transformData=function(){
-      var scale= $scope.scorecard_info['scale']
-      var previous = $scope.scorecard_info['previous']
-      var current = $scope.scorecard_info['current']
-      $scope.start_index =current-previous+1
-
-      //To show the header in score card
-      $scope.scorecard_header = []
-      for (var i=0,j=current-previous+1; i< previous; i++,j++) {
-          $scope.scorecard_header[i]=scale+j;
+      //To get the current work-week,month,quarter 
+      var current_work_week = $rootScope.scaleInfoData[0]['work_week']
+      var current_month = $rootScope.scaleInfoData[0]['month']
+      var current_quarter = $rootScope.scaleInfoData[0]['quarter']
+      //To get the window size
+      var window_size_work_week = $rootScope.meta.details[0].window_size;
+      var window_size_month = $rootScope.meta.details[1].window_size;
+      var window_size_quarter = $rootScope.meta.details[2].window_size;
+      //Variable to store starting index
+      $scope.start_index =current_work_week-window_size_work_week+1
+      //Variable to show the header in score card
+      $scope.scorecard_header = [];
+      //Variable to store work_week header
+      var scorecard_header_work_week =[];
+      //Variable to store month header 
+      var scorecard_header_month =[];
+      //Variable to store quarter header
+      var scorecard_header_quarter =[];
+      for (var i=0,j=current_work_week-window_size_work_week+1; i<window_size_work_week; i++,j++) {
+          scorecard_header_work_week[i]='WW'+j;
       }
-
+      //Pushing scorecard_header_work_week in scorecard_header
+      $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_work_week)
+      for (var i=0,j=current_month-window_size_month+1; i<window_size_month; i++,j++) {
+          scorecard_header_month[i]='M'+j;
+      }
+      //Pushing scorecard_header_month in scorecard_header
+      $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_month)
+      for (var i=0,j=current_quarter-window_size_quarter+1; i<window_size_quarter; i++,j++) {
+          scorecard_header_quarter[i]='Q'+j;
+      }
+      //Pushing scorecard_header_quarter in scorecard_header
+      $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_quarter)
       //To transform data 
       $scope.measureList =[]
       var metrics= $rootScope.placeholder.metric
-  
       for (var i = 0; i<metrics.length; i++) {
         if(metrics[i].name!==undefined){
           for (var j = 0; j < metrics[i].measures.length; j++) {
-          if(metrics[i].measures[j].type=='number' && metrics[i].measures[j].scorecard_data){
-            if(metrics[i].measures[j].scorecard_data.length>0){
+          if(metrics[i].measures[j].scorecard_data){
+            // console.log(metrics[i].measures[j].label,metrics[i].measures[j].scorecard_data.length)
+            // if(metrics[i].measures[j].scorecard_data.length>0){
               if(j==0){
                 var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
               }
@@ -268,26 +373,43 @@ angular.module('sasaWebApp')
                 var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
               }
               $scope.measureList.push(obj);
-            }
+            // }
           }
           }
         } 
       };
-      for (var i = 0; i < $scope.measureList.length; i++) {
+      //Loop to handle missing values that are being passed from back end
+      for (var i = 0; i < $scope.measureList.length; i++){
         var temp_array=[]
-        var flag = true;
-        for (var j = 0; j < $scope.measureList[i]['2'].length; j++) {
-          var pos =$scope.measureList[i]['2'][j]['work_week'];
-          if(pos==current){
-            flag = false;
-          }
-          temp_array[pos]= $scope.measureList[i]['2'][j]['value'];
-        };
-        if(flag){
-          temp_array[current]= 0;
+        var temp_array_ww=[]
+        var temp_array_m=[]
+        var temp_array_q=[]
+        //Traversing work_week
+        for (var k=0,j=current_work_week-window_size_work_week+1; k<window_size_work_week; k++,j++) {
+          var key='work_week'
+          var value=j
+          temp_array_ww[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
         }
-        var temp_var=_.extend({}, temp_array)
-        $scope.measureList[i]['2']= temp_var
-      };
+        //Pushing temp_array_ww into temp_array
+        temp_array.push.apply(temp_array,temp_array_ww)
+        //Traversing month
+        for (var k=0,j=current_month-window_size_month+1; k<window_size_month; k++,j++) {
+          var key='month'
+          var value=j
+          temp_array_m[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+        }
+        //Pushing temp_array_m into temp_array
+        temp_array.push.apply(temp_array,temp_array_m)
+        //Traversing quarter
+        for (var k=0,j=current_quarter-window_size_quarter+1; k<window_size_quarter; k++,j++) {
+          var key='quarter'
+          var value=j
+          temp_array_q[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+        }
+        //Pushing temp_array_q into temp_array
+        temp_array.push.apply(temp_array,temp_array_q)
+        //Replacing measureList's score_card data array from temp_array
+        $scope.measureList[i]['2']= temp_array
+      }
     }
   });

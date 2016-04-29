@@ -90,15 +90,46 @@ angular.module('sasaWebApp')
            }
         };
     
-        // This function watches the changes in global filter values
+        //This function watches the changes in global filter values
         scope.$watch(function () {
           return $rootScope.applyFilter;
-        }, function(newValue, oldValue, scope) {         
+        }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
             scope.getMetric();
           }          
         });
 
+        //Watch var_changeData to change score_card data
+        scope.$watch(function () {
+          return $rootScope.var_changeData;
+        }, function(newValue, oldValue, scope) {       
+          if(newValue !== oldValue){
+            scope.getMetric();
+          }          
+        });
+
+        //This function gets latest values of metrics
+        scope.getMetric = function () {  
+          $rootScope.myPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (resposne) {            
+            $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
+            console.log(resposne)
+          },function (err) {
+            console.error(err);
+          })       
+        };
+
+        
+
+        // //This function gets new score card data
+        // scope.getScoreCardData = function () {       
+        //   //API call to get the score card data from back end   
+        //   console.log(scope.metricData)
+        //   $rootScope.myPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (resposne) {            
+        //     $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
+        //   },function (err) {
+        //     console.error(err);
+        //   })
+        // };
 
         //Define custom filer for object sorting
         scope.customFilter = function(items){
@@ -112,25 +143,6 @@ angular.module('sasaWebApp')
           });
           return filtered;
         }
-
-        // //function to change vizualization
-        // scope.changeViz = function (type) {
-        //   if(type==='line' && !scope.line){
-        //     scope.line=!scope.line;
-        //   }
-        //   if(type==='bar' && scope.line){
-        //     scope.line=!scope.line;
-        //   } 
-        // };
-
-        //This function gets latest values of metrics
-        scope.getMetric = function () {                
-          scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
-            $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
-          },function (err) {
-            console.error(err);
-          })
-        };
 
         //This function validates changes in measure thresholds
         scope.$watch('[options5,metricData["measures"]]',function(){
