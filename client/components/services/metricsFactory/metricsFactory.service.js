@@ -13,7 +13,8 @@ angular.module('sasaWebApp')
         responseType: 'json',
         param: {
           metricId:{},
-          filters:{}
+          filters:{},
+          meta:{}
         }
       },
       getByObject: {
