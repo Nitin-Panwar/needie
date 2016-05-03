@@ -2,14 +2,11 @@
 
 angular.module('sasaWebApp')
   .service('parentService', function ($location,$rootScope, metricsFactory, dashBoardsFactory, messageCenterService, usersFactory) {    
-    	/**
-    	 * this function adds new items to placeholder
-    	 * @param  {[type]} type [description]
-    	 * @param  {[type]} item [description]
-    	 * @return {[type]}      [description]
-    	 */
+    	
+        //This function adds new items to placeholder
     	this.placeholderAdd = function (type, item){
-    		//create dummy dashboard id when adding any metric to it
+            // $rootScope.meta.view_type = 'scorecard'
+    		//Creating dummy dashboard id before adding any metric to it
     		if(!$rootScope.placeholder.dashboard._id)
     		{ 
                 $rootScope.createNew = false;
@@ -17,16 +14,17 @@ angular.module('sasaWebApp')
     		}	
     		if(type === 'metric'){    			
     			var id = item;    			
-    			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery}).$promise.then(function (data) {   				
-                    var metric = data;
-                    data.size = {x: 2};                   
+    			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {   				
+                    // var metric = data;
+                    // console.log(data)
+                    data.size = {x: 2};
+                    data.type='metric';                   
                     $rootScope.placeholder[type].push(data);
     				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
     			}, function (err) {
     				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
     			})
     		}   
-
     	};
 
     	/**
@@ -43,6 +41,7 @@ angular.module('sasaWebApp')
     			messageCenterService.add('success','Removed from dashboard',{timeout: 3000})
     		}
     	}
+
 
     	/**
     	 * [createDBoard description]
@@ -82,7 +81,9 @@ angular.module('sasaWebApp')
             dashboardObj.version = 1;
           }
           dashboardObj.owner = $rootScope.user;
-
+          
+          //Saving meta data for score card
+          dashboardObj.meta = $rootScope.meta;
 	      //Checking if the request is coming for update or create new.
 	      if($rootScope.placeholder.dashboard._id){	              
 	      	dashboardObj._id = $rootScope.placeholder.dashboard._id;            
@@ -119,4 +120,4 @@ angular.module('sasaWebApp')
             })
         };
         this.maxGridHeight = 0;
-  });
+    });

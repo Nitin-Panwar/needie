@@ -23,7 +23,7 @@
 	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()">
 		<!-- dashboard buttons section -->
 		<section class="row inline">
-			<section class="col-md-4">
+			<section class="col-md-3">
 			    <!-- dashboard name -->
 				<i class="fa fa-file" ng-if="placeholder.dashboard.name"></i>&nbsp;&nbsp;<span class="lead">{{placeholder.dashboard.name}}</span><br>
 				<small ng-if="placeholder.dashboard.description" class="">{{placeholder.dashboard.description|limitTo:100}}&nbsp;&nbsp;<i tooltip-placement="right"uib-tooltip="{{placeholder.dashboard.description}}">
@@ -33,9 +33,9 @@
 				<small ng-if="placeholder.dashboard.owner">&nbsp;{{placeholder.dashboard.owner}}</small>&nbsp;&nbsp;&nbsp;&nbsp;
 				<i ng-if="placeholder.dashboard.modified_on" class="fa fa-calendar">&nbsp;&nbsp;</i>{{placeholder.dashboard.modified_on | limitTo:10}}
 			</section>
-			<section class=" col-sm-8">	
-				<section class="pull-right btn-group">
-					<button type="button" class="btn btn-primary" ng-click="launchSave()" ng-show="placeholder.edited"> Save</button>	
+			<section class=" col-sm-9">	
+				<section class="pull-right">
+					<button type="button" class="btn btn-primary" ng-click="launchSave()">Save</button>
 				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()"><i class="fa fa-text-width"></i> Add Text</button>	
 				  	<span ng-hide ="placeholder.dashboard._id === undefined || placeholder.dashboard._id === 1">
 						<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()"><i class="fa fa-home"></i> Set HomePage </button>
@@ -43,44 +43,51 @@
 						<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ><i class="fa fa-envelope-o"></i> Send Mail </button>
 						<button type="button" class="btn btn-default btn-md" ng-click="delete()" ng-hide="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase()"><i class="fa fa-trash"></i> Delete </button>
 					</span>
-					<select class="changeView" ng-model="selection" ng-options="item for item in items">
-					</select>	
+					<form class="form-inline pull-right">
+						<select ng-model="meta.view_type" ng-options="view_type for view_type in view_types" class="form-control" style="margin-top: 10;color:#0071C5"></select>
+				    </form>
 				</section>
 			</section>	
 		</section>				
 		<section class="row" >&nbsp;</section>
 		<!-- <hr/> -->
 		<!-- <div ng-switch on="selection"> -->
-		<div ng-if="selection=='Score card'">
-    		<span class="md-body-1" style="font-size:large">Show Previous</span>&nbsp;&nbsp;&nbsp;
-				<select style="font-size:larger" ng-options="number for number in previous_numbers" ng-model="number">
-			</select>&nbsp;&nbsp;&nbsp;
-			<select style="font-size:larger" ng-model="scale" ng-options="scale for scale in scales">
-			</select>&nbsp;&nbsp;&nbsp;
-			<button type="button" class="btn btn-primary" ng-click="changeCardData(number,scale)">Apply</button>
+		<div ng-if="meta.view_type=='scorecard'">
+    		<form class="form-inline" >
+    			<label>Show Previous:</label>&nbsp;&nbsp;
+				<select ng-options="work_week for work_week in [] | range:0:53" ng-model="meta.details[0].window_size" class="form-control"></select>
+				<label>Work Week</label>&nbsp;&nbsp;
+				<select ng-options="month for month in [] | range:0:13" ng-model="meta.details[1].window_size"  class="form-control"></select>
+				<label>Month</label>&nbsp;&nbsp;
+				<select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
+				<label>Quarter</label>&nbsp;&nbsp;
+				<button type="submit" class="btn btn-primary" ng-click="changeCardData()">Apply</button>
+			</form>
 	    </div>
-	    <div ng-if="selection=='Score card'">
-			<table class="table table-bordered table-hover" style="overflow:scroll;max-width:screenWidth">
-				<thead class="thead-inverse">
-					<tr>
-						<th>Metric Name</th>
-						<th>Measure Name</th>
-						<th ng-repeat="header in scorecard_header track by $index">{{header}}</th>
+	    <div ng-if="meta.view_type=='scorecard'">
+	    	<div class="table-responsive">
+				<table class="table table-bordered table-hover">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Metric Name</th>
+							<th>Measure Name</th>
+							<th ng-repeat="header in scorecard_header track by $index">{{header}}</th>
+						</tr>
+					</thead>
+					<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)">
+					   	<td class="word-wrap:break-word" rowspan="{{rowspan}}" ng-if="measure[0] != ''">{{measure['0']}}</td>
+					    <td>{{measure['1']}}<br>
+							<span ng-if="measure.goal.value" >(Target{{measure.goal.comparision}}{{measure.goal.value}}/{{measure.goal.scale}})</span>
+						</td>
+					   	<td ng-repeat="(key, value) in measure['2'] track by $index" ng-class="{'red':targetMet, 'green': targetMiss}" ng-init="targetMet=evaluateTarget(measure,value,$index)">{{value}}</td>
 					</tr>
-				</thead>
-				<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)">
-				   	<td class="word-wrap:break-word" rowspan="{{rowspan}}" ng-if="measure[0] != ''">{{measure['0']}}</td>
-				    <td>{{measure['1']}}<br>
-						<span ng-if="measure.goal.value" >(Target{{measure.goal.comparision}}{{measure.goal.value}}/{{measure.goal.scale}})</span>
-					</td>
-				   	<td ng-repeat="(key, value) in measure['2']" ng-show="key>=start_index" ng-class="{'red':targetMet, 'green': targetMiss}" ng-init="targetMet=evaluateTarget(measure,value)">{{value|number}}</td>
-				</tr>
-			</table>
+				</table>
+			</div>
 	    </div>
 
       	<!-- Dashboard Section -->
 		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard">
-			<ul ng-if="selection=='Metric card'" >
+			<ul ng-show="meta.view_type=='metriccard'" >
 				<!-- metric card area -->
 				<li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x" size-y="item.size.y" ng-repeat="item in placeholder.metric track by $index" class="metric-card">		
 				<div ng-if="item.name!==undefined">
@@ -106,8 +113,6 @@
 		<!-- dashboard section end -->
 	</section>
 </section>
-
-
 
 
 

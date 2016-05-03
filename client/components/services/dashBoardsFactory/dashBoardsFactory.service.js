@@ -49,6 +49,15 @@ angular.module('sasaWebApp')
           filters:{}
         }
       },
+      getScaleInfo:{
+        method:'GET',
+        url:url+'/getScaleInfo',
+        headers: config,
+        responseType: 'json',
+        isArray:true,
+        param: {
+        }
+      },
       sendMail:{
         method:'GET',
         headers: config,
