@@ -92,6 +92,7 @@ angular.module('sasaWebApp')
 
     //This function sets a dashboard as homepage
     $scope.setHomepage = function () {
+      console.log($rootScope.homepage)
       usersFactory.setHomepage({idsid: $rootScope.user, dashboardId: $rootScope.placeholder.dashboard._id}).$promise.then(function (data) {
         messageCenterService.add('success','Dashboard set as homepage',{timeout: 3000});
       },function (err) {
@@ -110,18 +111,17 @@ angular.module('sasaWebApp')
 
     //Delete a dashboard
     $scope.delete = function(){
-      // var name = prompt("Please enter dashboard name to confirm");
       var result = confirm("Do you really want to delete?");
       if (result) {
         $rootScope.myPromise = dashBoardsFactory.delete({idsid: $rootScope.user, dashboardId:$stateParams.dashboardId}).$promise.then(function (data) {         
-          $rootScope.placeholder.dashboard = data; 
-          $location.url('/')  
-          $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
-          messageCenterService.add('success','Dashboard deleted successfully.',{timeout: 10000});
+        $rootScope.placeholder.dashboard = data; 
+        $location.url('/')  
+        $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
+        messageCenterService.add('success','Dashboard deleted successfully.',{timeout: 10000});
         }, function (err) {
           messageCenterService.add('danger','Could not delete dashboard.',{timeout: 10000});
         });
-      }
+      } 
     }
 
     //Below it watches for any changes in movement of metrics on the dashboard and resize 
@@ -342,21 +342,22 @@ angular.module('sasaWebApp')
       var scorecard_header_month =[];
       //Variable to store quarter header
       var scorecard_header_quarter =[];
-      for (var i=0,j=current_work_week-window_size_work_week+1; i<window_size_work_week; i++,j++) {
-          scorecard_header_work_week[i]='WW'+j;
-      }
-      //Pushing scorecard_header_work_week in scorecard_header
-      $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_work_week)
-      for (var i=0,j=current_month-window_size_month+1; i<window_size_month; i++,j++) {
-          scorecard_header_month[i]='M'+j;
-      }
-      //Pushing scorecard_header_month in scorecard_header
-      $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_month)
       for (var i=0,j=current_quarter-window_size_quarter+1; i<window_size_quarter; i++,j++) {
           scorecard_header_quarter[i]='Q'+j;
       }
       //Pushing scorecard_header_quarter in scorecard_header
       $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_quarter)
+      for (var i=0,j=current_month-window_size_month+1; i<window_size_month; i++,j++) {
+          scorecard_header_month[i]='M'+j;
+      }
+      //Pushing scorecard_header_month in scorecard_header
+      $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_month)
+      for (var i=0,j=current_work_week-window_size_work_week+1; i<window_size_work_week; i++,j++) {
+          scorecard_header_work_week[i]='WW'+j;
+      }
+      //Pushing scorecard_header_work_week in scorecard_header
+      $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_work_week)
+      
       //To transform data 
       $scope.measureList =[]
       var metrics= $rootScope.placeholder.metric
@@ -384,22 +385,6 @@ angular.module('sasaWebApp')
         var temp_array_ww=[]
         var temp_array_m=[]
         var temp_array_q=[]
-        //Traversing work_week
-        for (var k=0,j=current_work_week-window_size_work_week+1; k<window_size_work_week; k++,j++) {
-          var key='work_week'
-          var value=j
-          temp_array_ww[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
-        }
-        //Pushing temp_array_ww into temp_array
-        temp_array.push.apply(temp_array,temp_array_ww)
-        //Traversing month
-        for (var k=0,j=current_month-window_size_month+1; k<window_size_month; k++,j++) {
-          var key='month'
-          var value=j
-          temp_array_m[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
-        }
-        //Pushing temp_array_m into temp_array
-        temp_array.push.apply(temp_array,temp_array_m)
         //Traversing quarter
         for (var k=0,j=current_quarter-window_size_quarter+1; k<window_size_quarter; k++,j++) {
           var key='quarter'
@@ -408,6 +393,22 @@ angular.module('sasaWebApp')
         }
         //Pushing temp_array_q into temp_array
         temp_array.push.apply(temp_array,temp_array_q)
+        //Traversing month
+        for (var k=0,j=current_month-window_size_month+1; k<window_size_month; k++,j++) {
+          var key='month'
+          var value=j
+          temp_array_m[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+        }
+        //Pushing temp_array_m into temp_array
+        temp_array.push.apply(temp_array,temp_array_m)
+        //Traversing work_week
+        for (var k=0,j=current_work_week-window_size_work_week+1; k<window_size_work_week; k++,j++) {
+          var key='work_week'
+          var value=j
+          temp_array_ww[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+        }
+        //Pushing temp_array_ww into temp_array
+        temp_array.push.apply(temp_array,temp_array_ww)
         //Replacing measureList's score_card data array from temp_array
         $scope.measureList[i]['2']= temp_array
       }

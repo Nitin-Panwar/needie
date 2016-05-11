@@ -57,7 +57,8 @@ angular.module('sasaWebApp', [
         $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
         // $rootScope.user = 'gar\\npanwar'
         //find user homepage    
-        $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
+        $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
+            $rootScope.homepage = data.homepage
             if(data.homepage && !$stateParams.dashboardId){
               var homepage = '/?dashboardId='+data.homepage;         
               $location.url(homepage)  

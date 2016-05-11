@@ -54,13 +54,13 @@
 		<!-- <div ng-switch on="selection"> -->
 		<div ng-if="meta.view_type=='scorecard'">
     		<form class="form-inline" >
-    			<label>Show Previous:</label>&nbsp;&nbsp;
-				<select ng-options="work_week for work_week in [] | range:0:53" ng-model="meta.details[0].window_size" class="form-control"></select>
-				<label>Work Week</label>&nbsp;&nbsp;
+    			<!-- <label>Show:</label>&nbsp;&nbsp; -->
+    			<select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
+				<label>Quarter</label>&nbsp;&nbsp;
 				<select ng-options="month for month in [] | range:0:13" ng-model="meta.details[1].window_size"  class="form-control"></select>
 				<label>Month</label>&nbsp;&nbsp;
-				<select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
-				<label>Quarter</label>&nbsp;&nbsp;
+				<select ng-options="work_week for work_week in [] | range:0:53" ng-model="meta.details[0].window_size" class="form-control"></select>
+				<label>Work Week</label>&nbsp;&nbsp;
 				<button type="submit" class="btn btn-primary" ng-click="changeCardData()">Apply</button>
 			</form>
 	    </div>
