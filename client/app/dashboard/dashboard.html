@@ -3,24 +3,23 @@
 	<section class="col-md-1">
 		<section left-sidebar>sidebar</section>
 	</section>
-
 	<!-- left sidebar end -->
-
 	<!-- Create new dashboard start-->
 	<section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()">
 		<dl>
 			<blockquote>
 				<p>
 					<dt class="text-capitalize">To add metrics to new dashboard</dt>
-					<dd>Select&nbsp;<a href=""><img src="assets/images/metric.png" height="20" width="20" ng-click="metricList()"></a>&nbsp;button on left sidebar.</dd>
+					<dd>Click&nbsp;&nbsp;<i class="fa fa-bar-chart" aria-hidden="true"></i>&nbsp;button on left sidebar.</dd>
 				</p>
 			</blockquote>
 		</dl>
 	</section>
-
 	<!-- Create new dashboard start end-->
-	
 	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()">
+		<section class="progress-bar progress-bar-danger col-md-11 container-fluid row" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;height:25px;margin-top: -20px" ng-if="objbrowserName!=='Chrome'">
+			<span style="color:white;font-size:15;">Please use Google chrome for better performance.!!!</span>
+		</section>
 		<!-- dashboard buttons section -->
 		<section class="row inline">
 			<section class="col-md-3">
@@ -44,24 +43,32 @@
 						<button type="button" class="btn btn-default btn-md" ng-click="delete()" ng-hide="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase()"><i class="fa fa-trash"></i> Delete </button>
 					</span>
 					<form class="form-inline pull-right">
-						<select ng-model="meta.view_type" ng-options="view_type for view_type in view_types" class="form-control" style="margin-top: 10;color:#0071C5"></select>
+						<select style="margin-top:10px;color:#0071C5;text-transform:capitalize;" ng-model="meta.view_type" ng-options="view_type for view_type in view_types" class="form-control" ng-click="checkViewType()"></select>
 				    </form>
 				</section>
 			</section>	
 		</section>				
 		<section class="row" >&nbsp;</section>
+		
 		<!-- <hr/> -->
 		<!-- <div ng-switch on="selection"> -->
 		<div ng-if="meta.view_type=='scorecard'">
-    		<form class="form-inline" >
-    			<!-- <label>Show:</label>&nbsp;&nbsp; -->
-    			<select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
-				<label>Quarter</label>&nbsp;&nbsp;
-				<select ng-options="month for month in [] | range:0:13" ng-model="meta.details[1].window_size"  class="form-control"></select>
-				<label>Month</label>&nbsp;&nbsp;
-				<select ng-options="work_week for work_week in [] | range:0:53" ng-model="meta.details[0].window_size" class="form-control"></select>
-				<label>Work Week</label>&nbsp;&nbsp;
-				<button type="submit" class="btn btn-primary" ng-click="changeCardData()">Apply</button>
+    		<form class="form-inline" style="margin-bottom: 10px;" >
+    			<div class="input-group">				  
+				  <select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
+				  <span class="input-group-addon" id="basic-addon1">Quarter</span>
+				</div>
+				&nbsp;&nbsp;
+				<div class="input-group">				  
+				  <select ng-options="month for month in [] | range:0:13" ng-model="meta.details[1].window_size"  class="form-control"></select>
+				  <span class="input-group-addon" id="basic-addon1">Month</span>
+				</div>
+				&nbsp;&nbsp;
+				<div class="input-group">				  
+				  <select ng-options="work_week for work_week in [] | range:0:53" ng-model="meta.details[0].window_size" class="form-control"></select>
+				  <span class="input-group-addon" id="basic-addon1">Work Week</span>
+				</div>
+				<button type="submit" class="btn btn-primary" style="margin-top:2px;" ng-click="changeCardData()">Apply</button>
 			</form>
 	    </div>
 	    <div ng-if="meta.view_type=='scorecard'">
@@ -77,9 +84,10 @@
 					<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)">
 					   	<td class="word-wrap:break-word" rowspan="{{rowspan}}" ng-if="measure[0] != ''">{{measure['0']}}</td>
 					    <td>{{measure['1']}}<br>
-							<span ng-if="measure.goal.value" >(Target{{measure.goal.comparision}}{{measure.goal.value}}/{{measure.goal.scale}})</span>
+							<span ng-if="measure.goal.value" class="help-block">
+							Target {{measure.goal.comparision}} {{measure.goal.value}}/{{measure.goal.scale}}</span>
 						</td>
-					   	<td ng-repeat="(key, value) in measure['2'] track by $index" ng-class="{'red':targetMet, 'green': targetMiss}" ng-init="targetMet=evaluateTarget(measure,value,$index)">{{value}}</td>
+					   	<td ng-repeat="(key, value) in measure['2'] track by $index" ng-class="{'red':targetMet, 'green': targetMiss}" ng-init="targetMet=evaluateTarget(measure,value,$index)" style="vertical-align: middle">{{value}}</td>
 					</tr>
 				</table>
 			</div>
