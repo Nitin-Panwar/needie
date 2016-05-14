@@ -12,7 +12,7 @@ angular.module('sasaWebApp')
       	 * this variable validates whether filter has been applied.
       	 * @type {Number}
       	 */
-      	// $rootScope.applyFilter = 0;
+      	$rootScope.applyFilter = 0;
 
       	/**
       	 * this function toggles the sidebar
