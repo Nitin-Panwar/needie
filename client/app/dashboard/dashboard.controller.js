@@ -6,18 +6,25 @@ angular.module('sasaWebApp')
     $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
     //For ng-switch
     $scope.view_types = ['metriccard', 'scorecard'];
-    $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 15,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 0,"sequence":3}],'view_type': 'metriccard'}
     //Dictionary to store meta data of score card
-    // $scope.scorecard_info={'previous':15,'scale':'WW'}
+    $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3}],'view_type': 'metriccard'}
     //variable to watch, while changing score_card data
     $rootScope.var_changeData =0
     $rootScope.applyFilter = 0;
-    //Getting screen size for responsive design 
-    var screenWidth_temp = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-    $scope.screenWidth = screenWidth_temp*(10/12)
 
-    // $scope.view_type = $scope.meta.view_type;
-    
+    //Code to detect browser info.
+    var objAgent = navigator.userAgent; 
+    $scope.objbrowserName = navigator.appName; 
+    //In Chrome 
+    if ((objAgent.indexOf("Chrome"))!=-1) { $scope.objbrowserName = "Chrome"; } 
+    //In Microsoft internet explorer 
+    else if ((objAgent.indexOf("MSIE"))!=-1) { $scope.objbrowserName = "Microsoft Internet Explorer";  } 
+    // In Firefox 
+    else if ((objAgent.indexOf("Firefox"))!=-1) { $scope.objbrowserName = "Firefox"; } 
+    // In Safari 
+    else if ((objAgent.indexOf("Safari"))!=-1) { $scope.objbrowserName = "Safari";  
+    }  
+
     $rootScope.score_card_test =0;
     //Here system checks if there is an existing dashboard that user wants to see  
     if($stateParams.dashboardId){
@@ -92,7 +99,6 @@ angular.module('sasaWebApp')
 
     //This function sets a dashboard as homepage
     $scope.setHomepage = function () {
-      console.log($rootScope.homepage)
       usersFactory.setHomepage({idsid: $rootScope.user, dashboardId: $rootScope.placeholder.dashboard._id}).$promise.then(function (data) {
         messageCenterService.add('success','Dashboard set as homepage',{timeout: 3000});
       },function (err) {
@@ -160,6 +166,17 @@ angular.module('sasaWebApp')
       $rootScope.closeLeftSidebar =false;
     }
 
+    //Call back end API only if filter is being applied.
+    $scope.checkViewType =function(){
+      $scope.$watch('meta.view_type',function(newValue,oldValue){
+        if(newValue!= oldValue && $rootScope.applyFilter!==0){
+          if($rootScope.meta.view_type == 'scorecard'){
+            $scope.changeCardData();
+          }
+        }
+      })
+    }
+
     $scope.$watch('placeholder.metric', function(newValue, oldValue){
       //To stop unnessesry API call.
       if($rootScope.placeholder.metric.length==0){
@@ -167,7 +184,6 @@ angular.module('sasaWebApp')
       }
       //To call API when any metric is added or removed.
       if(newValue!==oldValue){
-        console.log(oldValue,newValue)
         //Call function to get the score card data 
         $scope.transformData();
       }
@@ -181,7 +197,7 @@ angular.module('sasaWebApp')
       var quarters = $rootScope.meta.details[2].window_size
       if(measure.goal!==undefined && current_value!== '--'){
         //TO DO---Change it to actual scale
-        if(measure.goal.scale=='work_week' && index < work_weeks){
+        if(measure.goal.scale=='quarter' && index < quarters){
           if(measure.goal.comparision==='<'){
             if(current_value < measure.goal.value){
               return false;
@@ -215,7 +231,7 @@ angular.module('sasaWebApp')
             } 
           }
         }
-        if(measure.goal.scale=='month' && index >= work_weeks && index < work_weeks+months ){
+        if(measure.goal.scale=='month' && index >= quarters && index < quarters+months ){
           if(measure.goal.comparision==='<'){
             if(current_value < measure.goal.value){
               return false;
@@ -249,7 +265,7 @@ angular.module('sasaWebApp')
             } 
           }
         }
-        if(measure.goal.scale=='quarter' && index >= work_weeks+months && index < work_weeks+months+quarters){
+        if(measure.goal.scale=='work_week' && index >= quarters+months && index < work_weeks+months+quarters){
           if(measure.goal.comparision==='<'){
             if(current_value < measure.goal.value){
               return false;
@@ -328,6 +344,8 @@ angular.module('sasaWebApp')
       var current_work_week = $rootScope.scaleInfoData[0]['work_week']
       var current_month = $rootScope.scaleInfoData[0]['month']
       var current_quarter = $rootScope.scaleInfoData[0]['quarter']
+      var current_year = $rootScope.scaleInfoData[0]['year']
+      var previous_year = current_year - 1
       //To get the window size
       var window_size_work_week = $rootScope.meta.details[0].window_size;
       var window_size_month = $rootScope.meta.details[1].window_size;
@@ -343,17 +361,35 @@ angular.module('sasaWebApp')
       //Variable to store quarter header
       var scorecard_header_quarter =[];
       for (var i=0,j=current_quarter-window_size_quarter+1; i<window_size_quarter; i++,j++) {
-          scorecard_header_quarter[i]='Q'+j;
+        if(j>0){
+          scorecard_header_quarter[i]='Q'+j+" "+current_year;
+        }
+        else{
+          var temp = j+4;
+          scorecard_header_quarter[i]='Q'+temp+" "+previous_year;
+        }
       }
       //Pushing scorecard_header_quarter in scorecard_header
       $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_quarter)
       for (var i=0,j=current_month-window_size_month+1; i<window_size_month; i++,j++) {
-          scorecard_header_month[i]='M'+j;
+        if(j>0){
+          scorecard_header_month[i]='M'+j+" "+current_year;
+        }
+        else{
+          var temp = j+12;
+          scorecard_header_month[i]='M'+temp+" "+previous_year;
+        }
       }
       //Pushing scorecard_header_month in scorecard_header
       $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_month)
       for (var i=0,j=current_work_week-window_size_work_week+1; i<window_size_work_week; i++,j++) {
-          scorecard_header_work_week[i]='WW'+j;
+        if(j>0){
+          scorecard_header_work_week[i]='WW'+j+" "+current_year;
+        }
+        else{ 
+          var temp = j+52;
+          scorecard_header_work_week[i]='WW'+temp+" "+previous_year;
+        }
       }
       //Pushing scorecard_header_work_week in scorecard_header
       $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_work_week)
@@ -365,16 +401,13 @@ angular.module('sasaWebApp')
         if(metrics[i].name!==undefined){
           for (var j = 0; j < metrics[i].measures.length; j++) {
           if(metrics[i].measures[j].scorecard_data){
-            // console.log(metrics[i].measures[j].label,metrics[i].measures[j].scorecard_data.length)
-            // if(metrics[i].measures[j].scorecard_data.length>0){
-              if(j==0){
-                var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
-              }
-              else{
-                var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
-              }
-              $scope.measureList.push(obj);
-            // }
+            if(j==0){
+              var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
+            }
+            else{
+              var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
+            }
+            $scope.measureList.push(obj);
           }
           }
         } 
@@ -386,26 +419,81 @@ angular.module('sasaWebApp')
         var temp_array_m=[]
         var temp_array_q=[]
         //Traversing quarter
-        for (var k=0,j=current_quarter-window_size_quarter+1; k<window_size_quarter; k++,j++) {
-          var key='quarter'
-          var value=j
-          temp_array_q[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+        if(current_quarter-window_size_quarter+1>0){
+          for (var k=0,j=current_quarter-window_size_quarter+1; k<window_size_quarter; k++,j++) {
+            var key='quarter'
+            var value=j
+            temp_array_q[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+          }
+        }
+        else{
+          for (var k=0,j=current_quarter-window_size_quarter+1; k<window_size_quarter; k++,j++) {
+            var year = current_year
+            var temp = j
+            if(j<=0){
+              var year = previous_year
+              temp = j+4;
+            }
+            var key = 'yyyyqq';
+            var value = parseInt(year+'0'+temp);
+            temp_array_q[k]=$scope.isExist(key,value,$scope.measureList[i]['2']) 
+          } 
         }
         //Pushing temp_array_q into temp_array
         temp_array.push.apply(temp_array,temp_array_q)
         //Traversing month
-        for (var k=0,j=current_month-window_size_month+1; k<window_size_month; k++,j++) {
-          var key='month'
-          var value=j
-          temp_array_m[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+        if(current_month-window_size_month+1>0){
+          for (var k=0,j=current_month-window_size_month+1; k<window_size_month; k++,j++) {
+              var key='month'
+              var value=j
+              temp_array_m[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+            }
+        }
+        else{
+          for (var k=0,j=current_month-window_size_month+1; k<window_size_month; k++,j++) {
+              var year = current_year
+              var temp = j;
+              if(j<=0){
+                var year = previous_year
+                temp = j+12;
+              }
+              var key ='yyyymm';
+              if(temp<10){
+                var value = parseInt(year+'0'+temp);
+              }
+              else{
+                var value = parseInt(year+''+temp);
+              }
+              temp_array_m[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+            }
         }
         //Pushing temp_array_m into temp_array
         temp_array.push.apply(temp_array,temp_array_m)
         //Traversing work_week
-        for (var k=0,j=current_work_week-window_size_work_week+1; k<window_size_work_week; k++,j++) {
-          var key='work_week'
-          var value=j
-          temp_array_ww[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+        if(current_work_week-window_size_work_week+1>0){
+          for (var k=0,j=current_work_week-window_size_work_week+1; k<window_size_work_week; k++,j++) {
+            var key='work_week'
+            var value=j
+            temp_array_ww[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+          }
+        }
+        else{
+          for (var k=0,j=current_work_week-window_size_work_week+1; k<window_size_work_week; k++,j++) {
+            var year = current_year
+            var temp = j;
+            if(j<=0){
+              var year = previous_year
+              temp = j+52;
+            }
+            var key='yyyyww'
+            if(temp<10){
+              var value=parseInt(year+'0'+temp);
+            }
+            else{
+              var value=parseInt(year+''+temp);
+            }
+            temp_array_ww[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+          }
         }
         //Pushing temp_array_ww into temp_array
         temp_array.push.apply(temp_array,temp_array_ww)

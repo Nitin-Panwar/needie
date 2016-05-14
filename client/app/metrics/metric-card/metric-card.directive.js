@@ -8,10 +8,6 @@ angular.module('sasaWebApp')
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
-        //Varibales to change measure color
-        // scope.measure_color_red=[]
-        // scope.measure_color_green=[]
-        // if(scope.metricData['distributions'].length)
         //Setting options for the bar graph
         scope.options5 = {}; 
         if(scope.metricData['distributions']){
@@ -112,24 +108,10 @@ angular.module('sasaWebApp')
         scope.getMetric = function () {  
           $rootScope.myPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (resposne) {            
             $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
-            console.log(resposne)
           },function (err) {
             console.error(err);
           })       
         };
-
-        
-
-        // //This function gets new score card data
-        // scope.getScoreCardData = function () {       
-        //   //API call to get the score card data from back end   
-        //   console.log(scope.metricData)
-        //   $rootScope.myPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (resposne) {            
-        //     $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
-        //   },function (err) {
-        //     console.error(err);
-        //   })
-        // };
 
         //Define custom filer for object sorting
         scope.customFilter = function(items){
@@ -166,13 +148,11 @@ angular.module('sasaWebApp')
                     if(current_value < measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
-                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
                       scope.alertBreached = true;
                       scope.warningBreached = false;
-                      // scope.measure_color_red[key]=true;
                       break;
                     } 
                   }
@@ -180,13 +160,11 @@ angular.module('sasaWebApp')
                     if(current_value <= measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
-                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
                       scope.alertBreached = true;
                       scope.warningBreached = false;
-                      // scope.measure_color_red[key]=true;
                       break;
                     }
 
@@ -195,13 +173,11 @@ angular.module('sasaWebApp')
                     if(current_value > measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
-                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
                       scope.alertBreached = true;
                       scope.warningBreached = false;
-                      // scope.measure_color_red[key]=true;
                       break;
                     } 
                   }
@@ -209,13 +185,11 @@ angular.module('sasaWebApp')
                     if(current_value >= measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
-                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
                       scope.alertBreached = true;
                       scope.warningBreached = false;
-                      // scope.measure_color_red[key]=true;
                       break;
                     } 
                   }
