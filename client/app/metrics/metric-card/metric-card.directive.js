@@ -105,13 +105,23 @@ angular.module('sasaWebApp')
         });
 
         //This function gets latest values of metrics
-        scope.getMetric = function () {  
-          $rootScope.myPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (resposne) {            
-            $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
-          },function (err) {
-            console.error(err);
-          })       
+        $rootScope.promiseObject = {};
+        scope.getMetric = function () { 
+          if($rootScope.meta.view_type='scorecard'){
+            scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+            $rootScope.placeholder['metric'][scope.metricIndex]=response;
+            delete $rootScope.promiseObject[scope.metricIndex];                                 
+          });
+          $rootScope.promiseObject[scope.metricIndex] = scope.requestPromise;
+          var arr = [];
+          for(var key in $rootScope.promiseObject){
+            arr.push($rootScope.promiseObject[key])
+          }          
+          $rootScope.myPromise = arr;          
         };
+        }                     
+          
+
 
         //Define custom filer for object sorting
         scope.customFilter = function(items){
