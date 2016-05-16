@@ -18,7 +18,7 @@
 	<!-- Create new dashboard start end-->
 	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()">
 		<section class="progress-bar progress-bar-danger col-md-11 container-fluid row" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;height:25px;margin-top: -20px" ng-if="objbrowserName!=='Chrome'">
-			<span style="color:white;font-size:15;">Please use Google chrome for better performance.!!!</span>
+			<span style="color:white;font-size:15;">Please use Google chrome for best performance.!!!</span>
 		</section>
 		<!-- dashboard buttons section -->
 		<section class="row inline">
@@ -35,7 +35,7 @@
 			<section class=" col-sm-9">	
 				<section class="pull-right">
 					<button type="button" class="btn btn-primary" ng-click="launchSave()">Save</button>
-				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()"><i class="fa fa-text-width"></i> Add Text</button>	
+				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()" ng-if="meta.view_type=='metriccard'"><i class="fa fa-text-width"></i> Add Text</button>	
 				  	<span ng-hide ="placeholder.dashboard._id === undefined || placeholder.dashboard._id === 1">
 						<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()"><i class="fa fa-home"></i> Set HomePage </button>
 						<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()"><i class="fa fa-heart"></i> Set Favourite </button>		
@@ -49,11 +49,45 @@
 			</section>	
 		</section>				
 		<section class="row" >&nbsp;</section>
-		
 		<!-- <hr/> -->
 		<!-- <div ng-switch on="selection"> -->
 		<section ng-if="meta.view_type=='scorecard'">
-			<score-card></score-card>
+			<form class="form-inline" style="margin-bottom: 10px;" >
+				<div class="input-group">				  
+				  <select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
+				  <span class="input-group-addon" id="basic-addon1">Quarter</span>
+				</div>
+				&nbsp;&nbsp;
+				<div class="input-group">				  
+				  <select ng-options="month for month in [] | range:0:13" ng-model="meta.details[1].window_size"  class="form-control"></select>
+				  <span class="input-group-addon" id="basic-addon1">Month</span>
+				</div>
+				&nbsp;&nbsp;
+				<div class="input-group">				  
+				  <select ng-options="work_week for work_week in [] | range:0:53" ng-model="meta.details[0].window_size" class="form-control"></select>
+				  <span class="input-group-addon" id="basic-addon1">Work Week</span>
+				</div>
+				<button type="submit" class="btn btn-primary" style="margin-top:2px;" ng-click="changeCardData()">Apply</button>
+			</form>
+			<div class="table-responsive">
+				<table class="table table-bordered table-hover">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Metric Name</th>
+							<th>Measure Name</th>
+							<th ng-repeat="header in scorecard_header track by $index">{{header}}</th>
+						</tr>
+					</thead>
+					<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)">
+					   	<td class="word-wrap:break-word" rowspan="{{rowspan}}" ng-if="measure[0] != ''">{{measure['0']}}</td>
+					    <td>{{measure['1']}}<br>
+							<span ng-if="measure.goal.value" class="help-block">
+							Target {{measure.goal.comparision}} {{measure.goal.value}}/{{measure.goal.scale}}</span>
+						</td>
+					   	<td ng-repeat="(key, value) in measure['2'] track by $index" ng-class="{'red':targetMet, 'green': targetMiss}" ng-init="targetMet=evaluateTarget(measure,value,$index)" style="vertical-align: middle">{{value}}</td>
+					</tr>
+				</table>
+			</div>
 		</section>
       	<!-- Dashboard Section -->
 		<section gridster="gridsterDashboardOpts" class="center-block text-center" id="dashboard">
