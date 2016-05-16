@@ -1,3 +1,4 @@
+
 <!-- <section ng-include="'components/navbar/navbar.html'"></section>             -->
 
 <section class="container text-justify">
@@ -14,6 +15,8 @@
                         <li><a href="#Setting_Home_Page" title=""><span>Setting Home Page</span></a></li>
                         <li><a href="#Set_Dashboard_favorite" title=""><span>Set Dashboard favorite</span></a></li>
                         <li><a href="#Send_Email" title=""><span>Send Email</span></a></li>
+                        <li><a href="#Metric_Card" title=""><span>Metric Card View </span></a></li>
+                        <li><a href="#Score_Card" title=""><span>Score Card View</span></a></li>
                         <li><a href="#Dashboard_Drill_Down" title=""><span>Dashboard Drill Down</span></a></li>                                                   
             </ul>
             <li><span>Metrics</span></li>
@@ -36,7 +39,6 @@
                         <li><a href="#moving_metric_from_Dashboard" title=""><span>Removing metric from Dashboard</span></a></li>
             </ul>  
             <li><a href="#Workflow" title=""><span>Workflow</span></a></li>
-            <li><a href="#ScoreCard" title=""><span>ScoreCard</span></li>
             <li><a href="#Release" title=""><span>Release</span></a></li>
 </ol>
 <p></p>
@@ -101,7 +103,7 @@
             <p>
                         Existing dashboards can be searched by using search box available in top navigation bar. <br>
                         <br><img src="/assets/images/help/dashboard_search.png" alt="Dashboard Searchbar Image"><br>
-                        It requires minimum 1 letter before start searching. When relavant dashboards are found, you can click on any one search result to load it. <br>
+                        It requires minimum 3 letters before start searching. When relavant dashboards are found, you can click on any one search result to load it. <br>
                         <br><img src="/assets/images/help/dashboard_search_result.png" alt="Dashboard Search Result Image">
             </p>
 </fieldset>
@@ -133,12 +135,47 @@
 <fieldset>
             <legend class="text-capitalize" id="Send_Email">Send Email</legend>
             <p>
-                        When a dashboard is loaded, you can see <i>Send Mail</i> button on top of it. <br>
+                        When a dashboard is loaded, you can see <i>Set Mail</i> button on top of it. <br>
                         <br><img src="/assets/images/help/send_mail_button.png" alt="Send Mail Button Image"><br>
                         Click on that button and this dashboard will be sent to your e-mail address as an attachment.
             </p>
 </fieldset>
 <!-- Send email end-->
+
+
+<!-- Metric Card View -->
+<fieldset>
+            <legend class="text-capitalize" id="Metric_Card">Metric Card View</legend>
+            <p>
+                        By default the dashboard is loaded into metric card view. The selection option is provided on top right corner of the screen to change the default view. <br>
+                        <br><img src="‪/assets/images/help/metric_card.png" alt="Metric Card Option Image"><br>
+                        To change the view select respective (metric or score card) view from the selection list.
+            </p>
+</fieldset>
+<!-- Metric Card View end-->
+
+
+<!-- Score Card View  -->
+<fieldset>
+            <legend class="text-capitalize" id="Score_Card">Score Card View</legend>
+            <p>
+                        When a dashboard is loaded, the default view is metric card. <br>
+                         <section class="row">
+                                    <section class="col-sm-6">
+                                               <br><img src="/assets/images/help/‪score_card.png" alt="Score Card Option Image"><br>
+                                    </section>
+                                    <section class="col-sm-6">
+                                              <br><img src="/assets/images/help/metric-score_toggle.png" alt="Score Card Option Image"><br>
+                                    </section>
+                        </section>
+                        To change the view to score card select <i>Scorecard</i> option from the selection list.
+            </p>
+</fieldset>
+<!-- Score Card View  end-->
+
+
+
+
 
 <!-- Dashboard drill down -->
 <fieldset>
@@ -263,7 +300,7 @@
 
 <!-- Measure thresholds -->
 <fieldset>
-            <legend class="text-capitalize" id="Measure_Thresholds">Measure Goal</legend>
+            <legend class="text-capitalize" id="Measure_Thresholds">Measure Thresholds</legend>
             <p>
                         Measure goal is used to monitor health status. You can set goal on some scalar value measure.<br>
 
@@ -272,7 +309,7 @@
                         <br><img src="/assets/images/help/Capture9.png" alt="Metric Measures Option Image"><br>            
                         Enter desired values for goal.
                         <br><img src="/assets/images/help/Capture8.png" alt="Measure Thresholds Image"><br>
-                        When a measure meets its goal it is distinctly recognizable on metric card. Metric card also changes its appearance based on goal that was met.
+                        When a measure breaches its set threshold it is distinctly recognizable on metric card. Metric card also changes its appearance based on the set threshold.
                         <section class="row">
                                     <section class="col-sm-6">
                                                 <br><img src="/assets/images/help/Capture11.png" alt="Threshold Warning Breach Image">
@@ -281,6 +318,9 @@
                                                 <br><img src="/assets/images/help/Capture10.png" alt="Threshold Alert Breach Image">
                                     </section>
                         </section>
+                        When a measure breaches its set threshold it is distinctly recognizable on score card. Score card also changes its text color based on the set threshold.
+                        <br><img src="/assets/images/help/score_card_threshold.png" alt="ScoreCard Measures Option Image"><br>  
+
                         <p class="well">
                                     Remember to click on <i>Apply</i> button at the bottom of the dialog and then click on dashboard <i>Save</i> button to permanently save thresholds.
                         </p>   
@@ -377,5 +417,3 @@
             <a href="#top" class="btn btn-default">Go to Top</a>
 </section>
 <!-- go to top button end-->
-
-
