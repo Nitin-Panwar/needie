@@ -260,6 +260,7 @@ angular.module('sasaWebApp')
 		 * @return {[type]}          [description]
 		 */
 	    scope.applyFilter = function (argument) {
+	    	$rootScope.$broadcast('featureWordCloud');
 	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;
 	    	$rootScope.placeholder.edited = true; 
 	    	scope.showfilters = false; 	
