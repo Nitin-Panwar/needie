@@ -50,10 +50,10 @@ angular.module('sasaWebApp', [
   function ($rootScope, $http, webServiceURL, messageCenterService,dashBoardsFactory,$location, usersFactory,$stateParams) {
     //Login user if not logged in
     if($rootScope.user == undefined){ 
-      $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
-        $rootScope.userDetails = response.data.user;
-        $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
-        // $rootScope.user = 'gar\\npanwar'
+      // $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
+      //   $rootScope.userDetails = response.data.user;
+      //   $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
+        $rootScope.user = 'gar\\npanwar'
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
             $rootScope.homepage = data.homepage
@@ -61,9 +61,9 @@ angular.module('sasaWebApp', [
               var homepage = '/?dashboardId='+data.homepage;         
               $location.url(homepage)  
             }            
-        }, function (){
-            messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
-        })     
+        // }, function (){
+        //     messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
+        // })     
       },function (err) {
           // redirect user to access denied page
           $location.url('/accessDenied')
@@ -83,7 +83,7 @@ angular.module('sasaWebApp', [
     gridsterConfig.columns= 6, // the width of the grid, in columns
     gridsterConfig.pushing= true, // whether to push other items out of the way on move or resize
     gridsterConfig.floating= true, // whether to automatically float items up so they stack (you can temporarily disable if you are adding unsorted items with ng-repeat)
-    gridsterConfig.swapping= true, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
+    gridsterConfig.swapping= false, // whether or not to have items of the same size switch places instead of pushing down if they are the same size
     gridsterConfig.width= 'auto', // can be an integer or 'auto'. 'auto' scales gridster to be the full width of its containing element
     gridsterConfig.colWidth= 'auto', // can be an integer or 'auto'.  'auto' uses the pixel width of the element divided by 'columns'
     gridsterConfig.rowHeight= 40, // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.

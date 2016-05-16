@@ -59,7 +59,6 @@ angular.module('sasaWebApp')
                 j=j+1;  
             }  
 	      };	      	      
-
 	      // second handle textboxes
 	      for (var i = 0; i < $rootScope.placeholder.textBoxes.length; i++) {	        	      	
 	        dashboardObj.components[dashboardObj.components.length] = $rootScope.placeholder.textBoxes[i];	        
@@ -73,7 +72,6 @@ angular.module('sasaWebApp')
             dashboardObj.description = ""; 
           }
 	      dashboardObj.filters = $rootScope.globalQuery;
-
           if($rootScope.placeholder.dashboard.version){
             dashboardObj.version = $rootScope.placeholder.dashboard.version + 1;
           }

@@ -22,7 +22,7 @@
 		</section>
 		<!-- dashboard buttons section -->
 		<section class="row inline">
-			<section class="col-md-3">
+			<section class="col-sm-3">
 			    <!-- dashboard name -->
 				<i class="fa fa-file" ng-if="placeholder.dashboard.name"></i>&nbsp;&nbsp;<span class="lead">{{placeholder.dashboard.name}}</span><br>
 				<small ng-if="placeholder.dashboard.description" class="">{{placeholder.dashboard.description|limitTo:100}}&nbsp;&nbsp;<i tooltip-placement="right"uib-tooltip="{{placeholder.dashboard.description}}">
@@ -32,7 +32,7 @@
 				<small ng-if="placeholder.dashboard.owner">&nbsp;{{placeholder.dashboard.owner}}</small>&nbsp;&nbsp;&nbsp;&nbsp;
 				<i ng-if="placeholder.dashboard.modified_on" class="fa fa-calendar">&nbsp;&nbsp;</i>{{placeholder.dashboard.modified_on | limitTo:10}}
 			</section>
-			<section class=" col-sm-9">	
+			<section class=" col-md-9">	
 				<section class="pull-right">
 					<button type="button" class="btn btn-primary" ng-click="launchSave()">Save</button>
 				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()" ng-if="meta.view_type=='metriccard'"><i class="fa fa-text-width"></i> Add Text</button>	
