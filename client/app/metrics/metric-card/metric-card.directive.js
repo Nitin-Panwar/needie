@@ -8,10 +8,6 @@ angular.module('sasaWebApp')
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
-        //Varibales to change measure color
-        // scope.measure_color_red=[]
-        // scope.measure_color_green=[]
-        // if(scope.metricData['distributions'].length)
         //Setting options for the bar graph
         scope.options5 = {}; 
         if(scope.metricData['distributions']){
@@ -90,14 +86,45 @@ angular.module('sasaWebApp')
            }
         };
     
-        // This function watches the changes in global filter values
+        //This function watches the changes in global filter values
         scope.$watch(function () {
           return $rootScope.applyFilter;
-        }, function(newValue, oldValue, scope) {         
+        }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
             scope.getMetric();
           }          
         });
+
+        //Watch var_changeData to change score_card data
+        scope.$watch(function () {
+          return $rootScope.var_changeData;
+        }, function(newValue, oldValue, scope) {       
+          if(newValue !== oldValue){
+            scope.getMetric();
+          }          
+        });
+
+        //This function gets latest values of metrics
+        $rootScope.promiseObject = {};
+        scope.getMetric = function () { 
+          if($rootScope.meta.view_type=='scorecard'){
+            scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+              $rootScope.placeholder['metric'][scope.metricIndex]=response;
+              delete $rootScope.promiseObject[scope.metricIndex];                                 
+            });
+            $rootScope.promiseObject[scope.metricIndex] = scope.requestPromise;
+            var arr = [];
+            for(var key in $rootScope.promiseObject){
+              arr.push($rootScope.promiseObject[key])
+            }          
+            $rootScope.myPromise = arr; 
+          }
+          else{
+            scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+              $rootScope.placeholder['metric'][scope.metricIndex]=response;
+          })            
+        }                     
+        }  
 
 
         //Define custom filer for object sorting
@@ -112,25 +139,6 @@ angular.module('sasaWebApp')
           });
           return filtered;
         }
-
-        // //function to change vizualization
-        // scope.changeViz = function (type) {
-        //   if(type==='line' && !scope.line){
-        //     scope.line=!scope.line;
-        //   }
-        //   if(type==='bar' && scope.line){
-        //     scope.line=!scope.line;
-        //   } 
-        // };
-
-        //This function gets latest values of metrics
-        scope.getMetric = function () {                
-          scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery}).$promise.then(function (resposne) {            
-            $rootScope.placeholder['metric'][scope.metricIndex]=resposne;
-          },function (err) {
-            console.error(err);
-          })
-        };
 
         //This function validates changes in measure thresholds
         scope.$watch('[options5,metricData["measures"]]',function(){
@@ -154,13 +162,11 @@ angular.module('sasaWebApp')
                     if(current_value < measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
-                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
                       scope.alertBreached = true;
                       scope.warningBreached = false;
-                      // scope.measure_color_red[key]=true;
                       break;
                     } 
                   }
@@ -168,13 +174,11 @@ angular.module('sasaWebApp')
                     if(current_value <= measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
-                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
                       scope.alertBreached = true;
                       scope.warningBreached = false;
-                      // scope.measure_color_red[key]=true;
                       break;
                     }
 
@@ -183,13 +187,11 @@ angular.module('sasaWebApp')
                     if(current_value > measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
-                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
                       scope.alertBreached = true;
                       scope.warningBreached = false;
-                      // scope.measure_color_red[key]=true;
                       break;
                     } 
                   }
@@ -197,13 +199,11 @@ angular.module('sasaWebApp')
                     if(current_value >= measure.goal.value){
                       scope.alertBreached = false;
                       scope.warningBreached = true;
-                      // scope.measure_color_green[key]=true;
                       break;
                     }
                     else{
                       scope.alertBreached = true;
                       scope.warningBreached = false;
-                      // scope.measure_color_red[key]=true;
                       break;
                     } 
                   }
@@ -256,7 +256,7 @@ angular.module('sasaWebApp')
               var curHeight = gridsterConfig.rowHeight*scope.metricData.size.y;
               var diff = curHeight - newValue;
               // check if new height is higher than current height
-              // or difference of new height and old height is more than a row size.
+              // or difference of new height and old height is more than a rowro size.
               if(newValue > curHeight || diff > gridsterConfig.rowHeight){
                 notRight = true;
               }  

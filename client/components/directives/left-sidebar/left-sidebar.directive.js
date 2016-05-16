@@ -67,22 +67,13 @@ angular.module('sasaWebApp')
 	        })
 	    };
 
-	    /**
-	     * this function gets a list of metrics and their workflows
-	     * @param  {[type]} argument [description]
-	     * @return {[type]}          [description]
-	     */
-	    scope.getMetricsList = function () {
-	    	getMetrics();
-	    }
-	    function getMetrics() {
+	    //This function gets a list of metrics and their workflows
+	    scope.getMetrics=function () {
 	    	scope.metriclist = !scope.metriclist;	    	
 	    	if(scope.metriclist){
 	    		scope.showmydashboards = false;
 	    		scope.showfilters = false;
 	    	}
-
-
 	    	workflow.get().$promise.then(function (data) {
 	    		scope.dashboardList = data;
 	    	},function (err) {
@@ -90,17 +81,15 @@ angular.module('sasaWebApp')
 	    	});
 	    }
 
-	    /**
-	     * adds metrics to dashboard
-	     * @param {[type]} argument [description]
-	     */
+	    //This function adds metrics to dashboard
 	    scope.addMetric2Dashboard = function (argument) {
+	    	//Calling parent service function to add metric to dashbord
 	    	parentService.placeholderAdd('metric',argument);
 	    	$rootScope.placeholder.edited = true;
 	    };
 
 	    //This function is being used to determine whether 
-	    //a metric already been added in dashboard or not.
+	    //a metric has already been added in dashboard or not.
 	    scope.show = function(item){
             var pos = $rootScope.placeholder.metric.map(function(e) { return e._id; }).indexOf(item);
             if(pos !== -1){return true;}
@@ -271,11 +260,11 @@ angular.module('sasaWebApp')
 		 * @return {[type]}          [description]
 		 */
 	    scope.applyFilter = function (argument) {
+	    	$rootScope.$broadcast('featureWordCloud');
 	    	$rootScope.applyFilter = $rootScope.applyFilter + 1;
 	    	$rootScope.placeholder.edited = true; 
 	    	scope.showfilters = false; 	
 	    	toggleSideBar();  
-
 	    }
 
 

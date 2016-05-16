@@ -18,7 +18,8 @@ angular.module('sasaWebApp', [
   'ui.grid.moveColumns',
   'ngTouch',
   'ngCsv',
-  'xeditable'
+  'xeditable',
+  'ngMaterial'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
      $urlRouterProvider
@@ -33,16 +34,29 @@ angular.module('sasaWebApp', [
     dialogsProvider.setSize('la');
   }])//end config
 
+// This filter will provide the range of the numbers in 
+// dropdown
+.filter('range', function() {
+  return function(input, min, max) {
+    min = parseInt(min); //Make string input int
+    max = parseInt(max);
+    for (var i=min; i<max; i++)
+      input.push(i);
+    return input;
+  };
+})
+
 .run(
-  function ($rootScope, $http, webServiceURL, messageCenterService, $location, usersFactory,$stateParams) {
+  function ($rootScope, $http, webServiceURL, messageCenterService,dashBoardsFactory,$location, usersFactory,$stateParams) {
     //Login user if not logged in
-    if($rootScope.user == undefined){      
+    if($rootScope.user == undefined){ 
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
         $rootScope.userDetails = response.data.user;
         $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
         // $rootScope.user = 'gar\\npanwar'
         //find user homepage    
-        $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) { 
+        $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
+            $rootScope.homepage = data.homepage
             if(data.homepage && !$stateParams.dashboardId){
               var homepage = '/?dashboardId='+data.homepage;         
               $location.url(homepage)  
@@ -56,6 +70,12 @@ angular.module('sasaWebApp', [
           messageCenterService.add('danger','Could not login!!!',{ status: messageCenterService.status.permanent });
       })  
     }
+    //API call to get the current scale value
+    $rootScope.myPromise= dashBoardsFactory.getScaleInfo({}).$promise.then(function (data) { 
+      $rootScope.scaleInfoData=data;
+    },function (err) {
+      messageCenterService.add('danger','Could not get scale Info!!!',{status: messageCenterService.status.permanent });
+    })
   }
 )
   angular.module('sasaWebApp').run(['gridsterConfig', function(gridsterConfig) {
