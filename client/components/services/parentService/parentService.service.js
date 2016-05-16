@@ -5,7 +5,6 @@ angular.module('sasaWebApp')
     	
         //This function adds new items to placeholder
     	this.placeholderAdd = function (type, item){
-            // $rootScope.meta.view_type = 'scorecard'
     		//Creating dummy dashboard id before adding any metric to it
     		if(!$rootScope.placeholder.dashboard._id)
     		{ 
@@ -15,8 +14,6 @@ angular.module('sasaWebApp')
     		if(type === 'metric'){    			
     			var id = item;    			
     			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {   				
-                    // var metric = data;
-                    // console.log(data)
                     data.size = {x: 2};
                     data.type='metric';                   
                     $rootScope.placeholder[type].push(data);
@@ -36,7 +33,6 @@ angular.module('sasaWebApp')
     	this.placeholderRemove = function (type, item) {    		
     		if(type === 'metric'){
     			var index = $rootScope.placeholder.metric.indexOf(item); 
-                // $rootScope.placeholder.metric.splice(index, 1);
                 $rootScope.placeholder.metric[index].name=undefined;
     			messageCenterService.add('success','Removed from dashboard',{timeout: 3000})
     		}
@@ -59,7 +55,6 @@ angular.module('sasaWebApp')
                 j=j+1;  
             }  
 	      };	      	      
-
 	      // second handle textboxes
 	      for (var i = 0; i < $rootScope.placeholder.textBoxes.length; i++) {	        	      	
 	        dashboardObj.components[dashboardObj.components.length] = $rootScope.placeholder.textBoxes[i];	        
@@ -73,7 +68,6 @@ angular.module('sasaWebApp')
             dashboardObj.description = ""; 
           }
 	      dashboardObj.filters = $rootScope.globalQuery;
-
           if($rootScope.placeholder.dashboard.version){
             dashboardObj.version = $rootScope.placeholder.dashboard.version + 1;
           }
