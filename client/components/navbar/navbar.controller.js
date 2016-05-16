@@ -22,6 +22,10 @@ angular.module('sasaWebApp')
     }
 
 
+    $scope.sendToHomepage = function(){
+      window.location.reload()
+    }
+    
     /**
      * [clearPlaceholder description]
      * @return {[type]} [description]
