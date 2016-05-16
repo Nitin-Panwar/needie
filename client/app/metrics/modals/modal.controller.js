@@ -296,11 +296,11 @@ angular.module('sasaWebApp')
        * this function updates relational filter values
        */
       $scope.updateGlobalFilters = function () {
-        if(Object.keys($scope.filterQuery).length == 0){          
-          // $scope.state = false;
-          $scope.showfilters = !$scope.showfilters;
-          $scope.getFilters();  
-        }
+        // if(Object.keys($scope.filterQuery).length == 0){          
+        //   // $scope.state = false;
+        //   $scope.showfilters = !$scope.showfilters;
+        //   $scope.getFilters();  
+        // }
 
         var data = $scope.FilterData;
         var dataHolder = [];
