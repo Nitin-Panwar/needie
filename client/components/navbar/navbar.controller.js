@@ -36,6 +36,7 @@ angular.module('sasaWebApp')
       $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3}],'view_type': 'metriccard'}
       $rootScope.GlobalFilters = {};
       $rootScope.globalQuery = {};
+      $rootScope.applyFilter =0;
     }
 
     //Function to close leftsidebar 

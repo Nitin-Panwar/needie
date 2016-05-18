@@ -104,6 +104,26 @@ angular.module('sasaWebApp')
           }          
         });
 
+        //Watch viewType to change data 
+        scope.$watch(function () {
+          return $rootScope.meta.view_type;
+        }, function(newValue, oldValue, scope) {       
+          if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
+            var callAPI = false;
+            for (var i = 0; i < scope.metricData.measures.length; i++) {
+              if(scope.metricData.measures[i]['scorecard_data']){
+                if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                  callAPI = true;
+                  break;
+                }
+              }
+            };
+            if(callAPI == true){
+              scope.getMetric();
+            }
+          }          
+        });
+
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
@@ -125,7 +145,6 @@ angular.module('sasaWebApp')
           })            
         }                     
         }  
-
 
         //Define custom filer for object sorting
         scope.customFilter = function(items){
