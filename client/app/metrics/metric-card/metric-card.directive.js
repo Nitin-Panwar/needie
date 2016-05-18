@@ -104,11 +104,32 @@ angular.module('sasaWebApp')
           }          
         });
 
+        //Watch viewType to change data 
+        scope.$watch(function () {
+          return $rootScope.meta.view_type;
+        }, function(newValue, oldValue, scope) {       
+          if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
+            var callAPI = false;
+            for (var i = 0; i < scope.metricData.measures.length; i++) {
+              if(scope.metricData.measures[i]['scorecard_data']){
+                if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                  callAPI = true;
+                  break;
+                }
+              }
+            };
+            if(callAPI == true){
+              scope.getMetric();
+            }
+          }          
+        });
+
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+              console.log(response)
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
               delete $rootScope.promiseObject[scope.metricIndex];                                 
             });
@@ -122,10 +143,10 @@ angular.module('sasaWebApp')
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
+              console.log(response)
           })            
         }                     
         }  
-
 
         //Define custom filer for object sorting
         scope.customFilter = function(items){
