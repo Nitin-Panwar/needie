@@ -16,7 +16,6 @@ angular.module('sasaWebApp')
         data.size = {x: 2};
         data.type='metric';                 
         $rootScope.placeholder[type].push(data);
-        console.log(data)
 				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
 			}, function (err) {
 				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
