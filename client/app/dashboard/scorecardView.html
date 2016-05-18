@@ -1,0 +1,45 @@
+<!-- Score card view --> 
+<section ng-if="meta.view_type=='scorecard'">
+	<!-- Score card header-->
+	<form class="form-inline" style="margin-bottom: 10px;" >
+		<div class="input-group">				  
+		  <select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
+		  <span class="input-group-addon" id="basic-addon1">Quarter</span>
+		</div>
+		&nbsp;&nbsp;
+		<div class="input-group">				  
+		  <select ng-options="month for month in [] | range:0:13" ng-model="meta.details[1].window_size"  class="form-control"></select>
+		  <span class="input-group-addon" id="basic-addon1">Month</span>
+		</div>
+		&nbsp;&nbsp;
+		<div class="input-group">				  
+		  <select ng-options="work_week for work_week in [] | range:0:53" ng-model="meta.details[0].window_size" class="form-control"></select>
+		  <span class="input-group-addon" id="basic-addon1">Work Week</span>
+		</div>
+		<button type="submit" class="btn btn-primary" style="margin-top:2px;" ng-click="changeCardData()">Apply</button>
+	</form>
+	<!-- Score card header end -->
+
+	<!-- Score card table -->
+	<div class="table-responsive">
+		<table class="table table-bordered table-hover">
+			<thead class="thead-inverse">
+				<tr>
+					<th>Metric Name</th>
+					<th>Measure Name</th>
+					<th ng-repeat="header in scorecard_header track by $index">{{header}}</th>
+				</tr>
+			</thead>
+			<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)">
+			   	<td class="word-wrap:break-word" rowspan="{{rowspan}}" ng-if="measure[0] != ''">{{measure['0']}}</td>
+			    <td>{{measure['1']}}<br>
+					<span ng-if="measure.goal.value" class="help-block">
+					Target {{measure.goal.comparision}} {{measure.goal.value}}/{{measure.goal.scale}}</span>
+				</td>
+			   	<td ng-repeat="(key, value) in measure['2'] track by $index" ng-class="{'red':targetMet, 'green': targetMiss}" ng-init="targetMet=evaluateTarget(measure,value,$index)" style="vertical-align: middle">{{value}}</td>
+			</tr>
+		</table>
+	</div>
+	<!-- Score card table end -->
+</section>
+<!-- Score card view end
