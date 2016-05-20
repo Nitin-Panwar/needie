@@ -10,8 +10,8 @@ angular.module('sasaWebApp')
     $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3}],'view_type': 'metriccard'}
     //variable to watch, while changing score_card data
     $rootScope.var_changeData =0
+    //Variable to check whether filte is applied or not
     $rootScope.applyFilter = 0;
-
     //Code to detect browser info.
     var objAgent = navigator.userAgent; 
     $scope.objbrowserName = navigator.appName; 
@@ -164,17 +164,6 @@ angular.module('sasaWebApp')
       $scope.showmydashboards = false;
       $scope.showfilters = false;
       $rootScope.closeLeftSidebar =false;
-    }
-
-    //Call back end API only if filter is being applied.
-    $scope.checkViewType =function(){
-      $scope.$watch('meta.view_type',function(newValue,oldValue){
-        if(newValue!= oldValue && $rootScope.applyFilter!==0){
-          if($rootScope.meta.view_type == 'scorecard'){
-            $scope.changeCardData();
-          }
-        }
-      })
     }
 
     $scope.$watch('placeholder.metric', function(newValue, oldValue){
