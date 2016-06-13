@@ -68,11 +68,11 @@
 		</section>				
 		<section class="row" >&nbsp;</section>
 		<!--Scorecard view -->
-		<section ng-include="'app/dashboard/scorecardView.html'"></section>
+		<section ng-show="meta.view_type='scorecard'" ng-include="'app/dashboard/scorecardView.html'"></section>
 		<!-- Scorecard end -->
 
 		<!-- MetriccardView view -->
-		<section ng-include="'app/dashboard/metriccardView.html'"></section>
+		<section ng-show="meta.view_type='metriccard'" ng-include="'app/dashboard/metriccardView.html'"></section>
 		<!-- MetriccardView end -->
 	</section>
 </section>
