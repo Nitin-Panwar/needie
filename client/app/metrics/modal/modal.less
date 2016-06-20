@@ -40,17 +40,22 @@ md-backdrop.md-select-backdrop {
 .md-select-menu-container {
 	 z-index: 1111 !important;
 }
-// md-divider{
-// 	border-top-width: 5px !important;
-// }
-// md-select{
-//   overflow-y: scroll !important;
-//   max-height: 120px !important;
-// }
-// .md-select-value *:first-child{
-//   max-height: 100px !important;
-// }
-//  .md-select-value{
-//     overflow-y: scroll !important;
-   
-//   }
+.md-select-value *:first-child {
+    display: -webkit-box !important; 
+    white-space: normal !important;
+    max-height: 300px !important;
+    overflow: auto !important;
+}
+.md-select-value {
+    div {
+        display: inline !important;
+    }
+}
+md-list-item, md-list-item .md-list-item-inner {
+
+  min-height: 0px !important;
+}
+md-backdrop.md-opaque.md-default-theme,
+.md-dialog-container {
+  position:fixed;
+}

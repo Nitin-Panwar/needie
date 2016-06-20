@@ -1,0 +1,40 @@
+
+<div class="md-dialog-content">
+	<table  border="1" class="table table-bordered table-striped table-intel">
+		<tbody>
+		<tr>
+			<th allign="center">Name</th>
+			<td title="String" class="STRING">{{data.alias}}</td>
+		</tr>
+		<tr>
+			<th>Alias</th>
+			<td title="String" class="STRING">{{data.alias}}</td>
+		</tr>
+		<tr>
+			<th>Description</th>
+			<td title="String" class="STRING">{{data.description}}</td>
+		</tr>
+		<!-- <tr>
+			<th>Author</th>
+			<td title="String" class="STRING">{{data.author}}</td>
+		</tr> -->
+		<tr>
+			<th>Dataset</th>
+			<td title="String" class="STRING">{{data.dataset}}</td>
+		</tr>		
+		<tr>
+			<th>Created</th>
+			<td title="String" class="STRING">{{data.created_on | date:'yyyy-MM-ddTHH:mm:ssZ'}}</td>
+		</tr>	
+		<tr>
+			<th>Modified</th>
+			<td title="String" class="STRING">{{data.modified_on}}</td>
+		</tr>						
+		
+		</tbody>
+	</table>
+</div>
+
+<md-divider></md-divider>
+
+

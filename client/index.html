@@ -6,10 +6,12 @@
 <!--[if gte IE 8]><![endif]-->
 <!-- alert msg end -->
 
-<html class="no-js">
+<html>
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=11">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    
     <meta http-equiv="Cache-control" content="public">
     <meta http-equiv="Cache-control" content="private">
     <meta http-equiv="Cache-control" content="no-cache">
@@ -40,7 +42,7 @@
     
   </head>
   <section ng-include="'components/navbar/navbar.html'"></section>
-  <body ng-app="sasaWebApp" id="testdiv" style="overflow: scroll; min-height:4000px; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
+  <body class="no-js" ng-app="sasaWebApp" id="testdiv" style="overflow:scroll; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -57,7 +59,7 @@
     <![endif]-->
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- bower:js -->
-      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/jquery/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -131,7 +133,8 @@
           <script src="app/help/help.controller.js"></script>
           <script src="app/help/help.js"></script>
           <script src="app/metrics/metric-card/metric-card.directive.js"></script>
-          <script src="app/metrics/modals/modal.controller.js"></script>
+          <script src="app/metrics/modal/modal.controller.js"></script>
+          <script src="app/score-card/score-card.directive.js"></script>
           <script src="components/constants/constants.service.js"></script>
           <script src="components/directives/barChart/barChart.directive.js"></script>
           <script src="components/directives/barChart/barChartFactory/barChartFactory.service.js"></script>

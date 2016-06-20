@@ -1,0 +1,48 @@
+<md-dialog aria-label="Visualization" style="width:40%" ng-cloak>
+  <form>
+    <md-toolbar layout="row">
+      <div class="md-toolbar-tools" layout-align="space-around center" style="background-color:#0071C5;color:white">
+        <h2>Advance Settings</h2> 
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Data" md-active="tab==='data'" ng-click="tab='data'">
+           <md-content class="md-padding">
+             <span ng-if="tab==='data'" ng-include="'app/metrics/modal/data.html'"></span> 
+          </md-content>
+        </md-tab>
+        <md-tab label="Filter" md-active="tab==='filter'" ng-click="tab='filter'">
+           <md-content class="md-padding">
+            <span ng-if="tab==='filter'" ng-include="'app/metrics/modal/filter.html'"></span>
+          </md-content>
+        </md-tab>
+        <md-tab label="Measure" md-active="tab==='measure'" ng-click="tab='measure'">
+           <md-content class="md-padding">
+            <span ng-if="tab==='measure'" ng-include="'app/metrics/modal/measures.html'"></span>
+          </md-content>
+        </md-tab>
+        <md-tab label="Metric Details" md-active="tab==='metric'" ng-click="tab='metric'">
+           <md-content class="md-padding">
+            <span ng-if="tab==='metric'" ng-include="'app/metrics/modal/metricDetails.html'"></span>
+          </md-content>
+        </md-tab>
+        <md-tab label="Visualization" md-active="tab==='visualization'" ng-click="tab='visualization'">
+           <md-content class="md-padding">
+            <span ng-if="tab==='visualization'" ng-include="'app/metrics/modal/visualization.html'"></span>
+          </md-content>
+        </md-tab>
+
+      </md-tabs>
+      <br>
+    </md-dialog-content>
+
+   
+    <md-dialog-actions layout="row">
+      <md-button ng-hide="tab==='Metric'" ng-click="save(tab)" class="md-raised" style="background-color:#0071C5;color:white">Apply</md-button>
+      <md-button ng-click="cancel()">Close</md-button>
+    </md-dialog-actions>
+
+  </form>
+</md-dialog>

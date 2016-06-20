@@ -50,20 +50,20 @@ angular.module('sasaWebApp', [
   function ($rootScope, $http, webServiceURL, messageCenterService,dashBoardsFactory,$location, usersFactory,$stateParams) {
     //Login user if not logged in
     if($rootScope.user == undefined){ 
-      $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
-        $rootScope.userDetails = response.data.user;
-        $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
-        // $rootScope.user = 'gar\\npanwar'
+      // $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
+      //   $rootScope.userDetails = response.data.user;
+      //   $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
+        $rootScope.user = 'gar\\abs007'
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
             $rootScope.homepage = data.homepage
             if(data.homepage && !$stateParams.dashboardId){
-              var homepage = '/?dashboardId='+data.homepage;         
+              var homepage = '/?dashboardId='+data.homepage;      
               $location.url(homepage)  
             }            
-        }, function (){
-            messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
-        })     
+        // }, function (){
+        //     messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
+        // })     
       },function (err) {
           // redirect user to access denied page
           $location.url('/accessDenied')
