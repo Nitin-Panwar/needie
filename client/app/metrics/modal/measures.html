@@ -1,6 +1,6 @@
 <div>
 	<ul class="list-group">	
-		<li class="list-group-item" ng-repeat="measure in data track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active;goal[$index]=measureInfo[$index].goal"  ng-class="{'disabled':measureInfo[$index].active==false}">
+		<li class="list-group-item" ng-repeat="measure in data['measures'] track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active;goal[$index]=measureInfo[$index].goal"  ng-class="{'disabled':measureInfo[$index].active==false}">
 			<h5>{{measure.name}}&nbsp;:&nbsp;&nbsp;{{measure.value|number}}{{measure.unit}}			
 				<a href ng-click="toggelActive($index)" class="pull-right">							
 				<span ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined" class="badge" >Disable Measure</span>
@@ -83,3 +83,6 @@
 		</li>
 	</ul>
 </div>
+
+<md-divider></md-divider>
+

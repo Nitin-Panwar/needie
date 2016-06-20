@@ -15,11 +15,14 @@ angular.module('sasaWebApp')
 
     link:function(scope, element, attrs){
       var goals=[];
+      console.log(scope.options)
       // scope.colors = ["blue","red","yellow","green"]
       //Creating div id on the fly
       var randomId = "x" + Math.floor(Math.random()*10000);
       d3.select(element[0]).append('div').attr("id",randomId)
       scope.$watch('data',function(){
+        console.log("i am inside data watch")
+        console.log(scope.data)
         //Creating array of goals
         goals=[];
         for (var i = 0; i < scope.measures.length; i++) {
@@ -80,6 +83,8 @@ angular.module('sasaWebApp')
       },true);
 
       scope.$watch('options',function(){
+        console.log("i am in options")
+        console.log(scope.options)
         //Creating array of goals
         goals=[];
         for (var i = 0; i < scope.measures.length; i++) {
@@ -95,16 +100,20 @@ angular.module('sasaWebApp')
           return;
         if(scope.container == null || scope.container == undefined)
           return;
-        if(!scope.stackBarChartObject)
+        if(!scope.stackBarChartObject){
+          console.log("inside if")
           drawChart()
+        }
         else
         {
+          console.log("inside else")
           scope.stackBarChartObject
             .data(scope.options.yAxis.length==2?scope.data[0]:scope.data)
             .xAxis(scope.options.xAxis)
             .y2Data(scope.options.yAxis.length==2?scope.data[1]:null)
             .hLines(goals)
             .colorMapping(scope.options.colorMapping)();
+            console.log("calling renderChart function")
           scope.stackBarChartObject.renderChart();
         }
       },true);

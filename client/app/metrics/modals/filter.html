@@ -31,7 +31,12 @@
 	</ul>
 
 </div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="save('filter')">Apply</button>
-	<button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
-</div>
+</md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button ng-click="save('filter')" class="md-raised" style="background-color:#0071C5;color:white">Apply</md-button>
+      <md-button ng-click="cancel()">Close</md-button>
+    </md-dialog-actions>
+
+  </form>
+</md-dialog>
