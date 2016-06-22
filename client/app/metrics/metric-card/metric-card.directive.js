@@ -8,36 +8,35 @@ angular.module('sasaWebApp')
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
+        scope.semaphore = true;
         //Setting options for the bar graph
-        scope.options5 = {};
-        if(scope.metricData['distributions']){
+        scope.options5 = {}; 
+        if(scope.semaphore){
+          if(scope.metricData['distributions']){
           if(scope.metricData['distributions'].length){
             if(scope.metricData['distributions'][0]!==null){
               if(scope.metricData['distributions'][0]['axis']){
                   scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
               }
               else{
-                 scope.options5.xAxis =  ["month","category"]
+                 scope.options5.xAxis =  ["quarter","category"]
               }
-              scope.options5.yAxis = ['Hours']
-              scope.options5.series = "category"    
+              scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+              scope.options5.series = "category"
             }
           }
         }
-        
         scope.options5.chartType = ["bar"]
         scope.options5.showLegend = true;
         scope.options5.legendFilter = true
         scope.options5.showGridlines = false
+        }
                 
         //function to change x axis 
         scope.changeXaxis=function(type){
           if(type=='WW'){
-            scope.options5.xAxis =  ["month","portfolio"]
-            scope.options5.yAxis = ['Total BRT']
-            scope.options5.series = "portfolio"
-            // scope.options5.xAxis = ["work_week","category"]
-            // scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
+            scope.options5.xAxis = ["work_week","category"]
+            scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
           }
           if(type=='Month'){
           scope.options5.xAxis = ["month","category"]
@@ -141,23 +140,14 @@ angular.module('sasaWebApp')
                     }
                 }).then(function(data) { 
                   if(scope.metricData['distributions'].length>0) {
-                    console.log(scope.metricData['distributions'][0])
                     for(var key in data){
                       if(key==="y_data")
                         scope.metricData['distributions'][0][key][0]["label"] = data[key][0]
                       else
                       scope.metricData['distributions'][0][key] = data[key];
                     }
-                    console.log(scope.metricData)
                   }
-                   scope.getMetric(); 
-                    // if(scope.metricData['distributions'][0]['advance_viz']===true){
-                    //   console.log("karishma")
-                    //   scope.options5.xAxis =  ["month","portfolio"]
-                    //   scope.options5.yAxis = ['Total MIs']
-                    //   scope.options5.series = "portfolio"
-
-                    // }         
+                   scope.getMetric();          
                 });
                 break;
           }    
@@ -204,7 +194,6 @@ angular.module('sasaWebApp')
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
-          console.log(scope.metricData)
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
@@ -218,11 +207,15 @@ angular.module('sasaWebApp')
             $rootScope.myPromise = arr; 
           }
           else{
+            
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
-              if(response['distributions'][0]['advance_viz']===true){
-                console.log("Advance Visualization")
-              }
+            if(scope.metricData['distributions'][0]['advance_viz'] ==true){
+              scope.semaphore = false;
+              scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
+              scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
+              scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
+            }
           })            
         }                     
         }  
