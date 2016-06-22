@@ -1,10 +1,10 @@
-    
-<div class="md-dialog-content" ng-init="getMetricColumns()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
+<div>
+<!-- <div ng-init="getMetricColumns()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}"> -->
   <div layout ="column">
     <div layout="row" ng-show="showColumns">
       <div flex>
        <md-subheader class="md-no-sticky" style="color:black;text-align: center">Available Columns</md-subheader>
-        <md-list flex style="border-style: dashed; border-width: 1px; border-radius:5px; max-height: 250px; overflow: auto; background-color: rgba(218, 221, 223, 0.25);">   
+        <md-list flex style="border-style: dashed; border-width: 1px; border-radius:5px; max-height: 250px; height:250px;overflow: auto; background-color: rgba(218, 221, 223, 0.25);">   
           <md-list-item  ng-repeat="item in availableColoumns.items track by $index | orderBy:'name'"  ng-click="selection(item, true)">
             <span style="color:#0071C5;" ng-show="availableColoumns.selected.indexOf(item) !== -1" class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505">{{item | uppercase}}</a>
           </md-list-item>
@@ -39,6 +39,7 @@
       <md-button class="btn btn-default btn-md" ng-click="getRawData('all')" ng-hide="selectedColumns.items.length === 0">Export CSV</md-button>
       <md-button class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</md-button> 
     </div>
+    <br>
     
   </div>
 </div>
