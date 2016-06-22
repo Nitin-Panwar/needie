@@ -1,4 +1,5 @@
 <div>
+	<label style="color:red" ng-show="data['distributions'][0]['advance_viz']">**Goal can be set w.r.t. Work Week, Month and Quarter </label>
 	<ul class="list-group">	
 		<li class="list-group-item" ng-repeat="measure in data['measures'] track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active;goal[$index]=measureInfo[$index].goal"  ng-class="{'disabled':measureInfo[$index].active==false}">
 			<h5>{{measure.name}}&nbsp;:&nbsp;&nbsp;{{measure.value|number}}{{measure.unit}}			
@@ -10,7 +11,7 @@
 			<div ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined">		
 				<div ng-if="measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage' && measure.type!=='mean'">
 					<div ng-cloak>
-					  	<md-content style="margin: 16px; padding:16px">
+					  	<md-content style="margin: 16px; padding:16px" ng-class="{'disabled':data['distributions'][0]['advance_viz']}">
 					    	<div layout>
 					     	    <div layout layout-align="center center">
 					        		<span class="md-body-1" style="font-size:large">Goal</span>&nbsp;&nbsp;&nbsp;
