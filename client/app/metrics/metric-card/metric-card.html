@@ -9,15 +9,15 @@
                     <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown" >
                         <li ng-click="launch('actions')" class="disabled"><a href="#">Actions</a></li>
                         <li role="separator" class="divider"></li>  
-                        <li ng-click="launch('data',metricData)"><a href="#">Data</a></li>
-                        <li ng-click="launch('filter',metricData)"><a href="#">Filters</a></li>
+                        <li ng-click="launch($event,'data',metricData)"><a href="#">Data</a></li>
+                        <li ng-click="launch($event,'filter',metricData)"><a href="#">Filters</a></li>
                         <li role="separator" class="divider"></li>
-                        <li ng-click="launch('measure',metricData,mydata)"><a href="#">Measures</a></li>    
-                        <li class="disabled">
+                        <li ng-click="launch($event,'measure',metricData,mydata)"><a href="#">Measures</a></li>    
+                        <li ng-click="launch($event,'visualization',metricData)">
                             <a href="#">Visualizations</a>
                         </li>                     
                         <li role="separator" class="divider"></li>
-                        <li ng-click="launch('metric',metricData)"><a href="#">Metric Details</a></li> 
+                        <li ng-click="launch($event,'metric',metricData)"><a href="#">Metric Details</a></li> 
                         <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
                     </ul>                
                 </li> 
@@ -33,7 +33,7 @@
         <!-- metric Card Body -->
         <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-             <section class="pull-right" ng-if="metricData['distributions'][0]">
+             <section class="pull-right" ng-if="!metricData['distributions'][0]['advance_viz']">
                 <!-- <span>X-Axis:</span> -->
                 <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer">WW</span>
                 <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
