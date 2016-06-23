@@ -1,0 +1,47 @@
+<!-- <div ng-init="getFilters()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">  -->  
+<div>
+  <md-content class="md-padding">
+    <div layout="row">
+      <md-input-container class="md-block" flex="35"  style="margin-left:7px" >
+        <label>Category</label>
+        <md-select ng-model="tempData.filterkey">
+          <md-option ng-repeat="(key,value) in filterSubData" ng-hide="isInQuery(key,filterQuery)" >
+            {{key}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container flex="55"  style="margin-left:2%"  class="md-block">
+        <label>Subcategory</label>
+        <md-select ng-model="tempData.filters[tempData.filterkey]" multiple>
+        <md-optgroup style="margin-left:10px">
+          <md-checkbox aria-label="Select All"
+                     ng-checked=isChecked(tempData.filterkey,"tempFilter")
+                     ng-click="toggleAll(tempData.filterkey,'tempFilter')">
+          <span ng-if="isChecked(tempData.filterkey,'tempFilter')">Un-</span>Select All
+          </md-checkbox>
+          <md-option ng-value="value" ng-repeat="value in filterSubData[tempData.filterkey]" >{{value}}</md-option>
+        </md-optgroup>
+        </md-select>          
+      </md-input-container>
+      <md-button style="margin-left:5%;background-color:#0071C5;" class="md-fab md-mini md-primary" ng-click="updateFilterQuery(tempData.filterkey, tempData.filters, 'add')" aria-label="Add filter"><i class="glyphicon glyphicon-plus"></i></md-button>
+    </div>
+
+    <div layout="row" ng-repeat="(key,value) in filterQuery">
+      <md-input-container class="md-block" flex="35" style="margin-left:7px" >
+        <input aria-label="FilterKey" style="color:black" ng-model="key" disabled>
+      </md-input-container>
+      <md-input-container flex="55"  style="margin-left:2%">
+        <md-select aria-label="FilterValues" ng-model="filterQuery[key]" multiple>
+          <md-optgroup style="margin-left:10px">
+            <md-checkbox aria-label="Select All" ng-checked=isChecked(key,'Filter') ng-click="toggleAll(key,'Filter')">
+              <span ng-if="isChecked(key,'Filter')">Un-</span>Select All
+            </md-checkbox>
+            <md-option ng-value="value" ng-repeat="value in filterSubData[key]">{{value}}</md-option>
+          </md-optgroup>
+        </md-select>          
+      </md-input-container>
+      <md-button style="margin-left:5%;background-color:#DADDDF;color:#5A5C5A" class="md-fab md-mini" aria-label="Remove filter" ng-click="updateFilterQuery(key,filterQuery,'remove')"><i class="glyphicon glyphicon-remove"></i></md-button>
+    </div>
+  </md-content>
+</div>
+<md-divider></md-divider>
