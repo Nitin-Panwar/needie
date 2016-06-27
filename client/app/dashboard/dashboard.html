@@ -6,8 +6,9 @@
 	<!-- left sidebar end -->
 
 	<!-- Create new dashboard-->
-	<section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()">
-		<dl>
+	<section class="col-md-11" ng-show="createNew">
+	<!-- <section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()">
+ -->		<dl>
 			<blockquote>
 				<p>
 					<dt class="text-capitalize">To add metrics to new dashboard</dt>
@@ -19,7 +20,9 @@
 	<!-- Create new dashboard end-->
 	
 	<!-- Dashboard view -->
-	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()">
+	<!-- <section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()"> -->
+
+	<section class="col-md-11" ng-show="placeholder.metric.length >0">
 		<!-- IE warning code-->
 		<section class="progress-bar progress-bar-danger col-md-11 container-fluid row" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;height:25px;margin-top: -20px" ng-if="objbrowserName!=='Chrome'">
 			<span style="color:white;font-size:15;">Please use Google chrome for best performance.!!!</span>
@@ -68,11 +71,11 @@
 		</section>				
 		<section class="row" >&nbsp;</section>
 		<!--Scorecard view -->
-		<section ng-if="meta.view_type=='scorecard'" ng-include="'app/dashboard/scorecardView.html'"></section>
+		<section ng-show="meta.view_type=='scorecard'" ng-include="'app/dashboard/scorecardView.html'"></section>
 		<!-- Scorecard end -->
 
 		<!-- MetriccardView view -->
-		<section ng-if="meta.view_type=='metriccard'" ng-include="'app/dashboard/metriccardView.html'"></section>
+		<section ng-show="meta.view_type=='metriccard'" ng-include="'app/dashboard/metriccardView.html'"></section>
 		<!-- MetriccardView end -->
 	</section>
 </section>

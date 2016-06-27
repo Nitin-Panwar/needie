@@ -141,13 +141,10 @@ angular.module('sasaWebApp')
                 }).then(function(data) { 
                   if(scope.metricData['distributions'].length>0) {
                     for(var key in data){
-                      if(key==="y_data")
-                        scope.metricData['distributions'][0][key][0]["label"] = data[key][0]
-                      else
                       scope.metricData['distributions'][0][key] = data[key];
                     }
                   }
-                   scope.getMetric();          
+                  scope.getMetric();          
                 });
                 break;
           }    
@@ -174,19 +171,21 @@ angular.module('sasaWebApp')
         //Watch viewType to change data 
         scope.$watch(function () {
           return $rootScope.meta.view_type;
-        }, function(newValue, oldValue, scope) {       
-          if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
-            var callAPI = false;
-            for (var i = 0; i < scope.metricData.measures.length; i++) {
-              if(scope.metricData.measures[i]['scorecard_data']){
-                if(scope.metricData.measures[i]['scorecard_data'].length ===0){
-                  callAPI = true;
-                  break;
+        }, function(newValue, oldValue, scope) {   
+          if(scope.metricData['distributions']){
+            if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
+              var callAPI = false;
+              for (var i = 0; i < scope.metricData.measures.length; i++) {
+                if(scope.metricData.measures[i]['scorecard_data']){
+                  if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                    callAPI = true;
+                    break;
+                  }
                 }
+              };
+              if(callAPI == true){
+                scope.getMetric();
               }
-            };
-            if(callAPI == true){
-              scope.getMetric();
             }
           }          
         });
@@ -196,6 +195,7 @@ angular.module('sasaWebApp')
         scope.getMetric = function () { 
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
               delete $rootScope.promiseObject[scope.metricIndex];                                 
             });
@@ -210,12 +210,19 @@ angular.module('sasaWebApp')
             
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
-            if(scope.metricData['distributions'][0]['advance_viz'] ==true){
-              scope.semaphore = false;
-              scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
-              scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
-              scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
-            }
+              if(scope.metricData['distributions']){
+                if(scope.metricData['distributions'][0]['advance_viz'] ==true){
+                  scope.semaphore = false;
+                  scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
+                  if(scope.metricData['distributions'][0]['group_by'][0]){
+                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
+                  }
+                  else{
+                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0]]
+                  }
+                  scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
+                }
+              }
           })            
         }                     
         }  
