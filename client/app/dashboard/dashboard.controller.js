@@ -490,4 +490,8 @@ angular.module('sasaWebApp')
         $scope.measureList[i]['2']= temp_array
       }
     }
+    // $('#dashboardArea').bind('click', function(event){
+    //   console.log("karishma")
+    //   closeLeftSidebar()
+    // })
   });
