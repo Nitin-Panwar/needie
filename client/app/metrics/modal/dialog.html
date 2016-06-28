@@ -7,7 +7,7 @@
     </md-toolbar>
 
     <md-dialog-content>
-      <div ng-init="getMetricColumns(); getFilters(); getAllFilters()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
+      <div ng-init="getMetricColumns(); getFilters(); getAllFilters()" id="waitloader" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
         <md-tabs md-dynamic-height md-border-bottom>
           <md-tab label="Data" md-active="tab==='data'" ng-click="tab='data'">
              <md-content class="md-padding">

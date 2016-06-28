@@ -34,6 +34,7 @@ angular.module('sasaWebApp')
                 
         //function to change x axis 
         scope.changeXaxis=function(type){
+          scope.options5.changeXaxis=true
           if(type=='WW'){
             scope.options5.xAxis = ["work_week","category"]
             scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
@@ -144,6 +145,7 @@ angular.module('sasaWebApp')
                       scope.metricData['distributions'][0][key] = data[key];
                     }
                   }
+                  console.log(scope.metricData['distributions'][0])
                   scope.getMetric();          
                 });
                 break;
@@ -209,10 +211,13 @@ angular.module('sasaWebApp')
           else{
             
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+              console.log(response)
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
               if(scope.metricData['distributions']){
+                console.log(scope.metricData['distributions'][0]['advance_viz'])
                 if(scope.metricData['distributions'][0]['advance_viz'] ==true){
                   scope.semaphore = false;
+                  console.log("within if condition")
                   scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
                   if(scope.metricData['distributions'][0]['group_by'][0]){
                     scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
@@ -222,8 +227,19 @@ angular.module('sasaWebApp')
                   }
                   scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
                 }
+                else{
+                  if(scope.metricData['distributions'][0]['advance_viz'] == false){
+                    scope.semaphore = false;
+                    console.log("within else condition")
+                    scope.options5.series = "category"
+                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],"category"]
+                    scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+                  }
+                }
               }
-          })            
+          }, function (err) {
+            messageCenterService.add('danger','No Data Found',{timeout: 10000});
+          });            
         }                     
         }  
 
