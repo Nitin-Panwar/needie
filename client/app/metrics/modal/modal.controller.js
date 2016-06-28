@@ -28,6 +28,7 @@ angular.module('sasaWebApp')
 		filterkey: '',
 		filters:{}
 	};
+  $scope.defaultViz = false;
   if(data['distributions'][0]['advance_viz'])
   {
       $scope.avData = {}
@@ -56,6 +57,7 @@ angular.module('sasaWebApp')
     }
   }
   $scope.setDefaultVisualization = function(){
+    if($scope.defaultViz === false){
       $scope.defaultViz =true
       $scope.avData = {
         x_data: 'quarter',
@@ -69,7 +71,12 @@ angular.module('sasaWebApp')
           $scope.avData.y_data.push(data.measures[i]['name'])
         }
       }
+    }
+    else{
+      $scope.defaultViz = false
+    }
   }
+
 	$scope.viz_details = {
 		x_data:[],
 		y_data:[],
@@ -397,7 +404,18 @@ angular.module('sasaWebApp')
 	$scope.formatVizData = function() {
     
     $scope.viz_details.advance_viz = $scope.avData.advance_viz;
-    $scope.viz_details.x_data.push($scope.avData.x_data);
+    
+    if($scope.defaultViz === true){
+      $scope.viz_details.x_data = ["year","month","quarter","work_week"]
+    }
+    else{
+        $scope.viz_details.x_data.push($scope.avData.x_data);
+        $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
+        if($scope.avData.group_by !== 'Not Required' && $scope.avData.group_by !== ''){
+        $scope.viz_details.group_by.push($scope.avData.group_by);
+    }
+    }
+
     for(var i=0; i<$scope.avData.y_data.length; i++){
       for (var j=0; j < data['distributions'][0]['y_data'].length; j++){
         if($scope.avData.y_data[i]===data['distributions'][0]['y_data'][j]['label']){
@@ -408,10 +426,8 @@ angular.module('sasaWebApp')
         }
       }
     }
-    if($scope.avData.group_by !== 'Not Required' && $scope.avData.group_by !== ''){
-    		$scope.viz_details.group_by.push($scope.avData.group_by);
-    }
-  	$scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
+    
+  	
   };
 
 	$scope.getAllFilters = function(){
