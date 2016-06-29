@@ -26,12 +26,13 @@ angular.module('sasaWebApp')
             }
           }
         }
+
         scope.options5.chartType = ["bar"]
         scope.options5.showLegend = true;
         scope.options5.legendFilter = true
         scope.options5.showGridlines = false
         }
-                
+         console.log($rootScope.GlobalFilters12)
         //function to change x axis 
         scope.changeXaxis=function(type){
           scope.options5.changeXaxis=true
@@ -137,7 +138,8 @@ angular.module('sasaWebApp')
                   clickOutsideToClose:true,
                   locals: {
                       data: metricData,
-                      tab : tab
+                      tab : tab,
+                      globalfilters : $rootScope.GlobalFilters12
                     }
                 }).then(function(data) { 
                   if(scope.metricData['distributions'].length>0) {
