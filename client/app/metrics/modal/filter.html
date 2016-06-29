@@ -28,7 +28,7 @@
 
     <div layout="row" ng-repeat="(key,value) in filterQuery">
       <md-input-container class="md-block" flex="35" style="margin-left:7px" >
-        <input aria-label="FilterKey" style="color:black" ng-model="key" disabled>
+        <input aria-label="FilterKey" style="color:black;text-transform: capitalize;" ng-model="key" disabled>
       </md-input-container>
       <md-input-container flex="55"  style="margin-left:2%">
         <md-select aria-label="FilterValues" ng-model="filterQuery[key]" multiple>
