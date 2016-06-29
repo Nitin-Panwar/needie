@@ -8,31 +8,44 @@ angular.module('sasaWebApp')
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
-        scope.semaphore = true;
+        
         //Setting options for the bar graph
         scope.options5 = {}; 
-        if(scope.semaphore){
-          if(scope.metricData['distributions']){
+       
+        if(scope.metricData['distributions']){
           if(scope.metricData['distributions'].length){
             if(scope.metricData['distributions'][0]!==null){
-              if(scope.metricData['distributions'][0]['axis']){
-                  scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
+              if(scope.metricData['distributions'][0]['advance_viz']){
+                scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
+                if(scope.metricData['distributions'][0]['group_by'][0]){
+                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
+                }
+                else{
+                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0]]
+                }
+                scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
               }
               else{
-                 scope.options5.xAxis =  ["quarter","category"]
+                if(scope.metricData['distributions'][0]['axis']){
+                  scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
+                }
+                else{
+                   scope.options5.xAxis =  ["quarter","category"]
+                }
+                scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+                scope.options5.series = "category"
               }
-              scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
-              scope.options5.series = "category"
+              
             }
           }
-        }
 
-        scope.options5.chartType = ["bar"]
-        scope.options5.showLegend = true;
-        scope.options5.legendFilter = true
-        scope.options5.showGridlines = false
+          scope.options5.chartType = ["bar"]
+          scope.options5.showLegend = true;
+          scope.options5.legendFilter = true
+          scope.options5.showGridlines = false
         }
         //function to change x axis 
+        
         scope.changeXaxis=function(type){
           scope.options5.changeXaxis=true
           if(type=='WW'){
@@ -195,6 +208,7 @@ angular.module('sasaWebApp')
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
+
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
 
@@ -215,7 +229,6 @@ angular.module('sasaWebApp')
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
               if(scope.metricData['distributions']){
                 if(scope.metricData['distributions'][0]['advance_viz'] ==true){
-                  scope.semaphore = false;
                   scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
                   if(scope.metricData['distributions'][0]['group_by'][0]){
                     scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
@@ -227,7 +240,6 @@ angular.module('sasaWebApp')
                 }
                 else{
                   if(scope.metricData['distributions'][0]['advance_viz'] == false){
-                    scope.semaphore = false;
                     scope.options5.series = "category"
                     scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],"category"]
                     scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
