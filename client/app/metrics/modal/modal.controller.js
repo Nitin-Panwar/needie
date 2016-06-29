@@ -33,13 +33,16 @@ angular.module('sasaWebApp')
   {
       $scope.avData = {}
       $scope.avData.x_data = data['distributions'][0]['x_data'][0]
-
       $scope.avData.y_data = []
       for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
         $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
       }
-      $scope.avData.group_by=data['distributions'][0]['group_by'][0]
+      if(data['distributions'][0]['group_by'][0] !==undefined)
+        $scope.avData.group_by=data['distributions'][0]['group_by'][0]
+      else
+        $scope.avData.group_by=''
       $scope.avData.x_options=data['distributions'][0]['x_options']
+      $scope.avData.advance_viz=true
   }
   else{
   	$scope.avData = {
@@ -410,10 +413,14 @@ angular.module('sasaWebApp')
     }
     else{
         $scope.viz_details.x_data.push($scope.avData.x_data);
-        $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
+        if($scope.avData.x_options[$scope.avData.x_data].length===0){
+          $scope.viz_details.x_options={}
+        }
+        else
+          $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
         if($scope.avData.group_by !== 'Not Required' && $scope.avData.group_by !== ''){
-        $scope.viz_details.group_by.push($scope.avData.group_by);
-    }
+          $scope.viz_details.group_by.push($scope.avData.group_by);
+        }
     }
 
     for(var i=0; i<$scope.avData.y_data.length; i++){
@@ -448,6 +455,8 @@ angular.module('sasaWebApp')
           	for (var key in $scope.filterSubData)     
           	{
             	$scope.allFilterData[key] = $scope.filterSubData[key]
+              $scope.allfilterkeys = Object.keys($scope.allFilterData)
+              
           	} 
           	for (var key in $scope.allFilterData) 
           	{
