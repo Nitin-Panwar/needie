@@ -10,10 +10,8 @@ angular.module('sasaWebApp')
     $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3}],'view_type': 'metriccard'}
     //variable to watch, while changing score_card data
     $rootScope.var_changeData =0
-    $rootScope.GlobalFilters12 ={}
-    $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {    
-      $rootScope.GlobalFilters12=data.filters;
-    });
+    $rootScope.globalQuery = {}
+    $rootScope.GlobalFilters ={}
     //Variable to check whether filte is applied or not
     $rootScope.applyFilter = 0;
     //Code to detect browser info.
