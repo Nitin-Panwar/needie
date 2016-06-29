@@ -449,7 +449,7 @@ angular.module('sasaWebApp')
         for (var i = 0; i < filterKeys.length; i++) {               
             $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
         };   
-          if(Object.keys($rootScope.GlobalFilters).length ===0 ){
+          
         	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                      
             	$scope.FilterData = data.filters;   
             	var filterKeys = Object.keys($scope.FilterData[0]);
@@ -473,24 +473,6 @@ angular.module('sasaWebApp')
           	},function (err) {
           		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
         	});
-        }
-        else{
-          $scope.allFilterData = $rootScope.GlobalFilters
-          for (var key in $scope.filterSubData)     
-          {
-            $scope.allFilterData[key] = $scope.filterSubData[key]
-            $scope.allfilterkeys = Object.keys($scope.allFilterData)
-
-          } 
-          for (var key in $scope.allFilterData) 
-          {
-            if($rootScope.globalQuery.hasOwnProperty(key))
-              $scope.allFilterData[key] = $rootScope.globalQuery[key]
-            else if(!$scope.avData.x_options.hasOwnProperty(key))
-              $scope.avData.x_options[key] = []
-
-          }
-        }
     	},function (err) {
       	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
   	});
