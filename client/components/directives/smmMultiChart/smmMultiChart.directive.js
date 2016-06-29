@@ -48,7 +48,6 @@ angular.module('sasaWebApp')
 
         }
         else{
-        console.log("calling draw chart")
           drawChart()
         }  
       },true);

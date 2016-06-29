@@ -32,7 +32,6 @@ angular.module('sasaWebApp')
         scope.options5.legendFilter = true
         scope.options5.showGridlines = false
         }
-         console.log($rootScope.GlobalFilters12)
         //function to change x axis 
         scope.changeXaxis=function(type){
           scope.options5.changeXaxis=true
@@ -138,8 +137,7 @@ angular.module('sasaWebApp')
                   clickOutsideToClose:true,
                   locals: {
                       data: metricData,
-                      tab : tab,
-                      globalfilters : $rootScope.GlobalFilters12
+                      tab : tab
                     }
                 }).then(function(data) { 
                   if(scope.metricData['distributions'].length>0) {
@@ -216,10 +214,8 @@ angular.module('sasaWebApp')
               console.log(response)
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
               if(scope.metricData['distributions']){
-                console.log(scope.metricData['distributions'][0]['advance_viz'])
                 if(scope.metricData['distributions'][0]['advance_viz'] ==true){
                   scope.semaphore = false;
-                  console.log("within if condition")
                   scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
                   if(scope.metricData['distributions'][0]['group_by'][0]){
                     scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
@@ -232,7 +228,6 @@ angular.module('sasaWebApp')
                 else{
                   if(scope.metricData['distributions'][0]['advance_viz'] == false){
                     scope.semaphore = false;
-                    console.log("within else condition")
                     scope.options5.series = "category"
                     scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],"category"]
                     scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
