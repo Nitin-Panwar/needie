@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('metriccard', function (metricsFactory, $rootScope, dialogs, parentService, gridsterConfig, $mdDialog, $mdMedia) {
+  .directive('metriccard', function (metricsFactory,messageCenterService, $rootScope, dialogs, parentService, gridsterConfig, $mdDialog, $mdMedia) {
     return {
       templateUrl: 'app/metrics/metric-card/metric-card.html',
       restrict: 'EA',   
