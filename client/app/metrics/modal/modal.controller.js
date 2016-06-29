@@ -29,7 +29,7 @@ angular.module('sasaWebApp')
 		filters:{}
 	};
   $scope.defaultViz = false;
-  if(data['distributions'][0]['advance_viz'])
+  if(data['distributions'][0] && data['distributions'][0]['advance_viz'])
   {
       $scope.avData = {}
       $scope.avData.x_data = data['distributions'][0]['x_data'][0]
@@ -456,7 +456,7 @@ angular.module('sasaWebApp')
           	{
             	$scope.allFilterData[key] = $scope.filterSubData[key]
               $scope.allfilterkeys = Object.keys($scope.allFilterData)
-              
+
           	} 
           	for (var key in $scope.allFilterData) 
           	{
