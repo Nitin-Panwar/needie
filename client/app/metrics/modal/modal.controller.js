@@ -29,9 +29,9 @@ angular.module('sasaWebApp')
 		filters:{}
 	};
   $scope.defaultViz = false;
-  $scope.measurevalues=[]
+  $scope.yAxisValues=[]
   for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
-        $scope.measurevalues.push(data['distributions'][0]['y_data'][j]['label'])
+        $scope.yAxisValues.push(data['distributions'][0]['y_data'][j]['label'])
   }
   if(data['distributions'][0] && data['distributions'][0]['advance_viz'])
   {
@@ -449,27 +449,48 @@ angular.module('sasaWebApp')
         for (var i = 0; i < filterKeys.length; i++) {               
             $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
         };   
-        
-        	// $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                         
-          	$scope.FilterData = $rootScope.GlobalFilters12;   
-          	var filterKeys = Object.keys($rootScope.GlobalFilters12[0]);
-          	for (var i = 0; i < filterKeys.length; i++) {               
-            	$scope.allFilterData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
-          	}; 
-          	for (var key in $scope.filterSubData)     
-          	{
-            	$scope.allFilterData[key] = $scope.filterSubData[key]
-              $scope.allfilterkeys = Object.keys($scope.allFilterData)
+          if(Object.keys($rootScope.GlobalFilters).length ===0 ){
+        	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                      
+            	$scope.FilterData = data.filters;   
+            	var filterKeys = Object.keys($scope.FilterData[0]);
+            	for (var i = 0; i < filterKeys.length; i++) {               
+              	$scope.allFilterData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
+            	}; 
+            	for (var key in $scope.filterSubData)     
+            	{
+              	$scope.allFilterData[key] = $scope.filterSubData[key]
+                $scope.allfilterkeys = Object.keys($scope.allFilterData)
 
-          	} 
-          	for (var key in $scope.allFilterData) 
-          	{
-          		if(!$scope.avData.x_options.hasOwnProperty(key))
-             		$scope.avData.x_options[key] = []
-          	}
-       //  	},function (err) {
-       //  		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
-      	// });
+            	} 
+            	for (var key in $scope.allFilterData) 
+            	{
+                if($rootScope.globalQuery.hasOwnProperty(key))
+                  $scope.allFilterData[key] = $rootScope.globalQuery[key]
+                else if(!$scope.avData.x_options.hasOwnProperty(key))
+               		$scope.avData.x_options[key] = []
+
+            	}
+          	},function (err) {
+          		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+        	});
+        }
+        else{
+          $scope.allFilterData = $rootScope.GlobalFilters
+          for (var key in $scope.filterSubData)     
+          {
+            $scope.allFilterData[key] = $scope.filterSubData[key]
+            $scope.allfilterkeys = Object.keys($scope.allFilterData)
+
+          } 
+          for (var key in $scope.allFilterData) 
+          {
+            if($rootScope.globalQuery.hasOwnProperty(key))
+              $scope.allFilterData[key] = $rootScope.globalQuery[key]
+            else if(!$scope.avData.x_options.hasOwnProperty(key))
+              $scope.avData.x_options[key] = []
+
+          }
+        }
     	},function (err) {
       	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
   	});

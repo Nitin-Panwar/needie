@@ -27,7 +27,7 @@
                      ng-click="toggleAll(avData.x_data,'xData')">
           <span ng-if="isChecked(avData.x_data,'xData')">Un-</span>Select All
           </md-checkbox> -->
-          <md-option ng-value="value" ng-repeat="value in allFilterData[avData.x_data]" >{{value}}</md-option>
+          <md-option ng-value="value" ng-repeat="value in allFilterData[avData.x_data]|orderBy|filter: searchFilter" >{{value}}</md-option>
         </md-optgroup>
         </md-select>          
       </md-input-container>
@@ -37,7 +37,7 @@
         <label>Y-Axis</label>
         <md-select ng-model="avData.y_data" multiple>
           <md-optgroup>
-            <md-option ng-value="measure" ng-repeat="measure in measurevalues">{{measure}}</md-option>
+            <md-option ng-value="measure" ng-repeat="measure in yAxisValues">{{measure}}</md-option>
           </md-optgroup>
         </md-select>  
       </md-input-container>
