@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('ModalCtrl', function ($scope,data,$rootScope,metricsFactory,filtersFactory,messageCenterService,$mdSelect,$mdDialog,tab,globalfilters) {
+  .controller('ModalCtrl', function ($scope,data,$rootScope,metricsFactory,filtersFactory,messageCenterService,$mdSelect,$mdDialog,tab) {
 	$scope.showColumns = true;
 	$scope.showApplyButton = false;
 	$scope.validate = false;
@@ -29,6 +29,10 @@ angular.module('sasaWebApp')
 		filters:{}
 	};
   $scope.defaultViz = false;
+  $scope.measurevalues=[]
+  for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+        $scope.measurevalues.push(data['distributions'][0]['y_data'][j]['label'])
+  }
   if(data['distributions'][0] && data['distributions'][0]['advance_viz'])
   {
       $scope.avData = {}
@@ -53,11 +57,14 @@ angular.module('sasaWebApp')
       advance_viz:true
 
   	};
-    for(var i=0; i<data.measures.length; i++){
-      if(data.measures[i]['type'] !== 'percentile' && data.measures[i]['type'] !== 'breakup' && data.measures[i]['type'] !=='percentage' && data.measures[i]['type']!=='mean'){
-        $scope.avData.y_data.push(data.measures[i]['name'])
+    for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+        $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
       }
-    }
+    // for(var i=0; i<data.measures.length; i++){
+    //   if(data.measures[i]['type'] !== 'percentile' && data.measures[i]['type'] !== 'breakup' && data.measures[i]['type'] !=='percentage' && data.measures[i]['type']!=='mean'){
+    //     $scope.avData.y_data.push(data.measures[i]['name'])
+    //   }
+    // }
   }
   $scope.setDefaultVisualization = function(){
     if($scope.defaultViz === false){
@@ -69,10 +76,8 @@ angular.module('sasaWebApp')
         x_options:{"quarter":[1,2,3,4]},
         advance_viz:false
       };
-      for(var i=0; i<data.measures.length; i++){
-        if(data.measures[i]['type'] !== 'percentile' && data.measures[i]['type'] !== 'breakup' && data.measures[i]['type'] !=='percentage' && data.measures[i]['type']!=='mean'){
-          $scope.avData.y_data.push(data.measures[i]['name'])
-        }
+      for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+        $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
       }
     }
     else{
@@ -422,10 +427,10 @@ angular.module('sasaWebApp')
           $scope.viz_details.group_by.push($scope.avData.group_by);
         }
     }
-
     for(var i=0; i<$scope.avData.y_data.length; i++){
       for (var j=0; j < data['distributions'][0]['y_data'].length; j++){
         if($scope.avData.y_data[i]===data['distributions'][0]['y_data'][j]['label']){
+
           $scope.viz_details.y_data[i]={}
           $scope.viz_details.y_data[i]['label']=data['distributions'][0]['y_data'][j]['label']
           $scope.viz_details.y_data[i]['conditions']=data['distributions'][0]['y_data'][j]['conditions']
@@ -438,7 +443,6 @@ angular.module('sasaWebApp')
   };
 
 	$scope.getAllFilters = function(){
-    console.log(globalfilters)
   	$rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
         	$scope.FilterData = data; 
         var filterKeys = Object.keys(data[0]);
@@ -447,8 +451,8 @@ angular.module('sasaWebApp')
         };   
         
         	// $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                         
-          	$scope.FilterData = globalfilters;   
-          	var filterKeys = Object.keys(globalfilters[0]);
+          	$scope.FilterData = $rootScope.GlobalFilters12;   
+          	var filterKeys = Object.keys($rootScope.GlobalFilters12[0]);
           	for (var i = 0; i < filterKeys.length; i++) {               
             	$scope.allFilterData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
           	}; 
