@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('ModalCtrl', function ($scope,data,$rootScope,metricsFactory,filtersFactory,messageCenterService,$mdSelect,$mdDialog,tab) {
+  .controller('ModalCtrl', function ($scope,data,$rootScope,metricsFactory,filtersFactory,messageCenterService,$mdSelect,$mdDialog,tab,globalfilters) {
 	$scope.showColumns = true;
 	$scope.showApplyButton = false;
 	$scope.validate = false;
@@ -438,7 +438,7 @@ angular.module('sasaWebApp')
   };
 
 	$scope.getAllFilters = function(){
-
+    console.log(globalfilters)
   	$rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
         	$scope.FilterData = data; 
         var filterKeys = Object.keys(data[0]);
@@ -446,9 +446,9 @@ angular.module('sasaWebApp')
             $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
         };   
         
-        	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                         
-          	$scope.FilterData = data.filters;   
-          	var filterKeys = Object.keys(data.filters[0]);
+        	// $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                         
+          	$scope.FilterData = globalfilters;   
+          	var filterKeys = Object.keys(globalfilters[0]);
           	for (var i = 0; i < filterKeys.length; i++) {               
             	$scope.allFilterData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
           	}; 
@@ -463,9 +463,9 @@ angular.module('sasaWebApp')
           		if(!$scope.avData.x_options.hasOwnProperty(key))
              		$scope.avData.x_options[key] = []
           	}
-        	},function (err) {
-        		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
-      	});
+       //  	},function (err) {
+       //  		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+      	// });
     	},function (err) {
       	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
   	});

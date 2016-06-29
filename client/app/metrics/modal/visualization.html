@@ -15,17 +15,18 @@
             {{key}}
           </md-option>
         </md-select>
+        {{GlobalFilters}}
       </md-input-container>
 
       <md-input-container class="md-block" flex= "55" style="margin-left:5%; margin-right:10px">
         <label>X-Axis Values</label>
         <md-select ng-model="avData.x_options[avData.x_data]" multiple>
         <md-optgroup style="margin-left:10px">
-          <md-checkbox aria-label="Select All"
+         <!--  <md-checkbox aria-label="Select All"
                      ng-checked=isChecked(avData.x_data,"xData")
                      ng-click="toggleAll(avData.x_data,'xData')">
           <span ng-if="isChecked(avData.x_data,'xData')">Un-</span>Select All
-          </md-checkbox>
+          </md-checkbox> -->
           <md-option ng-value="value" ng-repeat="value in allFilterData[avData.x_data]" >{{value}}</md-option>
         </md-optgroup>
         </md-select>          
