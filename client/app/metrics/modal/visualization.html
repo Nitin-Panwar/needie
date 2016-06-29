@@ -37,7 +37,7 @@
         <label>Y-Axis</label>
         <md-select ng-model="avData.y_data" multiple>
           <md-optgroup>
-            <md-option ng-value="measure.name" ng-repeat="measure in data.measures" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage' && measure.type!=='mean'">{{measure.name}}</md-option>
+            <md-option ng-value="measure" ng-repeat="measure in measurevalues">{{measure}}</md-option>
           </md-optgroup>
         </md-select>  
       </md-input-container>
