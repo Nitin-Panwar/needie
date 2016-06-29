@@ -12,6 +12,7 @@ angular.module('sasaWebApp')
       	 * this variable validates whether filter has been applied.
       	 * @type {Number}
       	 */
+      
       	$rootScope.applyFilter = 0;
 
       	/**
@@ -109,23 +110,23 @@ angular.module('sasaWebApp')
 	    		scope.showmydashboards = false;
 	    		scope.metriclist = false;
 	    	}
-	 
-	    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
+	    	// $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
 	            // $rootScope.GlobalFilters=data.filters;
-	            scope.FilterData = data.filters;	 
-	            var filterKeys = Object.keys(data.filters[0]);
-	            for (var i = 0; i < filterKeys.length; i++) {	            	
-	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
-	            };
-	            if(scope.navigationIcon()){
-	            	scope.updateGlobalFilters();
-    			}	  	            
-		        }, 
-		        function (err) {
-		        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
-	        });
+            scope.FilterData = $rootScope.GlobalFilters12;	 
+            var filterKeys = Object.keys($rootScope.GlobalFilters12[0]);
+            for (var i = 0; i < filterKeys.length; i++) {	            	
+            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
+            };
+            if(scope.navigationIcon()){
+            	scope.updateGlobalFilters();
+			}	  	            
+		}
+		        // , 
+		   //      function (err) {
+		   //      	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+	    //     // });
 
-	    }
+	    // }
 
 	    /**
 	     * find unique items in an array by key	     
