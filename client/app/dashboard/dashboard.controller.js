@@ -493,7 +493,6 @@ angular.module('sasaWebApp')
       }
     }
     // $('#dashboardArea').bind('click', function(event){
-    //   console.log("karishma")
     //   closeLeftSidebar()
     // })
   });

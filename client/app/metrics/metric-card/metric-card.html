@@ -39,11 +39,12 @@
                 <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
                 <span class="badge" ng-click="changeXaxis('Quarter')" style="cursor:pointer">Quarter</span>
             </section>
+             
             <!-- <smm-multi-chart options="options1" handle="handle" data="metricData['distributions'][0]['distribution_data']['data']"  ng-show="line"></smm-multi-chart> -->
             <section ng-if="metricData['distributions'][0]">
                 <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" ng-show="!line"></smm-multi-chart>
             </section>
-          </section> {{GlobalFilters12}}                        
+          </section> 
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
                          ng-class="{'warning-breached': (measure.goal.value !== null && measure_color_green[$index]),
@@ -78,7 +79,10 @@
                             {{measure.name}}
                         </table>
                     </li>
-                </ul>    
+                    <li class="pull-right" ng-if="metricData['distributions'][0]['advance_viz']">
+                        <i tooltip-placement="left" uib-tooltip="These values are independent of advance visualization settings"><i class="fa fa-info-circle"></i></i>
+                    </li>
+                </ul>  
         </section>
     </section>
 </section>
