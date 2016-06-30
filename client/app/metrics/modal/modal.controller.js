@@ -73,7 +73,7 @@ angular.module('sasaWebApp')
         y_data: [],
         group_by: '',
         x_options:{"quarter":[1,2,3,4]},
-        advance_viz:false
+        advance_viz:true
       };
       for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
         $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])

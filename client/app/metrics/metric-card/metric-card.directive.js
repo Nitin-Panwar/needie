@@ -11,11 +11,15 @@ angular.module('sasaWebApp')
         
         //Setting options for the bar graph
         scope.options5 = {}; 
-       
+        scope.advanceVisualization = false
         if(scope.metricData['distributions']){
           if(scope.metricData['distributions'].length){
             if(scope.metricData['distributions'][0]!==null){
               if(scope.metricData['distributions'][0]['advance_viz']){
+                if(scope.metricData['distributions'][0]['x_data'].length>1)
+                  scope.advanceVisualization=false
+                else
+                  scope.advanceVisualization=true
                 if(scope.metricData['distributions'][0]['group_by'][0]){
                   scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
                   scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],scope.metricData['distributions'][0]['group_by'][0]]
@@ -172,9 +176,11 @@ angular.module('sasaWebApp')
             
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
-              if(response['distributions']){
-                if(response['distributions'][0]['advance_viz']==true){
-                  
+                if(response['distributions'] && response['distributions'][0]['advance_viz']==true){
+                  if(response['distributions'][0]['x_data'].length>1)
+                    scope.advanceVisualization=false
+                  else
+                    scope.advanceVisualization=true
                   if(response['distributions'][0]['group_by'][0]){
                     scope.options5.series = response['distributions'][0]['group_by'][0]
                     scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],response['distributions'][0]['group_by'][0]]
@@ -184,14 +190,6 @@ angular.module('sasaWebApp')
                     scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label']]
                   }
                   scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
-                }
-                else{
-                  if(response['distributions'][0]['advance_viz'] == false){
-                    scope.options5.series = "category"
-                    scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],"category"]
-                    scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
-                  }
-                }
               }
           }, function (err) {
             messageCenterService.add('danger','No Data Found',{timeout: 10000});
