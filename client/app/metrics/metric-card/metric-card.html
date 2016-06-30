@@ -33,7 +33,7 @@
         <!-- metric Card Body -->
         <section class="panel-body" id="waitloader" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-             <section class="pull-right" ng-if="metricData['distributions'][0] && !metricData['distributions'][0]['advance_viz']">
+             <section class="pull-right" ng-if="metricData['distributions'][0] && !advanceVisualization">
                 <!-- <span>X-Axis:</span> --><!-- !metricData['distributions'][0]['advance_viz'] || -->
                 <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer">WW</span>
                 <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
@@ -79,7 +79,7 @@
                             {{measure.name}}
                         </table>
                     </li>
-                    <li class="pull-right" ng-if="metricData['distributions'][0]['advance_viz']">
+                    <li ng-if="advanceVisualization">
                         <i tooltip-placement="left" uib-tooltip="These values are independent of advance visualization settings"><i class="fa fa-info-circle"></i></i>
                     </li>
                 </ul>  
