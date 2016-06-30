@@ -115,7 +115,6 @@ angular.module('sasaWebApp')
 		            for (var i = 0; i < filterKeys.length; i++) {	            	
 		            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
 		            };	
-		            		        console.log($rootScope.GlobalFilters)
   	            
 			    },function (err){
 			        messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
