@@ -35,21 +35,21 @@ angular.module('sasaWebApp')
           return;
         if(scope.container == null || scope.container == undefined)
           return;
-        // if(!scope.stackBarChartObject){
+        // if(!scope.stackBarChartObject ){
+        if(scope.options.changeXaxis===true){
+          scope.stackBarChartObject
+            .data(scope.options.yAxis.length==2?scope.data[0]:scope.data)
+            .xAxis(scope.options.xAxis)
+            .y2Data(scope.options.yAxis.length==2?scope.data[1]:null)
+            .hLines(goals)
+            .colorMapping(scope.options.colorMapping)();
+          scope.stackBarChartObject.renderChart();
+          scope.options.changeXaxis=false;
+
+        }
+        else{
           drawChart()
-          // console.log(scope.options)
-        // }
-        // else
-        // {
-        //   console.log(scope.options)
-        //   scope.stackBarChartObject
-        //     .data(scope.options.yAxis.length==2?scope.data[0]:scope.data)
-        //     .xAxis(scope.options.xAxis)
-        //     .y2Data(scope.options.yAxis.length==2?scope.data[1]:null)
-        //     .hLines(goals)
-        //     .colorMapping(scope.options.colorMapping)();
-        //   scope.stackBarChartObject.renderChart();
-        // }
+        }  
       },true);
       scope.control = scope.handle || {}
       scope.$watch('data',function(){

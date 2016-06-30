@@ -9,8 +9,6 @@
 }
 
 
-
-
 .selected-list-item{
 	background-color: green !important;
 	color: white;
@@ -30,7 +28,7 @@
 
 md-select-menu {
   margin-left:20px !important;
-  max-width:100% !important;
+  max-width:400px !important;
 } 
 
 md-backdrop.md-select-backdrop {
@@ -44,22 +42,23 @@ md-backdrop.md-select-backdrop {
     display: -webkit-box !important; 
     white-space: normal !important;
     max-height: 300px !important;
-    overflow: auto !important;
+    overflow-y: auto !important;
+    text-transform: capitalize !important;
 }
 .md-select-value {
     div {
         display: inline !important;
     }
 }
+md-option .md-text {
+    white-space: normal !important;
+    text-transform: capitalize !important;
+}
 md-list-item, md-list-item .md-list-item-inner {
 
   min-height: 0px !important;
 }
-// md-backdrop.md-opaque.md-default-theme,
-// .md-dialog-container {
-//   position:fixed;
-// }
-// 
+
 body.md-dialog-is-showing {
     overflow: visible !important;
 } 

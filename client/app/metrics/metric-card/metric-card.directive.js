@@ -1,39 +1,53 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('metriccard', function (metricsFactory, $rootScope, dialogs, parentService, gridsterConfig, $mdDialog, $mdMedia) {
+  .directive('metriccard', function (metricsFactory,messageCenterService, $rootScope, dialogs, parentService, gridsterConfig, $mdDialog, $mdMedia) {
     return {
       templateUrl: 'app/metrics/metric-card/metric-card.html',
       restrict: 'EA',   
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
-        scope.semaphore = true;
+        
         //Setting options for the bar graph
         scope.options5 = {}; 
-        if(scope.semaphore){
-          if(scope.metricData['distributions']){
+       
+        if(scope.metricData['distributions']){
           if(scope.metricData['distributions'].length){
             if(scope.metricData['distributions'][0]!==null){
-              if(scope.metricData['distributions'][0]['axis']){
-                  scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
+              if(scope.metricData['distributions'][0]['advance_viz']){
+                scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
+                if(scope.metricData['distributions'][0]['group_by'][0]){
+                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
+                }
+                else{
+                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0]]
+                }
+                scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
               }
               else{
-                 scope.options5.xAxis =  ["quarter","category"]
+                if(scope.metricData['distributions'][0]['axis']){
+                  scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
+                }
+                else{
+                   scope.options5.xAxis =  ["quarter","category"]
+                }
+                scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+                scope.options5.series = "category"
               }
-              scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
-              scope.options5.series = "category"
+              
             }
           }
+
+          scope.options5.chartType = ["bar"]
+          scope.options5.showLegend = true;
+          scope.options5.legendFilter = true
+          scope.options5.showGridlines = false
         }
-        scope.options5.chartType = ["bar"]
-        scope.options5.showLegend = true;
-        scope.options5.legendFilter = true
-        scope.options5.showGridlines = false
-        }
-                
         //function to change x axis 
+        
         scope.changeXaxis=function(type){
+          scope.options5.changeXaxis=true
           if(type=='WW'){
             scope.options5.xAxis = ["work_week","category"]
             scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
@@ -141,13 +155,11 @@ angular.module('sasaWebApp')
                 }).then(function(data) { 
                   if(scope.metricData['distributions'].length>0) {
                     for(var key in data){
-                      if(key==="y_data")
-                        scope.metricData['distributions'][0][key][0]["label"] = data[key][0]
-                      else
                       scope.metricData['distributions'][0][key] = data[key];
                     }
                   }
-                   scope.getMetric();          
+                  console.log(scope.metricData['distributions'][0])
+                  scope.getMetric();          
                 });
                 break;
           }    
@@ -174,19 +186,21 @@ angular.module('sasaWebApp')
         //Watch viewType to change data 
         scope.$watch(function () {
           return $rootScope.meta.view_type;
-        }, function(newValue, oldValue, scope) {       
-          if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
-            var callAPI = false;
-            for (var i = 0; i < scope.metricData.measures.length; i++) {
-              if(scope.metricData.measures[i]['scorecard_data']){
-                if(scope.metricData.measures[i]['scorecard_data'].length ===0){
-                  callAPI = true;
-                  break;
+        }, function(newValue, oldValue, scope) {   
+          if(scope.metricData['distributions']){
+            if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
+              var callAPI = false;
+              for (var i = 0; i < scope.metricData.measures.length; i++) {
+                if(scope.metricData.measures[i]['scorecard_data']){
+                  if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                    callAPI = true;
+                    break;
+                  }
                 }
+              };
+              if(callAPI == true){
+                scope.getMetric();
               }
-            };
-            if(callAPI == true){
-              scope.getMetric();
             }
           }          
         });
@@ -194,8 +208,10 @@ angular.module('sasaWebApp')
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
+
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
               delete $rootScope.promiseObject[scope.metricIndex];                                 
             });
@@ -209,14 +225,30 @@ angular.module('sasaWebApp')
           else{
             
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+              console.log(response)
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
-            if(scope.metricData['distributions'][0]['advance_viz'] ==true){
-              scope.semaphore = false;
-              scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
-              scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
-              scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
-            }
-          })            
+              if(scope.metricData['distributions']){
+                if(scope.metricData['distributions'][0]['advance_viz'] ==true){
+                  scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
+                  if(scope.metricData['distributions'][0]['group_by'][0]){
+                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
+                  }
+                  else{
+                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0]]
+                  }
+                  scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
+                }
+                else{
+                  if(scope.metricData['distributions'][0]['advance_viz'] == false){
+                    scope.options5.series = "category"
+                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],"category"]
+                    scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+                  }
+                }
+              }
+          }, function (err) {
+            messageCenterService.add('danger','No Data Found',{timeout: 10000});
+          });            
         }                     
         }  
 

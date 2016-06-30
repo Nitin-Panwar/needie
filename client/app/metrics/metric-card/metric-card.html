@@ -31,10 +31,10 @@
             </ul>             
         </section>
         <!-- metric Card Body -->
-        <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
+        <section class="panel-body" id="waitloader" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-             <section class="pull-right" ng-if="!metricData['distributions'][0]['advance_viz']">
-                <!-- <span>X-Axis:</span> -->
+             <section class="pull-right" ng-if="metricData['distributions'][0] && !metricData['distributions'][0]['advance_viz']">
+                <!-- <span>X-Axis:</span> --><!-- !metricData['distributions'][0]['advance_viz'] || -->
                 <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer">WW</span>
                 <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
                 <span class="badge" ng-click="changeXaxis('Quarter')" style="cursor:pointer">Quarter</span>
@@ -43,7 +43,7 @@
             <section ng-if="metricData['distributions'][0]">
                 <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" ng-show="!line"></smm-multi-chart>
             </section>
-          </section>                         
+          </section> {{GlobalFilters12}}                        
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
                          ng-class="{'warning-breached': (measure.goal.value !== null && measure_color_green[$index]),

@@ -28,12 +28,63 @@ angular.module('sasaWebApp')
 		filterkey: '',
 		filters:{}
 	};
-	$scope.avData = {
-		x_data: 'month',
-		y_data: '',
-		group_by: '',
-		x_options:{"month":["1","2","3"]},
-	};
+  $scope.defaultViz = false;
+  $scope.yAxisValues=[]
+  for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+        $scope.yAxisValues.push(data['distributions'][0]['y_data'][j]['label'])
+  }
+  if(data['distributions'][0] && data['distributions'][0]['advance_viz'])
+  {
+      $scope.avData = {}
+      $scope.avData.x_data = data['distributions'][0]['x_data'][0]
+      $scope.avData.y_data = []
+      for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+        $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+      }
+      if(data['distributions'][0]['group_by'][0] !==undefined)
+        $scope.avData.group_by=data['distributions'][0]['group_by'][0]
+      else
+        $scope.avData.group_by=''
+      $scope.avData.x_options=data['distributions'][0]['x_options']
+      $scope.avData.advance_viz=true
+  }
+  else{
+  	$scope.avData = {
+  		x_data: 'quarter',
+  		y_data: [],
+  		group_by: '',
+  		x_options:{"quarter":[1,2,3,4]},
+      advance_viz:true
+
+  	};
+    for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+        $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+      }
+    // for(var i=0; i<data.measures.length; i++){
+    //   if(data.measures[i]['type'] !== 'percentile' && data.measures[i]['type'] !== 'breakup' && data.measures[i]['type'] !=='percentage' && data.measures[i]['type']!=='mean'){
+    //     $scope.avData.y_data.push(data.measures[i]['name'])
+    //   }
+    // }
+  }
+  $scope.setDefaultVisualization = function(){
+    if($scope.defaultViz === false){
+      $scope.defaultViz =true
+      $scope.avData = {
+        x_data: 'quarter',
+        y_data: [],
+        group_by: '',
+        x_options:{"quarter":[1,2,3,4]},
+        advance_viz:false
+      };
+      for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+        $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+      }
+    }
+    else{
+      $scope.defaultViz = false
+    }
+  }
+
 	$scope.viz_details = {
 		x_data:[],
 		y_data:[],
@@ -69,9 +120,7 @@ angular.module('sasaWebApp')
 		}       
 		$rootScope.metricPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
 		  var columns = response;
-		  // for (var i = 0; i < columns.length; i++) {
-		  //   $scope.availableColoumns.items.push({"name":columns[i]})
-		  // };
+
 		  for(var i in $scope.data.gridColumns){
 		      columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
 		  }
@@ -125,7 +174,7 @@ angular.module('sasaWebApp')
 		  return;
 		}
 		var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
-		$rootScope.metricPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
+    $rootScope.metricPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
 		  if(offset === 'all'){
 		    $scope.csvData.data = response;
 		    $scope.csvData.headers = Object.keys(response[0]);
@@ -146,130 +195,124 @@ angular.module('sasaWebApp')
 	};
 
     //To compare threshold vlaues
-  	$scope.compareThreshold = function(){
-    	for( var i in $scope.tempThreshold){
-      		if(($scope.tempThreshold[i].ua < $scope.tempThreshold[i].uw) || ($scope.tempThreshold[i].la > $scope.tempThreshold[i].lw))
-        	return true;    
-    	} 
-  	}
-
-  	//This function selets items to add to data grid
-  	$scope.dataGrid = function (item, boolean) {
-    	if(boolean){
-      		// select column to show in data grid
-      		for(var i in $scope.availableColoumns.selected) {
-        		$scope.selectedColumns.items.push($scope.availableColoumns.selected[i]);
-        		$scope.availableColoumns.items.splice($scope.availableColoumns.items.indexOf($scope.availableColoumns.selected[i]), 1);            
-      		}
-      		$scope.availableColoumns.selected.length = 0;
-		}
-    	else
-    	{
-      		// remove from selection
-      		for(var i in $scope.selectedColumns.selected){
-        		$scope.availableColoumns.items.push($scope.selectedColumns.selected[i]);
-        		$scope.selectedColumns.items.splice($scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]), 1);    
-      		}
-      		$scope.selectedColumns.selected.length = 0;
-    	}
-  	};
-
-  	//This function selects columns to show in data grid
-  	$scope.selection = function (item, boolean) {
-    	if(boolean){          
-      		// select column to show in data grid          
-      		if($scope.availableColoumns.selected.indexOf(item) === -1){
-        		$scope.availableColoumns.selected.push(item);
-      		}
-      		else{
-        		$scope.availableColoumns.selected.splice($scope.availableColoumns.selected.indexOf(item), 1);  
-      		}
-    	}
-    	else
-	    {
-	      // remove from selection
-	    	if($scope.selectedColumns.selected.indexOf(item) === -1){
-	        	$scope.selectedColumns.selected.push(item);
-	      	}
-	      	else{
-	        	$scope.selectedColumns.selected.splice($scope.selectedColumns.selected.indexOf(item), 1);  
-	      	}
-    	}
-  	}
-  
-	/**
-   	* gets metric filters
-   	* @return {[type]} [description]
-   	*/
-  	$scope.getFilters = function () {   
-  
-    	$rootScope.metricPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
-          	$scope.FilterData = data; 
-          	var filterKeys = Object.keys(data[0]);
-          	for (var i = 0; i < filterKeys.length; i++) {               
-            	$scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
-          	};   
-            for (var key in $scope.filterSubData){
-              $scope.tempData.filters[key] = []
-            }
-        }, 
-        function (err) {
-          	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
-    	});
-    	if(typeof($scope.data.filters) !== "object"){return;}
-      
-    	if(Object.keys($scope.data.filters).length > 0){
-	      	for(var key in $scope.data.filters){   
-            console.log($scope.filterQuery)
-	        	$scope.filterQuery[key] = $scope.data.filters[key];
-            console.log($scope.filterQuery)
-	      	}  
-    	}
-  	}
-
-  	//Find unique items in an array by key      
-  	$scope.pluck = function(arr, key, matchKey, value) {
-    	if(value && matchKey){
-	      	var result = $.map(arr, function(e) { 
-	        	if(e[matchKey] === value)
-	        	return e[key]; 
-	      	});
-    	} 
-    	else{
-      		var result = $.map(arr, function(e) { return e[key]; });
-    	}
-
-  		//find unique values      
-	    var o = {}, i, l = result.length, r = [];
-	    for(i=0; i<l;i+=1) o[result[i]] = result[i];
-	    for(i in o) r.push(o[i]);       
-
-	    return r;
+	$scope.compareThreshold = function(){
+  	for( var i in $scope.tempThreshold){
+    		if(($scope.tempThreshold[i].ua < $scope.tempThreshold[i].uw) || ($scope.tempThreshold[i].la > $scope.tempThreshold[i].lw))
+      	return true;    
+  	} 
 	}
 
-  	/**
-   * This function updates filter query
-   * @param  {[type]} key   [description]
-   * @param  {[type]} value [description]
-   * @return {[type]}       [description]
-   */
-  	$scope.updateFilterQuery = function (key, tempFilter, type) {
-      	$scope.showApplyButton = true;
-        if(type==='add')
-        {
-          for (var key in tempFilter)
-            if(tempFilter[key].length !==0)
-              $scope.filterQuery[key] = tempFilter[key]
-              $scope.tempData.filterkey = null
-              delete $scope.tempData.filters[key]
-        }
-        else{
-          console.log(key)
-          console.log(tempFilter)
-          console.log(type)
-          delete $scope.filterQuery[key]
-          console.log($scope.filterQuery)
-        }
+  	//This function selets items to add to data grid
+	$scope.dataGrid = function (item, boolean) {
+  	if(boolean){
+    		// select column to show in data grid
+    		for(var i in $scope.availableColoumns.selected) {
+      		$scope.selectedColumns.items.push($scope.availableColoumns.selected[i]);
+      		$scope.availableColoumns.items.splice($scope.availableColoumns.items.indexOf($scope.availableColoumns.selected[i]), 1);            
+    		}
+    		$scope.availableColoumns.selected.length = 0;
+	}
+  	else
+  	{
+    		// remove from selection
+    		for(var i in $scope.selectedColumns.selected){
+      		$scope.availableColoumns.items.push($scope.selectedColumns.selected[i]);
+      		$scope.selectedColumns.items.splice($scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]), 1);    
+    		}
+    		$scope.selectedColumns.selected.length = 0;
+  	}
+	};
+
+  //This function selects columns to show in data grid
+	$scope.selection = function (item, boolean) {
+  	if(boolean){          
+    		// select column to show in data grid          
+    		if($scope.availableColoumns.selected.indexOf(item) === -1){
+      		$scope.availableColoumns.selected.push(item);
+    		}
+    		else{
+      		$scope.availableColoumns.selected.splice($scope.availableColoumns.selected.indexOf(item), 1);  
+    		}
+  	}
+  	else
+    {
+      // remove from selection
+    	if($scope.selectedColumns.selected.indexOf(item) === -1){
+        	$scope.selectedColumns.selected.push(item);
+      	}
+      	else{
+        	$scope.selectedColumns.selected.splice($scope.selectedColumns.selected.indexOf(item), 1);  
+      	}
+  	}
+	}
+
+	/**
+ 	* gets metric filters
+ 	* @return {[type]} [description]
+ 	*/
+	$scope.getFilters = function () {   
+
+  	$rootScope.metricPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
+        	$scope.FilterData = data; 
+        	var filterKeys = Object.keys(data[0]);
+        	for (var i = 0; i < filterKeys.length; i++) {               
+          	$scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
+        	};   
+          for (var key in $scope.filterSubData){
+            $scope.tempData.filters[key] = []
+          }
+      }, 
+      function (err) {
+        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+  	});
+  	if(typeof($scope.data.filters) !== "object"){return;}
+    
+  	if(Object.keys($scope.data.filters).length > 0){
+      	for(var key in $scope.data.filters){   
+        	$scope.filterQuery[key] = $scope.data.filters[key];
+      	}  
+  	}
+	}
+
+  	//Find unique items in an array by key      
+	$scope.pluck = function(arr, key, matchKey, value) {
+  	if(value && matchKey){
+      	var result = $.map(arr, function(e) { 
+        	if(e[matchKey] === value)
+        	return e[key]; 
+      	});
+  	} 
+  	else{
+    		var result = $.map(arr, function(e) { return e[key]; });
+  	}
+
+		//find unique values      
+    var o = {}, i, l = result.length, r = [];
+    for(i=0; i<l;i+=1) o[result[i]] = result[i];
+    for(i in o) r.push(o[i]);       
+
+    return r;
+	}
+
+	/**
+ * This function updates filter query
+ * @param  {[type]} key   [description]
+ * @param  {[type]} value [description]
+ * @return {[type]}       [description]
+ */
+	$scope.updateFilterQuery = function (key, tempFilter, type) {
+    	$scope.showApplyButton = true;
+      if(type==='add')
+      {
+        for (var key in tempFilter)
+          if(tempFilter[key].length !==0)
+            $scope.filterQuery[key] = tempFilter[key]
+            $scope.tempData.filterkey = null
+            delete $scope.tempData.filters[key]
+      }
+      else{
+        delete $scope.filterQuery[key]
+      }
 
        	// udpate global search query
         
@@ -302,175 +345,202 @@ angular.module('sasaWebApp')
           
        //    	$scope.filterQuery[key] = [value]             
       	// }    
-      	$scope.updateGlobalFilters();
-  	};
-
-  	/**
-   * this function updates relational filter values
-   */
-  	$scope.updateGlobalFilters = function () {
-     
-    	// if(Object.keys($scope.filterQuery).length == 0){          
-     //  		// $scope.state = false;
-     //  		$scope.showfilters = !$scope.showfilters;
-     //  		$scope.getFilters();  
-    	// }
-
-	    var data = $scope.FilterData;
-	    var dataHolder = [];
-	    for(var queryKey in $scope.filterQuery){          
-      		var tempArr = Object.keys(data[0])
-      		tempArr.splice(tempArr.indexOf(queryKey), 1);
-      		for(var i in $scope.filterQuery[queryKey]){
-        		for(var j in tempArr){
-          			var result = $scope.pluck(data, tempArr[j], queryKey, $scope.filterQuery[queryKey][i]);
-          			if(dataHolder[tempArr[j]]){
-		          		dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
-		          		//find unique values      
-		            	var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
-		            	for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
-		            	for(i in o) r.push(o[i]);
-		            	dataHolder[tempArr[j]] = r;
-        			}
-        			else{
-          				dataHolder[tempArr[j]] = result;
-        			}
-        		}
-     		} 
-    	}
-    	for(var key in dataHolder){
-      		$scope.filterSubData[key] = dataHolder[key];
-    	}
-  	}
-
-  	/**
-   * this function checks whether any item is in filter query
-   * @param  {[type]} key   [description]
-   * @param  {[type]} value [description]
-   * @return {[type]}       [description]
-   */
-  	$scope.isInQuery = function (key, value) {
-    	if($scope.filterQuery.hasOwnProperty(key)){
-          return true
-    	}
-    	return false;
+    	$scope.updateGlobalFilters();
 	};
 
-  	/**
-   * this function unselects all filter values
-   * @param  {[type]} key [description]
-   * @return {[type]}     [description]
-   */
-  	$scope.unselectAllFilterValues = function (key) {
-        delete $scope.filterQuery[key];
-        $scope.updateGlobalFilters();
-  	};
+	/**
+ * this function updates relational filter values
+ */
+	$scope.updateGlobalFilters = function () {
+   
+  	// if(Object.keys($scope.filterQuery).length == 0){          
+   //  		// $scope.state = false;
+   //  		$scope.showfilters = !$scope.showfilters;
+   //  		$scope.getFilters();  
+  	// }
 
-  	$scope.formatVizData = function() {
-      $scope.viz_details.x_data.push($scope.avData.x_data);
-    	$scope.viz_details.y_data = $scope.avData.y_data;
+    var data = $scope.FilterData;
+    var dataHolder = [];
+    for(var queryKey in $scope.filterQuery){          
+    		var tempArr = Object.keys(data[0])
+    		tempArr.splice(tempArr.indexOf(queryKey), 1);
+    		for(var i in $scope.filterQuery[queryKey]){
+      		for(var j in tempArr){
+        			var result = $scope.pluck(data, tempArr[j], queryKey, $scope.filterQuery[queryKey][i]);
+        			if(dataHolder[tempArr[j]]){
+	          		dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
+	          		//find unique values      
+	            	var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
+	            	for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
+	            	for(i in o) r.push(o[i]);
+	            	dataHolder[tempArr[j]] = r;
+      			}
+      			else{
+        				dataHolder[tempArr[j]] = result;
+      			}
+      		}
+   		} 
+  	}
+  	for(var key in dataHolder){
+    		$scope.filterSubData[key] = dataHolder[key];
+  	}
+	}
 
-      if($scope.avData.group_by !== 'Not Required' && $scope.avData.group_by !== ''){
-      		$scope.viz_details.group_by.push($scope.avData.group_by);
+	/**
+ * this function checks whether any item is in filter query
+ * @param  {[type]} key   [description]
+ * @param  {[type]} value [description]
+ * @return {[type]}       [description]
+ */
+	$scope.isInQuery = function (key, value) {
+  	if($scope.filterQuery.hasOwnProperty(key)){
+        return true
+  	}
+  	return false;
+	};
+
+	/**
+ * this function unselects all filter values
+ * @param  {[type]} key [description]
+ * @return {[type]}     [description]
+ */
+	$scope.unselectAllFilterValues = function (key) {
+      delete $scope.filterQuery[key];
+      $scope.updateGlobalFilters();
+	};
+
+	$scope.formatVizData = function() {
+    
+    $scope.viz_details.advance_viz = $scope.avData.advance_viz;
+    
+    if($scope.defaultViz === true){
+      $scope.viz_details.x_data = ["year","month","quarter","work_week"]
+    }
+    else{
+        $scope.viz_details.x_data.push($scope.avData.x_data);
+        if($scope.avData.x_options[$scope.avData.x_data].length===0){
+          $scope.viz_details.x_options={}
+        }
+        else
+          $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
+        if($scope.avData.group_by !== 'Not Required' && $scope.avData.group_by !== ''){
+          $scope.viz_details.group_by.push($scope.avData.group_by);
+        }
+    }
+    for(var i=0; i<$scope.avData.y_data.length; i++){
+      for (var j=0; j < data['distributions'][0]['y_data'].length; j++){
+        if($scope.avData.y_data[i]===data['distributions'][0]['y_data'][j]['label']){
+
+          $scope.viz_details.y_data[i]={}
+          $scope.viz_details.y_data[i]['label']=data['distributions'][0]['y_data'][j]['label']
+          $scope.viz_details.y_data[i]['conditions']=data['distributions'][0]['y_data'][j]['conditions']
+          $scope.viz_details.y_data[i]['formula']=data['distributions'][0]['y_data'][j]['formula']
+        }
       }
+    }
+    
+  	
+  };
 
-    	$scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
-    };
-
-  	$scope.getAllFilters = function(){
-
-    	$rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
-          	$scope.FilterData = data; 
-	        var filterKeys = Object.keys(data[0]);
-	        for (var i = 0; i < filterKeys.length; i++) {               
-	            $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
-	        };   
+	$scope.getAllFilters = function(){
+  	$rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
+        	$scope.FilterData = data; 
+        var filterKeys = Object.keys(data[0]);
+        for (var i = 0; i < filterKeys.length; i++) {               
+            $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
+        };   
           
-          	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                         
-	          	$scope.FilterData = data.filters;   
-	          	var filterKeys = Object.keys(data.filters[0]);
-	          	for (var i = 0; i < filterKeys.length; i++) {               
-	            	$scope.allFilterData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
-	          	}; 
-	          	for (var key in $scope.filterSubData)     
-	          	{
-	            	$scope.allFilterData[key] = $scope.filterSubData[key]
-	          	} 
-	          	for (var key in $scope.allFilterData) 
-	          	{
-	          		if(!$scope.avData.x_options.hasOwnProperty(key))
-	             		$scope.avData.x_options[key] = []
-	          	}
+        	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                      
+            	$scope.FilterData = data.filters;   
+            	var filterKeys = Object.keys($scope.FilterData[0]);
+            	for (var i = 0; i < filterKeys.length; i++) {               
+              	$scope.allFilterData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
+            	}; 
+            	for (var key in $scope.filterSubData)     
+            	{
+              	$scope.allFilterData[key] = $scope.filterSubData[key]
+                $scope.allfilterkeys = Object.keys($scope.allFilterData)
+
+            	} 
+            	for (var key in $scope.allFilterData) 
+            	{
+                if($rootScope.globalQuery.hasOwnProperty(key))
+                  $scope.allFilterData[key] = $rootScope.globalQuery[key]
+                else if(!$scope.avData.x_options.hasOwnProperty(key))
+               		$scope.avData.x_options[key] = []
+
+            	}
           	},function (err) {
           		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
         	});
-      	},function (err) {
-        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
-    	});
+    	},function (err) {
+      	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+  	});
+	}
+
+	$scope.isChecked = function(key,type) {
+  	if(type==="xData" && $scope.avData.x_options[key] && $scope.allFilterData[key])
+ 	 		return $scope.avData.x_options[key].length === $scope.allFilterData[key].length;
+  	if(type==="tempFilter" && $scope.tempData.filters[key] && $scope.filterSubData[key])
+  		return $scope.tempData.filters[key].length === $scope.filterSubData[key].length;	
+  	if(type==="Filter" && $scope.filterQuery[key] && $scope.filterSubData[key])
+  	  return $scope.filterQuery[key].length === $scope.filterSubData[key].length;
+	};
+
+	$scope.toggleAll = function(key,type) {
+  	if(type==="xData"){
+    		if ($scope.avData.x_options[key].length === $scope.allFilterData[key].length) 
+      		$scope.avData.x_options[key] = [];
+    		else
+      		$scope.avData.x_options[key] = $scope.allFilterData[key]
   	}
-
-  	$scope.isChecked = function(key,type) {
-    	if(type==="xData" && $scope.avData.x_options[key] && $scope.allFilterData[key])
-   	 		return $scope.avData.x_options[key].length === $scope.allFilterData[key].length;
-    	if(type==="tempFilter" && $scope.tempData.filters[key] && $scope.filterSubData[key])
-    		return $scope.tempData.filters[key].length === $scope.filterSubData[key].length;	
-    	if(type==="Filter" && $scope.filterQuery[key] && $scope.filterSubData[key])
-    	  return $scope.filterQuery[key].length === $scope.filterSubData[key].length;
-  	};
-
-  	$scope.toggleAll = function(key,type) {
-    	if(type==="xData"){
-      		if ($scope.avData.x_options[key].length === $scope.allFilterData[key].length) 
-        		$scope.avData.x_options[key] = [];
-      		else
-        		$scope.avData.x_options[key] = $scope.allFilterData[key]
-    	}
-    	if(type==="tempFilter"){
-      		if ($scope.tempData.filters[key].length === $scope.filterSubData[key].length) 
-        	$scope.tempData.filters[key] = [];
-      	else
-        	$scope.tempData.filters[key] = $scope.filterSubData[key]
-    	}
-      if(type==="Filter"){
-          if ($scope.filterQuery[key].length === $scope.filterSubData[key].length) 
-          $scope.filterQuery[key] = [];
-        else
-          $scope.filterQuery[key] = $scope.filterSubData[key]
-      }
-  	};
+  	if(type==="tempFilter"){
+    		if ($scope.tempData.filters[key].length === $scope.filterSubData[key].length) 
+      	$scope.tempData.filters[key] = [];
+    	else
+      	$scope.tempData.filters[key] = $scope.filterSubData[key]
+  	}
+    if(type==="Filter"){
+        if ($scope.filterQuery[key].length === $scope.filterSubData[key].length) 
+        $scope.filterQuery[key] = [];
+      else
+        $scope.filterQuery[key] = $scope.filterSubData[key]
+    }
+	};
 
 	$scope.hide = function() {
 		$mdDialog.hide();
 	};
+
 	$scope.cancel = function() {
 		$mdDialog.cancel();
 	};
+
 	$scope.save = function(which){
-        $rootScope.placeholder.edited = true;
-        switch(which){
-          case 'measure':
-            for( var i in $scope.measureInfo){
-              $scope.measureInfo[i].goal=$scope.goal[i];
-            }
-            delete $scope.tempThreshold;
-            delete $scope.goal;
-            $mdDialog.hide($scope.measureInfo);
-            break;
-          case 'data':
-            $mdDialog.hide($scope.selectedColumns.items);
-            break;
-          case 'filter':
-            console.log($scope.filterQuery)
-            $mdDialog.hide($scope.filterQuery);
-            break;
-          case 'visualization':
-            $scope.formatVizData();
-            $mdDialog.hide($scope.viz_details)
-            break;
-          default:
-            $mdDialog.hide();          
+    $rootScope.placeholder.edited = true;
+    switch(which){
+      case 'measure':
+        for( var i in $scope.measureInfo){
+          $scope.measureInfo[i].goal=$scope.goal[i];
         }
-    };
+        delete $scope.tempThreshold;
+        delete $scope.goal;
+        $mdDialog.hide($scope.measureInfo);
+        break;
+      case 'data':
+        $mdDialog.hide($scope.selectedColumns.items);
+        break;
+      case 'filter':
+        $mdDialog.hide($scope.filterQuery);
+        break;
+      case 'visualization':
+        $scope.formatVizData();
+        $mdDialog.hide($scope.viz_details)
+        break;
+      default:
+        $mdDialog.hide();          
+    }
+  };
 });
 
 
