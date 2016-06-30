@@ -16,14 +16,14 @@ angular.module('sasaWebApp')
           if(scope.metricData['distributions'].length){
             if(scope.metricData['distributions'][0]!==null){
               if(scope.metricData['distributions'][0]['advance_viz']){
-                scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
                 if(scope.metricData['distributions'][0]['group_by'][0]){
-                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
+                  scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
+                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],scope.metricData['distributions'][0]['group_by'][0]]
                 }
                 else{
-                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0]]
+                  scope.options5.series = "category"
+                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label']]
                 }
-                scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
               }
               else{
                 if(scope.metricData['distributions'][0]['axis']){
@@ -32,13 +32,12 @@ angular.module('sasaWebApp')
                 else{
                    scope.options5.xAxis =  ["quarter","category"]
                 }
-                scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
                 scope.options5.series = "category"
               }
               
             }
           }
-
+          scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
           scope.options5.chartType = ["bar"]
           scope.options5.showLegend = true;
           scope.options5.legendFilter = true
@@ -64,105 +63,52 @@ angular.module('sasaWebApp')
 
         // this function launches the dialogs
         scope.launch = function(ev,which,metricData){
-          switch(which){
-            case 'data':
-              var tab = 'data'
-              $mdDialog.show({
-                controller: 'ModalCtrl',
-                templateUrl: 'app/metrics/modal/dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                locals: {
-                    data: metricData,
-                    tab: tab
+          var tab = which
+          $mdDialog.show({
+            controller: 'ModalCtrl',
+            templateUrl: 'app/metrics/modal/dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            locals: {
+                data: metricData,
+                tab: tab
+              }
+          }).then(function(data) {  
+              var selectedTab = data['tab']
+              delete data['tab'];
+              switch(selectedTab){
+                case 'data':
+                  $rootScope.placeholder.metric[scope.metricIndex].gridColumns = data;
+                  scope.metricData.gridColumns = data;  
+                  break;
+                case 'filter':
+                  scope.metricData.filters = data;
+                  for(var key in scope.metricData.filters){
+                    if(scope.metricData.filters[key].length === 0){delete scope.metricData.filters[key];}
                   }
-              }).then(function(data) {   
-                   $rootScope.placeholder.metric[scope.metricIndex].gridColumns = data;
-                    scope.metricData.gridColumns = data;        
-              });
-              break;
-
-            case 'filter':
-              var tab = 'filter'
-              $mdDialog.show({
-                controller: 'ModalCtrl',
-                templateUrl: 'app/metrics/modal/dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                locals: {
-                    data: metricData,
-                    tab : tab
-                  }
-              }).then(function(data) { 
-                scope.metricData.filters = data;
-                for(var key in scope.metricData.filters){
-                  if(scope.metricData.filters[key].length === 0){delete scope.metricData.filters[key];}
-                }
-                scope.getMetric();             
-              });
-              break;
-
-            case 'measure':
-              var tab = 'measure'
-              $mdDialog.show({
-                  controller: 'ModalCtrl',
-                  templateUrl: 'app/metrics/modal/dialog.html',
-                  parent: angular.element(document.body),
-                  targetEvent: ev,
-                  clickOutsideToClose:true,
-                  locals: {
-                      data: metricData,
-                      tab : tab
-                    }
-                }).then(function(data) { 
+                  scope.getMetric();
+                  break;
+                case 'measure':
                   for(var i in data){
                     for(var key in data[i]){
                       metricData.measures[i][key] = data[i][key];
                     }
-                  }            
-                });
-                break;
-
-              case 'metric': 
-                var tab = 'metric'
-                $mdDialog.show({
-                  controller: 'ModalCtrl',
-                  templateUrl: 'app/metrics/modal/dialog.html',
-                  parent: angular.element(document.body),
-                  targetEvent: ev,
-                  clickOutsideToClose:true,
-                  locals: {
-                      data: metricData,
-                      tab : tab
-                    }
-                });
-                break; 
-              
-              case 'visualization':
-                var tab = 'visualization'
-                $mdDialog.show({
-                  controller: 'ModalCtrl',
-                  templateUrl: 'app/metrics/modal/dialog.html',
-                  parent: angular.element(document.body),
-                  targetEvent: ev,
-                  clickOutsideToClose:true,
-                  locals: {
-                      data: metricData,
-                      tab : tab
-                    }
-                }).then(function(data) { 
+                  }
+                  break;
+                case 'visualization':
                   if(scope.metricData['distributions'].length>0) {
                     for(var key in data){
                       scope.metricData['distributions'][0][key] = data[key];
                     }
                   }
-                  console.log(scope.metricData['distributions'][0])
-                  scope.getMetric();          
-                });
-                break;
-          }    
+                  scope.getMetric();
+                  break;
+                default:
+                  return
+              }
+                    
+          });  
         }
     
         //This function watches the changes in global filter values
@@ -225,24 +171,25 @@ angular.module('sasaWebApp')
           else{
             
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
-              console.log(response)
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
-              if(scope.metricData['distributions']){
-                if(scope.metricData['distributions'][0]['advance_viz'] ==true){
-                  scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
-                  if(scope.metricData['distributions'][0]['group_by'][0]){
-                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0],scope.metricData['distributions'][0]['group_by'][0]]
+              if(response['distributions']){
+                if(response['distributions'][0]['advance_viz']==true){
+                  
+                  if(response['distributions'][0]['group_by'][0]){
+                    scope.options5.series = response['distributions'][0]['group_by'][0]
+                    scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],response['distributions'][0]['group_by'][0]]
                   }
                   else{
-                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['x_data'][0]]
+                    scope.options5.series = "category"
+                    scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label']]
                   }
-                  scope.options5.yAxis = [scope.metricData['distributions'][0]['y_data'][0]['label']]
+                  scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
                 }
                 else{
-                  if(scope.metricData['distributions'][0]['advance_viz'] == false){
+                  if(response['distributions'][0]['advance_viz'] == false){
                     scope.options5.series = "category"
-                    scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],"category"]
-                    scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+                    scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],"category"]
+                    scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
                   }
                 }
               }

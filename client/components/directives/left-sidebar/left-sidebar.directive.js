@@ -107,21 +107,23 @@ angular.module('sasaWebApp')
 	    		scope.showmydashboards = false;
 	    		scope.metriclist = false;
 	    	}
-	 
-	    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
-	            // $rootScope.GlobalFilters=data.filters;
-	            scope.FilterData = data.filters;	 
-	            var filterKeys = Object.keys(data.filters[0]);
-	            for (var i = 0; i < filterKeys.length; i++) {	            	
-	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
-	            };
-	            if(scope.navigationIcon()){
-	            	scope.updateGlobalFilters();
-    			}	  	            
-		        }, 
-		        function (err) {
-		        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
-	        });
+	 		if(Object.keys($rootScope.GlobalFilters).length===0){
+		    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
+		            // $rootScope.GlobalFilters=data.filters;
+		            scope.FilterData = data.filters;	 
+		            var filterKeys = Object.keys(data.filters[0]);
+		            for (var i = 0; i < filterKeys.length; i++) {	            	
+		            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
+		            };	
+		            		        console.log($rootScope.GlobalFilters)
+  	            
+			    },function (err){
+			        messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+		        });
+		    }
+	    	if(scope.navigationIcon()){
+	            scope.updateGlobalFilters();
+    		}
 
 	    }
 
