@@ -40,7 +40,7 @@ angular.module('sasaWebApp')
               }
               scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
             }
-            
+
           }
           
           scope.options5.chartType = ["bar"]
@@ -163,8 +163,8 @@ angular.module('sasaWebApp')
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
           if($rootScope.meta.view_type=='scorecard'){
+            
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
-
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
               delete $rootScope.promiseObject[scope.metricIndex];                                 
             });
@@ -178,7 +178,7 @@ angular.module('sasaWebApp')
           else{
 
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
-              $rootScope.placeholder['metric'][scope.metricIndex]=response;
+             $rootScope.placeholder['metric'][scope.metricIndex]=response;
                 if(response['distributions'] && response['distributions'][0]['advance_viz']==true){
                   if(response['distributions'][0]['x_data'].length>1)
                     scope.advanceVisualization=false
@@ -190,7 +190,7 @@ angular.module('sasaWebApp')
                   }
                   else{
                     scope.options5.series = (response['distributions'][0]['y_data'].length>1)?"category":""
-                    scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label']]
+                    scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],scope.options5.series]
                   }
                   scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
               }
