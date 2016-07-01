@@ -70,9 +70,9 @@ angular.module('sasaWebApp')
         x_options:{"quarter":[1,2,3,4]},
         advance_viz:true
       };
-      if(data['distributions'] && data['distributions'][0]){
-        for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
-          $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+      for (var measure in data.measures){
+        if(measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage'){
+          $scope.avData.y_data.push(data.measures[measure]['label'])
         }
       }
     }
@@ -315,34 +315,34 @@ angular.module('sasaWebApp')
 	/**
  * this function updates relational filter values
  */
-	$scope.updateGlobalFilters = function () {
+	// $scope.updateGlobalFilters = function () {
 
-    var data = $scope.FilterData;
-    var dataHolder = [];
-    for(var queryKey in $scope.filterQuery){          
-    		var tempArr = Object.keys(data[0])
-    		tempArr.splice(tempArr.indexOf(queryKey), 1);
-    		for(var i in $scope.filterQuery[queryKey]){
-      		for(var j in tempArr){
-        			var result = $scope.pluck(data, tempArr[j], queryKey, $scope.filterQuery[queryKey][i]);
-        			if(dataHolder[tempArr[j]]){
-	          		dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
-	          		//find unique values      
-	            	var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
-	            	for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
-	            	for(i in o) r.push(o[i]);
-	            	dataHolder[tempArr[j]] = r;
-      			}
-      			else{
-        				dataHolder[tempArr[j]] = result;
-      			}
-      		}
-   		} 
-  	}
-  	for(var key in dataHolder){
-    		$scope.filterSubData[key] = dataHolder[key];
-  	}
-	}
+ //    var data = $scope.FilterData;
+ //    var dataHolder = [];
+ //    for(var queryKey in $scope.filterQuery){          
+ //    		var tempArr = Object.keys(data[0])
+ //    		tempArr.splice(tempArr.indexOf(queryKey), 1);
+ //    		for(var i in $scope.filterQuery[queryKey]){
+ //      		for(var j in tempArr){
+ //        			var result = $scope.pluck(data, tempArr[j], queryKey, $scope.filterQuery[queryKey][i]);
+ //        			if(dataHolder[tempArr[j]]){
+	//           		dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
+	//           		//find unique values      
+	//             	var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
+	//             	for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
+	//             	for(i in o) r.push(o[i]);
+	//             	dataHolder[tempArr[j]] = r;
+ //      			}
+ //      			else{
+ //        				dataHolder[tempArr[j]] = result;
+ //      			}
+ //      		}
+ //   		} 
+ //  	}
+ //  	for(var key in dataHolder){
+ //    		$scope.filterSubData[key] = dataHolder[key];
+ //  	}
+	// }
 
 	/**
  * this function checks whether any item is in filter query
@@ -400,10 +400,10 @@ angular.module('sasaWebApp')
 
 	$scope.getAllFilters = function(){
   	$rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
-        $scope.FilterData = data; 
+        $scope.FilterData12 = data; 
         var filterKeys = Object.keys(data[0]);
         for (var i = 0; i < filterKeys.length; i++) {               
-            $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
+            $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData12, filterKeys[i], null, null);
         };   
         if(Object.keys($rootScope.GlobalFilters).length===0){
         	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                      
@@ -412,17 +412,16 @@ angular.module('sasaWebApp')
           	for (var i = 0; i < filterKeys.length; i++) {               
             	$scope.allFilterData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
           	}; 
+            if($scope.navigationIcon()){
+                $scope.updateGlobalFilters();
+            }
           	for (var key in $scope.filterSubData)     
           	{
             	$scope.allFilterData[key] = $scope.filterSubData[key]
               $scope.allfilterkeys = Object.keys($scope.allFilterData)
               $scope.tempData.filters[key] = []
           	} 
-          	for (var key in $scope.allFilterData) 
-          	{
-              if($rootScope.globalQuery.hasOwnProperty(key))
-                $scope.allFilterData[key] = $rootScope.globalQuery[key]
-          	}
+          	
         	},function (err) {
           		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
         	});
@@ -518,6 +517,41 @@ angular.module('sasaWebApp')
         $mdDialog.hide();          
     }
   };
+  $scope.navigationIcon=function(){
+      for(var key in $rootScope.globalQuery){
+          if($rootScope.globalQuery[key]!=undefined && key!='comment_type' )
+               return true;
+      }
+  }
+
+  $scope.updateGlobalFilters = function () {
+
+      var data = $scope.FilterData;
+      var dataHolder = [];
+      for(var queryKey in $rootScope.globalQuery){          
+        var tempArr = Object.keys(data[0])
+        tempArr.splice(tempArr.indexOf(queryKey), 1);
+        for(var i in $rootScope.globalQuery[queryKey]){
+          for(var j in tempArr){
+            var result = $scope.pluck(data, tempArr[j], queryKey, $rootScope.globalQuery[queryKey][i]);
+            if(dataHolder[tempArr[j]]){
+            dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
+            //find unique values      
+              var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
+              for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
+              for(i in o) r.push(o[i]);
+              dataHolder[tempArr[j]] = r;
+          }
+          else{
+            dataHolder[tempArr[j]] = result;
+          }
+          }
+        } 
+      }
+      for(var key in dataHolder){
+        $scope.allFilterData[key] = dataHolder[key];
+      }
+    }
 });
 
 

@@ -2310,6 +2310,24 @@
 
         this.InitlegendArray = null;
 
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+
+    var legend_series = this.chart.series[0]._positionData;
+    var max_category_length=0;
+
+    for (var i=0; i<legend_series.length;i++) {
+        if(isNaN(legend_series[i].aggField[0])) {
+            max_category_length=max_category_length>legend_series[i].aggField[0].length?max_category_length:legend_series[i].aggField[0].length;
+        } else {
+            max_category_length=max_category_length>0?max_category_length:1;
+        }
+    }
+    
+// **** Modification Ends ****
+
+
+
         // Copyright: 2015 AlignAlytics
         // License: "https://github.com/PMSI-AlignAlytics/dimple/blob/master/MIT-LICENSE.txt"
         // Source: /src/objects/legend/methods/_draw.js
@@ -2391,7 +2409,19 @@
             // Expand the bounds of the largest shape slightly.  This will be the size allocated to
             // all elements
             maxHeight = (maxHeight < keyHeight ? keyHeight : maxHeight) + self._getVerticalPadding();
-            maxWidth += keyWidth + self._getHorizontalPadding();
+            //maxWidth += keyWidth + self._getHorizontalPadding();
+
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+            maxWidth += keyWidth + self._getHorizontalPadding()+10;
+            var max_pixel_width=0;
+            theseShapes
+                .each(function(d){
+                    d3.select(this).select("text")
+
+                         max_pixel_width=max_pixel_width<self._xPixels()?self._xPixels():max_pixel_width;
+                });
+// **** Modification ends ****                
 
             // Iterate the shapes and position them based on the alignment and size of the legend
             theseShapes
@@ -2428,7 +2458,13 @@
                                         .style("shape-rendering", "crispEdges");
                                 }
                             });
-                        runningX += keyWidth + this.getBBox().width;//maxWidth;
+                        //runningX += keyWidth + this.getBBox().width;//maxWidth;
+
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+                        var w_ratio = (max_category_length/10)<1?1:(max_category_length/10);
+                        runningX= runningX+ (w_ratio *max_pixel_width) + keyWidth;
+// **** Modification ends ****;
                     }
                 });
 
