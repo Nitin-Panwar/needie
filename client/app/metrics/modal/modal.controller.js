@@ -29,13 +29,8 @@ angular.module('sasaWebApp')
 		filters:{}
 	};
   $scope.defaultViz = false;
-  $scope.yAxisValues=[]
-  if(data['distributions'][0]){
-    for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
-          $scope.yAxisValues.push(data['distributions'][0]['y_data'][j]['label'])
-    }
-  }
-  if(data['distributions'][0] && data['distributions'][0]['advance_viz'])
+  
+  if(data['distributions'] && data['distributions'][0] && data['distributions'][0]['advance_viz'])
   {
       $scope.avData = {}
       $scope.avData.x_data = data['distributions'][0]['x_data'][0]
@@ -59,7 +54,7 @@ angular.module('sasaWebApp')
       advance_viz:true
 
   	};
-    if(data['distributions'][0]){
+    if(data['distributions'] && data['distributions'][0]){
       for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
         $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
       }
@@ -75,8 +70,10 @@ angular.module('sasaWebApp')
         x_options:{"quarter":[1,2,3,4]},
         advance_viz:true
       };
-      for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
-        $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+      if(data['distributions'] && data['distributions'][0]){
+        for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+          $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+        }
       }
     }
     else{
@@ -117,7 +114,7 @@ angular.module('sasaWebApp')
 		if($scope.availableColoumns.items.length !== 0){
 		  return;
 		}       
-		$rootScope.metricPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
+		$rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
 		  var columns = response;
 
 		  for(var i in $scope.data.gridColumns){
@@ -173,7 +170,7 @@ angular.module('sasaWebApp')
 		  return;
 		}
 		var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
-    $rootScope.metricPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
+    $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
 		  if(offset === 'all'){
 		    $scope.csvData.data = response;
 		    $scope.csvData.headers = Object.keys(response[0]);
@@ -371,7 +368,6 @@ angular.module('sasaWebApp')
 	};
 
 	$scope.formatVizData = function() {
-    
     $scope.viz_details.advance_viz = $scope.avData.advance_viz;
     
     if($scope.defaultViz === true){
@@ -379,23 +375,22 @@ angular.module('sasaWebApp')
     }
     else{
         $scope.viz_details.x_data.push($scope.avData.x_data);
-        if($scope.avData.x_options[$scope.avData.x_data].length===0){
-          $scope.viz_details.x_options={}
+        if($scope.avData.x_options.hasOwnProperty($scope.avData.x_data)){
+          $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
         }
         else
-          $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
+          $scope.viz_details.x_options={}
         if($scope.avData.group_by !== 'None' && $scope.avData.group_by !== ''){
           $scope.viz_details.group_by.push($scope.avData.group_by);
         }
     }
     for(var i=0; i<$scope.avData.y_data.length; i++){
-      for (var j=0; j < data['distributions'][0]['y_data'].length; j++){
-        if($scope.avData.y_data[i]===data['distributions'][0]['y_data'][j]['label']){
-
+      for (var key in data.measures ){
+        if($scope.avData.y_data[i]===data.measures[key]['label']){
           $scope.viz_details.y_data[i]={}
-          $scope.viz_details.y_data[i]['label']=data['distributions'][0]['y_data'][j]['label']
-          $scope.viz_details.y_data[i]['conditions']=data['distributions'][0]['y_data'][j]['conditions']
-          $scope.viz_details.y_data[i]['formula']=data['distributions'][0]['y_data'][j]['formula']
+          $scope.viz_details.y_data[i]['label']=data.measures[key]['label']
+          $scope.viz_details.y_data[i]['conditions']=data.measures[key]['measure_mappings']['m1']['conditions']
+          $scope.viz_details.y_data[i]['formula']=data.measures[key]['measure_mappings']['m1']['formula']   
         }
       }
     }
@@ -427,9 +422,6 @@ angular.module('sasaWebApp')
           	{
               if($rootScope.globalQuery.hasOwnProperty(key))
                 $scope.allFilterData[key] = $rootScope.globalQuery[key]
-              else if(!$scope.avData.x_options.hasOwnProperty(key))
-             		$scope.avData.x_options[key] = []
-
           	}
         	},function (err) {
           		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
@@ -449,8 +441,6 @@ angular.module('sasaWebApp')
           {
             if($rootScope.globalQuery.hasOwnProperty(key))
               $scope.allFilterData[key] = $rootScope.globalQuery[key]
-            else if(!$scope.avData.x_options.hasOwnProperty(key))
-              $scope.avData.x_options[key] = []
 
           }
         }
@@ -467,8 +457,6 @@ angular.module('sasaWebApp')
 	}
 
 	$scope.isChecked = function(key,type) {
-  	if(type==="xData" && $scope.avData.x_options[key] && $scope.allFilterData[key])
- 	 		return $scope.avData.x_options[key].length === $scope.allFilterData[key].length;
   	if(type==="tempFilter" && $scope.tempData.filters[key] && $scope.filterSubData[key])
   		return $scope.tempData.filters[key].length === $scope.filterSubData[key].length;	
   	if(type==="Filter" && $scope.filterQuery[key] && $scope.filterSubData[key])
@@ -476,12 +464,6 @@ angular.module('sasaWebApp')
 	};
 
 	$scope.toggleAll = function(key,type) {
-  	if(type==="xData"){
-    		if ($scope.avData.x_options[key].length === $scope.allFilterData[key].length) 
-      		$scope.avData.x_options[key] = [];
-    		else
-      		$scope.avData.x_options[key] = $scope.allFilterData[key]
-  	}
   	if(type==="tempFilter"){
     		if ($scope.tempData.filters[key].length === $scope.filterSubData[key].length) 
       	$scope.tempData.filters[key] = [];
@@ -522,6 +504,9 @@ angular.module('sasaWebApp')
         break;
       case 'filter':
         $scope.filterQuery['tab']=which
+        if($scope.tempData.filters.hasOwnProperty($scope.tempData.filterkey)){
+          $scope.filterQuery[$scope.tempData.filterkey]=$scope.tempData.filters[$scope.tempData.filterkey]
+        }
         $mdDialog.hide($scope.filterQuery);
         break;
       case 'visualization':

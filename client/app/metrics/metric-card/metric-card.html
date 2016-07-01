@@ -24,7 +24,7 @@
                 <!-- <li class="fa fa-bar-chart pull-left" style="cursor: pointer; margin-top:3px;"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
                 <li class="fa fa-line-chart pull-left" style="cursor: pointer; margin-top:3px;" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li> -->
                 <li class="pull-left">
-                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="left-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
+                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="right-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
                     </span>
                 </li> 
                 <li class=""><span href="#" editable-text="metricData.alias">{{ metricData.alias || "empty" }}</a></li> 
