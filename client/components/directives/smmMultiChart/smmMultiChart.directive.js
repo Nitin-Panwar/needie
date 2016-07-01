@@ -221,9 +221,12 @@ angular.module('sasaWebApp')
 
         if(scope.options.legendLeft!=undefined)
           scope.stackBarChartObject.legendLeft(scope.options.legendLeft)
-
-        if(scope.options.showLegend!=undefined)
-          scope.stackBarChartObject.showLegend(scope.options.showLegend)
+        if(scope.options.showLegend!=undefined){
+          if(scope.options.series !== "")
+            scope.stackBarChartObject.showLegend(scope.options.showLegend)
+          else
+            scope.stackBarChartObject.showLegend(false)
+        }
 
         if(scope.options.legendFilter!=undefined)
           scope.stackBarChartObject.legendFilter(scope.options.legendFilter)

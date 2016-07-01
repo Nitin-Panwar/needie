@@ -25,7 +25,7 @@ angular.module('sasaWebApp')
                   scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],scope.metricData['distributions'][0]['group_by'][0]]
                 }
                 else{
-                  scope.options5.series = "category"
+                  scope.options5.series = (scope.metricData['distributions'][0]['y_data'].length>1)?"category":""
                   scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label']]
                 }
               }
@@ -38,10 +38,11 @@ angular.module('sasaWebApp')
                 }
                 scope.options5.series = "category"
               }
-              
+              scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
             }
+            
           }
-          scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+          
           scope.options5.chartType = ["bar"]
           scope.options5.showLegend = true;
           scope.options5.legendFilter = true
@@ -89,7 +90,8 @@ angular.module('sasaWebApp')
                 case 'filter':
                   scope.metricData.filters = data;
                   for(var key in scope.metricData.filters){
-                    if(scope.metricData.filters[key].length === 0){delete scope.metricData.filters[key];}
+                    if(scope.metricData.filters[key].length === 0)
+                      {delete scope.metricData.filters[key];}
                   }
                   scope.getMetric();
                   break;
@@ -103,10 +105,12 @@ angular.module('sasaWebApp')
                 case 'visualization':
                   if(scope.metricData['distributions'].length>0) {
                     for(var key in data){
-                      scope.metricData['distributions'][0][key] = data[key];
+                      // if(scope.metricData['distributions'] && scope.metricData['distributions'][0]){
+                        scope.metricData['distributions'][0][key] = data[key];
+                      
                     }
                   }
-                  scope.getMetric();
+                   scope.getMetric();
                   break;
                 default:
                   return
@@ -158,7 +162,6 @@ angular.module('sasaWebApp')
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
-
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
 
@@ -173,7 +176,7 @@ angular.module('sasaWebApp')
             $rootScope.myPromise = arr; 
           }
           else{
-            
+
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
                 if(response['distributions'] && response['distributions'][0]['advance_viz']==true){
@@ -186,7 +189,7 @@ angular.module('sasaWebApp')
                     scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],response['distributions'][0]['group_by'][0]]
                   }
                   else{
-                    scope.options5.series = "category"
+                    scope.options5.series = (response['distributions'][0]['y_data'].length>1)?"category":""
                     scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label']]
                   }
                   scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
