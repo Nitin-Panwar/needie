@@ -71,7 +71,7 @@ angular.module('sasaWebApp')
         advance_viz:true
       };
       for (var measure in data.measures){
-        if(measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage'){
+        if(data.measures[measure].type !== 'mean' && data.measures[measure].type !== 'percentile' && data.measures[measure].type !== 'breakup' && data.measures[measure].type !=='percentage'){
           $scope.avData.y_data.push(data.measures[measure]['label'])
         }
       }
@@ -380,7 +380,7 @@ angular.module('sasaWebApp')
         }
         else
           $scope.viz_details.x_options={}
-        if($scope.avData.group_by !== 'None' && $scope.avData.group_by !== ''){
+        if($scope.avData.y_data.length ===1 && $scope.avData.group_by !== 'None' && $scope.avData.group_by !== ''){
           $scope.viz_details.group_by.push($scope.avData.group_by);
         }
     }
@@ -393,9 +393,7 @@ angular.module('sasaWebApp')
           $scope.viz_details.y_data[i]['formula']=data.measures[key]['measure_mappings']['m1']['formula']   
         }
       }
-    }
-    
-  	
+    }  	
   };
 
 	$scope.getAllFilters = function(){

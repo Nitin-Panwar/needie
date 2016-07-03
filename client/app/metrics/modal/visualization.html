@@ -45,7 +45,7 @@
       <md-input-container class="md-block" flex-gt-sm style="margin-left:7px; margin-right:10px" ng-hide="avData.y_data.length>1" >
         <label>Group By</label>
         <md-select ng-model="avData.group_by" >
-          <md-option ng-repeat="(key,values) in allFilterData" ng-if="key !== avData.x_data" >
+          <md-option ng-repeat="key in allfilterkeys|orderBy|filter: searchFilter" ng-if="key !== avData.x_data" >
             {{key}}
           </md-option>
           <md-option>
