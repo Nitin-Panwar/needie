@@ -9,41 +9,45 @@
                     <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown" >
                         <li ng-click="launch('actions')" class="disabled"><a href="#">Actions</a></li>
                         <li role="separator" class="divider"></li>  
-                        <li ng-click="launch('data',metricData)"><a href="#">Data</a></li>
-                        <li ng-click="launch('filter',metricData)"><a href="#">Filters</a></li>
+                        <li ng-click="launch($event,'data',metricData)"><a href="#">Data</a></li>
+                        <li ng-click="launch($event,'filter',metricData)"><a href="#">Filters</a></li>
                         <li role="separator" class="divider"></li>
-                        <li ng-click="launch('measure',metricData,mydata)"><a href="#">Measures</a></li>    
-                        <li class="disabled">
+                        <li ng-click="launch($event,'measure',metricData,mydata)"><a href="#">Measures</a></li>    
+                        <li ng-click="launch($event,'visualization',metricData)">
                             <a href="#">Visualizations</a>
                         </li>                     
                         <li role="separator" class="divider"></li>
-                        <li ng-click="launch('metric',metricData)"><a href="#">Metric Details</a></li> 
+                        <li ng-click="launch($event,'metric',metricData)"><a href="#">Metric Details</a></li> 
                         <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
                     </ul>                
                 </li> 
                 <!-- <li class="fa fa-bar-chart pull-left" style="cursor: pointer; margin-top:3px;"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
                 <li class="fa fa-line-chart pull-left" style="cursor: pointer; margin-top:3px;" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li> -->
                 <li class="pull-left">
-                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="left-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
+                    <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="right-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
                     </span>
                 </li> 
                 <li class=""><span href="#" editable-text="metricData.alias">{{ metricData.alias || "empty" }}</a></li> 
             </ul>             
         </section>
         <!-- metric Card Body -->
-        <section class="panel-body" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
+        <section class="panel-body" id="waitloader" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
   	      <section>
-             <section class="pull-right" ng-if="metricData['distributions'][0]">
-                <!-- <span>X-Axis:</span> -->
+             <section class="pull-right" ng-if="metricData['distributions'][0] && !advanceVisualization">
+                <!-- <span>X-Axis:</span> --><!-- !metricData['distributions'][0]['advance_viz'] || -->
                 <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer">WW</span>
                 <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
                 <span class="badge" ng-click="changeXaxis('Quarter')" style="cursor:pointer">Quarter</span>
             </section>
+            <section class="pull-left" ng-if="advanceVisualization && (options5.series==='work_week' || options5.series==='quarter' || options5.series==='month')">
+                <label style="font-size: small;font-weight: 700;margin-bottom: 0px;text-transform: capitalize;margin-left:50px"><b>{{options5.series}}</b></label>
+            </section>            
+             
             <!-- <smm-multi-chart options="options1" handle="handle" data="metricData['distributions'][0]['distribution_data']['data']"  ng-show="line"></smm-multi-chart> -->
             <section ng-if="metricData['distributions'][0]">
                 <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" ng-show="!line"></smm-multi-chart>
             </section>
-          </section>                         
+          </section> 
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
                          ng-class="{'warning-breached': (measure.goal.value !== null && measure_color_green[$index]),
@@ -78,7 +82,10 @@
                             {{measure.name}}
                         </table>
                     </li>
-                </ul>    
+                    <li ng-if="advanceVisualization">
+                        <i tooltip-placement="left" uib-tooltip="These values are independent of advance visualization settings"><i class="fa fa-info-circle"></i></i>
+                    </li>
+                </ul>  
         </section>
     </section>
 </section>

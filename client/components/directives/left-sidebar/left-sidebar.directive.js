@@ -101,7 +101,6 @@ angular.module('sasaWebApp')
 	     * @param  {[type]} argument [description]
 	     * @return {[type]}          [description]
 	     */
-	    $rootScope.GlobalFilters = {};
     	$rootScope.globalQuery = {};
 	    scope.getFilters = function () {
 	    	scope.showfilters = !scope.showfilters;	
@@ -281,5 +280,4 @@ angular.module('sasaWebApp')
       }
     };
   });
-
 

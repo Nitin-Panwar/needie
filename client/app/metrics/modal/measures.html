@@ -1,9 +1,7 @@
-<div class="modal-header">
-	<h4 class="modal-title">Measures</h4>
-</div>
-<div class="modal-body">
+<div>
+	<label style="color:red" ng-show="data['distributions'][0]['advance_viz']">**Goal can be set w.r.t. Work Week, Month and Quarter </label>
 	<ul class="list-group">	
-		<li class="list-group-item" ng-repeat="measure in data track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active;goal[$index]=measureInfo[$index].goal"  ng-class="{'disabled':measureInfo[$index].active==false}">
+		<li class="list-group-item" ng-repeat="measure in data['measures'] track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active;goal[$index]=measureInfo[$index].goal"  ng-class="{'disabled':measureInfo[$index].active==false}">
 			<h5>{{measure.name}}&nbsp;:&nbsp;&nbsp;{{measure.value|number}}{{measure.unit}}			
 				<a href ng-click="toggelActive($index)" class="pull-right">							
 				<span ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined" class="badge" >Disable Measure</span>
@@ -13,7 +11,7 @@
 			<div ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined">		
 				<div ng-if="measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage' && measure.type!=='mean'">
 					<div ng-cloak>
-					  	<md-content style="margin: 16px; padding:16px">
+					  	<md-content style="margin: 16px; padding:16px" ng-class="{'disabled':data['distributions'][0]['advance_viz']}">
 					    	<div layout>
 					     	    <div layout layout-align="center center">
 					        		<span class="md-body-1" style="font-size:large">Goal</span>&nbsp;&nbsp;&nbsp;
@@ -86,7 +84,6 @@
 		</li>
 	</ul>
 </div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-primary" ng-click="save('measure')" ng-class="{'disabled':compareThreshold()}">Apply</button>	
-	<button type="button" class="btn btn-default" ng-click="cancel()" >Cancel</button>
-</div>
+
+<md-divider></md-divider>
+

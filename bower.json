@@ -12,7 +12,7 @@
     "bootstrap": "~3.1.1",
     "es5-shim": "~3.0.1",
     "font-awesome": "~4.5.0",
-    "jquery": "~1.11.0",
+    "jquery": "2.0",
     "json3": "~3.3.1",
     "lodash": "~2.4.1",
     "message-center": "~1.2.5",
