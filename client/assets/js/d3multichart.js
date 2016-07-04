@@ -447,6 +447,7 @@
                         .clamp(this.clamp)
                         .nice();
                 }
+
                 // If it's visible, orient it at the top or bottom if it's first or second respectively
                 if (!this.hidden) {
                     switch (this.chart._axisIndex(this, "x")) {
@@ -459,7 +460,17 @@
                                 this._draw.tickValues(function(){
                                         var domain_values = distinctCats;
                                         var total_length = domain_values.length * domain_values[0].toString().length*10;
-                                        return domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));})
+                                        //return domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));}) // Original
+                                        // **** Modified by Ikhurana ****
+                                            // Below code will help to print in original way in norma circumstances.
+                                            // For our special case, always, else condition will be printed.
+                                            var domain_values_filtered = domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));})
+                                            if(domain_values_filtered.length == domain_values.length) {
+                                                return domain_values_filtered;
+                                            } else {
+                                                return domain_values;    
+                                            }
+                                        // **** Modification Ends ****
                                     })
                             }
                         if (this.ticks) {
@@ -2463,7 +2474,7 @@
 // **** Modified by IKHURANA ****
 // Please make sure to include this in new file if you ever update this file.
                         var w_ratio = (max_category_length/10)<1?1:(max_category_length/10);
-                        runningX= runningX+ (w_ratio *max_pixel_width) + keyWidth;
+                        runningX= runningX+ (w_ratio *max_pixel_width) + keyWidth+15;
 // **** Modification ends ****;
                     }
                 });

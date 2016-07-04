@@ -371,11 +371,11 @@ angular.module('sasaWebApp')
     $scope.viz_details.advance_viz = $scope.avData.advance_viz;
     
     if($scope.defaultViz === true){
-      $scope.viz_details.x_data = ["year","month","quarter","work_week"]
+      $scope.viz_details.x_data = ["quarter","month","year","work_week"]
     }
     else{
         $scope.viz_details.x_data.push($scope.avData.x_data);
-        if($scope.avData.x_options.hasOwnProperty($scope.avData.x_data)){
+        if($scope.avData.x_options.hasOwnProperty($scope.avData.x_data) && $scope.avData.x_options[$scope.avData.x_data].length >0 ){
           $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
         }
         else
