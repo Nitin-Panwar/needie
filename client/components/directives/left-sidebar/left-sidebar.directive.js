@@ -101,6 +101,7 @@ angular.module('sasaWebApp')
 	     * @param  {[type]} argument [description]
 	     * @return {[type]}          [description]
 	     */
+    	$rootScope.globalQuery = {};
 	    scope.getFilters = function () {
 	    	scope.showfilters = !scope.showfilters;	
 	    	if(scope.showfilters){

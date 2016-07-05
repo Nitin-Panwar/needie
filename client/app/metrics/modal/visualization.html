@@ -15,7 +15,6 @@
             {{key}}
           </md-option>
         </md-select>
-        {{GlobalFilters}}
       </md-input-container>
 
       <md-input-container class="md-block" flex= "55" style="margin-left:5%; margin-right:10px">
@@ -37,7 +36,7 @@
         <label>Y-Axis</label>
         <md-select ng-model="avData.y_data" multiple>
           <md-optgroup>
-            <md-option ng-value="measure" ng-repeat="measure in yAxisValues">{{measure}}</md-option>
+            <md-option ng-value="measure.label" ng-repeat="measure in data.measures" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage' && measure.type!=='mean'">{{measure.label}}</md-option>
           </md-optgroup>
         </md-select>  
       </md-input-container>
@@ -46,11 +45,11 @@
       <md-input-container class="md-block" flex-gt-sm style="margin-left:7px; margin-right:10px" ng-hide="avData.y_data.length>1" >
         <label>Group By</label>
         <md-select ng-model="avData.group_by" >
-          <md-option ng-repeat="(key,values) in allFilterData" ng-if="key !== avData.x_data" >
+          <md-option ng-repeat="key in allfilterkeys|orderBy|filter: searchFilter" ng-if="key !== avData.x_data" >
             {{key}}
           </md-option>
           <md-option>
-            Not Required
+            None
           </md-option>
         </md-select>
       </md-input-container>  

@@ -447,6 +447,7 @@
                         .clamp(this.clamp)
                         .nice();
                 }
+
                 // If it's visible, orient it at the top or bottom if it's first or second respectively
                 if (!this.hidden) {
                     switch (this.chart._axisIndex(this, "x")) {
@@ -459,7 +460,17 @@
                                 this._draw.tickValues(function(){
                                         var domain_values = distinctCats;
                                         var total_length = domain_values.length * domain_values[0].toString().length*10;
-                                        return domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));})
+                                        //return domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));}) // Original
+                                        // **** Modified by Ikhurana ****
+                                            // Below code will help to print in original way in norma circumstances.
+                                            // For our special case, always, else condition will be printed.
+                                            var domain_values_filtered = domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));})
+                                            if(domain_values_filtered.length == domain_values.length) {
+                                                return domain_values_filtered;
+                                            } else {
+                                                return domain_values;    
+                                            }
+                                        // **** Modification Ends ****
                                     })
                             }
                         if (this.ticks) {
@@ -2310,6 +2321,24 @@
 
         this.InitlegendArray = null;
 
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+
+    var legend_series = this.chart.series[0]._positionData;
+    var max_category_length=0;
+
+    for (var i=0; i<legend_series.length;i++) {
+        if(isNaN(legend_series[i].aggField[0])) {
+            max_category_length=max_category_length>legend_series[i].aggField[0].length?max_category_length:legend_series[i].aggField[0].length;
+        } else {
+            max_category_length=max_category_length>0?max_category_length:1;
+        }
+    }
+    
+// **** Modification Ends ****
+
+
+
         // Copyright: 2015 AlignAlytics
         // License: "https://github.com/PMSI-AlignAlytics/dimple/blob/master/MIT-LICENSE.txt"
         // Source: /src/objects/legend/methods/_draw.js
@@ -2391,7 +2420,19 @@
             // Expand the bounds of the largest shape slightly.  This will be the size allocated to
             // all elements
             maxHeight = (maxHeight < keyHeight ? keyHeight : maxHeight) + self._getVerticalPadding();
-            maxWidth += keyWidth + self._getHorizontalPadding();
+            //maxWidth += keyWidth + self._getHorizontalPadding();
+
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+            maxWidth += keyWidth + self._getHorizontalPadding()+10;
+            var max_pixel_width=0;
+            theseShapes
+                .each(function(d){
+                    d3.select(this).select("text")
+
+                         max_pixel_width=max_pixel_width<self._xPixels()?self._xPixels():max_pixel_width;
+                });
+// **** Modification ends ****                
 
             // Iterate the shapes and position them based on the alignment and size of the legend
             theseShapes
@@ -2428,7 +2469,13 @@
                                         .style("shape-rendering", "crispEdges");
                                 }
                             });
-                        runningX += keyWidth + this.getBBox().width;//maxWidth;
+                        //runningX += keyWidth + this.getBBox().width;//maxWidth;
+
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+                        var w_ratio = (max_category_length/10)<1?1:(max_category_length/10);
+                        runningX= runningX+ (w_ratio *max_pixel_width) + keyWidth+15;
+// **** Modification ends ****;
                     }
                 });
 
