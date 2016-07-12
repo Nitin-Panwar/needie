@@ -1,32 +1,31 @@
-<div cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
+<div ng-init="getMetricColumns();">
 <!-- <div ng-init="getMetricColumns()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}"> -->
   <div layout ="column">
     <div layout="row" ng-show="showColumns">
       <div flex>
-       <md-subheader class="md-no-sticky" style="color:black;text-align: center">Available Columns</md-subheader>
+       <md-subheader class="md-no-sticky" style="color:black;text-align:center">Available Columns</md-subheader>
         <md-list flex style="border-style: dashed; border-width: 1px; border-radius:5px; max-height: 250px; height:250px;overflow: auto; background-color: rgba(218, 221, 223, 0.25);">   
-          <!-- <md-list-item>
-            <md-checkbox class="md-secondary"></md-checkbox> Select All
-          </md-list-item> -->
           <md-list-item  ng-repeat="item in availableColoumns.items track by $index | orderBy:'name'"  ng-click="selection(item, true)">
-            <span style="color:#0071C5;" ng-show="availableColoumns.selected.indexOf(item) !== -1" class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505">{{item | uppercase}}</a>
+            <span style="color:#0071C5;" ng-show="availableColoumns.selected.indexOf(item) !== -1" class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505; text-transform: uppercase;">{{item}}</a>
           </md-list-item>
         </md-list>
       </div>
-      <div flex=20 layout="column" style="margin-top:15%;align-items: center;">
+      <div flex=20 layout="column" style="margin-top:10%;align-items: center;">
         <md-button style="background-color:#0071C5;" class="md-fab md-mini md-primary" aria-label="Add selected" ng-click="dataGrid(item, true)"><i class="glyphicon glyphicon-arrow-right"></i></md-button> 
-        <md-button style="background-color:#0071C5;" class="md-fab md-mini md-primary" aria-label="Remove selected" ng-click="dataGrid(item, false)"><i class="glyphicon glyphicon-arrow-left"></i></md-button>    
+        <md-button style="background-color:#0071C5;" class="md-fab md-mini md-primary" aria-label="Remove selected" ng-click="dataGrid(item, false)"><i class="glyphicon glyphicon-arrow-left"></i></md-button>  
+        <md-button  class="btn btn-default btn-md" ng-click="AddRemoveColumns('add');">Add All</md-button> 
+        <md-button  class="btn btn-default btn-md" ng-click="AddRemoveColumns('remove');">Remove All</md-button>  
       </div>
       <div flex>
         <md-subheader class="md-no-sticky" style="color:black;text-align: center">Selected Columns</md-subheader>
         <md-list flex style="border-style: dashed; border-width: 1px; border-radius:5px; max-height: 250px; height:250px; overflow: auto; background-color: rgba(218, 221, 223, 0.25);">   
           <md-list-item  ng-repeat="item in selectedColumns.items track by $index" ng-click="selection(item, false)">
-          <span ng-show="selectedColumns.selected.indexOf(item) !== -1"class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505">{{item | uppercase}}</a>
+          <span  style="color:#0071C5;" ng-show="selectedColumns.selected.indexOf(item) !== -1"class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505;text-transform: uppercase;">{{item}}</a>
           </md-list-item>
         </md-list>
       </div>
     </div>
-    <div ng-if="gridOptions.data.length > 0" >{{rawpromise}}
+    <div ng-if="gridOptions.data.length > 0" >
       <br>
       <span>Showing {{gridOptions.data.length}} Rows</span>           
       <div ui-grid="gridOptions" id="metric-data-grid" ui-grid-resize-columns ui-grid-exporter ui-grid-move-columns ui-grid-pinning></div>
