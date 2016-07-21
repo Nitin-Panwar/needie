@@ -35,9 +35,9 @@
   	      <section>
              <section class="pull-right" ng-if="metricData['distributions'][0] && !advanceVisualization">
                 <!-- <span>X-Axis:</span> --><!-- !metricData['distributions'][0]['advance_viz'] || -->
-                <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer">WW</span>
-                <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer">Month</span>
-                <span class="badge" ng-click="changeXaxis('Quarter')" style="cursor:pointer">Quarter</span>
+                <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer" role="presentation" tabindex="-1">WW</span>
+                <span class="badge" ng-click="changeXaxis('Month')" style="cursor:pointer" role="presentation" tabindex="-1">Month</span>
+                <span class="badge" ng-click="changeXaxis('Quarter')" style="cursor:pointer" role="presentation" tabindex="-1">Quarter</span>
             </section>
             <section class="pull-left" ng-if="advanceVisualization && (options5.series==='work_week' || options5.series==='quarter' || options5.series==='month')">
                 <label style="font-size: small;font-weight: 700;margin-bottom: 0px;text-transform: capitalize;margin-left:50px"><b>{{options5.series}}</b></label>

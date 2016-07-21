@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .factory('metricsFactory', function ($resource,webServiceURL) {
+  .factory('metricsFactory', function ($resource,webServiceURL, $q) {
     var url = webServiceURL.url;
     var config = webServiceURL.config;
-
+    var deferred = $q.defer();
     return $resource(url + '/getmetrics', {}, {
       get: {
         method:'POST',
@@ -24,7 +24,7 @@ angular.module('sasaWebApp')
         param: {
           metric:{},
           filters:{}
-		}
+		  }
       },
       getColumns:{
         method : 'POST',
@@ -54,7 +54,7 @@ angular.module('sasaWebApp')
         url: url + '/metrics/filters',
         headers: config,
         responseType: 'json',
-        isArray: true,
+        isArray: false,
         param:{
           filterId : undefined
         }

@@ -158,10 +158,6 @@ angular.module('sasaWebApp')
 	     * @return {[type]}       [description]
 	     */
 	    scope.updateFilterQuery = function (key, value) {
-	    	if($rootScope.placeholder.metric.length===0){
-	    		messageCenterService.add('danger', 'Please select Metric First', {timeout: 5000});
-	    		return;
-	    	}
 	    	 // udpate global search query
 	        if($rootScope.globalQuery.hasOwnProperty(key)){
 
