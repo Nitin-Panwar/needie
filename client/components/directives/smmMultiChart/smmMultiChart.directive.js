@@ -157,9 +157,6 @@ angular.module('sasaWebApp')
         if(scope.options.series!=undefined)
           scope.stackBarChartObject.series(scope.options.series)
 
-        if(scope.options.series!=undefined)
-          scope.stackBarChartObject.series(scope.options.series)
-
         // if(scope.goal!=undefined){
         //   console.log("inside if",scope.goal)
         //   scope.stackBarChartObject.hLines([
@@ -284,7 +281,7 @@ angular.module('sasaWebApp')
 
 
         /*********build Chart object*********/
-        if(!scope.chartObject)
+        if(!scope.chartObject || scope.options.orderList)
         {
           scope.chartObject = (scope.stackBarChartObject
             .container(scope.container)
@@ -293,6 +290,11 @@ angular.module('sasaWebApp')
           )();
 
           //scope.chartObject.subscribe()
+        }
+        if(scope.options.orderList){
+          scope.stackBarChartObject
+              .orderList(scope.options.orderList)
+            scope.stackBarChartObject.orderList();
         }
       }
 

@@ -1,12 +1,12 @@
 <section class="container-fluid row">
 	<!-- left sidebar -->
 	<section class="col-md-1">
-		<section left-sidebar>sidebar</section>
+		<section left-sidebar style="min-width:80px">sidebar</section>
 	</section>
 	<!-- left sidebar end -->
 
 	<!-- Create new dashboard-->
-	<section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()"role="presentation" tabindex="-1">
+	<section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()" role="presentation" tabindex="-1">
 		<dl>
 			<blockquote>
 				<p>
@@ -58,7 +58,7 @@
 				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()" ng-if="meta.view_type=='metriccard'"><i class="fa fa-text-width"></i> Add Text</button>	
 				  	<span ng-hide ="placeholder.dashboard._id === undefined || placeholder.dashboard._id === 1">
 						<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()"><i class="fa fa-home"></i> Set HomePage </button>
-						<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()"><i class="fa fa-heart"></i> Set Favourite </button>		
+						<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()"><i class="fa fa-heart"></i> Set Favorite </button>		
 						<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ><i class="fa fa-envelope-o"></i> Send Mail </button>
 						<button type="button" class="btn btn-default btn-md" ng-click="delete()" ng-hide="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase()"><i class="fa fa-trash"></i> Delete </button>
 					</span>
