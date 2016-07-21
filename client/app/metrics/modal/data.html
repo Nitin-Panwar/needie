@@ -39,7 +39,7 @@
       <md-button class="btn btn-default btn-md" ng-click="getRawData(0)" ng-hide="selectedColumns.items.length === 0">Get Data</md-button>  
       <md-button class="btn btn-default btn-md" ng-click="getMetricColumns(); showColumns=true">Add/Remove Columns</md-button>       
       <md-button class="btn btn-default btn-md" ng-click="getRawData('all')" ng-hide="selectedColumns.items.length === 0">Export CSV</md-button>
-      <md-button class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</md-button> 
+      <md-button class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</md-button>
     </div>
     <br>
     
