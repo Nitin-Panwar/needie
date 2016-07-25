@@ -1,4 +1,4 @@
- <div class="left-sidebar parent">
+ <div class="left-sidebar parent" >
 	<div style="height: 100%;">
 		<ul class="list-group" ng-click="toggleState()">
 			<!-- my dashboards -->
@@ -6,9 +6,9 @@
 	 		<!-- Metric List -->
 	 		<li class="list-group-item" ng-click="getMetrics()" ng-class="{'active-sidebar-item': metriclist}" data-toggle="tooltip" data-placement="right" title="Metric List"><i class="fa fa-bar-chart fa-2x" aria-hidden="true"></i></li>
 	 		<!-- Dashboard Filters -->
-	 		<li class="list-group-item" ng-click="getFilters()" ng-show="!navigationIcon()" ng-class="{'active-sidebar-item': showfilters}" title="Filters"><i class="fa fa-filter fa-2x "></i>
+	 		<li class="list-group-item" ng-click="getFilters()" ng-if="!navigationIcon()" ng-class="{'active-sidebar-item': showfilters}" title="Filters"><i class="fa fa-filter fa-2x "></i>
 	 		</li>	
-	 		<li class="list-group-item" ng-click="getFilters()" ng-show="navigationIcon()" ng-class="{'active-sidebar-item': showfilters}"  tooltip-class="appliedFilter" tooltip-placement="right-bottom" uib-tooltip-template="'components/directives/left-sidebar/appliedfilters.html'"><i class="fa fa-filter fa-2x "></i><i class="fa fa-exclamation-circle fa-1x"></i>	 		
+	 		<li class="list-group-item" ng-click="getFilters()" ng-if="navigationIcon()" ng-class="{'active-sidebar-item': showfilters}"  tooltip-class="appliedFilter" tooltip-placement="right-bottom" uib-tooltip-template="'components/directives/left-sidebar/appliedfilters.html'"><i class="fa fa-filter fa-2x "></i><i class="fa fa-exclamation-circle fa-1x"></i>	 		
 	 		</li> 		
 		</ul>
 	</div>
@@ -40,7 +40,7 @@
 				</div>
 				<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
 					<li ng-repeat="(key, value) in GlobalFilters" class="text-capitalize active dropdown" ng-click="$event.stopPropagation();" role="presentation">
-						<span class="white-text text-capitalize"  data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]"ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;">{{key}}
+						<span class="white-text text-capitalize"  data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]"ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;display:block" role="presentation" tabindex="-1">{{key}}
 							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
 							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
 							<label class="badge badge-important pull-right" title="Filters">{{globalQuery[key].length}}</label>
@@ -64,7 +64,9 @@
 							</ul>
 						</section>
 					</li>			
-				</ul>   
+				</ul>  
+				<div style="height: 5px">
+				</div> 
 			</fieldset>
 		</section>
 
@@ -79,8 +81,8 @@
 							<span title="Remove search text" class="input-group-addon btn" id="basic-addon2" ng-click="searchFilter = ''"><i class="intelicon-close-outlined"></i></span>
 						</div>						            	
 	            	</li>
- 					<li ng-repeat="(key, value) in dashboardList|  orderBy:'toString()'|filter:searchFilter">
- 						<span class="white-text text-capitalize" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{value.name}}
+ 					<li ng-repeat="(key, value) in dashboardList|orderBy:'toString()'|filter:searchFilter">
+ 						<span class="white-text text-capitalize" ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;;display:block" role="presentation" tabindex="-1" data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]">{{value.name}}
  							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
 							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>
 						</span>
@@ -96,6 +98,8 @@
 						</section>
  					</li>
  				</ul>
+ 				<div style="height: 5px">
+				</div> 
  			</fieldset>
  		</div>
  	</div>

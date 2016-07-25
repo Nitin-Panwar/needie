@@ -1,11 +1,5 @@
 
-
-<div class="md-padding">
-    <!-- <div layout-gt-sm="row" layout-align="end center">
-        <md-checkbox aria-label="Checkbox" class="md-primary" ng-click="setDefaultVisualization()" >
-        <em style="color:#0071C5">Set to Default</em>
-        </md-checkbox>
-    </div> -->
+<div class="md-padding" ng-init="getAllFilters()">
     <label style="color:red" ng-if="avData.y_data.length>1">**Select Single value in Y-Axis to enable GroupBy Functionality</label>
     <div layout-gt-sm="row">
       <md-input-container class="md-block" flex= "40" style="margin-left:7px">
@@ -21,18 +15,15 @@
         <label>X-Axis Values</label>
         <md-select ng-model="avData.x_options[avData.x_data]" multiple>
         <md-optgroup style="margin-left:10px">
-         <!--  <md-checkbox aria-label="Select All"
-                     ng-checked=isChecked(avData.x_data,"xData")
-                     ng-click="toggleAll(avData.x_data,'xData')">
-          <span ng-if="isChecked(avData.x_data,'xData')">Un-</span>Select All
-          </md-checkbox> -->
+          <md-checkbox aria-label="Select All" ng-click="avData.x_options[avData.x_data]=[]" ng-if="avData.x_options[avData.x_data].length>2">Un-Select All
+          </md-checkbox> 
           <md-option ng-value="value" ng-repeat="value in allFilterData[avData.x_data]|orderBy|filter: searchFilter" >{{value}}</md-option>
         </md-optgroup>
         </md-select>          
       </md-input-container>
     </div>
-    <div layout-gt-sm="row">
-      <md-input-container class="md-block" flex-gt-sm style="margin-left:7px; margin-right:10px">
+    <div layout="row">
+      <md-input-container class="md-block" flex="45" style="margin-left:7px; margin-right:10px">
         <label>Y-Axis</label>
         <md-select ng-model="avData.y_data" multiple>
           <md-optgroup>
@@ -40,6 +31,16 @@
           </md-optgroup>
         </md-select>  
       </md-input-container>
+      <md-input-container class="md-block" flex="15">
+      Sort By Y-axis
+      </md-input-container>
+      <md-switch class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="avData.sortByyaxis">
+      </md-switch>
+      <md-input-container class="md-block" flex="20" ng-show="avData.sortByyaxis">
+      Descending Order
+      </md-input-container>
+      <md-switch class="md-primary" ng-show="avData.sortByyaxis" md-no-ink aria-label="Switch No Ink" ng-model="avData.descOrder">
+      </md-switch>
     </div>
     <div layout-gt-sm="row">
       <md-input-container class="md-block" flex-gt-sm style="margin-left:7px; margin-right:10px" ng-hide="avData.y_data.length>1" >
