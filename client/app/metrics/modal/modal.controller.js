@@ -28,70 +28,80 @@ angular.module('sasaWebApp')
 		filterkey: '',
 		filters:{}
 	};
+
+  /*
+  Variable for advance visualization Dialog
+   */  
+  $scope.viz_details = {
+    x_data:[],
+    y_data:[],
+    group_by:[],
+    x_options:{},
+    advance_viz:true
+  };
+  $scope.tab= tab;
   $scope.defaultViz = false;
-  
+  $scope.allfilterkeys=[];
+  $scope.avData = {
+    x_data: 'quarter',
+    y_data: [],
+    group_by: '',
+    x_options:{"quarter":[1,2,3,4]},
+    advance_viz:true,
+    sortByyaxis:false,
+    descOrder:false
+
+  };
+  if(data['distributions'] && data['distributions'][0]){
+    for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+      $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+    }
+  }
   if(data['distributions'] && data['distributions'][0] && data['distributions'][0]['advance_viz'])
   {
-      $scope.avData = {}
       $scope.avData.x_data = data['distributions'][0]['x_data'][0]
-      $scope.avData.y_data = []
-      for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
-        $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
-      }
       if(data['distributions'][0]['group_by'][0] !==undefined)
         $scope.avData.group_by=data['distributions'][0]['group_by'][0]
       else
         $scope.avData.group_by=''
       $scope.avData.x_options=data['distributions'][0]['x_options']
-      $scope.avData.advance_viz=true
-  }
-  else{
-  	$scope.avData = {
-  		x_data: 'quarter',
-  		y_data: [],
-  		group_by: '',
-  		x_options:{"quarter":[1,2,3,4]},
-      advance_viz:true
-
-  	};
-    if(data['distributions'] && data['distributions'][0]){
-      for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
-        $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+      $scope.avData.advance_viz=data['distributions'][0]['advance_viz']
+      if(data['distributions'][0]['sortByyaxis']){
+        $scope.avData.sort_by = data['distributions'][0]['sortByyaxis'][0]['yaxis'];
+        $scope.avData.order = data['distributions'][0]['sortByyaxis'][0]['descOrder']
       }
-    }
-  }
-  $scope.setDefaultVisualization = function(){
-    if($scope.defaultViz === false){
-      $scope.defaultViz =true
-      $scope.avData = {
-        x_data: 'quarter',
-        y_data: [],
-        group_by: '',
-        x_options:{"quarter":[1,2,3,4]},
-        advance_viz:true
-      };
-      for (var measure in data.measures){
-        if(data.measures[measure].type !== 'mean' && data.measures[measure].type !== 'percentile' && data.measures[measure].type !== 'breakup' && data.measures[measure].type !=='percentage'){
-          $scope.avData.y_data.push(data.measures[measure]['label'])
+  } 
+  /*
+  To set default Values in vizualization and filter tab
+   */
+  $scope.setDefaultValues = function(tab){
+    if(tab==='visualization'){
+      if($scope.defaultViz === false){
+        $scope.defaultViz =true
+        $scope.avData = {
+          x_data: 'quarter',
+          y_data: [],
+          group_by: '',
+          x_options:{"quarter":[1,2,3,4]},
+          advance_viz:true,
+          sortByyaxis:false,
+          descOrder:false
+        };
+        for (var measure in data.measures){
+          if(data.measures[measure].type !== 'mean' && data.measures[measure].type !== 'percentile' && data.measures[measure].type !== 'breakup' && data.measures[measure].type !=='percentage'){
+            $scope.avData.y_data.push(data.measures[measure]['label'])
+          }
         }
+      }
+      else{
+        $scope.defaultViz = false
       }
     }
     else{
-      $scope.defaultViz = false
+      $scope.filterQuery={}
     }
   }
-
-	$scope.viz_details = {
-		x_data:[],
-		y_data:[],
-		group_by:[],
-		x_options:{},
-    advance_viz:true
-	};
-	$scope.disableApplyButton =[];
-	$scope.predicate = 'name';
-	$scope.inputbox=true;
-  $scope.tab= tab;
+	
 	
   //Toggles active state
 	$scope.toggelActive = function (argument) {        
@@ -113,20 +123,22 @@ angular.module('sasaWebApp')
 		}
 		if($scope.availableColoumns.items.length !== 0){
 		  return;
-		}       
-		$rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
-		  var columns = response;
+		}   
+    	$rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
+    	  var columns = response;
 
-		  for(var i in $scope.data.gridColumns){
-		      columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
-		  }
-		  $scope.availableColoumns.items = columns;          
-		  if($scope.data.gridColumns){
-		    $scope.selectedColumns.items = $scope.data.gridColumns;
-		  }
-		}, function (err) {
-		  console.error(err);          
-		})
+    	  for(var i in $scope.data.gridColumns){
+    	      columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
+    	  }
+    	  $scope.availableColoumns.items = columns;   
+    	  if($scope.data.gridColumns){
+    	    $scope.selectedColumns.items = $scope.data.gridColumns;
+    	  }
+    	}, function (err) {
+    	  console.error(err);          
+    	})
+    
+    
 	};
 
 	//These are options for data grid
@@ -174,6 +186,7 @@ angular.module('sasaWebApp')
 		  if(offset === 'all'){
 		    $scope.csvData.data = response;
 		    $scope.csvData.headers = Object.keys(response[0]);
+        // messageCenterService.add('success', 'Click on Download Button to Download CSV', {timeout: 5000});
 		    return;
 		  }
 		  $scope.gridOptions.data = response;       
@@ -241,36 +254,26 @@ angular.module('sasaWebApp')
       	}
   	}
 	}
+  /*
+  Function to add or remove all columns in data Dialog
+  @param {[type]} [either 'add' or 'remove']
+   */
+  $scope.AddRemoveColumns = function(type){
+    if(type==='add'){
+      for(var i=0; i<$scope.availableColoumns.items.length; i++)
+        $scope.selectedColumns.items.push($scope.availableColoumns.items[i])
+        $scope.availableColoumns.selected = []
+        $scope.availableColoumns.items=[]
+    }
+    else{
+       for(var i=0; i<$scope.selectedColumns.items.length; i++)
+        $scope.availableColoumns.items.push($scope.selectedColumns.items[i])
+        $scope.selectedColumns.selected = []
+        $scope.selectedColumns.items=[]
+    }
+  }
 
-	/**
- 	* gets metric filters
- 	* @return {[type]} [description]
- 	*/
-	// $scope.getFilters = function () {   
-
- //  	$rootScope.metricPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
- //        	$scope.FilterData = data; 
- //        	var filterKeys = Object.keys(data[0]);
- //        	for (var i = 0; i < filterKeys.length; i++) {               
- //          	$scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
- //        	};   
- //          for (var key in $scope.filterSubData){
- //            $scope.tempData.filters[key] = []
- //          }
- //      }, 
- //      function (err) {
- //        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
- //  	});
- //  	if(typeof($scope.data.filters) !== "object"){return;}
-    
- //  	if(Object.keys($scope.data.filters).length > 0){
- //      	for(var key in $scope.data.filters){   
- //        	$scope.filterQuery[key] = $scope.data.filters[key];
- //      	}  
- //  	}
-	// }
-
-  	//Find unique items in an array by key      
+  //Find unique items in an array by key      
 	$scope.pluck = function(arr, key, matchKey, value) {
   	if(value && matchKey){
       	var result = $.map(arr, function(e) { 
@@ -313,38 +316,6 @@ angular.module('sasaWebApp')
 	};
 
 	/**
- * this function updates relational filter values
- */
-	// $scope.updateGlobalFilters = function () {
-
- //    var data = $scope.FilterData;
- //    var dataHolder = [];
- //    for(var queryKey in $scope.filterQuery){          
- //    		var tempArr = Object.keys(data[0])
- //    		tempArr.splice(tempArr.indexOf(queryKey), 1);
- //    		for(var i in $scope.filterQuery[queryKey]){
- //      		for(var j in tempArr){
- //        			var result = $scope.pluck(data, tempArr[j], queryKey, $scope.filterQuery[queryKey][i]);
- //        			if(dataHolder[tempArr[j]]){
-	//           		dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
-	//           		//find unique values      
-	//             	var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
-	//             	for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
-	//             	for(i in o) r.push(o[i]);
-	//             	dataHolder[tempArr[j]] = r;
- //      			}
- //      			else{
- //        				dataHolder[tempArr[j]] = result;
- //      			}
- //      		}
- //   		} 
- //  	}
- //  	for(var key in dataHolder){
- //    		$scope.filterSubData[key] = dataHolder[key];
- //  	}
-	// }
-
-	/**
  * this function checks whether any item is in filter query
  * @param  {[type]} key   [description]
  * @param  {[type]} value [description]
@@ -366,8 +337,14 @@ angular.module('sasaWebApp')
       delete $scope.filterQuery[key];
       $scope.updateGlobalFilters();
 	};
+  /**
+   * Function to set values of visualization when user click on apply
+   */
 
 	$scope.formatVizData = function() {
+    // $scope.viz_details.sort_by = $scope.avData.sort_by;
+    $scope.viz_details.sortByyaxis = [{yaxis:$scope.avData.sortByyaxis,descOrder:$scope.avData.descOrder}]
+    
     $scope.viz_details.advance_viz = $scope.avData.advance_viz;
     
     if($scope.defaultViz === true){
@@ -379,7 +356,7 @@ angular.module('sasaWebApp')
           $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
         }
         else
-          $scope.viz_details.x_options={}
+          $scope.viz_details.x_options[$scope.avData.x_data]=$scope.allFilterData[$scope.avData.x_data]
         if($scope.avData.y_data.length ===1 && $scope.avData.group_by !== 'None' && $scope.avData.group_by !== ''){
           $scope.viz_details.group_by.push($scope.avData.group_by);
         }
@@ -393,16 +370,18 @@ angular.module('sasaWebApp')
           $scope.viz_details.y_data[i]['formula']=data.measures[key]['measure_mappings']['m1']['formula']   
         }
       }
-    }  	
+    } 
   };
 
 	$scope.getAllFilters = function(){
+    if($scope.allfilterkeys.length>0)
+      return;
   	$rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
-        $scope.FilterData12 = data; 
-        var filterKeys = Object.keys(data[0]);
-        for (var i = 0; i < filterKeys.length; i++) {               
-            $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData12, filterKeys[i], null, null);
-        };   
+        $scope.filterSubData = data.toJSON(); 
+        // var filterKeys = Object.keys(data[0]);
+        // for (var i = 0; i < filterKeys.length; i++) {               
+        //     $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData12, filterKeys[i], null, null);
+        // };   
         if(Object.keys($rootScope.GlobalFilters).length===0){
         	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                      
           	$scope.FilterData = data.filters;   
@@ -418,8 +397,7 @@ angular.module('sasaWebApp')
             	$scope.allFilterData[key] = $scope.filterSubData[key]
               $scope.allfilterkeys = Object.keys($scope.allFilterData)
               $scope.tempData.filters[key] = []
-          	} 
-          	
+          	} 	
         	},function (err) {
           		messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
         	});
@@ -432,18 +410,12 @@ angular.module('sasaWebApp')
             $scope.allFilterData[key] = $scope.filterSubData[key]
             $scope.allfilterkeys = Object.keys($scope.allFilterData)
             $scope.tempData.filters[key] = []
-
           } 
-          for (var key in $scope.allFilterData) 
-          {
-            if($rootScope.globalQuery.hasOwnProperty(key))
-              $scope.allFilterData[key] = $rootScope.globalQuery[key]
-
-          }
         }
     	},function (err) {
       	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
   	});
+
     if(typeof($scope.data.filters) !== "object"){return;}
     
     if(Object.keys($scope.data.filters).length > 0){
@@ -523,7 +495,6 @@ angular.module('sasaWebApp')
   }
 
   $scope.updateGlobalFilters = function () {
-
       var data = $scope.FilterData;
       var dataHolder = [];
       for(var queryKey in $rootScope.globalQuery){          

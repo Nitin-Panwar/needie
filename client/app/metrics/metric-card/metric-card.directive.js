@@ -12,46 +12,38 @@ angular.module('sasaWebApp')
         //Setting options for the bar graph
         scope.options5 = {}; 
         scope.advanceVisualization = false
-        if(scope.metricData['distributions']){
-          if(scope.metricData['distributions'].length){
-            if(scope.metricData['distributions'][0]!==null){
-              if(scope.metricData['distributions'][0]['advance_viz']){
-                if(scope.metricData['distributions'][0]['x_data'].length>1)
-                  scope.advanceVisualization=false
-                else
-                  scope.advanceVisualization=true
-                if(scope.metricData['distributions'][0]['group_by'][0]){
-                  scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
-                  scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],scope.metricData['distributions'][0]['group_by'][0]]
-                }
-                else{
-                  scope.options5.series = (scope.metricData['distributions'][0]['y_data'].length>1)?"category":""
-                  if(scope.options5.series !== "")
-                      scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],scope.options5.series]
-                    else
-                      scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label']]
-
-                }
-              }
-              else{
-                if(scope.metricData['distributions'][0]['axis']){
-                  scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
-                }
-                else{
-                   scope.options5.xAxis =  ["quarter","category"]
-                }
-                scope.options5.series = "category"
-              }
-              scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+        if(scope.metricData['distributions'] && scope.metricData['distributions'].length  && scope.metricData['distributions'][0]!==null){
+          if(scope.metricData['distributions'][0]['advance_viz']){
+            scope.advanceVisualization=(scope.metricData['distributions'][0]['x_data'].length>1)?false:true
+            
+            if(scope.metricData['distributions'][0]['group_by'][0]){
+              scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
+              scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],scope.metricData['distributions'][0]['group_by'][0]]
+            }
+            else{
+              scope.options5.series = (scope.metricData['distributions'][0]['y_data'].length>1)?"category":""
+              scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label']]
+              if(scope.options5.series !== "")
+                scope.options5.xAxis.push(scope.options5.series)
             }
 
+            if(scope.metricData['distributions'][0]['sortByyaxis'])
+              scope.options5.orderList = ["orderlist",scope.metricData['distributions'][0]['sortByyaxis'][0]['descOrder']]
+    
           }
-          
-          scope.options5.chartType = ["bar"]
-          scope.options5.showLegend = true;
-          scope.options5.legendFilter = true
-          scope.options5.showGridlines = false
+          else{
+            scope.options5.xAxis=(scope.metricData['distributions'][0]['axis'])?scope.metricData['distributions'][0]['axis']:["quarter","category"]
+            scope.options5.series = "category"
+          }
+          scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
         }
+
+        scope.options5.chartType = ["bar"]
+        scope.options5.showLegend = true;
+        scope.options5.legendFilter = true
+        scope.options5.showGridlines = false
+
+
         //function to change x axis 
         
         scope.changeXaxis=function(type){
@@ -109,12 +101,11 @@ angular.module('sasaWebApp')
                 case 'visualization':
                   if(scope.metricData['distributions'] && scope.metricData['distributions'].length>0) {
                     for(var key in data){
-                      // if(scope.metricData['distributions'] && scope.metricData['distributions'][0]){
                         scope.metricData['distributions'][0][key] = data[key];
                       
                     }
                   }
-                   scope.getMetric();
+                  scope.getMetric();
                   break;
                 default:
                   return
@@ -166,8 +157,8 @@ angular.module('sasaWebApp')
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
+
           if($rootScope.meta.view_type=='scorecard'){
-            
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
               delete $rootScope.promiseObject[scope.metricIndex];                                 
@@ -180,27 +171,25 @@ angular.module('sasaWebApp')
             $rootScope.myPromise = arr; 
           }
           else{
-
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
              $rootScope.placeholder['metric'][scope.metricIndex]=response;
-                if(response['distributions'] && response['distributions'][0] && response['distributions'][0]['advance_viz']==true){
-                  if(response['distributions'][0]['x_data'].length>1)
-                    scope.advanceVisualization=false
-                  else
-                    scope.advanceVisualization=true
-                  if(response['distributions'][0]['group_by'][0]){
-                    scope.options5.series = response['distributions'][0]['group_by'][0]
-                    scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],response['distributions'][0]['group_by'][0]]
-                  }
-                  else{
-                    scope.options5.series = (response['distributions'][0]['y_data'].length>1)?"category":""
-                    if(scope.options5.series !== "")
-                      scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],scope.options5.series]
-                    else
-                      scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label']]
-
-                  }
-                  scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
+              if(response['distributions'] && response['distributions'][0] && response['distributions'][0]['distribution_data']['data'].length>0 && response['distributions'][0]['advance_viz']==true){
+                
+                scope.advanceVisualization=(response['distributions'][0]['x_data'].length>1)?false:true
+                
+                if(response['distributions'][0]['group_by'][0]){
+                  scope.options5.series = response['distributions'][0]['group_by'][0]
+                  scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],response['distributions'][0]['group_by'][0]]
+                }
+                else{
+                  scope.options5.series = (response['distributions'][0]['y_data'].length>1)?"category":""
+                  scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label']]
+                  if(scope.options5.series !== "")
+                    scope.options5.xAxis.push(scope.options5.series)
+                }
+                
+                scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
+                scope.options5.orderList = ["orderlist",response['distributions'][0]['sortByyaxis'][0]['descOrder']]
               }
           }, function (err) {
             messageCenterService.add('danger','No Data Found',{timeout: 10000});
