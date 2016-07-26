@@ -21,10 +21,17 @@ angular.module('sasaWebApp', [
   'xeditable',
   'ngMaterial'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider,$provide) {
      $urlRouterProvider
       .otherwise('/');
-    $locationProvider.html5Mode(true);    
+    $locationProvider.html5Mode(true); 
+     $httpProvider.useApplyAsync(true);  
+        /**
+            * Angular Material dynamically generates Style tags
+            * based on themes and palletes; for each ng-app.
+            * Let's disable generation and <style> DOM injections. 
+            */
+     //$provide.constant('$MD_THEME_CSS', ''); 
   })
 
 .config(['dialogsProvider','$translateProvider',function(dialogsProvider){
@@ -32,6 +39,7 @@ angular.module('sasaWebApp', [
     dialogsProvider.useEscClose(false);
     dialogsProvider.useCopy(false);
     dialogsProvider.setSize('la');
+       
   }])//end config
 
 // This filter will provide the range of the numbers in 
@@ -50,10 +58,10 @@ angular.module('sasaWebApp', [
   function ($rootScope, $http, webServiceURL, messageCenterService,dashBoardsFactory,$location, usersFactory,$stateParams) {
     //Login user if not logged in
     if($rootScope.user == undefined){ 
-      $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
-        $rootScope.userDetails = response.data.user;
-        $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
-        // $rootScope.user = 'gar\\npanwar'
+      // $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
+      //   $rootScope.userDetails = response.data.user;
+      //   $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
+        $rootScope.user = 'gar\\npanwar'
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
             $rootScope.homepage = data.homepage
@@ -61,9 +69,9 @@ angular.module('sasaWebApp', [
               var homepage = '/?dashboardId='+data.homepage;         
               $location.url(homepage)  
             }            
-        }, function (){
-            messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
-        })     
+        // }, function (){
+        //     messageCenterService.add('danger', 'Could not load homepage', { timeout: 5000 });
+        // })     
       },function (err) {
           // redirect user to access denied page
           $location.url('/accessDenied')

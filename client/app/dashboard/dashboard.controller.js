@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('DashboardCtrl', function ($scope, $rootScope, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs) {   
+  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs) {   
+    //loading image
+      $scope.showLoading=true;
     //Creating placeholder 
     $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
     //For ng-switch
@@ -34,6 +36,7 @@ angular.module('sasaWebApp')
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
         $rootScope.placeholder.dashboard = data; 
+
         if($rootScope.placeholder.dashboard.meta){
           $rootScope.meta =  $rootScope.placeholder.dashboard.meta
         }
@@ -49,7 +52,12 @@ angular.module('sasaWebApp')
           if(data['components'][i]['type']=='textBox'){
             $rootScope.placeholder.textBoxes.push(data['components'][i]);
           }
-        }  
+        }
+        // $timeout( function(){ 
+          $scope.showLoading=false;
+          //  }, 
+          // 3000);
+          
         messageCenterService.add('success','Dashboard loaded successfully',{timeout: 10000});
       }, function (err) {
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});

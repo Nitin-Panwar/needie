@@ -123,7 +123,8 @@ angular.module('sasaWebApp')
 		  for(var i in $scope.data.gridColumns){
 		      columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
 		  }
-		  $scope.availableColoumns.items = columns;          
+		  $scope.availableColoumns.items = columns;
+      console.log($scope.availableColoumns.items);          
 		  if($scope.data.gridColumns){
 		    $scope.selectedColumns.items = $scope.data.gridColumns;
 		  }
@@ -406,6 +407,7 @@ angular.module('sasaWebApp')
 	$scope.getAllFilters = function(){
   	$rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
         $scope.FilterData = data; 
+        console.log($scope.FilterData);
         var filterKeys = Object.keys(data[0]);
         for (var i = 0; i < filterKeys.length; i++) {               
             $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData, filterKeys[i], null, null);
