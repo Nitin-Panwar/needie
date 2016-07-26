@@ -447,6 +447,7 @@
                         .clamp(this.clamp)
                         .nice();
                 }
+
                 // If it's visible, orient it at the top or bottom if it's first or second respectively
                 if (!this.hidden) {
                     switch (this.chart._axisIndex(this, "x")) {
@@ -459,7 +460,17 @@
                                 this._draw.tickValues(function(){
                                         var domain_values = distinctCats;
                                         var total_length = domain_values.length * domain_values[0].toString().length*10;
-                                        return domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));})
+                                        //return domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));}) // Original
+                                        // **** Modified by Ikhurana ****
+                                            // Below code will help to print in original way in norma circumstances.
+                                            // For our special case, always, else condition will be printed.
+                                            var domain_values_filtered = domain_values.filter(function(d, i) {  return !(i % Math.ceil(total_length/chart._widthPixels()));})
+                                            if(domain_values_filtered.length == domain_values.length) {
+                                                return domain_values_filtered;
+                                            } else {
+                                                return domain_values;    
+                                            }
+                                        // **** Modification Ends ****
                                     })
                             }
                         if (this.ticks) {
@@ -1974,7 +1985,9 @@
                                     .each(function () {
                                         var rec = this.getBBox();
                                         d3.select(this)
-                                            .attr("transform", "rotate(90," + rec.x + "," + (rec.y + (rec.height / 2)) + ") translate(-5, 0)");
+                                            //.attr("transform", "rotate(90," + rec.x + "," + (rec.y + (rec.height / 2)) + ") translate(-5, 0)");
+                                            // Modified by KChug
+                                            .attr("transform", "rotate(60," + rec.x + "," + (rec.y + (rec.height / 2)) + ") translate(-2, 0)");
                                     });
                             } else {
                                 // For redraw operations we need to clear the transform
@@ -1998,7 +2011,9 @@
                                     .each(function () {
                                         var rec = this.getBBox();
                                         d3.select(this)
-                                            .attr("transform", "rotate(90," + (rec.x + rec.width) + "," + (rec.y + (rec.height / 2)) + ") translate(5, 0)");
+                                            //.attr("transform", "rotate(90," + (rec.x + rec.width) + "," + (rec.y + (rec.height / 2)) + ") translate(5, 0)");
+                                            // Modified by KChug 
+                                            .attr("transform", "rotate(60," + (rec.x + rec.width) + "," + (rec.y + (rec.height / 2)) + ") translate(2, 0)");
                                     });
                             } else {
                                 // For redraw operations we need to clear the transform
@@ -2310,6 +2325,24 @@
 
         this.InitlegendArray = null;
 
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+
+    var legend_series = this.chart.series[0]._positionData;
+    var max_category_length=0;
+
+    for (var i=0; i<legend_series.length;i++) {
+        if(isNaN(legend_series[i].aggField[0])) {
+            max_category_length=max_category_length>legend_series[i].aggField[0].length?max_category_length:legend_series[i].aggField[0].length;
+        } else {
+            max_category_length=max_category_length>0?max_category_length:1;
+        }
+    }
+    
+// **** Modification Ends ****
+
+
+
         // Copyright: 2015 AlignAlytics
         // License: "https://github.com/PMSI-AlignAlytics/dimple/blob/master/MIT-LICENSE.txt"
         // Source: /src/objects/legend/methods/_draw.js
@@ -2391,7 +2424,19 @@
             // Expand the bounds of the largest shape slightly.  This will be the size allocated to
             // all elements
             maxHeight = (maxHeight < keyHeight ? keyHeight : maxHeight) + self._getVerticalPadding();
-            maxWidth += keyWidth + self._getHorizontalPadding();
+            //maxWidth += keyWidth + self._getHorizontalPadding();
+
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+            maxWidth += keyWidth + self._getHorizontalPadding()+10;
+            var max_pixel_width=0;
+            theseShapes
+                .each(function(d){
+                    d3.select(this).select("text")
+
+                         max_pixel_width=max_pixel_width<self._xPixels()?self._xPixels():max_pixel_width;
+                });
+// **** Modification ends ****                
 
             // Iterate the shapes and position them based on the alignment and size of the legend
             theseShapes
@@ -2428,7 +2473,13 @@
                                         .style("shape-rendering", "crispEdges");
                                 }
                             });
-                        runningX += keyWidth + this.getBBox().width;//maxWidth;
+                        //runningX += keyWidth + this.getBBox().width;//maxWidth;
+
+// **** Modified by IKHURANA ****
+// Please make sure to include this in new file if you ever update this file.
+                        var w_ratio = (max_category_length/10)<1?1:(max_category_length/10);
+                        runningX= runningX+ (w_ratio *max_pixel_width) + keyWidth+15;
+// **** Modification ends ****;
                     }
                 });
 
@@ -2456,16 +2507,21 @@
                             j,
                             // Handle grouped plots (e.g. line and area where multiple points are coloured the same way
                             field = ((series.plot.grouped && !series.x._hasCategories() && !series.y._hasCategories() && row.aggField.length < 2 ? "All" : row.aggField.slice(-1)[0]));
+                            var key_f;
+                            if(field==="0" || field ===0)
+                                key_f = "N/A";
+                            else key_f=field;
                         for (j = 0; j < entries.length; j += 1) {
-                            if (entries[j].key === field) {
+                            if (entries[j].key === key_f) {
                                 index = j;
                                 break;
                             }
                         }
                         if (index === -1 && series.chart._assignedColors[field]) {
                             // If it's a new element create a new row in the return array
+                            
                             entries.push({
-                                key: field,
+                                key: key_f,
                                 fill: series.chart._assignedColors[field].fill,
                                 stroke: series.chart._assignedColors[field].stroke,
                                 opacity: series.chart._assignedColors[field].opacity,

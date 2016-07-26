@@ -7,8 +7,13 @@
     </md-toolbar>
 
     <md-dialog-content>
+<<<<<<< HEAD
       <div ng-init="getMetricColumns(); getAllFilters()" id="waitloader" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
         <md-tabs md-dynamic-height md-border-bottom >
+=======
+      <div >
+        <md-tabs md-dynamic-height md-border-bottom>
+>>>>>>> 673f97ba750920737f6a51387ed7420f1838b6f5
           <md-tab label="Data" md-active="tab==='data'" ng-click="tab='data'">
              <md-content class="md-padding">
                <span ng-if="tab==='data'" ng-include="'app/metrics/modal/data.html'"></span> 
@@ -41,7 +46,7 @@
     </md-dialog-content>
 
     <md-dialog-actions layout="row" style="margin-bottom: 10px;margin-right: 20px">
-      <md-button ng-show="tab==='visualization'" ng-click="setDefaultVisualization()" class="md-raised" style="margin-right: 5px;">Reset</md-button>
+      <md-button ng-show="tab==='visualization' || tab==='filter'" ng-click="setDefaultValues(tab)" class="md-raised" style="margin-right: 5px;">Reset</md-button>
       <md-button ng-hide="tab==='metric'" ng-click="save(tab)" class="md-raised" style="background-color:#0071C5;color:white;margin-right: 5px;">Apply</md-button>
       <md-button ng-click="cancel()" class="md-raised">Close</md-button>
     </md-dialog-actions>

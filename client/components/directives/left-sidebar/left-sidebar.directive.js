@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('leftSidebar', function ($rootScope, filtersFactory, messageCenterService, $stateParams, workflow, parentService, usersFactory) {
+  .directive('leftSidebar', function ($window,$rootScope, filtersFactory, messageCenterService, $stateParams, workflow, parentService, usersFactory) {
     return {
       templateUrl: 'components/directives/left-sidebar/left-sidebar.html',
       restrict: 'EA',
@@ -92,7 +92,7 @@ angular.module('sasaWebApp')
 	    //a metric has already been added in dashboard or not.
 	    scope.show = function(item){
             var pos = $rootScope.placeholder.metric.map(function(e) { return e._id; }).indexOf(item);
-            if(pos !== -1){return true;}
+            if(pos !== -1 && $rootScope.placeholder.metric[pos].name !== undefined){return true;}
             else return false;
 	    }
 
@@ -101,28 +101,28 @@ angular.module('sasaWebApp')
 	     * @param  {[type]} argument [description]
 	     * @return {[type]}          [description]
 	     */
+    	$rootScope.globalQuery = {};
 	    scope.getFilters = function () {
 	    	scope.showfilters = !scope.showfilters;	
 	    	if(scope.showfilters){
 	    		scope.showmydashboards = false;
 	    		scope.metriclist = false;
 	    	}
-	 		if(Object.keys($rootScope.GlobalFilters).length===0){
-		    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
-		            // $rootScope.GlobalFilters=data.filters;
-		            scope.FilterData = data.filters;	 
-		            var filterKeys = Object.keys(data.filters[0]);
-		            for (var i = 0; i < filterKeys.length; i++) {	            	
-		            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
-		            };	
-  	            
-			    },function (err){
-			        messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
-		        });
-		    }
-	    	if(scope.navigationIcon()){
-	            scope.updateGlobalFilters();
-    		}
+	 
+	    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
+	            // $rootScope.GlobalFilters=data.filters;
+	            scope.FilterData = data.filters;	 
+	            var filterKeys = Object.keys(data.filters[0]);
+	            for (var i = 0; i < filterKeys.length; i++) {	            	
+	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
+	            };
+	            if(scope.navigationIcon()){
+	            	scope.updateGlobalFilters();
+    			}	  	            
+		        }, 
+		        function (err) {
+		        	messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
+	        });
 
 	    }
 
@@ -158,7 +158,7 @@ angular.module('sasaWebApp')
 	     * @return {[type]}       [description]
 	     */
 	    scope.updateFilterQuery = function (key, value) {
-	         // udpate global search query
+	    	 // udpate global search query
 	        if($rootScope.globalQuery.hasOwnProperty(key)){
 
 	            // if the values exists                      

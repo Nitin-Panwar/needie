@@ -157,9 +157,6 @@ angular.module('sasaWebApp')
         if(scope.options.series!=undefined)
           scope.stackBarChartObject.series(scope.options.series)
 
-        if(scope.options.series!=undefined)
-          scope.stackBarChartObject.series(scope.options.series)
-
         // if(scope.goal!=undefined){
         //   console.log("inside if",scope.goal)
         //   scope.stackBarChartObject.hLines([
@@ -221,9 +218,12 @@ angular.module('sasaWebApp')
 
         if(scope.options.legendLeft!=undefined)
           scope.stackBarChartObject.legendLeft(scope.options.legendLeft)
-
-        if(scope.options.showLegend!=undefined)
-          scope.stackBarChartObject.showLegend(scope.options.showLegend)
+        if(scope.options.showLegend!=undefined){
+          if(scope.options.series !== "")
+            scope.stackBarChartObject.showLegend(scope.options.showLegend)
+          else
+            scope.stackBarChartObject.showLegend(false)
+        }
 
         if(scope.options.legendFilter!=undefined)
           scope.stackBarChartObject.legendFilter(scope.options.legendFilter)
@@ -281,7 +281,7 @@ angular.module('sasaWebApp')
 
 
         /*********build Chart object*********/
-        if(!scope.chartObject)
+        if(!scope.chartObject || scope.options.orderList)
         {
           scope.chartObject = (scope.stackBarChartObject
             .container(scope.container)
@@ -290,6 +290,11 @@ angular.module('sasaWebApp')
           )();
 
           //scope.chartObject.subscribe()
+        }
+        if(scope.options.orderList){
+          scope.stackBarChartObject
+              .orderList(scope.options.orderList)
+            scope.stackBarChartObject.orderList();
         }
       }
 
