@@ -27,6 +27,7 @@
       <link rel="stylesheet" href="bower_components/angular-dialog-service/dist/dialogs.min.css" />
       <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
       <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+      <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
       <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
       <!-- endbower -->
     <!-- endbuild -->
@@ -42,7 +43,7 @@
     
   </head>
   <section ng-include="'components/navbar/navbar.html'"></section>
-  <body class="no-js" ng-app="sasaWebApp" id="testdiv" md-no-ink style="overflow:scroll; overflow-x:hidden" >
+  <body class="no-js" ng-app="sasaWebApp" id="testdiv" md-no-ink style="overflow:scroll; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" >
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -88,7 +89,7 @@
       <script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
       <script src="bower_components/angular-aria/angular-aria.js"></script>
       <script src="bower_components/angular-messages/angular-messages.js"></script>
-      
+      <script src="bower_components/angular-material/angular-material.js"></script>
       <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
       <!-- endbower -->
     <!-- endbuild -->

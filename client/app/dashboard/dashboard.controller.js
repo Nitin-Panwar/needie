@@ -3,7 +3,7 @@
 angular.module('sasaWebApp')
   .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs) {   
     //loading image
-      $scope.showLoading=true;
+      //$scope.showLoading=true;
     //Creating placeholder 
     $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
     //For ng-switch
@@ -54,7 +54,7 @@ angular.module('sasaWebApp')
           }
         }
         // $timeout( function(){ 
-          $scope.showLoading=false;
+          //$scope.showLoading=false;
           //  }, 
           // 3000);
           
