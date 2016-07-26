@@ -8,7 +8,8 @@
       categLabels=[],yMin=null, yMax=null,legendWidth="100%",legendLeft=false,showLegend=true,legendFilter=true,tooltipObj=null,detailtooltipObj=null,
       showTooltip=true,showDetailTooltip=[],timeAxis=false,timeFormat="%m/%d/%Y",xLabels=[],shape="circle",barGap=0.2,shapeLine=false,
       tooltipFields=[],tooltipSeries=[],orderList=[],autoRotateLabel=true,eventHandler=null,aggrStackLabels=false,axisLabels=true;
-    var chartMargins = {left:50, top:50, right:30, bottom:40}  
+    var chartMargins = {left:50, top:30, right:30, bottom:100}  
+
     function plotChart_()
     {
       chartMargins.bottom = axisLabels?chartMargins.bottom:chartMargins.bottom-20;
@@ -254,13 +255,26 @@
       }
       y[0].showGridlines = showGridlines;
 
+      // if(chartType[0] != "pie" && x!=undefined)
+      // {
+      //   if(orderList.length > 0)
+      //   {
+      //     x.addOrderRule(orderList);
+      //   }
+      //   else
+      //   {
+      //     x.addOrderRule(xAxis);
+      //   }
+      // }
 
-
+      /* ****** Modified by KChug/IKhurana ********
+       Below code will allow us to sort according to Y-Axis
+      */
       if(chartType[0] != "pie" && x!=undefined)
       {
         if(orderList.length > 0)
         {
-          x.addOrderRule(orderList);
+          x.addOrderRule(yAxis[0],orderList[1]);
         }
         else
         {
@@ -269,6 +283,8 @@
 
       }
 
+      /* ***** Modification ENDS ***** */
+      
       if(orderList.length > 0)
         s[0].addOrderRule(orderList)
 
