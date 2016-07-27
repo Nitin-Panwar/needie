@@ -67,8 +67,8 @@ angular.module('sasaWebApp')
       $scope.avData.x_options=data['distributions'][0]['x_options']
       $scope.avData.advance_viz=data['distributions'][0]['advance_viz']
       if(data['distributions'][0]['sortByyaxis']){
-        $scope.avData.sort_by = data['distributions'][0]['sortByyaxis'][0]['yaxis'];
-        $scope.avData.order = data['distributions'][0]['sortByyaxis'][0]['descOrder']
+        $scope.avData.sortByyaxis = data['distributions'][0]['sortByyaxis'][0]['yaxis'];
+        $scope.avData.descOrder = data['distributions'][0]['sortByyaxis'][0]['descOrder']
       }
   } 
   /*
