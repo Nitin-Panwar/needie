@@ -2,10 +2,10 @@
 <section ng-if="meta.view_type=='scorecard'">
 	<!-- Score card header-->
 	<form class="form-inline" style="margin-bottom: 10px;" >
-		<!-- <div class="input-group">				  
-		  <select ng-options="year for year in [] | range:0:2" ng-model="meta.details[3].window_size"  class="form-control"></select>
+		<div class="input-group">				  
+		  <select ng-options="year for year in [] | range:0:3" ng-model="meta.details[3].window_size"  class="form-control"></select>
 		  <span class="input-group-addon" id="basic-addon1">Year</span>
-		</div> -->
+		</div>
 		<div class="input-group">				  
 		  <select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
 		  <span class="input-group-addon" id="basic-addon1">Quarter</span>
