@@ -12,8 +12,7 @@ angular.module('sasaWebApp')
 		}	
 		if(type === 'metric'){    			
 			var id = item;    			
-			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {
-        console.log(data)   				
+			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {				
         data.size = {x: 2};
         data.type='metric';                 
         $rootScope.placeholder[type].push(data);

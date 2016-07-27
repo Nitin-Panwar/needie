@@ -7,7 +7,7 @@ angular.module('sasaWebApp')
     //For ng-switch
     $scope.view_types = ['metriccard', 'scorecard'];
     //Dictionary to store meta data of score card
-    $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3}],'view_type': 'metriccard'}
+    $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3},{'timeframe': 'historical','dimension': 'year','window_size': 0,"sequence":4}],'view_type': 'metriccard'}
     //variable to watch, while changing score_card data
     $rootScope.var_changeData =0
     $rootScope.globalQuery = {}
