@@ -172,6 +172,7 @@ angular.module('sasaWebApp')
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+  
              $rootScope.placeholder['metric'][scope.metricIndex]=response;
               if(response['distributions'] && response['distributions'][0] && response['distributions'][0]['distribution_data']['data'].length>0 && response['distributions'][0]['advance_viz']==true){
                 
