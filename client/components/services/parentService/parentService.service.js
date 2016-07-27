@@ -7,12 +7,13 @@ angular.module('sasaWebApp')
 		//Creating dummy dashboard id before adding any metric to it
 		if(!$rootScope.placeholder.dashboard._id)
 		{ 
-            $rootScope.createNew = false;
+      $rootScope.createNew = false;
 			$rootScope.placeholder.dashboard._id=1;
 		}	
 		if(type === 'metric'){    			
 			var id = item;    			
-			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {   				
+			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {
+        console.log(data)   				
         data.size = {x: 2};
         data.type='metric';                 
         $rootScope.placeholder[type].push(data);
