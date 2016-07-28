@@ -3691,7 +3691,7 @@
                 });
 
             // Remove
-            removed = chart._handleTransition(theseShapes.exit(), duration, chart, series)
+            removed = chart._handleTransition(theseShapes.exit(),0,chart, series)
                 .attr("x", function (d) {
                     var returnValue = series.x._origin;
                     if (cat === "x") {
@@ -5327,7 +5327,7 @@
             // The margin between the ring and the popup
             popupMargin = 10,
            // The popup animation duration in ms
-            animDuration = 750,
+            animDuration = 0,
             // Collect some facts about the highlighted bar
             selectedShape = d3.select(shape),
             x = selectedShape.node().getBBox().x,
