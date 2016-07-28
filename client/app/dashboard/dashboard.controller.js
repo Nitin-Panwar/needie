@@ -9,7 +9,7 @@ angular.module('sasaWebApp')
     //For ng-switch
     $scope.view_types = ['metriccard', 'scorecard'];
     //Dictionary to store meta data of score card
-    $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3}],'view_type': 'metriccard'}
+    $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3},{'timeframe': 'historical','dimension': 'year','window_size': 0,"sequence":4}],'view_type': 'metriccard'}
     //variable to watch, while changing score_card data
     $rootScope.var_changeData =0
     $rootScope.globalQuery = {}
@@ -39,6 +39,9 @@ angular.module('sasaWebApp')
 
         if($rootScope.placeholder.dashboard.meta){
           $rootScope.meta =  $rootScope.placeholder.dashboard.meta
+          if(!$rootScope.meta.details[3]){
+            $rootScope.meta.details[3] = {'timeframe': 'historical','dimension': 'year','window_size': 0,"sequence":4}
+          }
         }
   
         // update filters on front end
@@ -349,6 +352,16 @@ angular.module('sasaWebApp')
       var window_size_work_week = $rootScope.meta.details[0].window_size;
       var window_size_month = $rootScope.meta.details[1].window_size;
       var window_size_quarter = $rootScope.meta.details[2].window_size;
+      var window_size_year =0;
+
+      //This is a temp fix; Plz remove it once patching is done.
+      if(!$rootScope.meta.details[3]){
+        $rootScope.meta.details[3] = {'timeframe': 'historical','dimension': 'year','window_size': 0,"sequence":4}
+      }
+      else{
+        window_size_year = $rootScope.meta.details[3].window_size;
+      }
+      
       //Variable to store starting index
       $scope.start_index =current_work_week-window_size_work_week+1
       //Variable to show the header in score card
@@ -359,6 +372,15 @@ angular.module('sasaWebApp')
       var scorecard_header_month =[];
       //Variable to store quarter header
       var scorecard_header_quarter =[];
+      //Variable to store year header
+      var scorecard_header_year =[];
+
+      for (var i=0; i < window_size_year ; i++) {
+          scorecard_header_year[i] = String(current_year - window_size_year + i +1)
+        }
+      //Pushing scorecard_header_quarter in scorecard_header
+      $scope.scorecard_header.push.apply($scope.scorecard_header,scorecard_header_year)
+
       for (var i=0,j=current_quarter-window_size_quarter+1; i<window_size_quarter; i++,j++) {
         if(j>0){
           scorecard_header_quarter[i]='Q'+j+" "+current_year;
@@ -417,6 +439,15 @@ angular.module('sasaWebApp')
         var temp_array_ww=[]
         var temp_array_m=[]
         var temp_array_q=[]
+        var temp_array_y=[]
+        //Traversing year
+        for (var k=0,j=current_year-window_size_year+1; k<window_size_year; k++,j++) {
+          var key='year'
+          var value=j
+          temp_array_y[k]=$scope.isExist(key,value,$scope.measureList[i]['2'])
+        }
+        //Pushing temp_array_q into temp_array
+        temp_array.push.apply(temp_array,temp_array_y)
         //Traversing quarter
         if(current_quarter-window_size_quarter+1>0){
           for (var k=0,j=current_quarter-window_size_quarter+1; k<window_size_quarter; k++,j++) {

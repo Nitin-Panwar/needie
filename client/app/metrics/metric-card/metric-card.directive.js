@@ -27,7 +27,7 @@ angular.module('sasaWebApp')
                 scope.options5.xAxis.push(scope.options5.series)
             }
 
-            if(scope.metricData['distributions'][0]['sortByyaxis'])
+            if(scope.metricData['distributions'][0]['sortByyaxis'] && scope.metricData['distributions'][0]['sortByyaxis'][0]['yaxis'])
               scope.options5.orderList = ["orderlist",scope.metricData['distributions'][0]['sortByyaxis'][0]['descOrder']]
     
           }
@@ -172,6 +172,7 @@ angular.module('sasaWebApp')
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
+  
              $rootScope.placeholder['metric'][scope.metricIndex]=response;
               if(response['distributions'] && response['distributions'][0] && response['distributions'][0]['distribution_data']['data'].length>0 && response['distributions'][0]['advance_viz']==true){
                 
@@ -189,7 +190,8 @@ angular.module('sasaWebApp')
                 }
                 
                 scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
-                scope.options5.orderList = ["orderlist",response['distributions'][0]['sortByyaxis'][0]['descOrder']]
+                if(response['distributions'][0]['sortByyaxis'][0]['yaxis']==true)
+                  scope.options5.orderList = ["orderlist",response['distributions'][0]['sortByyaxis'][0]['descOrder']]
               }
           }, function (err) {
             messageCenterService.add('danger','No Data Found',{timeout: 10000});
