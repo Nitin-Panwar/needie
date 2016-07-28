@@ -30,7 +30,7 @@
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
-    <link rel="stylesheet" href="assets/js/angular-material.css">
+    <link rel="stylesheet" href="assets/js/angular-material/angular-material.css">
     <link rel="stylesheet" href="app/app.css">
     <link rel="stylesheet" href="assets/css/smm-it-mlaf.min.css">
     <link rel="stylesheet" href="assets/js/multichart.css">
@@ -41,7 +41,7 @@
     
   </head>
   <section ng-include="'components/navbar/navbar.html'"></section>
-  <body class="no-js" ng-app="sasaWebApp" id="testdiv" md-no-ink style="overflow:scroll; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" >
+  <body class="no-js" ng-app="sasaWebApp" id="testdiv" md-no-ink=""  style="overflow:scroll; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" >
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -66,7 +66,7 @@
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/jquery/jquery.js"></script>
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/angular-route/angular-route.js"></script>
       <script src="bower_components/message-center/message-center.js"></script>
@@ -85,13 +85,13 @@
       <script src="bower_components/pdfmake/build/pdfmake.js"></script>
       <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
       <script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
-      <script src="bower_components/angular-aria/angular-aria.js"></script>
-      <script src="bower_components/angular-messages/angular-messages.js"></script>
       <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
        <!--Angular materails js file IE performance issue-->
-       <script src="assets/js/angular-material.js"></script>
+       <script src="assets/js/angular-aria/angular-aria.min.js"></script>
+       <script src="assets/js/angular-messages/angular-messages.js"></script>
+       <script src="assets/js/angular-material/angular-material.js"></script>
       <!-- build:js app/chart.js -->
       <script src="assets/js/chart.js"></script>
       <!-- endbuild -->
