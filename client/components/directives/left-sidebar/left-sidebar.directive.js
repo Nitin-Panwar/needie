@@ -111,8 +111,20 @@ angular.module('sasaWebApp')
 	 
 	    	$rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                         		            
 	            // $rootScope.GlobalFilters=data.filters;
-	            scope.FilterData = data.filters;	 
-	            var filterKeys = Object.keys(data.filters[0]);
+	            scope.FilterData = data.filters;	
+	            var tempkey = {
+	            	"segment":"Cross Enterprise",
+	            	"portfolio":"Finance",
+	            	"service":"Close and Reporting",
+	            	"service_component":"Close and Reporting (S)",
+	            	"product":"AssureNet",
+	            	"support_skill":"C and R Batch Jobs"
+
+	            } 
+	            var filterKeys = Object.keys(tempkey);
+	           
+	            // console.log(filterKeys)
+
 	            for (var i = 0; i < filterKeys.length; i++) {	            	
 	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
 	            };
