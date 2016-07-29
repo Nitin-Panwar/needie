@@ -4,7 +4,7 @@
 	<ul class="nav">
 		<li ng-repeat="(key, value)  in metricData.filters" class="text-capitalize">{{key}}
 			<ul style="list-style-type:circle" >
-				<li ng-repeat="item in value">{{item}}</li>
+				<li ng-repeat="item in value">{{::item}}</li>
 			</ul>
 		</li>
 	<ul>		
