@@ -347,6 +347,19 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/components/constants/'
         }]
       },
+      cons: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./config/environments/cons.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./config/constants.service.js'],
+          dest: '<%= yeoman.client %>/components/constants/'
+        }]
+      },
       production: {
         options: {
           patterns: [{
