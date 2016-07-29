@@ -8,10 +8,9 @@
 
 <html>
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=11">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta charset="utf-8">
-    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
-    
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=11"> -->
     <meta http-equiv="Cache-control" content="public">
     <meta http-equiv="Cache-control" content="private">
     <meta http-equiv="Cache-control" content="no-cache">
@@ -20,18 +19,19 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.min.css" />
+      <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.css" />
       <link rel="stylesheet" href="bower_components/angular-dialog-service/dist/dialogs.min.css" />
       <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
       <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
-      <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
       <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
+    <link rel="stylesheet" href="assets/js/angular-material/angular-material.css">
     <link rel="stylesheet" href="app/app.css">
     <link rel="stylesheet" href="assets/css/smm-it-mlaf.min.css">
     <link rel="stylesheet" href="assets/js/multichart.css">
@@ -42,13 +42,13 @@
     
   </head>
   <section ng-include="'components/navbar/navbar.html'"></section>
-  <body class="no-js" ng-app="sasaWebApp" id="testdiv" style="overflow:scroll; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
+  <body class="no-js" ng-app="sasaWebApp" id="testdiv" md-no-ink=""  style="overflow:scroll; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     
     <!-- Add your site or application content here -->
-    <section class="container-fluid">
+    <section class="container-fluid" style="min-width:960px;overflow-x: auto; background-color:#fff;">
       <section ui-view=""></section>
     </section>
     <div mc-messages id="flash-messages"></div>
@@ -59,7 +59,6 @@
     <![endif]-->
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- bower:js -->
-      <script src="bower_components/jquery/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -68,6 +67,7 @@
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/jquery/jquery.js"></script>
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/angular-route/angular-route.js"></script>
       <script src="bower_components/message-center/message-center.js"></script>
@@ -86,13 +86,14 @@
       <script src="bower_components/pdfmake/build/pdfmake.js"></script>
       <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
       <script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
-      <script src="bower_components/angular-aria/angular-aria.js"></script>
-      <script src="bower_components/angular-messages/angular-messages.js"></script>
-      <script src="bower_components/angular-material/angular-material.js"></script>
       <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
-
+       <!-- build:js app/a-material.js -->
+       <script src="assets/js/angular-aria/angular-aria.min.js"></script>
+       <script src="assets/js/angular-messages/angular-messages.js"></script>
+       <script src="assets/js/angular-material/angular-material.js"></script>
+       <!-- endbuild -->
       <!-- build:js app/chart.js -->
       <script src="assets/js/chart.js"></script>
       <!-- endbuild -->
@@ -153,5 +154,6 @@
           <script src="components/utility/utility.controller.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
+<div class="clearfix" style="clear: both"></div>
 </body>
 </html>
