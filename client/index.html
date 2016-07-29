@@ -19,6 +19,7 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
@@ -41,13 +42,13 @@
     
   </head>
   <section ng-include="'components/navbar/navbar.html'"></section>
-  <body class="no-js" ng-app="sasaWebApp" id="testdiv" md-no-ink=""  style="overflow:scroll; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" >
+  <body class="no-js" ng-app="sasaWebApp" id="testdiv" md-no-ink=""  style="overflow:scroll; overflow-x:hidden"cg-busy="{promise:myPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     
     <!-- Add your site or application content here -->
-    <section class="container-fluid" style="min-width:960px;overflow-x: auto;" >
+    <section class="container-fluid" style="min-width:960px;overflow-x: auto; background-color:#fff;">
       <section ui-view=""></section>
     </section>
     <div mc-messages id="flash-messages"></div>
@@ -153,5 +154,6 @@
           <script src="components/utility/utility.controller.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
+<div class="clearfix" style="clear: both"></div>
 </body>
 </html>
