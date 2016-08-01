@@ -3,6 +3,11 @@
 	<!-- Score card header-->
 	<form class="form-inline" style="margin-bottom: 10px;" >
 		<div class="input-group">				  
+		  <select ng-options="year for year in [] | range:0:3" ng-model="meta.details[3].window_size"  class="form-control"></select>
+		  <span class="input-group-addon" id="basic-addon1">Year</span>
+		</div>
+		&nbsp;&nbsp;
+		<div class="input-group">				  
 		  <select ng-options="quarter for quarter in [] | range:0:5" ng-model="meta.details[2].window_size"  class="form-control"></select>
 		  <span class="input-group-addon" id="basic-addon1">Quarter</span>
 		</div>
@@ -16,7 +21,7 @@
 		  <select ng-options="work_week for work_week in [] | range:0:53" ng-model="meta.details[0].window_size" class="form-control"></select>
 		  <span class="input-group-addon" id="basic-addon1">Work Week</span>
 		</div>
-		<button type="submit" class="btn btn-primary" style="margin-top:2px;" ng-click="changeCardData()">Apply</button>
+		<button type="submit" class="btn btn-primary" style="margin-top:2px;"  ng-click="changeCardData()">Apply</button>
 	</form>
 	<!-- Score card header end -->
 

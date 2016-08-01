@@ -1985,7 +1985,9 @@
                                     .each(function () {
                                         var rec = this.getBBox();
                                         d3.select(this)
-                                            .attr("transform", "rotate(90," + rec.x + "," + (rec.y + (rec.height / 2)) + ") translate(-5, 0)");
+                                            //.attr("transform", "rotate(90," + rec.x + "," + (rec.y + (rec.height / 2)) + ") translate(-5, 0)");
+                                            // Modified by KChug
+                                            .attr("transform", "rotate(60," + rec.x + "," + (rec.y + (rec.height / 2)) + ") translate(-2, 0)");
                                     });
                             } else {
                                 // For redraw operations we need to clear the transform
@@ -2009,7 +2011,9 @@
                                     .each(function () {
                                         var rec = this.getBBox();
                                         d3.select(this)
-                                            .attr("transform", "rotate(90," + (rec.x + rec.width) + "," + (rec.y + (rec.height / 2)) + ") translate(5, 0)");
+                                            //.attr("transform", "rotate(90," + (rec.x + rec.width) + "," + (rec.y + (rec.height / 2)) + ") translate(5, 0)");
+                                            // Modified by KChug 
+                                            .attr("transform", "rotate(60," + (rec.x + rec.width) + "," + (rec.y + (rec.height / 2)) + ") translate(2, 0)");
                                     });
                             } else {
                                 // For redraw operations we need to clear the transform
@@ -2503,16 +2507,21 @@
                             j,
                             // Handle grouped plots (e.g. line and area where multiple points are coloured the same way
                             field = ((series.plot.grouped && !series.x._hasCategories() && !series.y._hasCategories() && row.aggField.length < 2 ? "All" : row.aggField.slice(-1)[0]));
+                            var key_f;
+                            if(field==="0" || field ===0)
+                                key_f = "N/A";
+                            else key_f=field;
                         for (j = 0; j < entries.length; j += 1) {
-                            if (entries[j].key === field) {
+                            if (entries[j].key === key_f) {
                                 index = j;
                                 break;
                             }
                         }
                         if (index === -1 && series.chart._assignedColors[field]) {
                             // If it's a new element create a new row in the return array
+                            
                             entries.push({
-                                key: field,
+                                key: key_f,
                                 fill: series.chart._assignedColors[field].fill,
                                 stroke: series.chart._assignedColors[field].stroke,
                                 opacity: series.chart._assignedColors[field].opacity,
@@ -3682,7 +3691,7 @@
                 });
 
             // Remove
-            removed = chart._handleTransition(theseShapes.exit(), duration, chart, series)
+            removed = chart._handleTransition(theseShapes.exit(),0,chart, series)
                 .attr("x", function (d) {
                     var returnValue = series.x._origin;
                     if (cat === "x") {
@@ -5318,7 +5327,7 @@
             // The margin between the ring and the popup
             popupMargin = 10,
            // The popup animation duration in ms
-            animDuration = 750,
+            animDuration = 0,
             // Collect some facts about the highlighted bar
             selectedShape = d3.select(shape),
             x = selectedShape.node().getBBox().x,

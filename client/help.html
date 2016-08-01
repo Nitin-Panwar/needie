@@ -21,19 +21,21 @@
         <li><span>Metrics</span></li>
         <ul>
             <li><a href="#Metric_Card_Rearrangement" title=""><span>Metric Card Rearrangement</span></a></li>
+            <li><a href="#Metric_Drill_Down" title=""><span>Metric Drill Down</span></a></li>
             <li><a href="#Metric_Data" title=""><span>Metric Data</span></a></li>
             <li><a href="#Explore_Metric_Data" title=""><span>Explore and Export Metric Data</span></a></li>
            <!--   <ul>
                 <li><a href="#Explore_Metric_Data" title=""><span>Explore Metric Data</span></a></li>
                 <li><a href="#Exporting_to_CSV" title=""><span>Exporting to CSV</span></a></li>
              </ul> -->
-            <li><a href="#Metric_Drill_Down" title=""><span>Metric Drill Down</span></a></li>
+            
             <li><a href="#Measures" title=""><span>Measures</span></a></li>
             <ul>
                 <li><a href="#Measure_Thresholds" title=""><span>Measure Thresholds</span></a></li>
                 <li><a href="#Disabling_Measures" title=""><span>Disabling Measures</span></a></li>
                 <li><a href="#Measure_Details" title=""><span>Measure Details</span></a></li>
             </ul>
+            <li><a href="#Metric_Filters" title=""><span>Metric Filters</span></a></li>
             <li><a href="#Distributions" title=""><span>Distributions</span></a></li>
             <li><a href="#Metric_Details" title=""><span>Metric Details</span></a></li>
             <li><a href="#moving_metric_from_Dashboard" title=""><span>Removing metric from Dashboard</span></a></li>
@@ -194,6 +196,18 @@
         </p>
     </fieldset>
     <!-- Metric Card Rearrangement end-->
+    <!-- <Metric Drill Down starts> -->
+    <fieldset>
+        <legend class="text-capitalize" id="Metric_Drill_Down">Metric Drill Down</legend>
+        <p>
+            Click on metric drop down button and click on <i>Filters</i> option to open filters dialog.
+            <br><img src="/assets/images/help/metric_filter_options.png" alt="Metric Filters Option Image"><br>
+            Click on any of the listed category, and it will expand.
+            
+        </p>
+    </fieldset>
+    <!-- <Metric Drill Down starts> -->
+
     <!-- Metric Data -->
     <fieldset>
         <legend class="text-capitalize" id="Metric_Data">Metric Data</legend>
@@ -248,7 +262,7 @@
     <!-- Exporting to CSV end -->
     <!-- metric drill down -->
     <fieldset>
-        <legend class="text-capitalize" id="Metric_Drill_Down">Metric Drill Down</legend>
+        <legend class="text-capitalize" id="Metric_Filters">Metric Filters</legend>
         <p>
             Click on metric drop down button and click on <i>Filters</i> option to open filters dialog.
             <br><img src="/assets/images/help/metric_filter_options.png" alt="Metric Filters Option Image"><br>
@@ -354,9 +368,12 @@
         <legend class="text-capitalize" id="Measures">Visualization</legend>
         <p>
             Click on metric drop down button and click on <i>Visualization</i> option to open Metric Details dialog.
-            <br><img src="/assets/images/help/metric__visulization_options.png" alt="Metric Details Option Image"><br>
-            In Visulization user can select the cateogry to show on X-axis along with the values. Also user can chose the value for Y-axis and group by condition.
+            <br><img src="/assets/images/help/metric__visualization_options.png" alt="Metric Details Option Image"><br>
+            Visualization provides the functionality to change the category for X axis and Y axis. Also user can choose among X options to visualize over X axis with the Group By and Sort By capability. 
             <br><img src="/assets/images/help/visualization.png" alt="Metric Details Dialog Image">
+        <p class="well">
+            Remember to click on dashboard <i>Save</i> button to permanently save selected filters.
+        </p>
         </p>
     </fieldset>
     <!-- Visualization end -->
@@ -392,7 +409,7 @@
     <fieldset>
         <legend class="text-capitalize" id="Release">Release</legend>
         <p>
-            Current release is <strong>1.5</strong>
+            Current release is <strong>1.6</strong>
         </p>
     </fieldset>
     <!-- release end -->
