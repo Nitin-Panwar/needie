@@ -25,6 +25,8 @@ angular.module('sasaWebApp')
               scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label']]
               if(scope.options5.series !== "")
                 scope.options5.xAxis.push(scope.options5.series)
+              else
+                scope.options5.orderList = [] 
             }
 
             if(scope.metricData['distributions'][0]['sortByyaxis'] && scope.metricData['distributions'][0]['sortByyaxis'][0]['yaxis'])
@@ -187,6 +189,8 @@ angular.module('sasaWebApp')
                   scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label']]
                   if(scope.options5.series !== "")
                     scope.options5.xAxis.push(scope.options5.series)
+                  else
+                    scope.options5.orderList = [] 
                 }
                 
                 scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]

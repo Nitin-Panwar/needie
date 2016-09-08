@@ -19,19 +19,29 @@ angular.module('sasaWebApp', [
   'ngTouch',
   'ngCsv',
   'xeditable',
-  'ngMaterial'
+  'ngMaterial',
+  'intcAnalytics'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider,$provide) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider,$provide,$mdThemingProvider,intcAnalyticsProvider,$animateProvider) {
      $urlRouterProvider
       .otherwise('/');
     $locationProvider.html5Mode(true); 
-     $httpProvider.useApplyAsync(true);  
+    $httpProvider.useApplyAsync(true);  
+   // $animate.enabled(false, element);
+   $animateProvider.classNameFilter(/angular-animate/);
+
         /**
             * Angular Material dynamically generates Style tags
             * based on themes and palletes; for each ng-app.
             * Let's disable generation and <style> DOM injections. 
             */
-     //$provide.constant('$MD_THEME_CSS', ''); 
+     $provide.constant('$MD_THEME_CSS', ''); 
+    intcAnalyticsProvider.setDebugging(true);                   //Optional line - for debugging
+    intcAnalyticsProvider.setLocalhostMode(true);               //Optional line - for local dev testing
+    intcAnalyticsProvider.setAppId(13806);
+   // intcAnalyticsProvider.setGoogleAnalyticsId('UA-XXXXXXX-X');
+    console.log(intcAnalyticsProvider);
+     
   })
 
 .config(['dialogsProvider','$translateProvider',function(dialogsProvider){
@@ -61,10 +71,16 @@ angular.module('sasaWebApp', [
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
         $rootScope.userDetails = response.data.user;
         $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase();
-        // $rootScope.user = 'gar\\npanwar'
+         //$rootScope.user = 'gar\\pjenax'
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
-            $rootScope.homepage = data.homepage
+             // console.log("user info",data)
+             // var defaultDashboardId="567c56df3e18090c546187c5"
+             // if(data.homepage === ""){
+             //  data.homepage=defaultDashboardId;
+             //   }
+              $rootScope.homepage = data.homepage;
+               
             if(data.homepage && !$stateParams.dashboardId){
               var homepage = '/?dashboardId='+data.homepage;         
               $location.url(homepage)  
@@ -110,7 +126,7 @@ angular.module('sasaWebApp', [
     gridsterConfig.minSizeY= 1, // minumum row height of an item
     gridsterConfig.maxSizeY= null, // maximum row height of an item
     gridsterConfig.resizable= {
-       enabled: true,
+       enabled: false,
        handles: ['n', 'e', 's', 'w'],
        start: function(event, $element, widget) {}, // optional callback fired when resize is started,
        resize: function(event, $element, widget) {}, // optional callback fired when item is resized,
