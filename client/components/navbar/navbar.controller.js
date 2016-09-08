@@ -18,7 +18,7 @@ angular.module('sasaWebApp')
     $scope.redirect = function (dashboard) {
       var url = '/?dashboardId='+dashboard._id['$oid'];         
       $location.url(url)
-      window.location.reload()
+      //window.location.reload()
     }
 
 

@@ -1334,9 +1334,9 @@
                 returnShape = input;
             } else {
                 returnShape = input.transition()
-                    .duration(duration)
+                    .duration(0)
                     .delay(chart._getDelay(duration, chart, series))
-                    .ease(chart.ease);
+                    .ease("linear");
             }
             return returnShape;
         };
@@ -3112,7 +3112,7 @@
         // Source: /src/objects/storyboard/methods/pauseAnimation.js
         this.pauseAnimation = function () {
             if (this._animationTimer !== null) {
-                window.clearInterval(this._animationTimer);
+                window.clearInterval(0);
                 this._animationTimer = null;
             }
         };
@@ -3130,9 +3130,9 @@
                         if (storyboard.onTick !== null) {
                             storyboard.onTick(storyboard.getFrameValue());
                         }
-                        storyboard._drawText(storyboard.frameDuration / 2);
+                        storyboard._drawText(0 / 2);
                     };
-                }(this)), this.frameDuration);
+                }(this)), 0);
             }
         };
 
@@ -3607,7 +3607,7 @@
 
         // Draw the chart
         draw: function (chart, series, duration) {
-
+ duration=0;
             var chartData = series._positionData,
                 theseShapes = null,
                 classes = ["dimple-series-" + chart.series.indexOf(series), "dimple-bar"],
