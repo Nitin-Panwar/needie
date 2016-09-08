@@ -1,36 +1,53 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('metriccard', function (metricsFactory, $rootScope, dialogs, parentService, gridsterConfig) {
+  .directive('metriccard', function (metricsFactory,messageCenterService, $rootScope, dialogs, parentService, gridsterConfig, $mdDialog, $mdMedia) {
     return {
       templateUrl: 'app/metrics/metric-card/metric-card.html',
       restrict: 'EA',   
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
+        
         //Setting options for the bar graph
         scope.options5 = {}; 
-        if(scope.metricData['distributions']){
-          if(scope.metricData['distributions'].length){
-            if(scope.metricData['distributions'][0]!==null){
-              if(scope.metricData['distributions'][0]['axis']){
-                  scope.options5.xAxis=scope.metricData['distributions'][0]['axis']
-              }
-              else{
-                 scope.options5.xAxis =  ["quarter","category"]
-              }
-              scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+        scope.advanceVisualization = false
+        if(scope.metricData['distributions'] && scope.metricData['distributions'].length  && scope.metricData['distributions'][0]!==null){
+          if(scope.metricData['distributions'][0]['advance_viz']){
+            scope.advanceVisualization=(scope.metricData['distributions'][0]['x_data'].length>1)?false:true
+            
+            if(scope.metricData['distributions'][0]['group_by'][0]){
+              scope.options5.series = scope.metricData['distributions'][0]['group_by'][0]
+              scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label'],scope.metricData['distributions'][0]['group_by'][0]]
             }
+            else{
+              scope.options5.series = (scope.metricData['distributions'][0]['y_data'].length>1)?"category":""
+              scope.options5.xAxis =  [scope.metricData['distributions'][0]['distribution_data']['x_label']]
+              if(scope.options5.series !== "")
+                scope.options5.xAxis.push(scope.options5.series)
+            }
+
+            if(scope.metricData['distributions'][0]['sortByyaxis'] && scope.metricData['distributions'][0]['sortByyaxis'][0]['yaxis'])
+              scope.options5.orderList = ["orderlist",scope.metricData['distributions'][0]['sortByyaxis'][0]['descOrder']]
+    
           }
+          else{
+            scope.options5.xAxis=(scope.metricData['distributions'][0]['axis'])?scope.metricData['distributions'][0]['axis']:["quarter","category"]
+            scope.options5.series = "category"
+          }
+          scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
         }
-        scope.options5.series = "category"
+
         scope.options5.chartType = ["bar"]
         scope.options5.showLegend = true;
         scope.options5.legendFilter = true
         scope.options5.showGridlines = false
-                
+
+
         //function to change x axis 
+        
         scope.changeXaxis=function(type){
+          scope.options5.changeXaxis=true
           if(type=='WW'){
             scope.options5.xAxis = ["work_week","category"]
             scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
@@ -46,45 +63,56 @@ angular.module('sasaWebApp')
         }
 
         // this function launches the dialogs
-        scope.launch = function(which,metricData,placeholder){
-          switch(which){
-            case 'data':              
-              var dlg = dialogs.create('app/metrics/modals/data.html','ModalCtrl',metricData,'sm');
-				      dlg.result.then(function (data) {
-                // update selected columns in placeholder for saving
-                $rootScope.placeholder.metric[scope.metricIndex].gridColumns = data;
-                scope.metricData.gridColumns = data;
-              })
-              break;
-            
-            case 'filter':
-              var dlg = dialogs.create('app/metrics/modals/filter.html','ModalCtrl',metricData,'sm');
-              dlg.result.then(function (data) {                
-                scope.metricData.filters = data;
-                for(var key in scope.metricData.filters){
-                  if(scope.metricData.filters[key].length === 0){delete scope.metricData.filters[key];}
-                }
-                scope.getMetric();
-              });
-              break;
-          
-            case 'measure':              
-              var dlg = dialogs.create('app/metrics/modals/measures.html','ModalCtrl', metricData['measures'],'sm');              
-              dlg.result.then(function(data){
-                for(var i in data){
-                  for(var key in data[i]){
-                    metricData.measures[i][key] = data[i][key];
+        scope.launch = function(ev,which,metricData){
+          var tab = which
+          $mdDialog.show({
+            controller: 'ModalCtrl',
+            templateUrl: 'app/metrics/modal/dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            locals: {
+                data: metricData,
+                tab: tab
+              }
+          }).then(function(data) {  
+              var selectedTab = data['tab']
+              delete data['tab'];
+              switch(selectedTab){
+                case 'data':
+                  $rootScope.placeholder.metric[scope.metricIndex].gridColumns = data;
+                  scope.metricData.gridColumns = data;  
+                  break;
+                case 'filter':
+                  scope.metricData.filters = data;
+                  for(var key in scope.metricData.filters){
+                    if(scope.metricData.filters[key].length === 0)
+                      {delete scope.metricData.filters[key];}
                   }
-                }
-              });              
-                break;
-
-            case 'metric':
-              scope.metric=metricData;
-              dialogs.create('app/metrics/modals/metricDetails.html','ModalCtrl',scope.metric,'sm');
-              break;
-           }
-        };
+                  scope.getMetric();
+                  break;
+                case 'measure':
+                  for(var i in data){
+                    for(var key in data[i]){
+                      metricData.measures[i][key] = data[i][key];
+                    }
+                  }
+                  break;
+                case 'visualization':
+                  if(scope.metricData['distributions'] && scope.metricData['distributions'].length>0) {
+                    for(var key in data){
+                        scope.metricData['distributions'][0][key] = data[key];
+                      
+                    }
+                  }
+                  scope.getMetric();
+                  break;
+                default:
+                  return
+              }
+                    
+          });  
+        }
     
         //This function watches the changes in global filter values
         scope.$watch(function () {
@@ -107,19 +135,21 @@ angular.module('sasaWebApp')
         //Watch viewType to change data 
         scope.$watch(function () {
           return $rootScope.meta.view_type;
-        }, function(newValue, oldValue, scope) {       
-          if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
-            var callAPI = false;
-            for (var i = 0; i < scope.metricData.measures.length; i++) {
-              if(scope.metricData.measures[i]['scorecard_data']){
-                if(scope.metricData.measures[i]['scorecard_data'].length ===0){
-                  callAPI = true;
-                  break;
+        }, function(newValue, oldValue, scope) {   
+          if(scope.metricData['distributions']){
+            if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
+              var callAPI = false;
+              for (var i = 0; i < scope.metricData.measures.length; i++) {
+                if(scope.metricData.measures[i]['scorecard_data']){
+                  if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                    callAPI = true;
+                    break;
+                  }
                 }
+              };
+              if(callAPI == true){
+                scope.getMetric();
               }
-            };
-            if(callAPI == true){
-              scope.getMetric();
             }
           }          
         });
@@ -127,6 +157,7 @@ angular.module('sasaWebApp')
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
+
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
@@ -141,8 +172,30 @@ angular.module('sasaWebApp')
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
-              $rootScope.placeholder['metric'][scope.metricIndex]=response;
-          })            
+  
+             $rootScope.placeholder['metric'][scope.metricIndex]=response;
+              if(response['distributions'] && response['distributions'][0] && response['distributions'][0]['distribution_data']['data'].length>0 && response['distributions'][0]['advance_viz']==true){
+                
+                scope.advanceVisualization=(response['distributions'][0]['x_data'].length>1)?false:true
+                
+                if(response['distributions'][0]['group_by'][0]){
+                  scope.options5.series = response['distributions'][0]['group_by'][0]
+                  scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label'],response['distributions'][0]['group_by'][0]]
+                }
+                else{
+                  scope.options5.series = (response['distributions'][0]['y_data'].length>1)?"category":""
+                  scope.options5.xAxis =  [response['distributions'][0]['distribution_data']['x_label']]
+                  if(scope.options5.series !== "")
+                    scope.options5.xAxis.push(scope.options5.series)
+                }
+                
+                scope.options5.yAxis = [response['distributions'][0]['distribution_data']['y_label']]
+                if(response['distributions'][0]['sortByyaxis'][0]['yaxis']==true)
+                  scope.options5.orderList = ["orderlist",response['distributions'][0]['sortByyaxis'][0]['descOrder']]
+              }
+          }, function (err) {
+            messageCenterService.add('danger','No Data Found',{timeout: 10000});
+          });            
         }                     
         }  
 

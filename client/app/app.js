@@ -21,10 +21,17 @@ angular.module('sasaWebApp', [
   'xeditable',
   'ngMaterial'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider,$provide) {
      $urlRouterProvider
       .otherwise('/');
-    $locationProvider.html5Mode(true);    
+    $locationProvider.html5Mode(true); 
+     $httpProvider.useApplyAsync(true);  
+        /**
+            * Angular Material dynamically generates Style tags
+            * based on themes and palletes; for each ng-app.
+            * Let's disable generation and <style> DOM injections. 
+            */
+     //$provide.constant('$MD_THEME_CSS', ''); 
   })
 
 .config(['dialogsProvider','$translateProvider',function(dialogsProvider){
@@ -32,6 +39,7 @@ angular.module('sasaWebApp', [
     dialogsProvider.useEscClose(false);
     dialogsProvider.useCopy(false);
     dialogsProvider.setSize('la');
+       
   }])//end config
 
 // This filter will provide the range of the numbers in 

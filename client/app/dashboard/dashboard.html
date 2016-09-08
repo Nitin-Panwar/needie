@@ -1,3 +1,4 @@
+
 <section class="container-fluid row">
 	<!-- left sidebar -->
 	<section class="col-md-1">
@@ -6,7 +7,7 @@
 	<!-- left sidebar end -->
 
 	<!-- Create new dashboard-->
-	<section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()">
+	<section class="col-md-11" ng-show="createNew" ng-click="closeLeftSideBar()" role="presentation" tabindex="-1">
 		<dl>
 			<blockquote>
 				<p>
@@ -19,11 +20,15 @@
 	<!-- Create new dashboard end-->
 	
 	<!-- Dashboard view -->
-	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()">
+	<section class="col-md-11" ng-show="placeholder.metric.length >0" ng-click="closeLeftSideBar()" role="presentation" tabindex="-1">
+
+	<!-- <section class="col-md-11" ng-show="placeholder.metric.length >0"> -->
 		<!-- IE warning code-->
-		<section class="progress-bar progress-bar-danger col-md-11 container-fluid row" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;height:25px;margin-top: -20px" ng-if="objbrowserName!=='Chrome'">
+
+		<section class="progress-bar progress-bar-danger col-md-11 container-fluid row" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;height:25px" ng-if="objbrowserName!=='Chrome'">
 			<span style="color:white;font-size:15;">Please use Google chrome for best performance.!!!</span>
 		</section>
+		
 		<!-- IE warning code end-->
 
 		<!-- Dashboard section -->
@@ -40,7 +45,7 @@
 				<!-- Dashboard desription end -->
 
 				<!-- User name -->
-				<span class="glyphicon glyphicon-user" style='top: 5px;'ng-if="placeholder.dashboard.owner">
+				<span class="glyphicon glyphicon-user" id="spanDashboardOwner" ng-if="placeholder.dashboard.owner">
 					<small ng-if="placeholder.dashboard.owner">{{placeholder.dashboard.owner}}</small>&nbsp;&nbsp;	
 				</span>
 				<!-- User name end -->
@@ -56,12 +61,12 @@
 				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()" ng-if="meta.view_type=='metriccard'"><i class="fa fa-text-width"></i> Add Text</button>	
 				  	<span ng-hide ="placeholder.dashboard._id === undefined || placeholder.dashboard._id === 1">
 						<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()"><i class="fa fa-home"></i> Set HomePage </button>
-						<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()"><i class="fa fa-heart"></i> Set Favourite </button>		
+						<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()"><i class="fa fa-heart"></i> Set Favorite </button>		
 						<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ><i class="fa fa-envelope-o"></i> Send Mail </button>
 						<button type="button" class="btn btn-default btn-md" ng-click="delete()" ng-hide="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase()"><i class="fa fa-trash"></i> Delete </button>
 					</span>
 					<form class="form-inline pull-right">
-						<select style="margin-top:10px;color:#0071C5;text-transform:capitalize;" ng-model="meta.view_type" ng-options="view_type for view_type in view_types" class="form-control" ng-click="checkViewType()"></select>
+						<select style="margin-top:10px;color:#0071C5;text-transform:capitalize;"  ng-model="meta.view_type" ng-options="view_type for view_type in view_types" class="form-control" ng-click="checkViewType()"></select>
 				    </form>
 				</span>
 			</span>	

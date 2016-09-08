@@ -12,7 +12,7 @@
     "bootstrap": "~3.1.1",
     "es5-shim": "~3.0.1",
     "font-awesome": "~4.5.0",
-    "jquery": "~1.11.0",
+    "jquery": "2.0",
     "json3": "~3.3.1",
     "lodash": "~2.4.1",
     "message-center": "~1.2.5",
@@ -25,7 +25,6 @@
     "ngtouch": "~1.0.1",
     "pdfmake": "~0.1.20",
     "ng-csv": "~0.3.6",
-    "angular-material": "~1.0.6",
     "angular-xeditable": "~0.1.10"
   },
   "devDependencies": {
@@ -36,9 +35,6 @@
     "angular": "~1.4.8",
     "angular-bootstrap": "^0.14.3",
     "d3": "3.5.5",
-    "angular-animate": "^1.4.8",
-    "jquery": "~2.1.4",
-    "lodash": "~3.10.1",
-    "angular-material": "1.0.2"
+    "jquery": "~2.1.4"
   }
 }

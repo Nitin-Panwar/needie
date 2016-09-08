@@ -347,6 +347,19 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.client %>/components/constants/'
         }]
       },
+      cons: {
+        options: {
+          patterns: [{
+            json: grunt.file.readJSON('./config/environments/cons.json')
+          }]
+        },
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ['./config/constants.service.js'],
+          dest: '<%= yeoman.client %>/components/constants/'
+        }]
+      },
       production: {
         options: {
           patterns: [{
@@ -725,10 +738,15 @@ module.exports = function (grunt) {
         grunt.task.run(['replace:staging']);
       }
 
+      //update app server url to cons server
+      else if (target === 'cons') {
+        grunt.task.run(['replace:cons']);
+      }
+      
       //update app server url to prod server
       else if (target === 'production') {
         grunt.task.run(['replace:production']);
-    }
+      }
 
       grunt.task.run([
       'clean:dist',
@@ -770,6 +788,38 @@ module.exports = function (grunt) {
       'clean:server',
       'env:all',
       'replace:staging',
+      'injector:less', 
+      'concurrent:server',
+      'injector',
+      'wiredep',
+      'autoprefixer',
+      'express:dev',
+      'wait',
+      'open',
+      'watch'
+    ]);
+  });
+
+  //locally run with cons app server
+  grunt.registerTask('cons', function (target) {
+
+    //locally create dist with dev app server
+    if (target === 'dist') {
+      return grunt.task.run([
+        'build',
+         'env:all',
+         'replace:cons',
+         'env:prod', 
+         'express:prod', 
+         'wait', 
+         'open', 
+         'express-keepalive']);
+    }
+
+    grunt.task.run([
+      'clean:server',
+      'env:all',
+      'replace:cons',
       'injector:less', 
       'concurrent:server',
       'injector',

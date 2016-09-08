@@ -13,7 +13,8 @@
 @import 'dashboard/dashboard.less';
 @import 'help/help.less';
 @import 'metrics/metric-card/metric-card.less';
-@import 'metrics/modals/modal.less';
+@import 'metrics/modal/modal.less';
+@import 'score-card/score-card.less';
 @import 'directives/barChart/barChart.less';
 @import 'directives/left-sidebar/left-sidebar.less';
 @import 'directives/lineChart/lineChart.less';
@@ -24,9 +25,20 @@
  * Below styles are used to emphasise a particular button.
  * It brings attention to a particular button
  */
+.cg-busy{
+	position:fixed !important;
+    z-index:1001 !important;
+}
+#waitloader .cg-busy{
+	position:absolute !important;
+    z-index:1001 !important;
+}
 .btn-priority {
   animation: glowing 1500ms infinite;
 }
+.gridster-item {
+	z-index: inherit !important;
+}	
 
 //For message centre service 
 #flash-messages{
@@ -68,7 +80,8 @@ rect:hover{
 	cursor: pointer;
 }
 
-html, body { height: 100% }
+html, body { height: 100%}
+
 
 /**
  * this class creates a pulsating effect for attention
@@ -125,7 +138,8 @@ html, body { height: 100% }
 @import 'dashboard/dashboard.less';
 @import 'help/help.less';
 @import 'metrics/metric-card/metric-card.less';
-@import 'metrics/modals/modal.less';
+@import 'metrics/modal/modal.less';
+@import 'score-card/score-card.less';
 @import 'directives/barChart/barChart.less';
 @import 'directives/left-sidebar/left-sidebar.less';
 @import 'directives/lineChart/lineChart.less';

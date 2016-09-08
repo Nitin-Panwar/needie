@@ -19,6 +19,39 @@ angular.module('sasaWebApp')
       //Creating div id on the fly
       var randomId = "x" + Math.floor(Math.random()*10000);
       d3.select(element[0]).append('div').attr("id",randomId)
+      scope.$watch('options',function(){
+        //Creating array of goals
+        goals=[];
+        for (var i = 0; i < scope.measures.length; i++) {
+          if(scope.measures[i].goal && scope.measures[i].active){
+            if(scope.options.xAxis[0]===scope.measures[i].goal.scale){
+                goals[i]={ "y" : scope.measures[i].goal.value, "color" :"black"}
+            }
+          }
+        };
+        //Appending created div id 
+        scope.container =randomId
+        if(scope.data == null || scope.data === undefined || scope.data.length==0)
+          return;
+        if(scope.container == null || scope.container == undefined)
+          return;
+        // if(!scope.stackBarChartObject ){
+        if(scope.options.changeXaxis===true){
+          scope.stackBarChartObject
+            .data(scope.options.yAxis.length==2?scope.data[0]:scope.data)
+            .xAxis(scope.options.xAxis)
+            .y2Data(scope.options.yAxis.length==2?scope.data[1]:null)
+            .hLines(goals)
+            .colorMapping(scope.options.colorMapping)();
+          scope.stackBarChartObject.renderChart();
+          scope.options.changeXaxis=false;
+
+        }
+        else{
+          drawChart()
+        }  
+      },true);
+      scope.control = scope.handle || {}
       scope.$watch('data',function(){
         //Creating array of goals
         goals=[];
@@ -79,36 +112,7 @@ angular.module('sasaWebApp')
         }
       },true);
 
-      scope.$watch('options',function(){
-        //Creating array of goals
-        goals=[];
-        for (var i = 0; i < scope.measures.length; i++) {
-          if(scope.measures[i].goal && scope.measures[i].active){
-            if(scope.options.xAxis[0]===scope.measures[i].goal.scale){
-                goals[i]={ "y" : scope.measures[i].goal.value, "color" :"black"}
-            }
-          }
-        };
-        //Appending created div id 
-        scope.container =randomId
-        if(scope.data == null || scope.data === undefined || scope.data.length==0)
-          return;
-        if(scope.container == null || scope.container == undefined)
-          return;
-        if(!scope.stackBarChartObject)
-          drawChart()
-        else
-        {
-          scope.stackBarChartObject
-            .data(scope.options.yAxis.length==2?scope.data[0]:scope.data)
-            .xAxis(scope.options.xAxis)
-            .y2Data(scope.options.yAxis.length==2?scope.data[1]:null)
-            .hLines(goals)
-            .colorMapping(scope.options.colorMapping)();
-          scope.stackBarChartObject.renderChart();
-        }
-      },true);
-      scope.control = scope.handle || {}
+      
 
       function drawChart()
       {
@@ -149,9 +153,6 @@ angular.module('sasaWebApp')
 
         if(scope.options.zAxis!=undefined)
           scope.stackBarChartObject.zAxis(scope.options.zAxis)
-
-        if(scope.options.series!=undefined)
-          scope.stackBarChartObject.series(scope.options.series)
 
         if(scope.options.series!=undefined)
           scope.stackBarChartObject.series(scope.options.series)
@@ -217,9 +218,12 @@ angular.module('sasaWebApp')
 
         if(scope.options.legendLeft!=undefined)
           scope.stackBarChartObject.legendLeft(scope.options.legendLeft)
-
-        if(scope.options.showLegend!=undefined)
-          scope.stackBarChartObject.showLegend(scope.options.showLegend)
+        if(scope.options.showLegend!=undefined){
+          if(scope.options.series !== "")
+            scope.stackBarChartObject.showLegend(scope.options.showLegend)
+          else
+            scope.stackBarChartObject.showLegend(false)
+        }
 
         if(scope.options.legendFilter!=undefined)
           scope.stackBarChartObject.legendFilter(scope.options.legendFilter)
@@ -277,7 +281,7 @@ angular.module('sasaWebApp')
 
 
         /*********build Chart object*********/
-        if(!scope.chartObject)
+        if(!scope.chartObject || scope.options.orderList)
         {
           scope.chartObject = (scope.stackBarChartObject
             .container(scope.container)
@@ -286,6 +290,11 @@ angular.module('sasaWebApp')
           )();
 
           //scope.chartObject.subscribe()
+        }
+        if(scope.options.orderList){
+          scope.stackBarChartObject
+              .orderList(scope.options.orderList)
+            scope.stackBarChartObject.orderList();
         }
       }
 
