@@ -1,4 +1,4 @@
 {
-  "url": "http://vmssmmconsapp2.amr.corp.intel.com:5050/",
+  "url": "http://lbauto-10-64-30-99.cps.intel.com/",
   "loginUrl": "http://vmssmmconsweb1.amr.corp.intel.com:8099/getUserDetails"
 }
