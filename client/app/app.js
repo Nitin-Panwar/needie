@@ -40,8 +40,6 @@ angular.module('sasaWebApp', [
     intcAnalyticsProvider.setLocalhostMode(true);               //Optional line - for local dev testing
     intcAnalyticsProvider.setAppId(13806);
    // intcAnalyticsProvider.setGoogleAnalyticsId('UA-XXXXXXX-X');
-    console.log(intcAnalyticsProvider);
-     
   })
 
 .config(['dialogsProvider','$translateProvider',function(dialogsProvider){

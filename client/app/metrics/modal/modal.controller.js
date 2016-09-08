@@ -44,7 +44,7 @@ angular.module('sasaWebApp')
   };
   $scope.tab= tab;
 
-  console.log($scope.tab);
+
   $scope.defaultViz = false;
   $scope.allfilterkeys=[];
   $scope.avData = {
