@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs) {   
+  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs,$mdDialog) {   
     //loading image
       //$scope.showLoading=true;
     //Creating placeholder 
@@ -130,18 +130,34 @@ angular.module('sasaWebApp')
 
     //Delete a dashboard
     $scope.delete = function(){
-      var result = confirm("Do you really want to delete?");
-      if (result) {
+     //var result1=$scope.showConfirm();
+      //var result = confirm("Do you really want to delete?");
+      // if (result) {
         $rootScope.myPromise = dashBoardsFactory.delete({idsid: $rootScope.user, dashboardId:$stateParams.dashboardId}).$promise.then(function (data) {         
         $rootScope.placeholder.dashboard = data; 
         $location.url('/')  
         $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
-        messageCenterService.add('success','Dashboard deleted successfully.',{timeout: 10000});
+         messageCenterService.add('success','Dashboard deleted successfully.',{timeout: 10000});
         }, function (err) {
           messageCenterService.add('danger','Could not delete dashboard.',{timeout: 10000});
         });
-      } 
-    }
+      // } 
+    };
+    $scope.deleteConfirm = function(event) {
+               var confirm = $mdDialog.confirm()
+                  .title('Are you sure to delete the dashboard?')
+                  .textContent('Dashboard will be deleted permanently.')
+                  .ariaLabel('TutorialsPoint.com')
+                  .targetEvent(event)
+                  .ok('Yes')
+                  .cancel('No');
+                  $mdDialog.show(confirm).then(function() {
+                     $scope.status = 'Dashboard deleted successfully.';
+                         $scope.delete();
+                     }, function() {
+                        $scope.status = 'Could not delete dashboard.';
+                  });
+            };
 
     //Below it watches for any changes in movement of metrics on the dashboard and resize 
     $scope.gridsterDashboardOpts = {

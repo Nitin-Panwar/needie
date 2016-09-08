@@ -1,6 +1,6 @@
  <div class="left-sidebar parent" >
 	<div style="height: 100%;">
-		<ul class="list-group" ng-click="toggleState()">
+		<ul class="list-group" style="margin-top:10px;" ng-click="toggleState()">
 			<!-- my dashboards -->
 	 		<li class="list-group-item" ng-click="getUserDashboards()" ng-class="{'active-sidebar-item': showmydashboards}" data-toggle="tooltip" data-placement="right" title="My Dashboards"><i class="fa fa-tachometer fa-2x"></i></li>	
 	 		<!-- Metric List -->
@@ -22,7 +22,7 @@
  				<span class="lead white-text">&nbsp;My Dashboards</span> 				
  				<ul class="sidebar-menu" style="max-height:300px ;overflow:auto;">
  					<li class="" ng-repeat="dashboard in myDashboardsList" > 
- 						<a href="/?dashboardId={{dashboard._id.$oid}}" title="SMInsights" class="sidebar-hover-effect white-text" onclick="window.location.reload(true);">{{dashboard.name}}</a>
+ 						<a href="/?dashboardId={{dashboard._id.$oid}}" title="SMInsights" class="sidebar-hover-effect white-text" >{{dashboard.name}}</a>
  					</li>
  				</ul>
  			</fieldset>

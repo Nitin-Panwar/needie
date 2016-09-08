@@ -28,7 +28,10 @@ angular.module('sasaWebApp')
     filterkey: '',
     filters:{}
   };
-
+  $scope.isDisplayApplyBtn=false;
+  $scope.isDisplayYaxisMessage=false;
+  $scope.isDisplayUpDownBtn=false;
+  $scope.displayNextBtn=0;
   /*
   Variable for advance visualization Dialog
    */  
@@ -40,6 +43,8 @@ angular.module('sasaWebApp')
     advance_viz:true
   };
   $scope.tab= tab;
+
+  console.log($scope.tab);
   $scope.defaultViz = false;
   $scope.allfilterkeys=[];
   $scope.avData = {
@@ -119,7 +124,10 @@ angular.module('sasaWebApp')
       $scope.data.gridColumns = [];
     }
     if($scope.data.gridColumns.length !== 0){
-      $scope.selectedColumns.items = $scope.data.gridColumns;    
+      $scope.selectedColumns.items = $scope.data.gridColumns;  
+        if($scope.selectedColumns.items.length >= 2){
+        $scope.isDisplayUpDownBtn=true;  
+    } 
     }
     if($scope.availableColoumns.items.length !== 0){
       return;
@@ -133,6 +141,9 @@ angular.module('sasaWebApp')
         $scope.availableColoumns.items = columns;   
         if($scope.data.gridColumns){
           $scope.selectedColumns.items = $scope.data.gridColumns;
+            if($scope.selectedColumns.items.length  >= 2){
+                $scope.isDisplayUpDownBtn=true;
+              }
         }
       }, function (err) {
         console.error(err);          
@@ -145,8 +156,7 @@ angular.module('sasaWebApp')
   $scope.gridOptions = {
     enableSorting: true,
     enableColumnResizing: true,
-    enableGridMenu: true,        
-    exporterCsvFilename: $scope.data.name + '.csv',
+    enableGridMenu: false,        
     exporterPdfDefaultStyle: {fontSize: 9},
     exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
     exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
@@ -172,6 +182,8 @@ angular.module('sasaWebApp')
 
   //This function gets raw metric data for selected columns
   $scope.getRawData = function (offset) {
+    $scope.save($scope.tab);
+
     $scope.offset = offset;
     $scope.csvData.data = undefined;  
     $scope.gridOptions.data = [];      
@@ -185,11 +197,23 @@ angular.module('sasaWebApp')
     $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
       if(offset === 'all'){
         $scope.csvData.data = response;
-        $scope.csvData.headers = Object.keys(response[0]);
-        // messageCenterService.add('success', 'Click on Download Button to Download CSV', {timeout: 5000});
+        console.log(response);
+        console.log($scope.selectedColumns.items);
+   $scope.csvData.headers = Object.keys(response[0]);
+ //$scope.csvData.headers = $scope.selectedColumns.items;
+        console.log($scope.csvData.headers)
+        /*
+         Following three  line of code related to visable the grid with first 100 records
+         when an user click on export buuton and disable the previous button and enable the next buttoon .
+         */
+        $scope.gridOptions.data = response.splice(0,100);
+        $scope.offset =100;
+        $scope.offset =0;
+
         return;
       }
-      $scope.gridOptions.data = response;       
+      $scope.gridOptions.data = response; 
+      $scope.displayNextBtn =response.length;     
       // create column definitions
       for (var column in $scope.selectedColumns.items){
         $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
@@ -217,6 +241,9 @@ angular.module('sasaWebApp')
         // select column to show in data grid
         for(var i in $scope.availableColoumns.selected) {
           $scope.selectedColumns.items.push($scope.availableColoumns.selected[i]);
+            if($scope.selectedColumns.items.length >= 2){
+              $scope.isDisplayUpDownBtn=true;
+            }
           $scope.availableColoumns.items.splice($scope.availableColoumns.items.indexOf($scope.availableColoumns.selected[i]), 1);            
         }
         $scope.availableColoumns.selected.length = 0;
@@ -226,7 +253,11 @@ angular.module('sasaWebApp')
         // remove from selection
         for(var i in $scope.selectedColumns.selected){
           $scope.availableColoumns.items.push($scope.selectedColumns.selected[i]);
-          $scope.selectedColumns.items.splice($scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]), 1);    
+          
+          $scope.selectedColumns.items.splice($scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]), 1); 
+          if($scope.selectedColumns.items.length < 2){
+              $scope.isDisplayUpDownBtn=false;
+            }   
         }
         $scope.selectedColumns.selected.length = 0;
     }
@@ -260,12 +291,14 @@ angular.module('sasaWebApp')
    */
   $scope.AddRemoveColumns = function(type){
     if(type==='add'){
+      $scope.isDisplayUpDownBtn=true;
       for(var i=0; i<$scope.availableColoumns.items.length; i++)
         $scope.selectedColumns.items.push($scope.availableColoumns.items[i])
         $scope.availableColoumns.selected = []
         $scope.availableColoumns.items=[]
     }
     else{
+      $scope.isDisplayUpDownBtn=false;
        for(var i=0; i<$scope.selectedColumns.items.length; i++)
         $scope.availableColoumns.items.push($scope.selectedColumns.items[i])
         $scope.selectedColumns.selected = []
@@ -452,6 +485,7 @@ angular.module('sasaWebApp')
   };
 
   $scope.cancel = function() {
+    console.log($scope.selectedColumns.items.length);
     $mdDialog.cancel();
   };
 
@@ -469,7 +503,7 @@ angular.module('sasaWebApp')
         break;
       case 'data':
         $scope.selectedColumns.items['tab']=which
-        $mdDialog.hide($scope.selectedColumns.items);
+        //$mdDialog.hide($scope.selectedColumns.items);
         break;
       case 'filter':
         $scope.filterQuery['tab']=which
@@ -479,14 +513,25 @@ angular.module('sasaWebApp')
         $mdDialog.hide($scope.filterQuery);
         break;
       case 'visualization':
+         $scope.isDisplayYaxisMessage=false;
         $scope.formatVizData();
-        $scope.viz_details['tab']=which
-        $mdDialog.hide($scope.viz_details)
+        $scope.viz_details['tab']=which;
+        console.log($scope.avData.y_data.length);
+         if($scope.avData.y_data.length === 0){
+            $scope.isDisplayYaxisMessage=true;
+         }
+         else{
+               $mdDialog.hide($scope.viz_details)
+         }
+        
+       
         break;
       default:
         $mdDialog.hide();          
     }
   };
+
+
   $scope.navigationIcon=function(){
       for(var key in $rootScope.globalQuery){
           if($rootScope.globalQuery[key]!=undefined && key!='comment_type' )
@@ -521,5 +566,33 @@ angular.module('sasaWebApp')
         $scope.allFilterData[key] = dataHolder[key];
       }
     }
+
+    $scope.moveDown=function(){
+      //selectedColumns.items
+     for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
+            var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
+            console.log(idx);
+            if (idx < $scope.selectedColumns.items.length) {
+                var itemToMove = $scope.selectedColumns.items.splice(idx, 1)
+                console.log(itemToMove[0])
+                $scope.selectedColumns.items.splice(idx+1, 0, itemToMove[0]);
+                
+            }
+        }
+      
+    };
+     $scope.moveUp=function(){
+      //selectedColumns.items
+     for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
+            var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
+            console.log(idx);
+            if (idx > 0) {
+                var itemToMove = $scope.selectedColumns.items.splice(idx, 1)
+                console.log(itemToMove[0])
+                $scope.selectedColumns.items.splice(idx-1, 0, itemToMove[0]);
+                
+            }
+        }
+    };
 });
 
