@@ -42,9 +42,6 @@
         <md-subheader class="md-no-sticky" style="color:black;text-align: center">Selected Column(s)</md-subheader>
         <md-list flex style="border-style: dashed; border-width: 1px; border-radius:5px; max-height: 250px; height:250px; overflow: auto; background-color: rgba(218, 221, 223, 0.25);">   
 
-          <md-list-item  ng-model="selectedColumns.items" ng-repeat="item in selectedColumns.items track by $index" ng-click="selection(item, false)">
-          <span  style="color:#0071C5;" ng-show="selectedColumns.selected.indexOf(item) !== -1" class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505;text-transform: uppercase;">{{item}}</a>
-
           <md-list-item  ng-repeat="item in selectedColumns.items track by $index" ng-click="selection(item, false)" style="height:35px">
           <span  style="color:#0071C5;" ng-show="selectedColumns.selected.indexOf(item) !== -1"class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505;text-transform: uppercase;">{{item}}</a>
 
