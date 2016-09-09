@@ -17,7 +17,7 @@
         <md-optgroup style="margin-left:10px">
           <md-checkbox aria-label="Select All" ng-click="avData.x_options[avData.x_data]=[]" ng-if="avData.x_options[avData.x_data].length>2">Un-Select All
           </md-checkbox> 
-          <md-option ng-value="value" ng-repeat="value in allFilterData[avData.x_data]|orderBy|filter: searchFilter" >{{::value}}</md-option>
+          <md-option ng-value="value" ng-repeat="value in allFilterData[avData.x_data]|orderBy|filter:''" >{{::value}}</md-option>
         </md-optgroup>
         </md-select>          
       </md-input-container>

@@ -19,7 +19,7 @@
                      ng-click="toggleAll(tempData.filterkey,'tempFilter')">
           <span ng-if="isChecked(tempData.filterkey,'tempFilter')">Un-</span>Select All
           </md-checkbox>
-          <md-option ng-value="value" ng-repeat="value in filterSubData[tempData.filterkey]|orderBy|filter: searchFilter" >{{::value}}</md-option>
+          <md-option ng-value="value" ng-repeat="value in filterSubData[tempData.filterkey]|orderBy|filter:''" >{{::value}}</md-option>
         </md-optgroup>
         </md-select>          
       </md-input-container>
@@ -36,7 +36,7 @@
             <md-checkbox aria-label="Select All" ng-checked=isChecked(key,'Filter') ng-click="toggleAll(key,'Filter')">
               <span ng-if="isChecked(key,'Filter')">Un-</span>Select All
             </md-checkbox>
-            <md-option ng-value="value" ng-repeat="value in filterSubData[key]|orderBy|filter: searchFilter">{{::value}}</md-option>
+            <md-option ng-value="value" ng-repeat="value in filterSubData[key]|orderBy|filter:''">{{::value}}</md-option>
           </md-optgroup>
         </md-select>          
       </md-input-container>
