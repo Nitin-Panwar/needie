@@ -197,11 +197,9 @@ angular.module('sasaWebApp')
     $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
       if(offset === 'all'){
         $scope.csvData.data = response;
-        console.log(response);
-        console.log($scope.selectedColumns.items);
-   $scope.csvData.headers = Object.keys(response[0]);
- //$scope.csvData.headers = $scope.selectedColumns.items;
-        console.log($scope.csvData.headers)
+       $scope.csvData.headers = Object.keys(response[0]);
+        //$scope.csvData.headers = $scope.selectedColumns.items;
+
         /*
          Following three  line of code related to visable the grid with first 100 records
          when an user click on export buuton and disable the previous button and enable the next buttoon .
@@ -384,17 +382,12 @@ angular.module('sasaWebApp')
       $scope.viz_details.x_data = ["quarter","month","year","work_week"]
     }
     else{
-        console.log($scope.avData.x_options);
         $scope.viz_details.x_data.push($scope.avData.x_data);
         if($scope.avData.x_options.hasOwnProperty($scope.avData.x_data) && $scope.avData.x_options[$scope.avData.x_data].length >0 ){
           $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
         }
         else
-          {
-            console.log($scope.viz_details.x_options.length);
-          console.log($scope.viz_details.x_options);
-          $scope.viz_details.x_options[$scope.avData.x_data]=$scope.allFilterData[$scope.avData.x_data]
-        }
+          $scope.viz_details.x_options[$scope.avData.x_data]=$scope.allFilterData[$scope.avData.x_data].filter(function(n){return n;});
         if($scope.avData.y_data.length ===1 && $scope.avData.group_by !== 'None' && $scope.avData.group_by !== ''){
           $scope.viz_details.group_by.push($scope.avData.group_by);
         }
@@ -518,18 +511,15 @@ angular.module('sasaWebApp')
         $mdDialog.hide($scope.filterQuery);
         break;
       case 'visualization':
-         $scope.isDisplayYaxisMessage=false;
+        $scope.isDisplayYaxisMessage=false;
         $scope.formatVizData();
         $scope.viz_details['tab']=which;
-        console.log($scope.avData.y_data.length);
          if($scope.avData.y_data.length === 0){
             $scope.isDisplayYaxisMessage=true;
          }
          else{
                $mdDialog.hide($scope.viz_details)
          }
-        
-       
         break;
       default:
         $mdDialog.hide();          
