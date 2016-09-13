@@ -104,6 +104,8 @@ angular.module('sasaWebApp')
     }
     else{
       $scope.filterQuery={}
+      $scope.tempData.filters = {}
+      $scope.tempData.filterkey = null
     }
   }
   
@@ -486,7 +488,6 @@ angular.module('sasaWebApp')
   };
 
   $scope.cancel = function() {
-    console.log($scope.selectedColumns.items.length);
     $mdDialog.cancel();
   };
 

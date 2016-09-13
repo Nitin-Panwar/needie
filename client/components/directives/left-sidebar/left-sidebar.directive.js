@@ -127,7 +127,7 @@ angular.module('sasaWebApp')
 
 	            for (var i = 0; i < filterKeys.length; i++) {	            	
 	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
-	            	console.log($rootScope.GlobalFilters);
+	            
 	            };
 	            if(scope.navigationIcon()){
 	            	scope.updateGlobalFilters();
