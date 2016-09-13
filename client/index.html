@@ -23,7 +23,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.css" />
+      <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.min.css" />
       <link rel="stylesheet" href="bower_components/angular-dialog-service/dist/dialogs.min.css" />
       <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
       <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
@@ -52,7 +52,7 @@
     <![endif]-->
     
     <!-- Add your site or application content here -->
-    <section class="container-fluid" style="min-width:960px;overflow-x: auto; background-color:#fff;margin-top:-20px;" >
+    <section class="container-fluid" style="min-width:960px;min-height:102%;overflow-y: auto;background-color:#fff; margin-top:-20px;" >
       <section ui-view=""></section>
     </section>
     <div mc-messages id="flash-messages"></div>
