@@ -1335,7 +1335,7 @@
             } else {
                 returnShape = input.transition()
                     .duration(0)
-                    .delay(chart._getDelay(duration, chart, series))
+                    .delay(chart._getDelay(0, chart, series))
                     .ease("linear");
             }
             return returnShape;
