@@ -122,6 +122,7 @@ angular.module('sasaWebApp')
 
   //This function populates all metric columns
   $scope.getMetricColumns = function (argument) {
+  //  $scope.showColumns = true;
     if(!$scope.data.gridColumns){
       $scope.data.gridColumns = [];
     }
@@ -184,8 +185,7 @@ angular.module('sasaWebApp')
 
   //This function gets raw metric data for selected columns
   $scope.getRawData = function (offset) {
-    $scope.save($scope.tab);
-
+    
     $scope.offset = offset;
     $scope.csvData.data = undefined;  
     $scope.gridOptions.data = [];      
@@ -213,14 +213,17 @@ angular.module('sasaWebApp')
         return;
       }
       $scope.gridOptions.data = response; 
-      $scope.displayNextBtn =response.length;     
+      $scope.displayNextBtn =response.length;
+           
       // create column definitions
       for (var column in $scope.selectedColumns.items){
         $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
-      }
+       }
+      $scope.save($scope.tab); 
     },function (err) {
       console.error(err);
-    })        
+    })
+
   };
 
   $scope.exportCSV = function () {
@@ -270,7 +273,7 @@ angular.module('sasaWebApp')
         if($scope.availableColoumns.selected.indexOf(item) === -1){
           $scope.availableColoumns.selected.push(item);
         }
-        else{
+        else{fget
           $scope.availableColoumns.selected.splice($scope.availableColoumns.selected.indexOf(item), 1);  
         }
     }

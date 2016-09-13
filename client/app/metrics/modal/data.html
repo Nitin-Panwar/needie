@@ -2,25 +2,11 @@
 <!-- <div ng-init="getMetricColumns()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}"> -->
   <div layout ="column">
     <div layout ="row">
+      <md-button class="btn btn-default btn-md" ng-click="getMetricColumns(); showColumns=true">Add/Remove Columns</md-button>
       <md-button class="btn btn-default btn-md" ng-click="getRawData(0)" ng-hide="selectedColumns.items.length === 0">Get Data</md-button>  
       <md-button class="btn btn-default btn-md" ng-click="getRawData('all')" ng-hide="selectedColumns.items.length === 0">Export CSV</md-button>
       <md-button class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</md-button>
     </div>
-
-    <div ng-if="gridOptions.data.length > 0" style="margin-bottom: 10px;">
-      <br>
-      <span>Showing {{gridOptions.data.length}} Rows</span>    
-      <div class="btn-group pull-right">
-        <button class="btn btn-default" ng-disabled="offset == 0" ng-click="getRawData(offset - 100)" style="margin: 0 5px 0 0;">&lt;&lt;&lt;</button>
-        <button class="btn btn-default pull-right" ng-disabled="gridOptions.data.length < 100" ng-click="getRawData(offset + 100)" style="margin: 0;">&gt;&gt;&gt;</button>       
-      </div>         
-      
-          
-    </div>
-    <div ng-if="gridOptions.data.length > 0">
-    <div style="height:300px;" ui-grid="gridOptions" id="metric-data-grid" ui-grid-resize-columns ui-grid-exporter ui-grid-move-columns ui-grid-pinning></div>
-    </div>
-
     <div layout="row" ng-show="showColumns">
       <div flex>
        <md-subheader class="md-no-sticky" style="color:black;text-align:center">Available Column(s)</md-subheader>
@@ -54,6 +40,21 @@
             <button ng-click="moveDown()" style="height: 40px; width: 55px;margin: 10px 0 0 10px;">Down</button>
       </div>
     </div>
+    <div ng-if="gridOptions.data.length > 0" style="margin-bottom: 10px;">
+      <br>
+      <span>Showing {{gridOptions.data.length}} Rows</span>    
+      <div class="btn-group pull-right">
+        <button class="btn btn-default" ng-disabled="offset == 0" ng-click="getRawData(offset - 100)" style="margin: 0 5px 0 0;">&lt;&lt;&lt;</button>
+        <button class="btn btn-default pull-right" ng-disabled="gridOptions.data.length < 100" ng-click="getRawData(offset + 100)" style="margin: 0;">&gt;&gt;&gt;</button>       
+      </div>         
+      
+          
+    </div>
+    <div ng-if="gridOptions.data.length > 0">
+    <div style="height:300px;" ui-grid="gridOptions" id="metric-data-grid" ui-grid-resize-columns ui-grid-exporter ui-grid-move-columns ui-grid-pinning></div>
+    </div>
+
+    
     </div>
 </div>
 <md-divider></md-divider>

@@ -24,14 +24,16 @@
               <span ng-if="tab==='measure'" ng-include="'app/metrics/modal/measures.html'"></span>
             </md-content>
           </md-tab>
-          <md-tab label="Metric Details" md-active="tab==='metric'" ng-click="tab='metric'">
-             <md-content class="md-padding">
-              <span ng-if="tab==='metric'" ng-include="'app/metrics/modal/metricDetails.html'"></span>
-            </md-content>
-          </md-tab>
+          
           <md-tab label="Visualization" md-active="tab==='visualization'" ng-click="tab='visualization'">
              <md-content class="md-padding">
               <span ng-if="tab==='visualization'" ng-include="'app/metrics/modal/visualization.html'"></span>
+            </md-content>
+          </md-tab>
+          
+          <md-tab label="Metric Details" md-active="tab==='metric'" ng-click="tab='metric'">
+             <md-content class="md-padding">
+              <span ng-if="tab==='metric'" ng-include="'app/metrics/modal/metricDetails.html'"></span>
             </md-content>
           </md-tab>
 
