@@ -50,8 +50,8 @@ DetectNgTouch.$inject = ["$log", "$injector"];
 /**
  * @ngInject
  */
-function MdCoreConfigure($provide, $mdThemingProvider) {
-
+function MdCoreConfigure($provide, $mdThemingProvider,$animateProvider) {
+  //$animateProvider.classNameFilter(/^(?:(?!ng-animate-disabled).)*$/);
   $provide.decorator('$$rAF', ["$delegate", rAFDecorator]);
 
   $mdThemingProvider.theme('default')

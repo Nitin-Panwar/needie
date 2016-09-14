@@ -6,7 +6,7 @@
         <label>X-Axis</label>
         <md-select ng-model="avData.x_data">
           <md-option ng-repeat="key in allfilterkeys|orderBy|filter: searchFilter" value="{{key}}">
-            {{key}}
+            {{::key}}
           </md-option>
         </md-select>
       </md-input-container>
@@ -17,7 +17,7 @@
         <md-optgroup style="margin-left:10px">
           <md-checkbox aria-label="Select All" ng-click="avData.x_options[avData.x_data]=[]" ng-if="avData.x_options[avData.x_data].length>2">Un-Select All
           </md-checkbox> 
-          <md-option ng-value="value" ng-repeat="value in allFilterData[avData.x_data]|orderBy|filter: searchFilter" >{{value}}</md-option>
+          <md-option ng-value="value" ng-repeat="value in allFilterData[avData.x_data]|orderBy|filter:''" >{{::value}}</md-option>
         </md-optgroup>
         </md-select>          
       </md-input-container>
@@ -25,10 +25,10 @@
     <div layout="row">
       <md-input-container class="md-block" flex="45" style="margin-left:7px; margin-right:10px">
         <label>Y-Axis</label>
-        <md-select ng-model="avData.y_data" multiple>
+        <md-select ng-model="avData.y_data"   multiple >
           <md-optgroup>
             <md-option ng-value="measure.label" ng-repeat="measure in data.measures" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'
-             && measure.type !=='percentage' && measure.type!=='mean'">{{measure.label}}</md-option>
+             && measure.type !=='percentage' && measure.type!=='mean'">{{::measure.label}}</md-option>
           </md-optgroup>
         </md-select>  
       </md-input-container>
@@ -48,7 +48,7 @@
         <label>Group By</label>
         <md-select ng-model="avData.group_by" >
           <md-option ng-repeat="key in allfilterkeys|orderBy|filter: searchFilter" ng-if="key !== avData.x_data"  value="{{key}}" >
-            {{key}}
+            {{::key}}
           </md-option>
           <md-option>
             None
@@ -56,8 +56,11 @@
         </md-select>
       </md-input-container>  
     </div> 
-    
+     
+     <div layout-gt-sm="row" ng-show="isDisplayYaxisMessage">
+          <label style="color:red;">**Y-Axis value is mandatory,Please select Y-Axis value to proceed</label> 
+    </div>     
 
   
 </div>
-<md-divider></md-divider>
+<!-- <md-divider></md-divider> -->

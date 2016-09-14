@@ -48,30 +48,22 @@
 								<td>{{measure.type}}</td>
 							</tr>
 							<tr>
-								<th>Measure Mappping</th>
+								<th>Formula</th>
 								<td>
-
-								<table class="table table-bordered table-striped table-intel" ng-repeat="measure_mapping in measure.measure_mappings">
-									<tbody>
-										<tr>
-											<th>Conditions</th>
-											<td>{{measure_mapping.conditions}}</td>			
-										</tr>
-										<tr>
-											<th>Formula</th>
-											<td>{{measure_mapping.formula}}</td>			
-										</tr>
-									</tbody>
-								</table>
+								{{measure.measure_details.m_formula}}
 								</td>
 							</tr>
 							<tr>
-								<th>Value</th>
-								<td>{{measure.value}}</td>
-							</tr>
-							<tr>
-								<th>Expression</th>
-								<td>{{measure.expression}}</td>
+								<th>Conditions</th>
+								<td>
+									<table ng-repeat = "condition in measure.measure_details.m_condition">
+										<tbody>
+											<tr>
+												<td>{{condition}}</td>			
+											</tr>
+										</tbody>
+									</table>
+								</td>
 							</tr>
 							<tr>
 								<th>Unit</th>

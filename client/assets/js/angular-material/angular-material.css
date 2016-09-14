@@ -142,7 +142,7 @@ input:-webkit-autofill {
 
 .md-scroll-mask {
   position: absolute;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, .6);
   top: 0;
   right: 0;
   bottom: 0;
@@ -4818,11 +4818,8 @@ md-tab-content {
   md-tab-content.ng-leave, md-tab-content.md-no-transition {
     transition: none; }
   md-tab-content.md-left:not(.md-active) {
-    -webkit-transform: translateX(-100%);
-            transform: translateX(-100%);
-    -webkit-animation: 1s md-tab-content-hide;
-            animation: 1s md-tab-content-hide;
-    opacity: 0; }
+    
+    }
     [dir=rtl] md-tab-content.md-left:not(.md-active) {
       -webkit-transform: translateX(100%);
               transform: translateX(100%); }
@@ -21670,4 +21667,8 @@ md-toast .md-toast-content {
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
+}
+
+.md-switch.md-default-theme .md-bar, md-switch .md-bar {
+    background-color: rgb(158,158,158);
 }
