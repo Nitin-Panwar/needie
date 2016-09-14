@@ -570,10 +570,8 @@ angular.module('sasaWebApp')
       //selectedColumns.items
      for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
             var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
-            console.log(idx);
             if (idx < $scope.selectedColumns.items.length) {
                 var itemToMove = $scope.selectedColumns.items.splice(idx, 1)
-                console.log(itemToMove[0])
                 $scope.selectedColumns.items.splice(idx+1, 0, itemToMove[0]);
                 
             }
@@ -584,10 +582,8 @@ angular.module('sasaWebApp')
       //selectedColumns.items
      for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
             var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
-            console.log(idx);
             if (idx > 0) {
                 var itemToMove = $scope.selectedColumns.items.splice(idx, 1)
-                console.log(itemToMove[0])
                 $scope.selectedColumns.items.splice(idx-1, 0, itemToMove[0]);
                 
             }
