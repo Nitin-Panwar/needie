@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('NavbarCtrl', function ($scope, $location, $rootScope, usersFactory,dashBoardsFactory,messageCenterService) {
+  .controller('NavbarCtrl', function ($scope, $location, $rootScope, usersFactory,dashBoardsFactory,messageCenterService,$mdDialog) {
     $scope.menu = [       
     {
       'title': 'Create Dashboard',
@@ -25,6 +25,10 @@ angular.module('sasaWebApp')
     $scope.sendToHomepage = function(){
       window.location.reload()
     }
+    $scope.help=function(){
+     
+       $mdDialog.cancel();
+    };
     
     /**
      * [clearPlaceholder description]
