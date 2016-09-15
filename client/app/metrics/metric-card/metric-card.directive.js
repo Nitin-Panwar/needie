@@ -72,7 +72,8 @@ angular.module('sasaWebApp')
             templateUrl: 'app/metrics/modal/dialog.html',
             parent: angular.element(document.body),
             targetEvent: ev,
-            clickOutsideToClose:true,
+            clickOutsideToClose:false,
+            escapeToClose: false,
             locals: {
                 data: metricData,
                 tab: tab
