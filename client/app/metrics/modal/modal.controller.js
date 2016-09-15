@@ -301,6 +301,7 @@ angular.module('sasaWebApp')
         $scope.availableColoumns.items=[]
     }
     else{
+       $scope.availableColoumns.items=[];
       $scope.isDisplayUpDownBtn=false;
        for(var i=0; i<$scope.selectedColumns.items.length; i++)
         $scope.availableColoumns.items.push($scope.selectedColumns.items[i])
@@ -412,14 +413,15 @@ angular.module('sasaWebApp')
   $scope.getAllFilters = function(){
     if($scope.allfilterkeys.length>0)
       return;
-    $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
-        $scope.filterSubData = data.toJSON(); 
+    $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {  
+        $scope.filterSubData = filter_data.toJSON(); 
+        // console.log($scope.filterSubData)
         // var filterKeys = Object.keys(data[0]);
         // for (var i = 0; i < filterKeys.length; i++) {               
         //     $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData12, filterKeys[i], null, null);
         // };   
         if(Object.keys($rootScope.GlobalFilters).length===0){
-          $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                      
+          $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                   
             $scope.FilterData = data.filters;   
             var filterKeys = Object.keys($scope.FilterData[0]);
             for (var i = 0; i < filterKeys.length; i++) {               
@@ -432,6 +434,7 @@ angular.module('sasaWebApp')
             {
               $scope.allFilterData[key] = $scope.filterSubData[key]
               $scope.allfilterkeys = Object.keys($scope.allFilterData)
+              // console.log($scope.allfilterkeys);
               $scope.tempData.filters[key] = []
             }   
           },function (err) {
