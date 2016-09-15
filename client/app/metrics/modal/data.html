@@ -1,8 +1,8 @@
-<div ng-init="getMetricColumns();">
+<div ng-init="getMetricData();">
 <!-- <div ng-init="getMetricColumns()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}"> -->
   <div layout ="column">
     <div layout ="row">
-      <md-button class="btn btn-default btn-md" ng-click="getMetricColumns(); showColumns=true">Add/Remove Columns</md-button>
+      <md-button class="btn btn-default btn-md" ng-click="showColumns=true">Add/Remove Columns</md-button>
       <md-button class="btn btn-default btn-md" ng-click="getRawData(0)" ng-hide="selectedColumns.items.length === 0">Get Data</md-button>  
       <md-button class="btn btn-default btn-md" ng-click="getRawData('all')" ng-hide="selectedColumns.items.length === 0">Export CSV</md-button>
       <md-button class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</md-button>

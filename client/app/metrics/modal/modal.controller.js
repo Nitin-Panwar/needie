@@ -121,40 +121,19 @@ angular.module('sasaWebApp')
   }
 
   //This function populates all metric columns
-  $scope.getMetricColumns = function (argument) {
-  //  $scope.showColumns = true;
-    if(!$scope.data.gridColumns){
-      $scope.data.gridColumns = [];
-    }
-    if($scope.data.gridColumns.length !== 0){
-      $scope.selectedColumns.items = $scope.data.gridColumns;  
-        if($scope.selectedColumns.items.length >= 2){
-        $scope.isDisplayUpDownBtn=true;  
-    } 
-    }
-    if($scope.availableColoumns.items.length !== 0){
-      return;
-    }   
-      $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
-        var columns = response;
+  $scope.getMetricData = function(){
+    $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
+       var columns = response;
 
         for(var i in $scope.data.gridColumns){
             columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
         }
         $scope.availableColoumns.items = columns;   
-        if($scope.data.gridColumns){
-          $scope.selectedColumns.items = $scope.data.gridColumns;
-            if($scope.selectedColumns.items.length  >= 2){
-                $scope.isDisplayUpDownBtn=true;
-              }
-        }
       }, function (err) {
         console.error(err);          
       })
-    
-    
-  };
-
+  }
+  
   //These are options for data grid
   $scope.gridOptions = {
     enableSorting: true,
@@ -195,6 +174,7 @@ angular.module('sasaWebApp')
       messageCenterService.add('danger','Please select columns', {timeout: 10000});
       return;
     }
+    console.log($scope.selectedColumns.items)
     var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
     $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
       if(offset === 'all'){
@@ -299,11 +279,12 @@ angular.module('sasaWebApp')
         $scope.selectedColumns.items.push($scope.availableColoumns.items[i])
         $scope.availableColoumns.selected = []
         $scope.availableColoumns.items=[]
+        $scope.availableColoumns.items=[];
     }
     else{
-       $scope.availableColoumns.items=[];
-      $scope.isDisplayUpDownBtn=false;
+       $scope.isDisplayUpDownBtn=false;
        for(var i=0; i<$scope.selectedColumns.items.length; i++)
+
         $scope.availableColoumns.items.push($scope.selectedColumns.items[i])
         $scope.selectedColumns.selected = []
         $scope.selectedColumns.items=[]
