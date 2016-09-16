@@ -197,20 +197,18 @@ angular.module('sasaWebApp')
       return;
     }
     var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
+    var temp;
     $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
       if(offset === 'all'){
-        $scope.csvData.data = response;
-       $scope.csvData.headers = Object.keys(response[0]);
-        //$scope.csvData.headers = $scope.selectedColumns.items;
-
+        temp =angular.copy(response);
+        $scope.csvData.data = temp;
+        $scope.csvData.headers = Object.keys(response[0]);
         /*
          Following three  line of code related to visable the grid with first 100 records
          when an user click on export buuton and disable the previous button and enable the next buttoon .
-         */
-        $scope.gridOptions.data = response.splice(0,100);
-        $scope.offset =100;
+        //  */
+        $scope.gridOptions.data=response.splice(0,100);
         $scope.offset =0;
-
         return;
       }
       $scope.gridOptions.data = response; 
@@ -220,7 +218,7 @@ angular.module('sasaWebApp')
       for (var column in $scope.selectedColumns.items){
         $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
        }
-      //$scope.save($scope.tab); 
+      
     },function (err) {
       console.error(err);
     })
