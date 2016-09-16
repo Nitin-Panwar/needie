@@ -122,17 +122,37 @@ angular.module('sasaWebApp')
 
   //This function populates all metric columns
   $scope.getMetricData = function(){
-    $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
-       var columns = response;
+
+    //Retain the selected item columns after close the button in the modal
+   if(!$scope.data.gridColumns){
+      $scope.data.gridColumns = [];
+    }
+    if($scope.data.gridColumns.length !== 0){
+      $scope.selectedColumns.items = $scope.data.gridColumns;  
+        if($scope.selectedColumns.items.length >= 2){
+        $scope.isDisplayUpDownBtn=true;  
+    } 
+    }
+    if($scope.availableColoumns.items.length !== 0){
+      return;
+    }   
+      $rootScope.myPromise = metricsFactory.getColumns({dataset: $scope.data.dataset}).$promise.then(function (response) {                    
+        var columns = response;
 
         for(var i in $scope.data.gridColumns){
             columns.splice(columns.indexOf($scope.data.gridColumns[i]), 1);
         }
         $scope.availableColoumns.items = columns;   
+        if($scope.data.gridColumns){
+          $scope.selectedColumns.items = $scope.data.gridColumns;
+            if($scope.selectedColumns.items.length  >= 2){
+                $scope.isDisplayUpDownBtn=true;
+              }
+        }
       }, function (err) {
         console.error(err);          
       })
-  }
+  };
   
   //These are options for data grid
   $scope.gridOptions = {
@@ -161,7 +181,9 @@ angular.module('sasaWebApp')
     columnDefs: [],
     data: []
   };
-
+   $scope.getAddRemoveCoulmns=function(){
+        $scope.showColumns = true;
+   };
   //This function gets raw metric data for selected columns
   $scope.getRawData = function (offset) {
     
@@ -174,7 +196,6 @@ angular.module('sasaWebApp')
       messageCenterService.add('danger','Please select columns', {timeout: 10000});
       return;
     }
-    console.log($scope.selectedColumns.items)
     var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
     $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
       if(offset === 'all'){
@@ -199,7 +220,7 @@ angular.module('sasaWebApp')
       for (var column in $scope.selectedColumns.items){
         $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
        }
-      $scope.save($scope.tab); 
+      //$scope.save($scope.tab); 
     },function (err) {
       console.error(err);
     })
@@ -395,7 +416,7 @@ angular.module('sasaWebApp')
     if($scope.allfilterkeys.length>0)
       return;
     $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {  
-        $scope.filterSubData = filter_data.toJSON(); 
+        $scope.filterSubData = data.toJSON(); 
         // console.log($scope.filterSubData)
         // var filterKeys = Object.keys(data[0]);
         // for (var i = 0; i < filterKeys.length; i++) {               
@@ -488,7 +509,7 @@ angular.module('sasaWebApp')
         $mdDialog.hide($scope.measureInfo);
         break;
       case 'data':
-        $scope.selectedColumns.items['tab']=which
+         $scope.selectedColumns.items['tab']=which;
         //$mdDialog.hide($scope.selectedColumns.items);
         break;
       case 'filter':
