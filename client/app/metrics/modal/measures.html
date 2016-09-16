@@ -43,7 +43,7 @@
 								<th>Data Type</th>
 								<td>{{measure.datatype}}</td>
 								</tr>
-								<tr>
+								<tr ng-if="measure.type.length > 0">
 								<th>Type</th>
 								<td>{{measure.type}}</td>
 							</tr>
@@ -53,7 +53,7 @@
 								{{measure.measure_details.m_formula}}
 								</td>
 							</tr>
-							<tr>
+							<tr  ng-if="measure.measure_details.m_condition.length > 0">
 								<th>Conditions</th>
 								<td>
 									<table ng-repeat = "condition in measure.measure_details.m_condition">
