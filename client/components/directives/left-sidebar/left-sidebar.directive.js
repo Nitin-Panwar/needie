@@ -127,6 +127,7 @@ angular.module('sasaWebApp')
 
 	            for (var i = 0; i < filterKeys.length; i++) {	            	
 	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
+	            
 	            };
 	            if(scope.navigationIcon()){
 	            	scope.updateGlobalFilters();
@@ -145,21 +146,28 @@ angular.module('sasaWebApp')
 	     * @return {[type]}       [description]
 	     */
 	    scope.pluck = function(arr, key, matchKey, value) {
+	    	var tmp ={};
 	    	if(value && matchKey){
 	    		var result = $.map(arr, function(e) { 
 	    			if(e[matchKey] === value)
+	    			tmp[e[key]] = e[key]
 	    			return e[key]; 
 	    		});
 	    	} 
-	    	else{
-	    		var result = $.map(arr, function(e) { return e[key]; });
-	    	}
- 
-			//find unique values			
-		    var o = {}, i, l = result.length, r = [];
-		    for(i=0; i<l;i+=1) o[result[i]] = result[i];
-		    for(i in o) r.push(o[i]);		    
-
+	    	// first time filter will load from else part
+	    	else{ 
+	 			var result = $.map(arr, function(e) {
+						tmp[e[key]] = e[key];
+						return e[key];
+				});
+		    }
+	    		   		
+		    var r = [];
+		    for (var key in tmp){
+		    	if(tmp.hasOwnProperty(key)){
+		    		r.push(key)
+		    	}
+		    } 
 		    return r;
 		}
 
@@ -213,19 +221,22 @@ angular.module('sasaWebApp')
 	    	}
 	    	var data = scope.FilterData;
 	    	var dataHolder = [];
-	    	for(var queryKey in $rootScope.globalQuery){	    		
+	    	for(var queryKey in $rootScope.globalQuery)
+	    	{	
 	    		var tempArr = Object.keys(data[0])
 	    		tempArr.splice(tempArr.indexOf(queryKey), 1);
-	    		for(var i in $rootScope.globalQuery[queryKey]){
-	    			for(var j in tempArr){
+	    		for(var i in $rootScope.globalQuery[queryKey])
+	    		{
+	    			for(var j in tempArr)
+	    			{
 	    				var result = scope.pluck(data, tempArr[j], queryKey, $rootScope.globalQuery[queryKey][i]);
 	    				if(dataHolder[tempArr[j]]){
 							dataHolder[tempArr[j]] = dataHolder[tempArr[j]].concat(result)
 							//find unique values			
-						    var o = {}, i, l = dataHolder[tempArr[j]].length, r = [];
-						    for(i=0; i<l;i+=1) o[dataHolder[tempArr[j]][i]] = dataHolder[tempArr[j]][i];
-						    for(i in o) r.push(o[i]);
-						    dataHolder[tempArr[j]] = r;
+						    var tmp_data = {}, l = dataHolder[tempArr[j]].length, unique_values = [];
+						    for(var k=0; k<l;k+=1) tmp_data[dataHolder[tempArr[j]][k]] = dataHolder[tempArr[j]][k];
+						    for( var key in tmp_data) unique_values.push(tmp_data[key]);
+						    dataHolder[tempArr[j]] = unique_values;
 						}
 						else{
 							dataHolder[tempArr[j]] = result;

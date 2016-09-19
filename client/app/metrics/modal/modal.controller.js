@@ -28,7 +28,10 @@ angular.module('sasaWebApp')
     filterkey: '',
     filters:{}
   };
-
+  $scope.isDisplayApplyBtn=false;
+  $scope.isDisplayYaxisMessage=false;
+  $scope.isDisplayUpDownBtn=false;
+  $scope.displayNextBtn=0;
   /*
   Variable for advance visualization Dialog
    */  
@@ -40,6 +43,8 @@ angular.module('sasaWebApp')
     advance_viz:true
   };
   $scope.tab= tab;
+
+
   $scope.defaultViz = false;
   $scope.allfilterkeys=[];
   $scope.avData = {
@@ -99,6 +104,8 @@ angular.module('sasaWebApp')
     }
     else{
       $scope.filterQuery={}
+      $scope.tempData.filters = {}
+      $scope.tempData.filterkey = null
     }
   }
   
@@ -114,12 +121,17 @@ angular.module('sasaWebApp')
   }
 
   //This function populates all metric columns
-  $scope.getMetricColumns = function (argument) {
-    if(!$scope.data.gridColumns){
+  $scope.getMetricData = function(){
+
+    //Retain the selected item columns after close the button in the modal
+   if(!$scope.data.gridColumns){
       $scope.data.gridColumns = [];
     }
     if($scope.data.gridColumns.length !== 0){
-      $scope.selectedColumns.items = $scope.data.gridColumns;    
+      $scope.selectedColumns.items = $scope.data.gridColumns;  
+        if($scope.selectedColumns.items.length >= 2){
+        $scope.isDisplayUpDownBtn=true;  
+    } 
     }
     if($scope.availableColoumns.items.length !== 0){
       return;
@@ -133,20 +145,20 @@ angular.module('sasaWebApp')
         $scope.availableColoumns.items = columns;   
         if($scope.data.gridColumns){
           $scope.selectedColumns.items = $scope.data.gridColumns;
+            if($scope.selectedColumns.items.length  >= 2){
+                $scope.isDisplayUpDownBtn=true;
+              }
         }
       }, function (err) {
         console.error(err);          
       })
-    
-    
   };
-
+  
   //These are options for data grid
   $scope.gridOptions = {
     enableSorting: true,
     enableColumnResizing: true,
-    enableGridMenu: true,        
-    exporterCsvFilename: $scope.data.name + '.csv',
+    enableGridMenu: false,        
     exporterPdfDefaultStyle: {fontSize: 9},
     exporterPdfTableStyle: {margin: [30, 30, 30, 30]},
     exporterPdfTableHeaderStyle: {fontSize: 10, bold: true, italics: true, color: 'red'},
@@ -169,9 +181,12 @@ angular.module('sasaWebApp')
     columnDefs: [],
     data: []
   };
-
+   $scope.getAddRemoveCoulmns=function(){
+        $scope.showColumns = true;
+   };
   //This function gets raw metric data for selected columns
   $scope.getRawData = function (offset) {
+    
     $scope.offset = offset;
     $scope.csvData.data = undefined;  
     $scope.gridOptions.data = [];      
@@ -182,21 +197,32 @@ angular.module('sasaWebApp')
       return;
     }
     var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
+    var temp;
     $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
       if(offset === 'all'){
-        $scope.csvData.data = response;
+        temp =angular.copy(response);
+        $scope.csvData.data = temp;
         $scope.csvData.headers = Object.keys(response[0]);
-        // messageCenterService.add('success', 'Click on Download Button to Download CSV', {timeout: 5000});
+        /*
+         Following three  line of code related to visable the grid with first 100 records
+         when an user click on export buuton and disable the previous button and enable the next buttoon .
+        //  */
+        $scope.gridOptions.data=response.splice(0,100);
+        $scope.offset =0;
         return;
       }
-      $scope.gridOptions.data = response;       
+      $scope.gridOptions.data = response; 
+      $scope.displayNextBtn =response.length;
+           
       // create column definitions
       for (var column in $scope.selectedColumns.items){
         $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
-      }
+       }
+      
     },function (err) {
       console.error(err);
-    })        
+    })
+
   };
 
   $scope.exportCSV = function () {
@@ -217,6 +243,9 @@ angular.module('sasaWebApp')
         // select column to show in data grid
         for(var i in $scope.availableColoumns.selected) {
           $scope.selectedColumns.items.push($scope.availableColoumns.selected[i]);
+            if($scope.selectedColumns.items.length >= 2){
+              $scope.isDisplayUpDownBtn=true;
+            }
           $scope.availableColoumns.items.splice($scope.availableColoumns.items.indexOf($scope.availableColoumns.selected[i]), 1);            
         }
         $scope.availableColoumns.selected.length = 0;
@@ -226,7 +255,11 @@ angular.module('sasaWebApp')
         // remove from selection
         for(var i in $scope.selectedColumns.selected){
           $scope.availableColoumns.items.push($scope.selectedColumns.selected[i]);
-          $scope.selectedColumns.items.splice($scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]), 1);    
+          
+          $scope.selectedColumns.items.splice($scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]), 1); 
+          if($scope.selectedColumns.items.length < 2){
+              $scope.isDisplayUpDownBtn=false;
+            }   
         }
         $scope.selectedColumns.selected.length = 0;
     }
@@ -239,7 +272,7 @@ angular.module('sasaWebApp')
         if($scope.availableColoumns.selected.indexOf(item) === -1){
           $scope.availableColoumns.selected.push(item);
         }
-        else{
+        else{fget
           $scope.availableColoumns.selected.splice($scope.availableColoumns.selected.indexOf(item), 1);  
         }
     }
@@ -260,13 +293,17 @@ angular.module('sasaWebApp')
    */
   $scope.AddRemoveColumns = function(type){
     if(type==='add'){
+      $scope.isDisplayUpDownBtn=true;
       for(var i=0; i<$scope.availableColoumns.items.length; i++)
         $scope.selectedColumns.items.push($scope.availableColoumns.items[i])
         $scope.availableColoumns.selected = []
         $scope.availableColoumns.items=[]
+        $scope.availableColoumns.items=[];
     }
     else{
+       $scope.isDisplayUpDownBtn=false;
        for(var i=0; i<$scope.selectedColumns.items.length; i++)
+
         $scope.availableColoumns.items.push($scope.selectedColumns.items[i])
         $scope.selectedColumns.selected = []
         $scope.selectedColumns.items=[]
@@ -356,7 +393,7 @@ angular.module('sasaWebApp')
           $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
         }
         else
-          $scope.viz_details.x_options[$scope.avData.x_data]=$scope.allFilterData[$scope.avData.x_data]
+          $scope.viz_details.x_options[$scope.avData.x_data]=$scope.allFilterData[$scope.avData.x_data].filter(function(n){return n;});
         if($scope.avData.y_data.length ===1 && $scope.avData.group_by !== 'None' && $scope.avData.group_by !== ''){
           $scope.viz_details.group_by.push($scope.avData.group_by);
         }
@@ -376,14 +413,15 @@ angular.module('sasaWebApp')
   $scope.getAllFilters = function(){
     if($scope.allfilterkeys.length>0)
       return;
-    $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
+    $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {  
         $scope.filterSubData = data.toJSON(); 
+        // console.log($scope.filterSubData)
         // var filterKeys = Object.keys(data[0]);
         // for (var i = 0; i < filterKeys.length; i++) {               
         //     $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData12, filterKeys[i], null, null);
         // };   
         if(Object.keys($rootScope.GlobalFilters).length===0){
-          $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                      
+          $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                   
             $scope.FilterData = data.filters;   
             var filterKeys = Object.keys($scope.FilterData[0]);
             for (var i = 0; i < filterKeys.length; i++) {               
@@ -396,6 +434,7 @@ angular.module('sasaWebApp')
             {
               $scope.allFilterData[key] = $scope.filterSubData[key]
               $scope.allfilterkeys = Object.keys($scope.allFilterData)
+              // console.log($scope.allfilterkeys);
               $scope.tempData.filters[key] = []
             }   
           },function (err) {
@@ -468,8 +507,8 @@ angular.module('sasaWebApp')
         $mdDialog.hide($scope.measureInfo);
         break;
       case 'data':
-        $scope.selectedColumns.items['tab']=which
-        $mdDialog.hide($scope.selectedColumns.items);
+         $scope.selectedColumns.items['tab']=which;
+        //$mdDialog.hide($scope.selectedColumns.items);
         break;
       case 'filter':
         $scope.filterQuery['tab']=which
@@ -479,14 +518,22 @@ angular.module('sasaWebApp')
         $mdDialog.hide($scope.filterQuery);
         break;
       case 'visualization':
+        $scope.isDisplayYaxisMessage=false;
         $scope.formatVizData();
-        $scope.viz_details['tab']=which
-        $mdDialog.hide($scope.viz_details)
+        $scope.viz_details['tab']=which;
+         if($scope.avData.y_data.length === 0){
+            $scope.isDisplayYaxisMessage=true;
+         }
+         else{
+               $mdDialog.hide($scope.viz_details)
+         }
         break;
       default:
         $mdDialog.hide();          
     }
   };
+
+
   $scope.navigationIcon=function(){
       for(var key in $rootScope.globalQuery){
           if($rootScope.globalQuery[key]!=undefined && key!='comment_type' )
@@ -521,5 +568,29 @@ angular.module('sasaWebApp')
         $scope.allFilterData[key] = dataHolder[key];
       }
     }
+
+    $scope.moveDown=function(){
+      //selectedColumns.items
+     for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
+            var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
+            if (idx < $scope.selectedColumns.items.length) {
+                var itemToMove = $scope.selectedColumns.items.splice(idx, 1)
+                $scope.selectedColumns.items.splice(idx+1, 0, itemToMove[0]);
+                
+            }
+        }
+      
+    };
+     $scope.moveUp=function(){
+      //selectedColumns.items
+     for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
+            var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
+            if (idx > 0) {
+                var itemToMove = $scope.selectedColumns.items.splice(idx, 1)
+                $scope.selectedColumns.items.splice(idx-1, 0, itemToMove[0]);
+                
+            }
+        }
+    };
 });
 

@@ -15,8 +15,8 @@
         <li>
           <form id="searchform" class="navbar-form">
             <div class="form-group" style="display:inline;">
-              <div class="input-group" ng-click="searchableItems()">
-                <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" ng-model="searched" placeholder="Dashboard Search" uib-typeahead="name as dashboard.name for dashboard in searchedDashboard | filter:{name:$viewValue}" typeahead-min-length=1 typeahead-loading="searchLoader" typeahead-on-select="redirect($item)" class="form-control" style="border-radius: 30px;" aria-autocomplete="list" aria-expanded="false" autocomplete="off">
+              <div class="input-group" id="searchDashboardScrollBar" ng-click="searchableItems()">
+                <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" ng-model="searched" placeholder="Dashboard Search" uib-typeahead="name as dashboard.name for dashboard in searchedDashboard | filter:{name:$viewValue}" typeahead-min-length=1 typeahead-loading="searchLoader" typeahead-on-select="redirect($item)" class="form-control"  style="border-radius: 30px;" aria-autocomplete="list" aria-expanded="false" autocomplete="off">
               </div>
             </div>
           </form>
@@ -26,7 +26,7 @@
           <!-- <a href></a>           -->
         </li>
         <li ng-class="{active: isActive('/help')}" >
-            <a ng-href="/help">Help</a>
+            <a ng-href="/help" ng-click="help()">Help</a>
         </li>
         <li ng-class="{active: isActive('/contactUs')}" >
             <a ng-href="/contactUs">Contact Us</a>

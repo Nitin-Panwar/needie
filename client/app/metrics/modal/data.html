@@ -1,52 +1,60 @@
-<div ng-init="getMetricColumns();">
+<div ng-init="getMetricData();">
 <!-- <div ng-init="getMetricColumns()" cg-busy="{promise:metricPromise,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}"> -->
   <div layout ="column">
+    <div layout ="row">
+      <md-button class="btn btn-default btn-md" ng-click="getAddRemoveCoulmns()">Add/Remove Columns</md-button>
+      <md-button class="btn btn-default btn-md" ng-click="getRawData(0)" ng-hide="selectedColumns.items.length === 0">Get Data</md-button>  
+      <md-button class="btn btn-default btn-md" ng-click="getRawData('all')" ng-hide="selectedColumns.items.length === 0">Export CSV</md-button>
+      <md-button class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</md-button>
+    </div>
     <div layout="row" ng-show="showColumns">
       <div flex>
-       <md-subheader class="md-no-sticky" style="color:black;text-align:center">Available Columns</md-subheader>
+       <md-subheader class="md-no-sticky" style="color:black;text-align:center">Available Column(s)</md-subheader>
         <md-list flex style="border-style: dashed; border-width: 1px; border-radius:5px; max-height: 250px; height:250px;overflow: auto; background-color: rgba(218, 221, 223, 0.25);">   
-          <md-list-item  ng-repeat="item in availableColoumns.items track by $index | orderBy:'name'"  ng-click="selection(item, true)" style="height:35px">
+
+          <md-list-item  ng-repeat="item in availableColoumns.items  | orderBy track by $index"  ng-click="selection(item, true)">
             <span style="color:#0071C5;" ng-show="availableColoumns.selected.indexOf(item) !== -1" class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505; text-transform: uppercase;">{{item}}</a>
           </md-list-item>
         </md-list>
       </div>
-      <div flex=20 layout="column" style="margin-top:10%;align-items: center;">
+      <div flex=20 layout="column" style="margin-top:5%;align-items: center;">
         <md-button style="background-color:#0071C5;" class="md-fab md-mini md-primary" aria-label="Add selected" ng-click="dataGrid(item, true)"><i class="glyphicon glyphicon-arrow-right"></i></md-button> 
         <md-button style="background-color:#0071C5;" class="md-fab md-mini md-primary" aria-label="Remove selected" ng-click="dataGrid(item, false)"><i class="glyphicon glyphicon-arrow-left"></i></md-button>  
         <md-button  class="btn btn-default btn-md" ng-click="AddRemoveColumns('add');" style="width:110px">Add All</md-button> 
         <md-button  class="btn btn-default btn-md" ng-click="AddRemoveColumns('remove');" style="width:110px">Remove All</md-button>  
       </div>
+      
       <div flex>
-        <md-subheader class="md-no-sticky" style="color:black;text-align: center">Selected Columns</md-subheader>
+        <md-subheader class="md-no-sticky" style="color:black;text-align: center">Selected Column(s)</md-subheader>
         <md-list flex style="border-style: dashed; border-width: 1px; border-radius:5px; max-height: 250px; height:250px; overflow: auto; background-color: rgba(218, 221, 223, 0.25);">   
+
           <md-list-item  ng-repeat="item in selectedColumns.items track by $index" ng-click="selection(item, false)" style="height:35px">
           <span  style="color:#0071C5;" ng-show="selectedColumns.selected.indexOf(item) !== -1"class="glyphicon glyphicon-ok"></span>&nbsp;<a href="#"style="font-color:#050505;text-transform: uppercase;">{{item}}</a>
+
           </md-list-item>
         </md-list>
+      </div >
+            
+      <div ng-show="isDisplayUpDownBtn">
+               <button ng-click="moveUp()" style="height: 40px; width: 55px;display: block;margin-top: 115px;margin-left: 10px;">Up</button>
+            <button ng-click="moveDown()" style="height: 40px; width: 55px;margin: 10px 0 0 10px;">Down</button>
       </div>
     </div>
-    <div ng-if="gridOptions.data.length > 0" >
+    <div ng-if="gridOptions.data.length > 0" style="margin-bottom: 10px;">
       <br>
-      <span>Showing {{gridOptions.data.length}} Rows</span>           
-      <div ui-grid="gridOptions" id="metric-data-grid" ui-grid-resize-columns ui-grid-exporter ui-grid-move-columns ui-grid-pinning></div>
-      <div class="btn-group">
-        <button class="btn btn-default" ng-disabled="offset == 0" ng-click="getRawData(offset - 100)">Previous</button>
-        <button class="btn btn-default pull-right" ng-disabled="gridOptions.data.length == 0" ng-click="getRawData(offset + 100)">Next</button>       
-      </div>      
-    </div>
-    <br>
-    <div layout ="row">
-      <md-button class="btn btn-default btn-md" ng-click="getRawData(0)" ng-hide="selectedColumns.items.length === 0">Get Data</md-button>  
-      <md-button class="btn btn-default btn-md" ng-click="getMetricColumns(); showColumns=true">Add/Remove Columns</md-button>       
-      <md-button class="btn btn-default btn-md" ng-click="getRawData('all')" ng-hide="selectedColumns.items.length === 0">Export CSV</md-button>
-      <md-button class="btn btn-default btn-md" ng-csv="csvData.data" csv-header="csvData.headers" filename="{{data.name}}.csv" lazy-load="true" ng-disabled="csvData.data === undefined" ng-hide="selectedColumns.items.length === 0">Download CSV</md-button>
-    </div>
-    <br>
-    
-  </div>
-</div>
-
-<md-divider></md-divider>
-
+      <span>Showing {{gridOptions.data.length}} Rows</span>    
+      <div class="btn-group pull-right">
+        <button class="btn btn-default" ng-disabled="offset == 0" ng-click="getRawData(offset - 100)" style="margin: 0 5px 0 0;">&lt;&lt;&lt;</button>
+        <button class="btn btn-default pull-right" ng-disabled="gridOptions.data.length < 100" ng-click="getRawData(offset + 100)" style="margin: 0;">&gt;&gt;&gt;</button>       
+      </div>         
       
+          
+    </div>
+    <div ng-if="gridOptions.data.length > 0">
+    <div style="height:300px;" ui-grid="gridOptions" id="metric-data-grid" ui-grid-resize-columns ui-grid-exporter ui-grid-move-columns ui-grid-pinning></div>
+    </div>
+
     
+    </div>
+</div>
+<md-divider></md-divider>

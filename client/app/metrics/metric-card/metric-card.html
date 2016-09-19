@@ -1,4 +1,4 @@
-<section ng-model="metricModel">
+<section ng-model="metricModel" class="ng-animate-disabled">
     <section class="panel panel-default metric-card-panel" ng-class="{'panel-danger':alertBreached, 'panel-warning': warningBreached}" >
         <section class="panel-heading">
             <ul class="panel-title list-inline mover-handle">
@@ -44,7 +44,7 @@
             </section>            
              
             <!-- <smm-multi-chart options="options1" handle="handle" data="metricData['distributions'][0]['distribution_data']['data']"  ng-show="line"></smm-multi-chart> -->
-            <section ng-if="metricData['distributions'][0]">
+            <section ng-if="metricData['distributions'][0]" class="ng-animate-disabled">
                 <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" ng-show="!line"></smm-multi-chart>
             </section>
           </section> 
