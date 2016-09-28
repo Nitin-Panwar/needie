@@ -272,7 +272,7 @@ angular.module('sasaWebApp')
         if($scope.availableColoumns.selected.indexOf(item) === -1){
           $scope.availableColoumns.selected.push(item);
         }
-        else{fget
+        else{
           $scope.availableColoumns.selected.splice($scope.availableColoumns.selected.indexOf(item), 1);  
         }
     }
