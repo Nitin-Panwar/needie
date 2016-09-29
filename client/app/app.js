@@ -23,9 +23,10 @@ angular.module('sasaWebApp', [
   'intcAnalytics'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider,$provide,$mdThemingProvider,intcAnalyticsProvider,$animateProvider) {
-     $urlRouterProvider
-      .otherwise('/');
-    $locationProvider.html5Mode(true); 
+     // $urlRouterProvider
+      // .otherwise('/');
+    // $locationProvider.html5Mode(true); 
+    $locationProvider.html5Mode(true).hashPrefix('*');
     $httpProvider.useApplyAsync(true);  
    // $animate.enabled(false, element);
    $animateProvider.classNameFilter(/angular-animate/);
@@ -75,7 +76,7 @@ angular.module('sasaWebApp', [
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
         $rootScope.userDetails = response.data.user;
         $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase(); 
-     //$rootScope.user = 'gar\\pjenax'
+     // $rootScope.user = 'gar\\npanwar'
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
              // console.log("user info",data)
@@ -83,9 +84,8 @@ angular.module('sasaWebApp', [
              // if(data.homepage === ""){
              //  data.homepage=defaultDashboardId;
              //   }
-              $rootScope.homepage = data.homepage;
-               
-            if(data.homepage && !$stateParams.dashboardId){
+            $rootScope.homepage = data.homepage;   
+            if(data.homepage && !$stateParams.dashboardId && $location.$$url !=='/help'){
               var homepage = '/?dashboardId='+data.homepage;         
               $location.url(homepage)  
             }            

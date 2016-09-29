@@ -8,8 +8,9 @@
 				<span ng-hide="measureInfo[$index].active || measureInfo[$index].active == undefined" class="badge" style="background-color: #5cb85c;">Enable Measure</span>
 				</a>
 			</h5>
-			<div ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined">		
-				<div ng-if="measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage' && measure.type!=='mean'">
+			<div ng-show="measureInfo[$index].active || measureInfo[$index].active == undefined">
+
+				<div ng-if="measure.type !== 'percentile' && measure.type !== 'breakup' && measure.type !=='percentage' && measure.type!=='mean'" ng-show=" avData.y_data.length == 1 && measure.label === avData.y_data[0] ">
 					<div ng-cloak>
 					  	<md-content style="margin: 16px; padding:16px" ng-class="{'disabled':data['distributions'][0]['advance_viz']}">
 					    	<div layout>
