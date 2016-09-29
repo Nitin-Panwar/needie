@@ -1164,7 +1164,7 @@
                 }
 
             }, this);
-
+            // console.log(returnData)
             return returnData;
 
         };
@@ -1196,6 +1196,7 @@
 
             // If there are series
             if (this.series !== null && this.series !== undefined) {
+                // console.log(this.series)
 
                 // Iterate all the series
                 this.series.forEach(function (series) {
@@ -1335,7 +1336,7 @@
             } else {
                 returnShape = input.transition()
                     .duration(0)
-                    .delay(chart._getDelay(duration, chart, series))
+                    .delay(chart._getDelay(0, chart, series))
                     .ease("linear");
             }
             return returnShape;
@@ -2495,6 +2496,7 @@
             // Create an array of distinct series values
             var entries = [];
             // If there are some series
+            // console.log(this.series)
             if (this.series) {
                 // Iterate all the associated series
                 this.series.forEach(function (series) {
@@ -2507,6 +2509,8 @@
                             j,
                             // Handle grouped plots (e.g. line and area where multiple points are coloured the same way
                             field = ((series.plot.grouped && !series.x._hasCategories() && !series.y._hasCategories() && row.aggField.length < 2 ? "All" : row.aggField.slice(-1)[0]));
+                            // Modified by KChug to handle null values of any filter in legend
+                            // console.log(field)
                             var key_f;
                             if(field==="0" || field ===0)
                                 key_f = "N/A";
@@ -2516,6 +2520,7 @@
                                 index = j;
                                 break;
                             }
+                            //Modification ends
                         }
                         if (index === -1 && series.chart._assignedColors[field]) {
                             // If it's a new element create a new row in the return array
@@ -2529,11 +2534,13 @@
                                 series: series,
                                 aggField: row.aggField
                             });
+
                             index = entries.length - 1;
                         }
                     });
                 }, this);
             }
+            // console.log(entries)
             return entries;
         };
 

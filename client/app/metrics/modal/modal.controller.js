@@ -104,6 +104,8 @@ angular.module('sasaWebApp')
     }
     else{
       $scope.filterQuery={}
+      $scope.tempData.filters = {}
+      $scope.tempData.filterkey = null
     }
   }
   
@@ -119,8 +121,10 @@ angular.module('sasaWebApp')
   }
 
   //This function populates all metric columns
-  $scope.getMetricColumns = function (argument) {
-    if(!$scope.data.gridColumns){
+  $scope.getMetricData = function(){
+
+    //Retain the selected item columns after close the button in the modal
+   if(!$scope.data.gridColumns){
       $scope.data.gridColumns = [];
     }
     if($scope.data.gridColumns.length !== 0){
@@ -148,10 +152,8 @@ angular.module('sasaWebApp')
       }, function (err) {
         console.error(err);          
       })
-    
-    
   };
-
+  
   //These are options for data grid
   $scope.gridOptions = {
     enableSorting: true,
@@ -179,11 +181,12 @@ angular.module('sasaWebApp')
     columnDefs: [],
     data: []
   };
-
+   $scope.getAddRemoveCoulmns=function(){
+        $scope.showColumns = true;
+   };
   //This function gets raw metric data for selected columns
   $scope.getRawData = function (offset) {
-    $scope.save($scope.tab);
-
+    
     $scope.offset = offset;
     $scope.csvData.data = undefined;  
     $scope.gridOptions.data = [];      
@@ -194,31 +197,32 @@ angular.module('sasaWebApp')
       return;
     }
     var filters = angular.extend({}, $rootScope.globalQuery, data.filters);
+    var temp;
     $rootScope.myPromise = metricsFactory.getRawData({fields: $scope.selectedColumns.items, metricId: $scope.data._id, filters: filters, offset: $scope.offset}).$promise.then(function (response) {          
       if(offset === 'all'){
-        $scope.csvData.data = response;
-       $scope.csvData.headers = Object.keys(response[0]);
-        //$scope.csvData.headers = $scope.selectedColumns.items;
-
+        temp =angular.copy(response);
+        $scope.csvData.data = temp;
+        $scope.csvData.headers = Object.keys(response[0]);
         /*
          Following three  line of code related to visable the grid with first 100 records
          when an user click on export buuton and disable the previous button and enable the next buttoon .
-         */
-        $scope.gridOptions.data = response.splice(0,100);
-        $scope.offset =100;
+        //  */
+        $scope.gridOptions.data=response.splice(0,100);
         $scope.offset =0;
-
         return;
       }
       $scope.gridOptions.data = response; 
-      $scope.displayNextBtn =response.length;     
+      $scope.displayNextBtn =response.length;
+           
       // create column definitions
       for (var column in $scope.selectedColumns.items){
         $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
-      }
+       }
+      
     },function (err) {
       console.error(err);
-    })        
+    })
+
   };
 
   $scope.exportCSV = function () {
@@ -294,10 +298,12 @@ angular.module('sasaWebApp')
         $scope.selectedColumns.items.push($scope.availableColoumns.items[i])
         $scope.availableColoumns.selected = []
         $scope.availableColoumns.items=[]
+        $scope.availableColoumns.items=[];
     }
     else{
-      $scope.isDisplayUpDownBtn=false;
+       $scope.isDisplayUpDownBtn=false;
        for(var i=0; i<$scope.selectedColumns.items.length; i++)
+
         $scope.availableColoumns.items.push($scope.selectedColumns.items[i])
         $scope.selectedColumns.selected = []
         $scope.selectedColumns.items=[]
@@ -407,14 +413,15 @@ angular.module('sasaWebApp')
   $scope.getAllFilters = function(){
     if($scope.allfilterkeys.length>0)
       return;
-    $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {                                                                    
+    $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {  
         $scope.filterSubData = data.toJSON(); 
+        // console.log($scope.filterSubData)
         // var filterKeys = Object.keys(data[0]);
         // for (var i = 0; i < filterKeys.length; i++) {               
         //     $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData12, filterKeys[i], null, null);
         // };   
         if(Object.keys($rootScope.GlobalFilters).length===0){
-          $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                      
+          $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                   
             $scope.FilterData = data.filters;   
             var filterKeys = Object.keys($scope.FilterData[0]);
             for (var i = 0; i < filterKeys.length; i++) {               
@@ -427,6 +434,7 @@ angular.module('sasaWebApp')
             {
               $scope.allFilterData[key] = $scope.filterSubData[key]
               $scope.allfilterkeys = Object.keys($scope.allFilterData)
+              // console.log($scope.allfilterkeys);
               $scope.tempData.filters[key] = []
             }   
           },function (err) {
@@ -483,7 +491,6 @@ angular.module('sasaWebApp')
   };
 
   $scope.cancel = function() {
-    console.log($scope.selectedColumns.items.length);
     $mdDialog.cancel();
   };
 
@@ -500,7 +507,7 @@ angular.module('sasaWebApp')
         $mdDialog.hide($scope.measureInfo);
         break;
       case 'data':
-        $scope.selectedColumns.items['tab']=which
+         $scope.selectedColumns.items['tab']=which;
         //$mdDialog.hide($scope.selectedColumns.items);
         break;
       case 'filter':
@@ -566,10 +573,8 @@ angular.module('sasaWebApp')
       //selectedColumns.items
      for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
             var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
-            console.log(idx);
             if (idx < $scope.selectedColumns.items.length) {
                 var itemToMove = $scope.selectedColumns.items.splice(idx, 1)
-                console.log(itemToMove[0])
                 $scope.selectedColumns.items.splice(idx+1, 0, itemToMove[0]);
                 
             }
@@ -580,10 +585,8 @@ angular.module('sasaWebApp')
       //selectedColumns.items
      for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
             var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
-            console.log(idx);
             if (idx > 0) {
                 var itemToMove = $scope.selectedColumns.items.splice(idx, 1)
-                console.log(itemToMove[0])
                 $scope.selectedColumns.items.splice(idx-1, 0, itemToMove[0]);
                 
             }
