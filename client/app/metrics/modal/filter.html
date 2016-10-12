@@ -5,7 +5,7 @@
       <md-input-container class="md-block" flex="35"  style="margin-left:7px;" >
         <label>Category</label>
         <md-select ng-model="tempData.filterkey">
-          <md-option ng-repeat="(key,value) in filterSubData" ng-if="!isInQuery(key,filterQuery)" value="{{key}}">
+          <md-option ng-repeat="key in allfilterkeys|orderBy|filter: searchFilter" ng-if="!isInFilters(key)" value="{{key}}" >
             {{::key}}
           </md-option>
         </md-select>
@@ -19,7 +19,7 @@
                      ng-click="toggleAll(tempData.filterkey,'tempFilter')">
           <span ng-if="isChecked(tempData.filterkey,'tempFilter')">Un-</span>Select All
           </md-checkbox>
-          <md-option ng-value="value" ng-repeat="value in filterSubData[tempData.filterkey]|orderBy|filter:''" >{{::value}}</md-option>
+          <md-option ng-value="value" ng-repeat="value in allFilterData[tempData.filterkey]|orderBy|filter:''" ng-if="tempData.filterkey !== 'Product'">{{::value}}</md-option>
         </md-optgroup>
         </md-select>          
       </md-input-container>
@@ -36,7 +36,7 @@
             <md-checkbox aria-label="Select All" ng-checked=isChecked(key,'Filter') ng-click="toggleAll(key,'Filter')">
               <span ng-if="isChecked(key,'Filter')">Un-</span>Select All
             </md-checkbox>
-            <md-option ng-value="value" ng-repeat="value in filterSubData[key]|orderBy|filter:''">{{::value}}</md-option>
+            <md-option ng-value="value" ng-repeat="value in allFilterData[key]|orderBy|filter:''">{{::value}}</md-option>
           </md-optgroup>
         </md-select>          
       </md-input-container>
