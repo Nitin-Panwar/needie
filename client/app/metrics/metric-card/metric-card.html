@@ -7,6 +7,7 @@
                     <i class="fa fa-align-justify"></i>
                     </a>
                     <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown" >
+                        
                         <li ng-click="launch('actions')" class="disabled"><a href="#">Actions</a></li>
                         <li role="separator" class="divider"></li>  
                         <li ng-click="launch($event,'data',metricData)"><a href="#">Data</a></li>
@@ -18,6 +19,7 @@
                         </li>                     
                         <li role="separator" class="divider"></li>
                         <li ng-click="launch($event,'metric',metricData)"><a href="#">Metric Details</a></li> 
+                
                         <li ng-click="removeMetric('metric',metricData)"><a href="#">Remove</a></li>
                     </ul>                
                 </li> 
@@ -27,7 +29,14 @@
                     <span  ng-if="!isEmpty(metricData.filters)"><i class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="right-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></i>
                     </span>
                 </li> 
-                <li class=""><span href="#" editable-text="metricData.alias">{{ metricData.alias || "empty" }}</a></li> 
+                <li class="pull-right">
+                    <span ng-click="createDuplicate(metricData)" role="presentation" tabindex="-1"><i class="fa fa-files-o" title="Create Metric Copy"></i>
+                    </span>
+                </li> 
+                <li>
+                    <span editable-text="metricData.alias">{{ metricData.alias || "empty" }}</span>
+                </li> 
+                
             </ul>             
         </section>
         <!-- metric Card Body -->

@@ -117,8 +117,8 @@ angular.module('sasaWebApp')
 	            	"portfolio":"Finance",
 	            	"service":"Close and Reporting",
 	            	"service_component":"Close and Reporting (S)",
-	            	"product":"AssureNet",
-	            	"support_skill":"C and R Batch Jobs"
+	            	"support_skill":"C and R Batch Jobs",
+	            	"product":"AssureNet"
 
 	            } 
 	            var filterKeys = Object.keys(tempkey);
