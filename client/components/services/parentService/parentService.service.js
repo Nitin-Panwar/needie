@@ -10,11 +10,16 @@ angular.module('sasaWebApp')
       $rootScope.createNew = false;
 			$rootScope.placeholder.dashboard._id=1;
 		}	
+    if(type === 'duplicatemetric'){
+      item.size = {x: 2};
+      item.type='metric'; 
+      $rootScope.placeholder['metric'].push(item);
+    }
 		if(type === 'metric'){    			
 			var id = item;    			
 			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {				
         data.size = {x: 2};
-        data.type='metric';                 
+        data.type='metric'; 
         $rootScope.placeholder[type].push(data);
 				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
 			}, function (err) {
