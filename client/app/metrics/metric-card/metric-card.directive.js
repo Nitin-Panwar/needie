@@ -64,12 +64,7 @@ angular.module('sasaWebApp')
         }
 
         scope.createDuplicate = function(metricData){
-
-          scope.data = angular.copy(metricData);
-          delete scope.data.size
-          delete scope.data.position
-          delete scope.data.type
-          parentService.placeholderAdd('duplicatemetric',scope.data);
+          parentService.placeholderAdd('duplicatemetric',metricData);
           // scope.testData.size = {x: 2};
           // scope.testData.type='metric';
           // $rootScope.placeholder['metric'].push(scope.testData);
