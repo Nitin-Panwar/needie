@@ -11,9 +11,11 @@ angular.module('sasaWebApp')
 			$rootScope.placeholder.dashboard._id=1;
 		}	
     if(type === 'duplicatemetric'){
-      item.size = {x: 2};
-      item.type='metric'; 
-      $rootScope.placeholder['metric'].push(item);
+      var mdata = angular.copy(item)
+      delete mdata.position
+      delete mdata.size
+      mdata.size = item.size
+      $rootScope.placeholder['metric'].push(mdata);
     }
 		if(type === 'metric'){    			
 			var id = item;    			
