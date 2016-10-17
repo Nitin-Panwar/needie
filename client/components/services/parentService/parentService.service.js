@@ -10,6 +10,8 @@ angular.module('sasaWebApp')
       $rootScope.createNew = false;
 			$rootScope.placeholder.dashboard._id=1;
 		}	
+
+    //TO Create Copy of the existing metric card
     if(type === 'duplicatemetric'){
       var mdata = angular.copy(item)
       delete mdata.position
@@ -17,6 +19,7 @@ angular.module('sasaWebApp')
       mdata.size = item.size
       $rootScope.placeholder['metric'].push(mdata);
     }
+
 		if(type === 'metric'){    			
 			var id = item;    			
 			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {				
