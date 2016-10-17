@@ -2093,7 +2093,10 @@
                             if (!chart.noFormats) {
                                 d3.select(this)
                                     .style("font-family", axis.fontFamily)
-                                    .style("font-size", axis._getFontSize());
+                                    // Modified by KChug to increase textsize of x and y axis label 
+                                    .style("font-size", "13px")
+                                    .style("text-transform","capitalize");
+                                    // Modification ends
                             }
                         });
 
