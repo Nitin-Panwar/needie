@@ -63,12 +63,13 @@ angular.module('sasaWebApp')
           }
         }
 
+        
+        /**
+         * This function create copy of metric
+         * @param  {[type]} metricdata   [Data of Metric to create copy]
+        */
         scope.createDuplicate = function(metricData){
           parentService.placeholderAdd('duplicatemetric',metricData);
-          // scope.testData.size = {x: 2};
-          // scope.testData.type='metric';
-          // $rootScope.placeholder['metric'].push(scope.testData);
-
         }
 
         // this function launches the dialogs

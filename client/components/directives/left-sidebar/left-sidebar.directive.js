@@ -121,12 +121,10 @@ angular.module('sasaWebApp')
 	            	"product":"AssureNet"
 
 	            } 
-	            var filterKeys = Object.keys(tempkey);
+	            scope.filterKeys = Object.keys(tempkey);
 	           
-	            // console.log(filterKeys)
-
-	            for (var i = 0; i < filterKeys.length; i++) {	            	
-	            	$rootScope.GlobalFilters[filterKeys[i]] = scope.pluck(scope.FilterData, filterKeys[i], null, null);
+	            for (var i = 0; i < scope.filterKeys.length; i++) {	            	
+	            	$rootScope.GlobalFilters[scope.filterKeys[i]] = scope.pluck(scope.FilterData, scope.filterKeys[i], null, null);
 	            
 	            };
 	            if(scope.navigationIcon()){
