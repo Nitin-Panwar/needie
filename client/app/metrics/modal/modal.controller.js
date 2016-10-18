@@ -599,7 +599,7 @@ angular.module('sasaWebApp')
             }
         }
     };
-<<<<<<< HEAD
+
   
 
   /*
