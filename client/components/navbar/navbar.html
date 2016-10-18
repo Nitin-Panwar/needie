@@ -5,7 +5,7 @@
       <a href="/" class="navbar-brand" ng-click="sendToHomepage()">SMInsights</a>
 
     </div>
-    <div class="navbar-collapse collapse" id="navbar-main">
+    <div class="navbar-collapse collapse" id="navbar-main" style="cursor:default">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
             <a ng-href="{{item.link}}" ng-click="createNew()">{{item.title}}</a>
