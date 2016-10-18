@@ -32,9 +32,14 @@ angular.module('sasaWebApp')
   $scope.isDisplayYaxisMessage=false;
   $scope.isDisplayUpDownBtn=false;
   $scope.displayNextBtn=0;
+  $scope.isDisplayMeasureUnitMessage=false;
+  $scope.isDisableApplyClick=false;
+  $scope.myclass="applyBtnEnableMode";
   /*
   Variable for advance visualization Dialog
    */  
+
+  
   $scope.viz_details = {
     x_data:[],
     y_data:[],
@@ -57,9 +62,19 @@ angular.module('sasaWebApp')
     descOrder:false
 
   };
+
+
+  // if(data['distributions'] && data['distributions'][0]){
+  //   for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
+  //     $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+  //   }
+  // }
+  
+  // populate the data y-axis select from data.measure 
   if(data['distributions'] && data['distributions'][0]){
-    for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
-      $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
+    for (var i=0;i<data.measures.length;i++){
+      if(data.measures[i].distribution === true)
+      $scope.avData.y_data.push(data.measures[i].label);
     }
   }
   if(data['distributions'] && data['distributions'][0] && data['distributions'][0]['advance_viz'])
@@ -378,16 +393,25 @@ angular.module('sasaWebApp')
           $scope.viz_details.group_by.push($scope.avData.group_by);
         }
     }
-    for(var i=0; i<$scope.avData.y_data.length; i++){
+    
+// need to pass distribution property true or false based on selection of y_data in visualization screen
       for (var key in data.measures ){
+        for(var i=0; i<$scope.avData.y_data.length; i++){
         if($scope.avData.y_data[i]===data.measures[key]['label']){
-          $scope.viz_details.y_data[i]={}
-          $scope.viz_details.y_data[i]['label']=data.measures[key]['label']
-          $scope.viz_details.y_data[i]['conditions']=data.measures[key]['measure_mappings']['m1']['conditions']
-          $scope.viz_details.y_data[i]['formula']=data.measures[key]['measure_mappings']['m1']['formula']   
+          data.measures[key]['distribution'] =true;
+          $scope.viz_details.y_data[i]={};
+         $scope.viz_details.y_data[i]['label']=data.measures[key]['label'];
+          break;
         }
+        else{
+          data.measures[key]['distribution'] =false;
+        }
+        
       }
     } 
+    
+
+
   };
 
   $scope.getAllFilters = function(){
@@ -502,12 +526,12 @@ angular.module('sasaWebApp')
         $scope.isDisplayYaxisMessage=false;
         $scope.formatVizData();
         $scope.viz_details['tab']=which;
-         if($scope.avData.y_data.length === 0){
-            $scope.isDisplayYaxisMessage=true;
-         }
-         else{
-               $mdDialog.hide($scope.viz_details)
-         }
+        if($scope.avData.y_data.length === 0){
+          $scope.isDisplayYaxisMessage=true;
+        }
+        else{
+          $mdDialog.hide($scope.viz_details)
+        }
         break;
       default:
         $mdDialog.hide();          
@@ -550,8 +574,9 @@ angular.module('sasaWebApp')
       }
     }
 
+// method used for select an item and enable move down functioanlity in data modaal
     $scope.moveDown=function(){
-      //selectedColumns.items
+      
      for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
             var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
             if (idx < $scope.selectedColumns.items.length) {
@@ -562,8 +587,9 @@ angular.module('sasaWebApp')
         }
       
     };
+    // method used for select an item and enable move up functioanlity in data modal
      $scope.moveUp=function(){
-      //selectedColumns.items
+      
      for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
             var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
             if (idx > 0) {
@@ -573,6 +599,44 @@ angular.module('sasaWebApp')
             }
         }
     };
+<<<<<<< HEAD
+  
+
+  /*
+    User stroy:Complex Distribution Calculation- US15213
+    Method Name:checkMeasureUnit used to Do not allow multiple measures with different units on Y-Axis
+    Parameter name:listof measures data
+  */
+  $scope.checkMeasureUnit=function(listOfmeasures){
+     var unit;
+     $scope.isDisplayMeasureUnitMessage=false;
+    if(listOfmeasures.length === 1){
+          $scope.isDisplayMeasureUnitMessage=false;
+          $scope.isDisableApplyClick=false;
+          return;
+    }
+       for(var i=0;i<listOfmeasures.length;i++){
+         for(var j=0;j<data.measures.length;j++){
+             unit =data.measures[0].unit;
+              if(listOfmeasures[i] === data.measures[j].label){
+               if(unit === data.measures[j].unit){
+                  $scope.isDisplayMeasureUnitMessage=false;
+                  $scope.isDisableApplyClick=false;
+                  $scope.myclass="applyBtnEnableMode";
+               }
+               else{
+                $scope.isDisplayMeasureUnitMessage=true;
+                $scope.isDisableApplyClick=true;
+                $scope.myclass="applyBtnDisableMode";
+                return;
+                
+               }
+             }
+         }
+       }
+  };
+
+
 
  /**
  * this function checks whether any item is in local filter query or global filter query and 
@@ -601,5 +665,6 @@ angular.module('sasaWebApp')
       return false
 
     }
+
 });
 

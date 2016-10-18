@@ -163,7 +163,6 @@
 
     function log(msg) {
       if (settings.debugging) {
-        // console.log(msg);
       }
     }
 
