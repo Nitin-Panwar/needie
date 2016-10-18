@@ -8,7 +8,6 @@ angular.module('sasaWebApp')
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
-        
         //Setting options for the bar graph
         scope.options5 = {}; 
         scope.advanceVisualization = false
@@ -63,6 +62,15 @@ angular.module('sasaWebApp')
             scope.options5.xAxis = ["quarter","category"]
             scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
           }
+        }
+
+        
+        /**
+         * This function create copy of metric
+         * @param  {[type]} metricdata   [Data of Metric to create copy]
+        */
+        scope.createDuplicate = function(metricData){
+          parentService.placeholderAdd('duplicatemetric',metricData);
         }
 
         // this function launches the dialogs

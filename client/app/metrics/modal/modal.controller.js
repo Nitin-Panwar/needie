@@ -22,7 +22,7 @@ angular.module('sasaWebApp')
   };
   $scope.filterData = {};
   $scope.filterQuery = {};
-  $scope.filterSubData = {};
+  $scope.metricfilterData = {};
   $scope.allFilterData = {};
   $scope.tempData = {
     filterkey: '',
@@ -80,10 +80,10 @@ angular.module('sasaWebApp')
   if(data['distributions'] && data['distributions'][0] && data['distributions'][0]['advance_viz'])
   {
       $scope.avData.x_data = data['distributions'][0]['x_data'][0]
-      if(data['distributions'][0]['group_by'][0] !==undefined)
+      if(data['distributions'][0]['group_by'][0] !== undefined)
         $scope.avData.group_by=data['distributions'][0]['group_by'][0]
       else
-        $scope.avData.group_by=''
+        $scope.avData.group_by = ''
       $scope.avData.x_options=data['distributions'][0]['x_options']
       $scope.avData.advance_viz=data['distributions'][0]['advance_viz']
       if(data['distributions'][0]['sortByyaxis']){
@@ -367,28 +367,8 @@ angular.module('sasaWebApp')
       $scope.updateGlobalFilters();
   };
 
-  /**
- * this function checks whether any item is in filter query
- * @param  {[type]} key   [description]
- * @param  {[type]} value [description]
- * @return {[type]}       [description]
- */
-  $scope.isInQuery = function (key, value) {
-    if($scope.filterQuery.hasOwnProperty(key)){
-        return true
-    }
-    return false;
-  };
+  
 
-  /**
- * this function unselects all filter values
- * @param  {[type]} key [description]
- * @return {[type]}     [description]
- */
-  $scope.unselectAllFilterValues = function (key) {
-      delete $scope.filterQuery[key];
-      $scope.updateGlobalFilters();
-  };
   /**
    * Function to set values of visualization when user click on apply
    */
@@ -438,12 +418,7 @@ angular.module('sasaWebApp')
     if($scope.allfilterkeys.length>0)
       return;
     $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {  
-        $scope.filterSubData = data.toJSON(); 
-        // console.log($scope.filterSubData)
-        // var filterKeys = Object.keys(data[0]);
-        // for (var i = 0; i < filterKeys.length; i++) {               
-        //     $scope.filterSubData[filterKeys[i]] = $scope.pluck($scope.FilterData12, filterKeys[i], null, null);
-        // };   
+        $scope.metricfilterData = data.toJSON();  
         if(Object.keys($rootScope.GlobalFilters).length===0){
           $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                   
             $scope.FilterData = data.filters;   
@@ -454,13 +429,15 @@ angular.module('sasaWebApp')
             if($scope.navigationIcon()){
                 $scope.updateGlobalFilters();
             }
-            for (var key in $scope.filterSubData)     
+            for (var key in $scope.metricfilterData)     
             {
-              $scope.allFilterData[key] = $scope.filterSubData[key]
+              $scope.allFilterData[key] = $scope.metricfilterData[key]
               $scope.allfilterkeys = Object.keys($scope.allFilterData)
               // console.log($scope.allfilterkeys);
-              $scope.tempData.filters[key] = []
-            }   
+              
+            } 
+            for(var key in $scope.allFilterData)
+              $scope.tempData.filters[key] = []  
           },function (err) {
               messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
           });
@@ -468,13 +445,17 @@ angular.module('sasaWebApp')
         else{
           for(var key in $rootScope.GlobalFilters)
            $scope.allFilterData[key]=$rootScope.GlobalFilters[key]
-          for (var key in $scope.filterSubData)     
+          for (var key in $scope.metricfilterData)     
           {
-            $scope.allFilterData[key] = $scope.filterSubData[key]
+            $scope.allFilterData[key] = $scope.metricfilterData[key]
             $scope.allfilterkeys = Object.keys($scope.allFilterData)
-            $scope.tempData.filters[key] = []
           } 
+          for(var key in $scope.allFilterData)
+            $scope.tempData.filters[key] = []
         }
+        // To provide selectall check in filter options
+        
+       
       },function (err) {
         messageCenterService.add('danger', 'Could Not Load Filters', {timeout: 5000});
     });
@@ -489,24 +470,24 @@ angular.module('sasaWebApp')
   }
 
   $scope.isChecked = function(key,type) {
-    if(type==="tempFilter" && $scope.tempData.filters[key] && $scope.filterSubData[key])
-      return $scope.tempData.filters[key].length === $scope.filterSubData[key].length;  
-    if(type==="Filter" && $scope.filterQuery[key] && $scope.filterSubData[key])
-      return $scope.filterQuery[key].length === $scope.filterSubData[key].length;
+    if(type==="tempFilter" && $scope.tempData.filters[key] && $scope.allFilterData[key])
+      return $scope.tempData.filters[key].length === $scope.allFilterData[key].length;  
+    if(type==="Filter" && $scope.filterQuery[key] && $scope.allFilterData[key])
+      return $scope.filterQuery[key].length === $scope.allFilterData[key].length;
   };
 
   $scope.toggleAll = function(key,type) {
     if(type==="tempFilter"){
-        if ($scope.tempData.filters[key].length === $scope.filterSubData[key].length) 
+        if ($scope.tempData.filters[key].length === $scope.allFilterData[key].length) 
         $scope.tempData.filters[key] = [];
       else
-        $scope.tempData.filters[key] = $scope.filterSubData[key]
+        $scope.tempData.filters[key] = $scope.allFilterData[key]
     }
     if(type==="Filter"){
-        if ($scope.filterQuery[key].length === $scope.filterSubData[key].length) 
+        if ($scope.filterQuery[key].length === $scope.allFilterData[key].length) 
         $scope.filterQuery[key] = [];
       else
-        $scope.filterQuery[key] = $scope.filterSubData[key]
+        $scope.filterQuery[key] = $scope.allFilterData[key]
     }
   };
 
@@ -618,6 +599,7 @@ angular.module('sasaWebApp')
             }
         }
     };
+<<<<<<< HEAD
   
 
   /*
@@ -653,6 +635,36 @@ angular.module('sasaWebApp')
          }
        }
   };
+
+
+
+ /**
+ * this function checks whether any item is in local filter query or global filter query and 
+ * also maintain heirarchy of global filters in local filters. 
+ * @param  {[type]} key   [description]
+ * @return {[type]}       [description]
+ */
+
+    $scope.isInFilters=function(key){
+      if(key==="product"){
+        return true
+      }
+      $scope.globalfilterhierarchy = ["segment", "portfolio", "service", "service_component", "support_skill"]
+      if($rootScope.globalQuery.hasOwnProperty(key) || $scope.filterQuery.hasOwnProperty(key)){
+        return true
+      }
+      else{
+        if($scope.globalfilterhierarchy.indexOf(key)>-1){
+          var index = $scope.globalfilterhierarchy.indexOf(key)
+          for (var key in $rootScope.globalQuery){
+            if(index<$scope.globalfilterhierarchy.indexOf(key))
+              return true
+          }
+        }
+      }
+      return false
+
+    }
 
 });
 
