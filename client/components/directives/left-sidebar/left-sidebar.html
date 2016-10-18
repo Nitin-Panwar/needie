@@ -39,7 +39,7 @@
 				<hr style="margin-top: 10px;margin-bottom: 1px">
 				</div>
 				<ul class="sidebar-menu" style="max-height:450px ;overflow:auto;">
-					<li ng-repeat="(key, value) in GlobalFilters" class="text-capitalize active dropdown" ng-click="$event.stopPropagation();" role="presentation">
+					<li ng-repeat="(key, value) in GlobalFilters | orderBy:filterKeys " class="text-capitalize active dropdown" ng-click="$event.stopPropagation();" role="presentation">
 						<span class="white-text text-capitalize"  data-toggle="popover" title="Selected Filters" data-content="globalQuery[key]"ng-click="isCollapsed = !isCollapsed" style="cursor: pointer;display:block" role="presentation" tabindex="-1">{{key}}
 							<span class="glyphicon glyphicon-chevron-down white-text" ng-show="!isCollapsed"></span>
 							<span class="glyphicon glyphicon-chevron-up white-text" ng-show="isCollapsed"></span>

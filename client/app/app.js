@@ -35,7 +35,7 @@ angular.module('sasaWebApp', [
             * based on themes and palletes; for each ng-app.
             * Let's disable generation and <style> DOM injections. 
             */
-     $provide.constant('$MD_THEME_CSS', ''); 
+    $provide.constant('$MD_THEME_CSS', ''); 
     intcAnalyticsProvider.setDebugging(true);                   //Optional line - for debugging
     intcAnalyticsProvider.setLocalhostMode(true);               //Optional line - for local dev testing
     intcAnalyticsProvider.setAppId(13806);
@@ -75,7 +75,7 @@ angular.module('sasaWebApp', [
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
         $rootScope.userDetails = response.data.user;
         $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase(); 
-     //$rootScope.user = 'gar\\pjenax'
+       //$rootScope.user = 'gar\\pjenax'
         //find user homepage    
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
              // console.log("user info",data)

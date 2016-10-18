@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .service('parentService', function ($location,$rootScope, metricsFactory, dashBoardsFactory, messageCenterService, usersFactory) {    
+  .service('parentService', function ($location,$rootScope, $http,metricsFactory, dashBoardsFactory, messageCenterService, usersFactory) {    
     //This function adds new items to placeholder
 	this.placeholderAdd = function (type, item){
 		//Creating dummy dashboard id before adding any metric to it
@@ -11,11 +11,12 @@ angular.module('sasaWebApp')
 			$rootScope.placeholder.dashboard._id=1;
 		}	
 		if(type === 'metric'){    			
-			var id = item;    			
+			 var id = item; 			
 			$rootScope.myPromise = metricsFactory.get({metricId: id, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (data) {				
         data.size = {x: 2};
         data.type='metric';                 
         $rootScope.placeholder[type].push(data);
+
 				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
 			}, function (err) {
 				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
