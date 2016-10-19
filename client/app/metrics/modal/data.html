@@ -36,8 +36,8 @@
       </div >
             
       <div ng-show="isDisplayUpDownBtn">
-               <button ng-click="moveUp()" style="height: 40px; width: 55px;display: block;margin-top: 115px;margin-left: 10px;">Up</button>
-            <button ng-click="moveDown()" style="height: 40px; width: 55px;margin: 10px 0 0 10px;">Down</button>
+            <button ng-click="moveUp()" ng-disabled="selectedColumns.selected.length==0" style="height: 40px; width: 55px;display: block;margin-top: 115px;margin-left: 10px;">Up</button>
+            <button ng-click="moveDown()" ng-disabled="selectedColumns.selected.length==0" style="height: 40px; width: 55px;margin: 10px 0 0 10px;">Down</button>
       </div>
     </div>
     <div ng-if="gridOptions.data.length > 0" style="margin-bottom: 10px;">
