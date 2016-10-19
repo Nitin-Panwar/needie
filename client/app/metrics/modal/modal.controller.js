@@ -613,6 +613,7 @@ angular.module('sasaWebApp')
     if(listOfmeasures.length === 1){
           $scope.isDisplayMeasureUnitMessage=false;
           $scope.isDisableApplyClick=false;
+          $scope.myclass="applyBtnEnableMode";
           return;
     }
        for(var i=0;i<listOfmeasures.length;i++){
