@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('NavbarCtrl', function ($scope, $location, $rootScope, usersFactory,dashBoardsFactory,messageCenterService,$mdDialog) {
+  .controller('NavbarCtrl', function ($scope, $location, $rootScope,$timeout,usersFactory,dashBoardsFactory,messageCenterService,$mdDialog) {
     $scope.menu = [       
     {
       'title': 'Create Dashboard',
@@ -9,7 +9,12 @@ angular.module('sasaWebApp')
     }];
 
     $rootScope.closeLeftSidebar= false;
-
+    $scope.isAdvSeachSectionShow=false;
+    $scope.isOpenDashBoard=false;
+    $scope.opened = false;
+    $scope.dashboardName=undefined;
+    $scope.noResponses=false;
+    var secretEmptyKey = '[$empty$]'
     /**
      * [redirect description]
      * @param  {[type]} dashboard [description]
@@ -56,7 +61,7 @@ angular.module('sasaWebApp')
     $scope.searchableItems = function () {
       $scope.searchLoader=dashBoardsFactory.index().$promise.then(function(data){
         $scope.searchedDashboard = data;
-      }, function (){
+        }, function (){
           messageCenterService.add('danger', 'Dashboard search failed', { timeout: 5000 });
       }); 
     };      
@@ -66,4 +71,65 @@ angular.module('sasaWebApp')
     $scope.isActive = function(route) {
       return route === $location.path();
     };
+    
+     /*
+       User story Name:Provide advanced dashboard search capability -US15206
+       Method name getAllIdsidValues is used to get all the idsid values 
+       Request Parameter:NA
+       Response:Array of idsid values which will populates for idsid  typeahead input component
+     */
+    $scope.getAllIdsidValues=function(){
+      if($scope.isAdvSeachSectionShow === false){
+               $scope.IdsidLoader=usersFactory.getIdsid().$promise.then(function(data){
+                    $scope.idsidValues = data;
+                  }, function (){
+                      messageCenterService.add('danger', 'Idsid search failed', { timeout: 5000 });
+                  }); 
+         }
+        if($scope.isAdvSeachSectionShow === true)
+           $scope.isAdvSeachSectionShow=false;
+         else{
+           $scope.isAdvSeachSectionShow=true;
+         }
+      
+    };
+
+     /*
+       User story Name:Provide advanced dashboard search capability-US15206
+       Method name getDashboardNameByIDSID is used to get all dasboard name for the selected idsid value.
+       Request Parameter : idsid
+       Response:Array of dashboard values which will populates for dashboard typeahead input component
+     */
+    $scope.getDashboardNameByIDSID=function(idsid){
+      var idsid=idsid.idsid;
+      $scope.dashboardNameLoader=dashBoardsFactory.getDashboardNamebyIdsid({idsid: idsid}).$promise.then(function(data){
+                    $scope.dashboardNames = data;
+                    if($scope.dashboardNames.length === 0){
+                      $scope.noResponses=true;
+                    }
+                    else{
+                      $scope.noResponses=false;
+                    }
+                    $scope.isOpenDashBoard=true;
+                    $scope.opened = true;
+                    $scope.dashboardName="";
+                   
+                  }, function (){
+                      messageCenterService.add('danger', 'Dashboard search failed', { timeout: 5000 });
+                  }); 
+    };
+    
+    /*
+       User story Name:Provide advanced dashboard search capability -US15206
+       Method name redirectToDashboard is used to redirect to dashboard screen for the selected ddashboard Name.
+       Request Parameter : dashboard id 
+       Response:
+     */
+    $scope.redirectToDashboard=function(dashboard){
+      var url = '/?dashboardId='+dashboard._id['$oid'];         
+      $location.url(url)
+      $scope.isAdvSeachSectionShow=false;
+    };
+  
+
   });
