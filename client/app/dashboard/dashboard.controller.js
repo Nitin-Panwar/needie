@@ -346,10 +346,13 @@ angular.module('sasaWebApp')
 
     //This function to check wheather a key,value pair exists in
     //passed object or not
-    $scope.isExist=function(key,value,list){
+    
+$scope.isExist=function(key,value,list){
       for (var i = 0; i < list.length; i++) {
         if(list[i][key]==value){
-          return list[i]['value'].toFixed(0);
+          if(list[i]['value'] != '--')
+            return list[i]['value'].toFixed(0);
+         
         }
       };
       return '--';
@@ -434,6 +437,7 @@ angular.module('sasaWebApp')
       //To transform data 
       $scope.measureList =[]
       var metrics= $rootScope.placeholder.metric
+      //console.log(metrics);
       for (var i = 0; i<metrics.length; i++) {
         if(metrics[i].name!==undefined){
           for (var j = 0; j < metrics[i].measures.length; j++) {

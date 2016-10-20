@@ -8,7 +8,6 @@ angular.module('sasaWebApp')
       replace: true,          
       scope: {metricData: '=',metricIndex: '='}, 
       link: function (scope, element, attrs) {
-        
         //Setting options for the bar graph
         scope.options5 = {}; 
         scope.advanceVisualization = false
@@ -38,6 +37,7 @@ angular.module('sasaWebApp')
             scope.options5.series = "category"
           }
           scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+          
         }
 
         scope.options5.chartType = ["bar"]
@@ -62,6 +62,15 @@ angular.module('sasaWebApp')
             scope.options5.xAxis = ["quarter","category"]
             scope.metricData['distributions'][0]['axis']=scope.options5.xAxis
           }
+        }
+
+        
+        /**
+         * This function create copy of metric
+         * @param  {[type]} metricdata   [Data of Metric to create copy]
+        */
+        scope.createDuplicate = function(metricData){
+          parentService.placeholderAdd('duplicatemetric',metricData);
         }
 
         // this function launches the dialogs
@@ -175,7 +184,7 @@ angular.module('sasaWebApp')
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
-             
+             console.log(response)
              $rootScope.placeholder['metric'][scope.metricIndex]=response;
               if(response['distributions'] && response['distributions'][0] && response['distributions'][0]['distribution_data']['data'].length>0 && response['distributions'][0]['advance_viz']==true){
                 

@@ -23,12 +23,13 @@
       </md-input-container>
     </div>
     <div layout="row">
+
       <md-input-container class="md-block" flex="45" style="margin-left:7px; margin-right:10px">
         <label>Y-Axis</label>
-        <md-select ng-model="avData.y_data"   multiple >
+        <md-select ng-model="avData.y_data"  ng-change="checkMeasureUnit(avData.y_data)" multiple >
           <md-optgroup>
-            <md-option ng-value="measure.label" ng-repeat="measure in data.measures" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'
-             && measure.type !=='percentage' && measure.type!=='mean'">{{::measure.label}}</md-option>
+            <md-option ng-value="measure.label" ng-repeat="measure in data.measures" ng-if="measure.plottable === true"
+             >{{::measure.label}} ( {{measure.unit}} )</md-option>
           </md-optgroup>
         </md-select>  
       </md-input-container>
@@ -56,9 +57,22 @@
         </md-select>
       </md-input-container>  
     </div> 
-     
+    <!--Following div add bacause of issue (option on what basis to sort in case of multiple y-axis) -->
+     <!-- <div layout="row">
+      <md-input-container class="md-block" flex= "45" style="margin-left:7px" ng-show="avData.sortByyaxis" >
+        <label>Y-Axis Sort options</label>
+        <md-select ng-model="avData.yaxisSortOptions">
+          <md-option ng-value="yaxisOptions" ng-repeat="yaxisOptions in avData.y_data">{{::yaxisOptions}}</md-option>
+        </md-select>
+      </md-input-container>
+    </div> -->
+
      <div layout-gt-sm="row" ng-show="isDisplayYaxisMessage">
           <label style="color:red;">**Y-Axis value is mandatory,Please select Y-Axis value to proceed</label> 
+    </div>  
+
+    <div layout-gt-sm="row" ng-show="isDisplayMeasureUnitMessage">
+          <label style="color:red;">**Selected Y-Axis measures have different unit</label> 
     </div>     
 
   

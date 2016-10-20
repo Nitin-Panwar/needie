@@ -67,6 +67,17 @@ angular.module('sasaWebApp')
           idsid: {},
           url: {}
         }
+      },
+      getDashboardNamebyIdsid:{
+        method:'GET',
+        headers: config,
+        url:url+'/dashBoards/idsid',
+        responseType: 'json',
+        isArray: true,
+        param: {
+          idsid: {}
+          
+        }
       }
     });
   });
