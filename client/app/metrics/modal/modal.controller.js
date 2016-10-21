@@ -387,8 +387,8 @@ angular.module('sasaWebApp')
         if($scope.avData.x_options.hasOwnProperty($scope.avData.x_data) && $scope.avData.x_options[$scope.avData.x_data].length >0 ){
           $scope.viz_details.x_options[$scope.avData.x_data] = $scope.avData.x_options[$scope.avData.x_data];
         }
-        else
-          $scope.viz_details.x_options[$scope.avData.x_data]=$scope.allFilterData[$scope.avData.x_data].filter(function(n){return n;});
+        // else
+          // $scope.viz_details.x_options[$scope.avData.x_data]=$scope.allFilterData[$scope.avData.x_data].filter(function(n){return n;});
         if($scope.avData.y_data.length ===1 && $scope.avData.group_by !== 'None' && $scope.avData.group_by !== ''){
           $scope.viz_details.group_by.push($scope.avData.group_by);
         }

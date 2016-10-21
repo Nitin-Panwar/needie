@@ -7,7 +7,7 @@ angular.module('sasaWebApp')
 */
   .constant('webServiceURL', {
   	// web service server url
-	'url': 'http://vmssmmconsapp1.amr.corp.intel.com:5000',	
+	'url': 'http://ikhurana-mobl.gar.corp.intel.com:5050',	
 	'config': { 'Content-Type': 'application/json; } charset=UTF-8' },
 	'loginUrl': 'http://vmsenggds.gar.corp.intel.com/getUserDetails'
 });
