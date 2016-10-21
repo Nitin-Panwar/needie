@@ -433,7 +433,7 @@ angular.module('sasaWebApp')
             {
               $scope.allFilterData[key] = $scope.metricfilterData[key]
               $scope.allfilterkeys = Object.keys($scope.allFilterData)
-              // console.log($scope.allfilterkeys);
+              
               
             } 
             for(var key in $scope.allFilterData)
