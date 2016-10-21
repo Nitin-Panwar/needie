@@ -14,7 +14,8 @@ angular.module('sasaWebApp')
     $scope.opened = false;
     $scope.dashboardName=undefined;
     $scope.noResponses=false;
-    var secretEmptyKey = '[$empty$]'
+    $scope.IDSIDName="";
+    $scope.dashboardName="";
     /**
      * [redirect description]
      * @param  {[type]} dashboard [description]
@@ -28,18 +29,22 @@ angular.module('sasaWebApp')
 
 
     $scope.sendToHomepage = function(){
+      $scope.isAdvSeachSectionShow=false;
       window.location.reload()
     }
     $scope.help=function(){
-     
+     $scope.isAdvSeachSectionShow=false;
        $mdDialog.cancel();
     };
-    
+    $scope.contactUs=function(){
+     $scope.isAdvSeachSectionShow=false;
+    };
     /**
      * [clearPlaceholder description]
      * @return {[type]} [description]
      */
     $scope.createNew = function(){
+      $scope.isAdvSeachSectionShow=false;
       $rootScope.createNew = true;
       $rootScope.placeholder={metric: [], textBoxes: [], dashboard: {}, edited: false}; 
       $rootScope.meta = {'details': [{'timeframe': 'historical','dimension': 'work_week','window_size': 10,"sequence":1},{'timeframe': 'historical','dimension': 'month','window_size': 0,"sequence":2},{'timeframe': 'historical','dimension': 'quarter','window_size': 2,"sequence":3},{'timeframe': 'historical','dimension': 'year','window_size': 0,"sequence":4}],'view_type': 'metriccard'}
@@ -71,7 +76,11 @@ angular.module('sasaWebApp')
     $scope.isActive = function(route) {
       return route === $location.path();
     };
-    
+    $scope.$watch('IDSIDName', function() {
+        if($scope.IDSIDName.length === 0){
+          $scope.isOpenDashBoard=false;
+        }
+    });
      /*
        User story Name:Provide advanced dashboard search capability -US15206
        Method name getAllIdsidValues is used to get all the idsid values 
@@ -79,6 +88,9 @@ angular.module('sasaWebApp')
        Response:Array of idsid values which will populates for idsid  typeahead input component
      */
     $scope.getAllIdsidValues=function(){
+      $scope.IDSIDName="";
+      $scope.dashboardName="";
+      $scope.isOpenDashBoard=false;
       if($scope.isAdvSeachSectionShow === false){
                $scope.IdsidLoader=usersFactory.getIdsid().$promise.then(function(data){
                     $scope.idsidValues = data;
@@ -101,6 +113,7 @@ angular.module('sasaWebApp')
        Response:Array of dashboard values which will populates for dashboard typeahead input component
      */
     $scope.getDashboardNameByIDSID=function(idsid){
+      $scope.dashboardName="";
       var idsid=idsid.idsid;
       $scope.dashboardNameLoader=dashBoardsFactory.getDashboardNamebyIdsid({idsid: idsid}).$promise.then(function(data){
                     $scope.dashboardNames = data;
@@ -130,6 +143,8 @@ angular.module('sasaWebApp')
       $location.url(url)
       $scope.isAdvSeachSectionShow=false;
     };
-  
+    $scope.hideAdvSearchContainer = function(){
+        $scope.isAdvSeachSectionShow=false;
+    };
 
   });

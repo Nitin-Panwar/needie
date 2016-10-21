@@ -443,10 +443,10 @@ $scope.isExist=function(key,value,list){
           for (var j = 0; j < metrics[i].measures.length; j++) {
           if(metrics[i].measures[j].scorecard_data){
             if(j==0){
-              var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
+              var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal,'unit':metrics[i].measures[j].unit}
             }
             else{
-              var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
+              var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal,'unit':metrics[i].measures[j].unit}
             }
             $scope.measureList.push(obj);
           }

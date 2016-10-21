@@ -28,8 +28,14 @@
         <label>Y-Axis</label>
         <md-select ng-model="avData.y_data"  ng-change="checkMeasureUnit(avData.y_data)" multiple >
           <md-optgroup>
-            <md-option ng-value="measure.label" ng-repeat="measure in data.measures" ng-if="measure.plottable === true"
-             >{{::measure.label}} ( {{measure.unit}} )</md-option>
+            <md-option ng-value="measure.label" ng-repeat="measure in data.measures" ng-if="measure.plottable === true">
+              <span>{{measure.label}}</span>
+              <span ng-if='measure.unit === "%" || measure.unit === "hours" || measure.unit === "days/request" || measure.unit === "mins"'>(</span>
+              <span ng-if='measure.unit === "%" || measure.unit === "hours" || measure.unit === "days/request" || measure.unit === "mins"'>{{measure.unit}}</span>
+              <span ng-if='measure.unit === "%" || measure.unit === "hours" || measure.unit === "days/request" || measure.unit === "mins"'>)</span>
+              
+             </md-option>
+             <!-- <span ng-if='measure.unit === "%" || measure.unit === "hours" || measure.unit === "days/request" || measure.unit === "mins"'><b>{{measure.unit}}</b></span> -->
           </md-optgroup>
         </md-select>  
       </md-input-container>

@@ -608,7 +608,7 @@ angular.module('sasaWebApp')
     Parameter name:listof measures data
   */
   $scope.checkMeasureUnit=function(listOfmeasures){
-     var unit;
+     var unit="";
      $scope.isDisplayMeasureUnitMessage=false;
     if(listOfmeasures.length === 1){
           $scope.isDisplayMeasureUnitMessage=false;
@@ -618,8 +618,11 @@ angular.module('sasaWebApp')
     }
        for(var i=0;i<listOfmeasures.length;i++){
          for(var j=0;j<data.measures.length;j++){
-             unit =data.measures[0].unit;
+            // unit =data.measures[0].unit;
               if(listOfmeasures[i] === data.measures[j].label){
+                    if(unit.length === 0){
+                      unit =data.measures[j].unit;
+                    }
                if(unit === data.measures[j].unit){
                   $scope.isDisplayMeasureUnitMessage=false;
                   $scope.isDisableApplyClick=false;
