@@ -153,7 +153,11 @@ angular.module('sasaWebApp')
               var callAPI = false;
               for (var i = 0; i < scope.metricData.measures.length; i++) {
                 if(scope.metricData.measures[i]['scorecard_data']){
-                  if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                  if(scope.metricData.measures[i]['scorecard_data'].length !==0){
+                    callAPI = false;
+                    break;
+                  }
+                  else{
                     callAPI = true;
                     break;
                   }

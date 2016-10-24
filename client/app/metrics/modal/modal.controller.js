@@ -48,7 +48,7 @@ angular.module('sasaWebApp')
     advance_viz:true
   };
   $scope.tab= tab;
-
+  
 
   $scope.defaultViz = false;
   $scope.allfilterkeys=[];
@@ -96,6 +96,9 @@ angular.module('sasaWebApp')
    */
   $scope.setDefaultValues = function(tab){
     if(tab==='visualization'){
+       $scope.isDisplayMeasureUnitMessage=false;
+        $scope.isDisableApplyClick=false;
+        $scope.myclass="applyBtnEnableMode";
       if($scope.defaultViz === false){
         $scope.defaultViz =true
         $scope.avData = {
@@ -107,15 +110,29 @@ angular.module('sasaWebApp')
           sortByyaxis:false,
           descOrder:false
         };
-        for (var measure in data.measures){
-          if(data.measures[measure].type !== 'mean' && data.measures[measure].type !== 'percentile' && data.measures[measure].type !== 'breakup' && data.measures[measure].type !=='percentage'){
-            $scope.avData.y_data.push(data.measures[measure]['label'])
-          }
-        }
+     for (var i=0;i<data.measures.length;i++){
+              if(data.measures[i].distribution === true)
+              $scope.avData.y_data.push(data.measures[i].label);
+            }
+          
+        // for (var measure in data.measures){
+        //   if(data.measures[measure].type !== 'mean' && data.measures[measure].type !== 'percentile' && data.measures[measure].type !== 'breakup' && data.measures[measure].type !=='percentage'){
+        //     $scope.avData.y_data.push(data.measures[measure]['label'])
+        //   }
+        // }
       }
       else{
-        $scope.defaultViz = false
+        $scope.defaultViz = false;
+        $scope.avData = {
+          y_data: []
+        };
+         for (var i=0;i<data.measures.length;i++){
+              if(data.measures[i].distribution === true)
+              $scope.avData.y_data.push(data.measures[i].label);
+            }
+          
       }
+      
     }
     else{
       $scope.filterQuery={}
@@ -379,7 +396,7 @@ angular.module('sasaWebApp')
     
     $scope.viz_details.advance_viz = $scope.avData.advance_viz;
     
-    if($scope.defaultViz === true){
+    if($scope.defaultViz === true && $scope.avData.x_data === 'quarter'){
       $scope.viz_details.x_data = ["quarter","month","year","work_week"]
     }
     else{
@@ -409,7 +426,8 @@ angular.module('sasaWebApp')
         
       }
     } 
-    
+    $scope.isDisableApplyClick=false;
+    $scope.myclass="applyBtnEnableMode";
 
 
   };
@@ -608,6 +626,9 @@ angular.module('sasaWebApp')
     Parameter name:listof measures data
   */
   $scope.checkMeasureUnit=function(listOfmeasures){
+     if($scope.isDisplayYaxisMessage && listOfmeasures.length > 0){
+      $scope.isDisplayYaxisMessage=false;
+     }
      var unit="";
      $scope.isDisplayMeasureUnitMessage=false;
     if(listOfmeasures.length === 1){
@@ -669,6 +690,18 @@ angular.module('sasaWebApp')
       return false
 
     }
+    
+    $scope.swapFilterTab=function(){
+     $scope.tab='filter';
+     $scope.isDisableApplyClick=false;
+     $scope.myclass="applyBtnEnableMode";
+    };
+    $scope.swapMeasureTab=function(){
+     $scope.tab='measure';
+     $scope.isDisableApplyClick=false;
+     $scope.myclass="applyBtnEnableMode";
+    };
+
 
 });
 
