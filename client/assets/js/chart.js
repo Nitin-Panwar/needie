@@ -8,7 +8,7 @@
       categLabels=[],yMin=null, yMax=null,legendWidth="100%",legendLeft=false,showLegend=true,legendFilter=true,tooltipObj=null,detailtooltipObj=null,
       showTooltip=true,showDetailTooltip=[],timeAxis=false,timeFormat="%m/%d/%Y",xLabels=[],shape="circle",barGap=0.2,shapeLine=false,
       tooltipFields=[],tooltipSeries=[],orderList=[],autoRotateLabel=true,eventHandler=null,aggrStackLabels=false,axisLabels=true;
-    var chartMargins = {left:50, top:30, right:30, bottom:100}  
+    var chartMargins = {left:55, top:30, right:30, bottom:100}  
 
     function plotChart_()
     {

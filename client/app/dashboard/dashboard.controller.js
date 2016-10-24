@@ -350,9 +350,9 @@ angular.module('sasaWebApp')
 $scope.isExist=function(key,value,list){
       for (var i = 0; i < list.length; i++) {
         if(list[i][key]==value){
-          if(list[i]['value'] != '--' && list[i]['value'] != "None")
+          if(list[i]['value'] != '--' && list[i]['value'] != "None"){
             return list[i]['value'].toFixed(0);
-         
+          } 
         }
       };
       return '--';
