@@ -153,7 +153,11 @@ angular.module('sasaWebApp')
               var callAPI = false;
               for (var i = 0; i < scope.metricData.measures.length; i++) {
                 if(scope.metricData.measures[i]['scorecard_data']){
-                  if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                  if(scope.metricData.measures[i]['scorecard_data'].length !==0){
+                    callAPI = false;
+                    break;
+                  }
+                  else{
                     callAPI = true;
                     break;
                   }
@@ -184,7 +188,6 @@ angular.module('sasaWebApp')
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
-             console.log(response)
              $rootScope.placeholder['metric'][scope.metricIndex]=response;
               if(response['distributions'] && response['distributions'][0] && response['distributions'][0]['distribution_data']['data'].length>0 && response['distributions'][0]['advance_viz']==true){
                 

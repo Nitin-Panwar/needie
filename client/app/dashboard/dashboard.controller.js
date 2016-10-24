@@ -350,9 +350,9 @@ angular.module('sasaWebApp')
 $scope.isExist=function(key,value,list){
       for (var i = 0; i < list.length; i++) {
         if(list[i][key]==value){
-          if(list[i]['value'] != '--')
+          if(list[i]['value'] != '--' && list[i]['value'] != "None"){
             return list[i]['value'].toFixed(0);
-         
+          } 
         }
       };
       return '--';
@@ -440,10 +440,12 @@ $scope.isExist=function(key,value,list){
       //console.log(metrics);
       for (var i = 0; i<metrics.length; i++) {
         if(metrics[i].name!==undefined){
-          for (var j = 0; j < metrics[i].measures.length; j++) {
-          if(metrics[i].measures[j].scorecard_data){
-            if(j==0){
+          var k=true;
+          for (var j = 0; j < metrics[i].measures.length;j++) {
+          if(metrics[i].measures[j].scorecard_data && metrics[i].measures[j].active && metrics[i].measures[j].plottable){
+            if(k){
               var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal,'unit':metrics[i].measures[j].unit}
+              k=false
             }
             else{
               var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal,'unit':metrics[i].measures[j].unit}

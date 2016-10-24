@@ -14,12 +14,12 @@
                <span ng-if="tab==='data'" ng-include="'app/metrics/modal/data.html'"></span> 
             </md-content>
           </md-tab>
-          <md-tab label="Filter" md-active="tab==='filter'" ng-click="tab='filter'">
+          <md-tab label="Filter" md-active="tab==='filter'" ng-click="swapFilterTab()">
              <md-content class="md-padding">
               <span ng-if="tab==='filter'" ng-include="'app/metrics/modal/filter.html'"></span>
             </md-content>
           </md-tab>
-          <md-tab label="Measure" md-active="tab==='measure'" ng-click="tab='measure'">
+          <md-tab label="Measure" md-active="tab==='measure'" ng-click="swapMeasureTab()">
              <md-content class="md-padding">
               <span ng-if="tab==='measure'" ng-include="'app/metrics/modal/measures.html'"></span>
             </md-content>

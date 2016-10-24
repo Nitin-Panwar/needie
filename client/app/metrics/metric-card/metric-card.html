@@ -65,7 +65,7 @@
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
                          ng-class="{'warning-breached': (measure.goal.value !== null && measure_color_green[$index]),
                         'alert-breached': (measure.goal.value !== null && measure_color_red[$index])}"  ng-show="measure.active || measure.active == undefined" style="cursor:default" tooltip-class="Thresold" tooltip-placement="right" uib-tooltip-template="'app/metrics/metric-card/threshold.html'" tooltip-enable="measure.goal.value">
-                            <span><b>{{measure.value|number}}</b></span>
+                            <span><b>{{measure.value === null ? 0: measure.value|number}}</b></span>
                             <span ng-if='measure.unit === "%" || measure.unit === "hours" || measure.unit === "days/request" || measure.unit === "mins"'><b>{{measure.unit}}</b></span>
                             <br>
                             <span>{{measure.name}}</span>                      
