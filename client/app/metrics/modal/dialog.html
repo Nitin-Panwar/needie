@@ -14,12 +14,12 @@
                <span ng-if="tab==='data'" ng-include="'app/metrics/modal/data.html'"></span> 
             </md-content>
           </md-tab>
-          <md-tab label="Filter" md-active="tab==='filter'" ng-click="tab='filter'">
+          <md-tab label="Filter" md-active="tab==='filter'" ng-click="swapFilterTab()">
              <md-content class="md-padding">
               <span ng-if="tab==='filter'" ng-include="'app/metrics/modal/filter.html'"></span>
             </md-content>
           </md-tab>
-          <md-tab label="Measure" md-active="tab==='measure'" ng-click="tab='measure'">
+          <md-tab label="Measure" md-active="tab==='measure'" ng-click="swapMeasureTab()">
              <md-content class="md-padding">
               <span ng-if="tab==='measure'" ng-include="'app/metrics/modal/measures.html'"></span>
             </md-content>
@@ -44,8 +44,10 @@
 
     <md-dialog-actions layout="row" style="margin-bottom: 10px;margin-right: 20px">
       <md-button ng-show="tab==='visualization' || tab==='filter'" ng-click="setDefaultValues(tab)" class="md-raised" style="margin-right: 5px;">Reset</md-button>
-      <md-button ng-hide="tab==='metric' || tab==='data'" ng-click="save(tab)" class="md-raised" style="background-color:#0071C5;color:white;margin-right: 5px;">Apply</md-button>
+      <input type="button" ng-hide="tab==='metric' || tab==='data'" ng-click="save(tab)" value="Apply" ng-disabled="isDisableApplyClick" ng-class="myclass"/>
+      <!-- <md-button ng-hide="tab==='metric' || tab==='data'" ng-click="save(tab)" class="md-raised" style="background-color:#0071C5;color:white;margin-right: 5px;" ng-disabled="isDisableApplyClick">Apply</md-button> -->
       <md-button ng-click="cancel()" class="md-raised">Close</md-button>
+      
     </md-dialog-actions>
   </form>
 </md-dialog>

@@ -65,7 +65,7 @@
 						<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ><i class="fa fa-envelope-o"></i> Send Mail </button>
 						<button type="button" class="btn btn-default btn-md" ng-click="deleteConfirm($event)" ng-hide="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase()"><i class="fa fa-trash"></i> Delete </button>
 					</span>
-					<form class="form-inline pull-right">
+					<form class="form-inline pull-right" style="margin-left: 13px">
 						<select style="margin-top:10px;color:#0071C5;text-transform:capitalize;"  ng-model="meta.view_type" ng-options="view_type for view_type in view_types" class="form-control" ng-click="checkViewType()"></select>
 						<!-- <span class="caret"></span> -->
 				    </form>
