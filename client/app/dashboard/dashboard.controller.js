@@ -346,10 +346,13 @@ angular.module('sasaWebApp')
 
     //This function to check wheather a key,value pair exists in
     //passed object or not
-    $scope.isExist=function(key,value,list){
+    
+$scope.isExist=function(key,value,list){
       for (var i = 0; i < list.length; i++) {
         if(list[i][key]==value){
-          return list[i]['value'].toFixed(0);
+          if(list[i]['value'] != '--' && list[i]['value'] != "None"){
+            return list[i]['value'].toFixed(0);
+          } 
         }
       };
       return '--';
@@ -434,15 +437,18 @@ angular.module('sasaWebApp')
       //To transform data 
       $scope.measureList =[]
       var metrics= $rootScope.placeholder.metric
+      //console.log(metrics);
       for (var i = 0; i<metrics.length; i++) {
         if(metrics[i].name!==undefined){
-          for (var j = 0; j < metrics[i].measures.length; j++) {
-          if(metrics[i].measures[j].scorecard_data){
-            if(j==0){
-              var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
+          var k=true;
+          for (var j = 0; j < metrics[i].measures.length;j++) {
+          if(metrics[i].measures[j].scorecard_data && metrics[i].measures[j].active && metrics[i].measures[j].plottable){
+            if(k){
+              var obj={0:metrics[i].alias,1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal,'unit':metrics[i].measures[j].unit}
+              k=false
             }
             else{
-              var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal}
+              var obj={0:'',1:metrics[i].measures[j].label,2:metrics[i].measures[j].scorecard_data,'goal':metrics[i].measures[j].goal,'unit':metrics[i].measures[j].unit}
             }
             $scope.measureList.push(obj);
           }

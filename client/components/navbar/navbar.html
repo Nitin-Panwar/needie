@@ -1,37 +1,64 @@
-<div class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarCtrl">
-  <div class="container-fluid" ng-click="closelsb()">
-    <div class="navbar-header">
-      <img class="navbar-logo" src="assets/images/intel-logo-white-100.png" alt="">
-      <a href="/" class="navbar-brand" ng-click="sendToHomepage()">SMInsights</a>
-
-    </div>
-    <div class="navbar-collapse collapse" id="navbar-main">
-      <ul class="nav navbar-nav">
-        <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
-            <a ng-href="{{item.link}}" ng-click="createNew()">{{item.title}}</a>
-        </li>        
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <form id="searchform" class="navbar-form">
-            <div class="form-group" style="display:inline;">
-              <div class="input-group" id="searchDashboardScrollBar" ng-click="searchableItems()">
-                <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" ng-model="searched" placeholder="Dashboard Search" uib-typeahead="name as dashboard.name for dashboard in searchedDashboard | filter:{name:$viewValue}" typeahead-min-length=1 typeahead-loading="searchLoader" typeahead-on-select="redirect($item)" class="form-control"  style="border-radius: 30px;" aria-autocomplete="list" aria-expanded="false" autocomplete="off">
-              </div>
-            </div>
-          </form>
-        </li>
-        <li style="margin-top: 13px; color: White;">
-          Welcome {{userDetails['firstname']}} &nbsp;&nbsp;
-          <!-- <a href></a>           -->
-        </li>
-        <li ng-class="{active: isActive('/help')}" >
-            <a ng-href="/help" ng-click="help()">Help</a>
-        </li>
-        <li ng-class="{active: isActive('/contactUs')}" >
-            <a ng-href="/contactUs">Contact Us</a>
-        </li>
-      </ul>      
-    </div>
-  </div>
+<div class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarCtrl" >
+   <div class="container-fluid" ng-click="closelsb()">
+      <div class="navbar-header">
+         <img class="navbar-logo"  style="cursor:default" src="assets/images/intel-logo-white-100.png" >
+         <a href="/" class="navbar-brand" ng-click="sendToHomepage()">SMInsights</a>
+      </div>
+      <div class="navbar-collapse collapse" id="navbar-main" style="cursor:default">
+         <ul class="nav navbar-nav">
+            <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
+               <a ng-href="{{item.link}}" ng-click="createNew()">{{item.title}}</a>
+            </li>
+         </ul>
+         <ul class="nav navbar-nav navbar-right">
+            <li>
+               <form id="searchform" class="navbar-form">
+                  <div class="form-group" style="display:inline;">
+                     <div class="input-group" id="searchDashboardScrollBar" ng-click="searchableItems()" style="cursor:default">
+                        <input class="form-control searchInput ng-pristine ng-valid ng-touched" type="text" ng-model="searched" placeholder="Dashboard Search"  uib-typeahead="name as dashboard.name for dashboard in searchedDashboard | filter:{name:$viewValue}" typeahead-min-length=1 typeahead-loading="searchLoader" typeahead-on-select="redirect($item)" class="form-control"  aria-autocomplete="list" aria-expanded="false" autocomplete="off" style="border-radius: 30px 0 0 30px;">
+                        <!--advance dashboard search design start here-->
+                        <div class="input-group-btn">
+                           <button style="margin: 0; padding-right: 17px; border-radius: 0 30px 30px 0;" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false" uib-tooltip="Advance Dashboard Search!" tooltip-placement="right" ng-click="getAllIdsidValues()" hide-advanced-search-div="hideAdvSearchContainer()">
+                           <span class="glyphicon glyphicon-chevron-down" ng-if="!isAdvSeachSectionShow" style="top:4px;"></span>
+                           <span class="glyphicon glyphicon-remove" ng-if="isAdvSeachSectionShow" style="top:4px;"></span></button>
+                        </div>
+                        <div ng-show="isAdvSeachSectionShow" hide-advanced-search-div="hideAdvSearchContainer()" style="position: absolute; top: 40px;background-color: #fff; padding: 20px 10px; width: 400px; right: 20px; border: 1px solid #333; border-radius: 5px;">
+                              <p style="font-size: 10px; color: #ddd; margin-bottom: 25px;">Advanced Search</p>
+                              <form class="form-horizontal">
+                              <label style="font-size: 14px;">Owner</label>
+                              <div class="form-group">
+                                   <input class="form-control  ng-pristine ng-valid ng-touched" type="text" ng-model="IDSIDName" placeholder="IDSID"  uib-typeahead="user.idsid for user in idsidValues | filter:$viewValue"  typeahead-min-length=2 typeahead-loading="searchLoader" typeahead-on-select="getDashboardNameByIDSID($item)" class="form-control"  aria-autocomplete="list" aria-expanded="false" autocomplete="off" style="width: 220px; margin-left: 89px;">
+                              </div>
+                               <br>    
+                              <div style="margin-top: 10px;" ng-show="isOpenDashBoard">
+                              <label style="font-size: 14px;">Dashboard Name</label>
+                              <div class="form-group">
+                               <input type="text"   
+                                    class="form-control searchInput ng-pristine ng-valid ng-touched" 
+                                    ng-model="dashboardName"  placeholder="Dashboard Name Search" typeahead-no-results="noResponses" typeahead="dashboard.name for dashboard in dashboardNames" typeahead-on-select="redirectToDashboard($item)"  class="form-control"   style="width: 220px; margin-left: 20px;" typeahead-like-select>
+                                    <div ng-show="noResponses" style="margin-left: 77px;color: red;">
+                                      <i class="glyphicon glyphicon-remove"></i> No Dashboard Found
+                                    </div>
+                               </div>
+                               </div> 
+                               </form>
+                        </div>
+                        <!--advance dashboard search design end here-->
+                     </div>
+                  </div>
+               </form>
+            </li>
+            <li style="margin-top: 13px; color: White;">
+               Welcome {{userDetails['firstname']}} &nbsp;&nbsp;
+               <!-- <a href></a>           -->
+            </li>
+            <li ng-class="{active: isActive('/help')}" >
+               <a ng-href="/help" ng-click="help()">Help</a>
+            </li>
+            <li ng-class="{active: isActive('/contactUs')}" >
+               <a ng-href="/contactUs" ng-click="contactUs()">Contact Us</a>
+            </li>
+         </ul>
+      </div>
+   </div>
 </div>

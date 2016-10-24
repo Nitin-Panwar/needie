@@ -35,9 +35,12 @@
 					<th ng-repeat="header in scorecard_header track by $index">{{header}}</th>
 				</tr>
 			</thead>
-			<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)">
+			<tr ng-repeat="measure in measureList track by $index" ng-init="rowspan = rowspanCalculator($index)" >
 			   	<td class="word-wrap:break-word" rowspan="{{rowspan}}" ng-if="measure[0] != ''">{{measure['0']}}</td>
 			    <td>{{measure['1']}}<br>
+			      <span ng-if="measure['unit'] ===  '%' || measure['unit'] ===  'hours' || measure['unit'] ===  'days/request' || measure['unit'] ===  'mins'">(</span>
+			      <span ng-if="measure['unit'] ===  '%' || measure['unit'] ===  'hours' || measure['unit'] ===  'days/request' || measure['unit'] ===  'mins'">{{measure['unit']}}</span>
+			      <span ng-if="measure['unit'] ===  '%' || measure['unit'] ===  'hours' || measure['unit'] ===  'days/request' || measure['unit'] ===  'mins'">)</span>
 					<span ng-if="measure.goal.value" class="help-block">
 					(Target {{measure.goal.comparision}} {{measure.goal.value}}/{{measure.goal.scale}})</span>
 				</td>

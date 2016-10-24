@@ -32,6 +32,16 @@ angular.module('sasaWebApp')
           idsid: {},
           dashboardId: {}
         }
+      },
+      getIdsid: {
+        method: 'GET',
+        headers: config,
+        isArray: true,
+        url: url + '/users/idsids',
+        // responseType: 'json',
+        param: {
+          
+        }
       }
   });
 });

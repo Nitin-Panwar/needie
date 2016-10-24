@@ -37,6 +37,7 @@ angular.module('sasaWebApp')
             scope.options5.series = "category"
           }
           scope.options5.yAxis = [scope.metricData['distributions'][0]['distribution_data']['y_label']]
+          
         }
 
         scope.options5.chartType = ["bar"]
@@ -63,17 +64,13 @@ angular.module('sasaWebApp')
           }
         }
 
+        
+        /**
+         * This function create copy of metric
+         * @param  {[type]} metricdata   [Data of Metric to create copy]
+        */
         scope.createDuplicate = function(metricData){
-
-          scope.data = angular.copy(metricData);
-          delete scope.data.size
-          delete scope.data.position
-          delete scope.data.type
-          parentService.placeholderAdd('duplicatemetric',scope.data);
-          // scope.testData.size = {x: 2};
-          // scope.testData.type='metric';
-          // $rootScope.placeholder['metric'].push(scope.testData);
-
+          parentService.placeholderAdd('duplicatemetric',metricData);
         }
 
         // this function launches the dialogs
@@ -156,7 +153,11 @@ angular.module('sasaWebApp')
               var callAPI = false;
               for (var i = 0; i < scope.metricData.measures.length; i++) {
                 if(scope.metricData.measures[i]['scorecard_data']){
-                  if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                  if(scope.metricData.measures[i]['scorecard_data'].length !==0){
+                    callAPI = false;
+                    break;
+                  }
+                  else{
                     callAPI = true;
                     break;
                   }
@@ -187,7 +188,6 @@ angular.module('sasaWebApp')
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
-             
              $rootScope.placeholder['metric'][scope.metricIndex]=response;
               if(response['distributions'] && response['distributions'][0] && response['distributions'][0]['distribution_data']['data'].length>0 && response['distributions'][0]['advance_viz']==true){
                 
