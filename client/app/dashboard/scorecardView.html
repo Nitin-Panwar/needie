@@ -44,7 +44,7 @@
 					<span ng-if="measure.goal.value" class="help-block">
 					(Target {{measure.goal.comparision}} {{measure.goal.value}}/{{measure.goal.scale}})</span>
 				</td>
-			   	<td ng-repeat="(key, value) in measure['2'] track by $index" ng-class="{'red':targetMet, 'green': targetMiss}" ng-init="targetMet=evaluateTarget(measure,value,$index)" style="vertical-align: middle">{{value}}</td>
+			   	<td ng-repeat="(key, value) in measure['2'] track by $index" ng-class="{'red':targetMet}" ng-init="targetMet=evaluateTarget(measure,value,$index)" style="vertical-align: middle">{{value}}</td>
 			</tr>
 		</table>
 	</div>

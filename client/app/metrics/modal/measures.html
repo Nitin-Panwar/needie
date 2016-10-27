@@ -1,5 +1,8 @@
 <div>
 	<label style="color:red" ng-show="data['distributions'][0]['advance_viz']">**Goal can be set w.r.t. Work Week, Month and Quarter </label>
+	<!-- <div layout-gt-sm="row" ng-if="avData.y_data.length != 1">
+			          <label style="color:red;">Goal capibility is disabled since  more than  Y-Axis measures is selected in visualization screen</label> 
+			    </div>  -->
 	<ul class="list-group">	
 		<li class="list-group-item" ng-repeat="measure in data['measures'] track by $index" ng-init="measureInfo[$index]=measure;measureInfo[$index].active = measure.active;goal[$index]=measureInfo[$index].goal"  ng-class="{'disabled':measureInfo[$index].active==false}">
 			<h5>{{measure.name}}&nbsp;:&nbsp;&nbsp;{{measure.value|number}}{{measure.unit}}			
@@ -72,7 +75,8 @@
 							</tr>
 						</tbody>
 					</table>
-				</div>			
+				</div>
+							
 			</div>	
 		</li>
 	</ul>
