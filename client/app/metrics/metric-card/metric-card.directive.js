@@ -10,6 +10,7 @@ angular.module('sasaWebApp')
       link: function (scope, element, attrs) {
         //Setting options for the bar graph
         scope.options5 = {}; 
+        scope.refreshVisualization = 0;
         scope.APIcall = true;
         scope.advanceVisualization = false
         if(scope.metricData['distributions'] && scope.metricData['distributions'].length  && scope.metricData['distributions'][0]!==null){
@@ -169,19 +170,15 @@ angular.module('sasaWebApp')
               }
             }
           }
-
           //Refresh chart while changing the view from scorecard to metriccard 
            if(newValue !== oldValue){
-            scope.options5.showLegend = true;
-            scope.options5.legendFilter = true
-            scope.options5.showGridlines = false
+            scope.refreshVisualization = scope.refreshVisualization +1;
           }            
         });
 
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
-
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
