@@ -124,13 +124,7 @@ angular.module('sasaWebApp')
       else{
         $scope.defaultViz = false;
         $scope.avData = {
-          x_data: 'quarter',
-          y_data: [],
-          group_by: '',
-          x_options:{"quarter":[1,2,3,4]},
-          advance_viz:true,
-          sortByyaxis:false,
-          descOrder:false
+          y_data: []
         };
          for (var i=0;i<data.measures.length;i++){
               if(data.measures[i].distribution === true)
