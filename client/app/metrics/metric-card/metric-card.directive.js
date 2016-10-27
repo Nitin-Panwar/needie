@@ -163,17 +163,18 @@ angular.module('sasaWebApp')
               };
             }
             if($rootScope.placeholder.dashboard.name !== undefined){
-          if(newValue !== oldValue && $rootScope.placeholder.dashboard.name.length>0 && scope.APIcall){
-            scope.getMetric();
-            scope.APIcall =false;
-          }
-        }
+              if(newValue !== oldValue && $rootScope.placeholder.dashboard.name.length>0 && scope.APIcall){
+                scope.getMetric();
+                scope.APIcall =false;
+              }
+            }
           }
 
           //Refresh chart while changing the view from scorecard to metriccard 
-           if(newValue !== oldValue  && newValue === 'metriccard')    {
-            scope.metricData['distributions'][0]['temp'] = true;
-            delete scope.metricData['distributions'][0]['temp'];
+           if(newValue !== oldValue){
+            scope.options5.showLegend = true;
+            scope.options5.legendFilter = true
+            scope.options5.showGridlines = false
           }            
         });
 
