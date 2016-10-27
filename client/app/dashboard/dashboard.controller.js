@@ -36,7 +36,6 @@ angular.module('sasaWebApp')
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
         $rootScope.placeholder.dashboard = data; 
-
         if($rootScope.placeholder.dashboard.meta){
           $rootScope.meta =  $rootScope.placeholder.dashboard.meta
           if(!$rootScope.meta.details[3]){
