@@ -10,6 +10,8 @@ angular.module('sasaWebApp')
       link: function (scope, element, attrs) {
         //Setting options for the bar graph
         scope.options5 = {}; 
+        scope.refreshVisualization = 0;
+        scope.APIcall = true;
         scope.advanceVisualization = false
         if(scope.metricData['distributions'] && scope.metricData['distributions'].length  && scope.metricData['distributions'][0]!==null){
           if(scope.metricData['distributions'][0]['advance_viz']){
@@ -132,6 +134,7 @@ angular.module('sasaWebApp')
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
             scope.getMetric();
+            scope.APIcall = false;
           }          
         });
 
@@ -141,39 +144,41 @@ angular.module('sasaWebApp')
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
             scope.getMetric();
+            scope.APIcall = false;
           }          
         });
-
+        scope.APIcall = true;
         //Watch viewType to change data 
         scope.$watch(function () {
           return $rootScope.meta.view_type;
         }, function(newValue, oldValue, scope) {   
           if(scope.metricData['distributions']){
             if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
-              var callAPI = false;
               for (var i = 0; i < scope.metricData.measures.length; i++) {
                 if(scope.metricData.measures[i]['scorecard_data']){
-                  if(scope.metricData.measures[i]['scorecard_data'].length !==0){
-                    callAPI = false;
-                    break;
-                  }
-                  else{
-                    callAPI = true;
+                  if(scope.metricData.measures[i]['scorecard_data'].length ===0){
+                    scope.getMetric();
                     break;
                   }
                 }
               };
-              if(callAPI == true){
+            }
+            if($rootScope.placeholder.dashboard.name !== undefined){
+              if(newValue !== oldValue && $rootScope.placeholder.dashboard.name.length>0 && scope.APIcall){
                 scope.getMetric();
+                scope.APIcall =false;
               }
             }
-          }          
+          }
+          //Refresh chart while changing the view from scorecard to metriccard 
+           if(newValue !== oldValue){
+            scope.refreshVisualization = scope.refreshVisualization +1;
+          }            
         });
 
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
         scope.getMetric = function () { 
-
           if($rootScope.meta.view_type=='scorecard'){
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
