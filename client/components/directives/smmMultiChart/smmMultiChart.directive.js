@@ -9,6 +9,7 @@ angular.module('sasaWebApp')
       handle: '=',
       options:'=',
       measures:'=',
+      refresh: '=',
     },
     restrict: 'EA',
     replace: true,
@@ -111,7 +112,35 @@ angular.module('sasaWebApp')
           scope.stackBarChartObject.renderChart();
         }
       },true);
-
+      scope.$watch('refresh',function(){
+        //Creating array of goals
+        goals=[];
+        for (var i = 0; i < scope.measures.length; i++) {
+          if(scope.measures[i].goal && scope.measures[i].active){
+            if(scope.options.xAxis[0]===scope.measures[i].goal.scale){
+                goals[i]={ "y" : scope.measures[i].goal.value, "color" : "black"}
+            }
+          }
+        };
+        //Appending created div id 
+      scope.container =randomId
+        if(scope.data == null || scope.data === undefined || scope.data.length==0)
+          return;
+        if(scope.container == null || scope.container == undefined)
+          return;
+        if(!scope.stackBarChartObject)
+          drawChart()
+        else
+        {
+          scope.stackBarChartObject
+            .data(scope.options.yAxis.length==2?scope.data[0]:scope.data)
+            .xAxis(scope.options.xAxis)
+            .y2Data(scope.options.yAxis.length==2?scope.data[1]:null)
+            .hLines(goals)
+            .colorMapping(scope.options.colorMapping)();
+          scope.stackBarChartObject.renderChart();
+        }
+      },true);
       
 
       function drawChart()
