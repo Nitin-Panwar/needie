@@ -28,7 +28,7 @@ angular.module('sasaWebApp')
         data.type='metric'; 
         $rootScope.placeholder[type].push(data);
 
-				messageCenterService.add('success', 'Metric added to dashboard', {timeout: 5000});
+				messageCenterService.add('success',data.name +  ' metric is added to dashboard', {timeout: 5000});
 			}, function (err) {
 				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
 			})
@@ -36,11 +36,13 @@ angular.module('sasaWebApp')
 	};
 
 	//This function removes an item from placeholder
-	this.placeholderRemove = function (type, item) {    		
+	this.placeholderRemove = function (type, item) {    	
+   var itemName=angular.copy(item.name);	
 		if(type === 'metric'){
 			var index = $rootScope.placeholder.metric.indexOf(item); 
             $rootScope.placeholder.metric[index].name=undefined;
-			messageCenterService.add('success','Removed from dashboard',{timeout: 3000})
+           
+			messageCenterService.add('success', itemName +' metric is removed from dashboard',{timeout: 3000})
 		}
 	}
 
