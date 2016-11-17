@@ -105,8 +105,9 @@ angular.module('sasaWebApp')
         in measure section.
         Task id:TA17183 of of user story (US15436)
    */
+   
      var x_data_goalToSetMsg=data['distributions'][0]['x_data'][0];
-         if(x_data_goalToSetMsg === "quarter" || x_data_goalToSetMsg === "month" || x_data_goalToSetMsg === "work_week"){
+         if(x_data_goalToSetMsg === "quarter" || x_data_goalToSetMsg === "month" || x_data_goalToSetMsg === "work_week" || x_data_goalToSetMsg === "year"){
            $scope.isGoalToBeSet=true;
          }
          else{
