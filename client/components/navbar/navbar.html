@@ -36,11 +36,12 @@
                                <input type="text"   
                                     class="form-control searchInput ng-pristine ng-valid ng-touched" 
                                     ng-model="dashboardName"  placeholder="Dashboard Name Search" typeahead-no-results="noResponses" typeahead="dashboard.name for dashboard in dashboardNames" typeahead-on-select="redirectToDashboard($item)"  class="form-control"   style="width: 220px; margin-left: 20px;" typeahead-like-select>
-                                    <div ng-show="noResponses" style="margin-left: 77px;color: red;">
-                                      <i class="glyphicon glyphicon-remove"></i> No Dashboard Found
-                                    </div>
+                                    
                                </div>
                                </div> 
+                               <div ng-show="noResponses" style="margin-left: 132px;color: red;margin-top:10px">
+                                      <i class="glyphicon glyphicon-remove"></i> No Dashboard Found
+                                    </div>
                                </form>
                         </div>
                         <!--advance dashboard search design end here-->
