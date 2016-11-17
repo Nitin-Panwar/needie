@@ -16,7 +16,8 @@ angular.module('sasaWebApp')
       var mdata = angular.copy(item)
       delete mdata.position
       delete mdata.size
-      mdata.size = item.size
+      var size = angular.copy(item.size)
+      mdata.size = size
       $rootScope.placeholder['metric'].push(mdata);
     }
 
