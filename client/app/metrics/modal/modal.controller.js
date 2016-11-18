@@ -2,10 +2,11 @@
 
 angular.module('sasaWebApp')
   .controller('ModalCtrl', function ($scope,data,$rootScope,metricsFactory,filtersFactory,messageCenterService,$mdSelect,$mdDialog,tab) {
+
   $scope.showColumns = true;
   $scope.showApplyButton = false;
   $scope.validate = false;
-  $scope.data = data;        
+  $scope.data = data;
   $scope.dashBoard = {dashBoardName : ''};
   $scope.measureInfo = [];
   $scope.offset = 0;
@@ -35,6 +36,8 @@ angular.module('sasaWebApp')
   $scope.isDisplayMeasureUnitMessage=false;
   $scope.isDisableApplyClick=false;
   $scope.myclass="applyBtnEnableMode";
+  $scope.isGroupByOptionsApply=false;
+  $scope.isGoalToBeSet=false;
   /*
   Variable for advance visualization Dialog
    */  
@@ -62,13 +65,56 @@ angular.module('sasaWebApp')
     descOrder:false
 
   };
+  
+    /*
+      Description:function to reset the goal value of measure object 
+      Task Id: TA17182 of user story (US15436)
+      Task Id:TA17168  of user story (US15436)
+      Previous goal setting value should be reset when an user  chose  the Visualization tab after goal setting in  measure section
+      Disable goals whenever group by is enabled in visualization
+    */
+     function resetGoalSettingValue(){
+       for(var i=0;i<data.measures.length;i++){
+             if(data.measures[i].goal){
+               data.measures[i].goal=undefined;
+             }
+         }
+     }
 
+   /*
+   The below code is  check for wheather the gropu by is enable or not .
+   based on need to Disable goals whenever group by is enabled in visualization
+   Task Id:TA17168  of user story (US15436)
+   Disable goals whenever group by is enabled in visualization
 
-  // if(data['distributions'] && data['distributions'][0]){
-  //   for(var j=0; j < data['distributions'][0]['y_data'].length; j++){
-  //     $scope.avData.y_data.push(data['distributions'][0]['y_data'][j]['label'])
-  //   }
-  // }
+   */
+       if(data.distributions && data.distributions[0].group_by){
+       
+         if(data.distributions[0].group_by.length > 0){
+          $scope.gropuByOptions=data.distributions[0].group_by[0];
+          $scope.isGroupByOptionsApply=true;
+       }
+       else{
+        $scope.isGroupByOptionsApply=false;
+       }
+     }
+   
+   /*
+        Code to find out x_data of distributions object and decide to display a
+        meassage(**Goal can be set w.r.t. Work Week, Month and Quarter )
+        in measure section.
+        Task id:TA17183 of of user story (US15436)
+   */
+   
+     var x_data_goalToSetMsg=data['distributions'][0]['x_data'][0];
+         if(x_data_goalToSetMsg === "quarter" || x_data_goalToSetMsg === "month" || x_data_goalToSetMsg === "work_week" || x_data_goalToSetMsg === "year"){
+           $scope.isGoalToBeSet=true;
+         }
+         else{
+           $scope.isGoalToBeSet=false;
+         }
+     
+
   
   // populate the data y-axis select from data.measure 
   if(data['distributions'] && data['distributions'][0]){
@@ -91,10 +137,13 @@ angular.module('sasaWebApp')
         $scope.avData.descOrder = data['distributions'][0]['sortByyaxis'][0]['descOrder']
       }
   } 
+  var loadingYdata=$scope.avData.y_data[0];
   /*
-  To set default Values in vizualization and filter tab
+   To set default Values in vizualization and filter tab.Method will invoke
+   when an user click on Reset button in filter and visualization modal
    */
   $scope.setDefaultValues = function(tab){
+    $scope.isGroupByOptionsApply = false;
     if(tab==='visualization'){
        $scope.isDisplayMeasureUnitMessage=false;
         $scope.isDisableApplyClick=false;
@@ -115,11 +164,7 @@ angular.module('sasaWebApp')
               $scope.avData.y_data.push(data.measures[i].label);
             }
           
-        // for (var measure in data.measures){
-        //   if(data.measures[measure].type !== 'mean' && data.measures[measure].type !== 'percentile' && data.measures[measure].type !== 'breakup' && data.measures[measure].type !=='percentage'){
-        //     $scope.avData.y_data.push(data.measures[measure]['label'])
-        //   }
-        // }
+        
       }
       else{
         $scope.defaultViz = false;
@@ -154,7 +199,6 @@ angular.module('sasaWebApp')
 
   //This function populates all metric columns
   $scope.getMetricData = function(){
-
     //Retain the selected item columns after close the button in the modal
    if(!$scope.data.gridColumns){
       $scope.data.gridColumns = [];
@@ -216,7 +260,12 @@ angular.module('sasaWebApp')
    $scope.getAddRemoveCoulmns=function(){
         $scope.showColumns = true;
    };
-  //This function gets raw metric data for selected columns
+  /*
+  This function gets raw metric data for selected columns and 
+  invoke when user click on GET DATA and EXPORT CSV  button in data section.
+  offset value is all means Export CSV button click
+  offset value other tahn all means Get Data button click
+  */
   $scope.getRawData = function (offset) {
     
     $scope.offset = offset;
@@ -234,13 +283,28 @@ angular.module('sasaWebApp')
       if(offset === 'all'){
         temp =angular.copy(response);
         $scope.csvData.data = temp;
-        $scope.csvData.headers = Object.keys(response[0]);
+       /*
+       Following two line of codes for specifiy the columns order in export excel sheet by using csv-column-order property
+        Task Id:TA17145 of user story (US15436)
+        Desc:Defines the column order while exporting the excel sheet
+       */
+        $scope.csvData.headers =$scope.selectedColumns.items;
+        $scope.csvData.columnsOrder=$scope.selectedColumns.items;
+
         /*
          Following three  line of code related to visable the grid with first 100 records
          when an user click on export buuton and disable the previous button and enable the next buttoon .
-        //  */
+         */
         $scope.gridOptions.data=response.splice(0,100);
         $scope.offset =0;
+        /*
+         create column definitions while go  for  export excel data
+         Task Id:TA17146 of user story (US15436)
+         Desc:Grid columns order is getting change after click on export excel button in the data modal.Grid column order should be consistent.
+        */
+            for (var column in $scope.selectedColumns.items){
+              $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
+             }
         return;
       }
       $scope.gridOptions.data = response; 
@@ -257,6 +321,9 @@ angular.module('sasaWebApp')
 
   };
 
+   /*
+    Method is not in used 
+   */
   $scope.exportCSV = function () {
     return metricsFactory.getRawData({})
   };
@@ -269,7 +336,7 @@ angular.module('sasaWebApp')
     } 
   }
 
-    //This function selets items to add to data grid
+    //This function selects items to add to data grid
   $scope.dataGrid = function (item, boolean) {
     if(boolean){
         // select column to show in data grid
@@ -281,6 +348,8 @@ angular.module('sasaWebApp')
           $scope.availableColoumns.items.splice($scope.availableColoumns.items.indexOf($scope.availableColoumns.selected[i]), 1);            
         }
         $scope.availableColoumns.selected.length = 0;
+     //   $scope.selectedColumns.items.length=1;
+
   }
     else
     {
@@ -296,7 +365,7 @@ angular.module('sasaWebApp')
         $scope.selectedColumns.selected.length = 0;
     }
   };
-
+  $scope.firstIndex=0;
   //This function selects columns to show in data grid
   $scope.selection = function (item, boolean) {
     if(boolean){          
@@ -310,7 +379,8 @@ angular.module('sasaWebApp')
     }
     else
     {
-      // remove from selection
+      $scope.firstIndex=$scope.selectedColumns.items.indexOf(item);
+       // remove from selection
       if($scope.selectedColumns.selected.indexOf(item) === -1){
           $scope.selectedColumns.selected.push(item);
         }
@@ -387,7 +457,7 @@ angular.module('sasaWebApp')
   
 
   /**
-   * Function to set values of visualization when user click on apply
+   * Function to set values of visualization when user click on apply in case of visualization section
    */
 
   $scope.formatVizData = function() {
@@ -408,9 +478,12 @@ angular.module('sasaWebApp')
           // $scope.viz_details.x_options[$scope.avData.x_data]=$scope.allFilterData[$scope.avData.x_data].filter(function(n){return n;});
         if($scope.avData.y_data.length ===1 && $scope.avData.group_by !== 'None' && $scope.avData.group_by !== ''){
           $scope.viz_details.group_by.push($scope.avData.group_by);
+          
         }
     }
-    
+    if($scope.viz_details.group_by.length > 0){
+      $scope.isGroupByOptionsApply=true;
+    }
 // need to pass distribution property true or false based on selection of y_data in visualization screen
       for (var key in data.measures ){
         for(var i=0; i<$scope.avData.y_data.length; i++){
@@ -432,13 +505,18 @@ angular.module('sasaWebApp')
 
   };
 
+ /*
+   Method will invoke when user select filter options in metric card to load the default value for filter modal
+ */
   $scope.getAllFilters = function(){
     if($scope.allfilterkeys.length>0)
       return;
     $rootScope.myPromise = metricsFactory.getFilters({filterId: $scope.data.metric_filter_id}).$promise.then(function (data) {  
+         
         $scope.metricfilterData = data.toJSON();  
         if(Object.keys($rootScope.GlobalFilters).length===0){
-          $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {                                   
+          $rootScope.myPromise = filtersFactory.getFilterData().$promise.then(function (data) {   
+                                          
             $scope.FilterData = data.filters;   
             var filterKeys = Object.keys($scope.FilterData[0]);
             for (var i = 0; i < filterKeys.length; i++) {               
@@ -517,6 +595,9 @@ angular.module('sasaWebApp')
     $mdDialog.cancel();
   };
 
+/*
+   Method will invoke when user click on Apply button in the modal
+ */
   $scope.save = function(which){
     $rootScope.placeholder.edited = true;
     switch(which){
@@ -543,6 +624,16 @@ angular.module('sasaWebApp')
       case 'visualization':
         $scope.isDisplayYaxisMessage=false;
         $scope.formatVizData();
+        var updateYdata=$scope.avData.y_data[0]
+           if(loadingYdata !== updateYdata){
+              resetGoalSettingValue();
+             }
+             if($scope.isGroupByOptionsApply === true){
+              resetGoalSettingValue();
+             }
+             if($scope.avData.y_data.length > 1){
+              resetGoalSettingValue();
+             }
         $scope.viz_details['tab']=which;
         if($scope.avData.y_data.length === 0){
           $scope.isDisplayYaxisMessage=true;
@@ -555,8 +646,10 @@ angular.module('sasaWebApp')
         $mdDialog.hide();          
     }
   };
-
-
+ 
+ /*
+method will invoke inside getAllFilters method.
+*/
   $scope.navigationIcon=function(){
       for(var key in $rootScope.globalQuery){
           if($rootScope.globalQuery[key]!=undefined && key!='comment_type' )
@@ -564,6 +657,9 @@ angular.module('sasaWebApp')
       }
   }
 
+/*
+method will invoke inside getAllFilters method.
+*/
   $scope.updateGlobalFilters = function () {
       var data = $scope.FilterData;
       var dataHolder = [];
@@ -592,9 +688,11 @@ angular.module('sasaWebApp')
       }
     }
 
-// method used for select an item and enable move down functioanlity in data modaal
+   /*
+   method used for select an item and enable move down functioanlity in data modal
+   */
     $scope.moveDown=function(){
-      
+    $scope.firstIndex++;  
      for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
             var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
             if (idx < $scope.selectedColumns.items.length) {
@@ -605,9 +703,11 @@ angular.module('sasaWebApp')
         }
       
     };
-    // method used for select an item and enable move up functioanlity in data modal
+    /*
+     method used for select an item and enable move up functioanlity in data modal
+     */
      $scope.moveUp=function(){
-      
+       $scope.firstIndex--;  
      for(var i = 0; i < $scope.selectedColumns.selected.length; i++) {
             var idx = $scope.selectedColumns.items.indexOf($scope.selectedColumns.selected[i]);
             if (idx > 0) {

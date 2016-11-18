@@ -75,7 +75,8 @@ angular.module('sasaWebApp', [
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
         $rootScope.userDetails = response.data.user;
         $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase(); 
-        //find user homepage    
+        //find user homepage  
+        //$rootScope.user='gar\\pjenax';  
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
              // console.log("user info",data)
              // var defaultDashboardId="567c56df3e18090c546187c5"
