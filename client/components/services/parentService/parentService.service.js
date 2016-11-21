@@ -27,8 +27,8 @@ angular.module('sasaWebApp')
         data.size = {x: 2};
         data.type='metric'; 
         $rootScope.placeholder[type].push(data);
-        //Task id:TA17166
-        //desc:Flash message displayed should be specific once a user removes one of the metric card
+      
+        //Flash message displayed should be specific once a user removes one of the metric card
 				messageCenterService.add('success',data.name +  ' metric is added to dashboard', {timeout: 5000});
 			}, function (err) {
 				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
@@ -42,8 +42,8 @@ angular.module('sasaWebApp')
 		if(type === 'metric'){
 			var index = $rootScope.placeholder.metric.indexOf(item); 
             $rootScope.placeholder.metric[index].name=undefined;
-        //Task id:TA17166
-        //desc:Flash message displayed should be specific once a user removes one of the metric card       
+        
+        //Flash message displayed should be specific once a user removes one of the metric card       
     	messageCenterService.add('success', itemName +' metric is removed from dashboard',{timeout: 3000})
 		}
 	}
