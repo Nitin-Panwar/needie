@@ -174,32 +174,7 @@ angular.module('sasaWebApp')
           }            
         });
 
-        // scope.$watch(function () {
-        //   return $rootScope.meta.view_type;
-        // }, function(newValue, oldValue, scope) {   
-        //   if(scope.metricData['distributions']){
-        //     if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
-        //       for (var i = 0; i < scope.metricData.measures.length; i++) {
-        //         if(scope.metricData.measures[i]['scorecard_data']){
-        //           if(scope.metricData.measures[i]['scorecard_data'].length ===0){
-        //             scope.getMetric();
-        //             break;
-        //           }
-        //         }
-        //       };
-        //     }
-        //     if($rootScope.placeholder.dashboard.name !== undefined){
-        //       if(newValue !== oldValue && $rootScope.placeholder.dashboard.name.length>0 && scope.APIcall){
-        //         scope.getMetric();
-        //         scope.APIcall =false;
-        //       }
-        //     }
-        //   }
-        //   //Refresh chart while changing the view from scorecard to metriccard 
-        //    if(newValue !== oldValue){
-        //     scope.refreshVisualization = scope.refreshVisualization +1;
-        //   }            
-        // });
+       
 
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
@@ -259,13 +234,23 @@ angular.module('sasaWebApp')
           });
           return filtered;
         }
-
+        scope.isEnableMeasureMsg=false;
         //This function validates changes in measure thresholds
         scope.$watch('[options5,metricData["measures"]]',function(){
           scope.warningBreached = false;
           scope.alertBreached = false;    
           scope.measure_color_red=[]
           scope.measure_color_green=[]  
+          //code To display a message to the user if some measures are disable.
+          for(var i=0;i<scope.metricData['measures'].length;i++){
+                if(scope.metricData['measures'][i].active === false){
+                    scope.isEnableMeasureMsg=true;
+                    break;
+                }
+                else{
+                  scope.isEnableMeasureMsg=false;
+                }
+          }
           for(var key in scope.metricData['measures']){ 
             var measure=scope.metricData.measures[key];
             if(measure.goal && measure.active){

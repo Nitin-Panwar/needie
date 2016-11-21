@@ -68,10 +68,6 @@ angular.module('sasaWebApp')
   
     /*
       Description:function to reset the goal value of measure object 
-      Task Id: TA17182 of user story (US15436)
-      Task Id:TA17168  of user story (US15436)
-      Previous goal setting value should be reset when an user  chose  the Visualization tab after goal setting in  measure section
-      Disable goals whenever group by is enabled in visualization
     */
      function resetGoalSettingValue(){
        for(var i=0;i<data.measures.length;i++){
@@ -83,12 +79,8 @@ angular.module('sasaWebApp')
 
    /*
    The below code is  check for wheather the gropu by is enable or not .
-   based on need to Disable goals whenever group by is enabled in visualization
-   Task Id:TA17168  of user story (US15436)
-   Disable goals whenever group by is enabled in visualization
-
    */
-       if(data.distributions && data.distributions[0].group_by){
+       if(data.distributions && data.distributions[0] !== undefined && data.distributions[0].group_by !== undefined && data.distributions[0].group_by.length > 0 ){
        
          if(data.distributions[0].group_by.length > 0){
           $scope.gropuByOptions=data.distributions[0].group_by[0];
@@ -103,10 +95,10 @@ angular.module('sasaWebApp')
         Code to find out x_data of distributions object and decide to display a
         meassage(**Goal can be set w.r.t. Work Week, Month and Quarter )
         in measure section.
-        Task id:TA17183 of of user story (US15436)
+        
    */
-   
-     var x_data_goalToSetMsg=data['distributions'][0]['x_data'][0];
+     if(data['distributions'] && data['distributions'][0] !== undefined && data['distributions'][0]['x_data'] !== undefined && data['distributions'][0]['x_data'].length > 0 )
+          var x_data_goalToSetMsg=data['distributions'][0]['x_data'][0];
          if(x_data_goalToSetMsg === "quarter" || x_data_goalToSetMsg === "month" || x_data_goalToSetMsg === "work_week" || x_data_goalToSetMsg === "year"){
            $scope.isGoalToBeSet=true;
          }
@@ -285,8 +277,6 @@ angular.module('sasaWebApp')
         $scope.csvData.data = temp;
        /*
        Following two line of codes for specifiy the columns order in export excel sheet by using csv-column-order property
-        Task Id:TA17145 of user story (US15436)
-        Desc:Defines the column order while exporting the excel sheet
        */
         $scope.csvData.headers =$scope.selectedColumns.items;
         $scope.csvData.columnsOrder=$scope.selectedColumns.items;
@@ -298,10 +288,8 @@ angular.module('sasaWebApp')
         $scope.gridOptions.data=response.splice(0,100);
         $scope.offset =0;
         /*
-         create column definitions while go  for  export excel data
-         Task Id:TA17146 of user story (US15436)
-         Desc:Grid columns order is getting change after click on export excel button in the data modal.Grid column order should be consistent.
-        */
+         create grid column definitions while go  for  export excel data
+         */
             for (var column in $scope.selectedColumns.items){
               $scope.gridOptions.columnDefs.push({ name:$scope.selectedColumns.items[column], width:150, enablePinning:true })
              }
@@ -721,9 +709,8 @@ method will invoke inside getAllFilters method.
   
 
   /*
-    User stroy:Complex Distribution Calculation- US15213
-    Method Name:checkMeasureUnit used to Do not allow multiple measures with different units on Y-Axis
-    Parameter name:listof measures data
+    checkMeasureUnit is used to Do not allow multiple measures with different units on Y-Axis
+    
   */
   $scope.checkMeasureUnit=function(listOfmeasures){
      if($scope.isDisplayYaxisMessage && listOfmeasures.length > 0){
