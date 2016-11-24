@@ -32,7 +32,7 @@
             <li><a href="#Measures" title=""><span>Measures</span></a></li>
             <ul>
                 <li><a href="#Measure_Thresholds" title=""><span>Measure Thresholds</span></a></li>
-                <li><a href="#Disabling_Measures" title=""><span>Disabling Measures</span></a></li>
+                <li><a href="#Disabling_Measures" title=""><span>Enabling/Disabling Measures</span></a></li>
                 <li><a href="#Measure_Details" title=""><span>Measure Details</span></a></li>
             </ul>
             <li><a href="#Metric_Filters" title=""><span>Metric Filters</span></a></li>
@@ -335,7 +335,7 @@
     <!-- Measure thresholds end -->
     <!-- Disabling measures -->
     <fieldset>
-        <legend class="text-capitalize" id="Disabling_Measures">Disabling Measures</legend>
+        <legend class="text-capitalize" id="Disabling_Measures">Enabling/Disabling Measures</legend>
         <p>
             At times you might not want to see certain measures on a dashboard. To remove measures from a metric, simply disable it.<br>
             Click on metric drop down button and click on <i>Measures</i> option to open Measures dialog.
@@ -430,7 +430,7 @@
 </section>
 
 <!-- go to top button -->
-<section style="position: fixed; right: 0; bottom: 0;margin-right:10px;">
-    <a href="#top" class="btn btn-default">Go to Top</a>
-</section>
+<div style="position: fixed; right: 0; bottom: 0;margin-right:10px;">
+    <a  class="btn btn-default" ng-click="scrollTo('top')" >Go to Top</a>
+</div>
 <!-- go to top button end-->
