@@ -119,12 +119,14 @@ angular.module('sasaWebApp')
                     $scope.dashboardNames = data;
                     if($scope.dashboardNames.length === 0){
                       $scope.noResponses=true;
+                      $scope.isOpenDashBoard=false;
                     }
                     else{
                       $scope.noResponses=false;
+                      $scope.isOpenDashBoard=true;
                     }
-                    $scope.isOpenDashBoard=true;
-                    $scope.opened = true;
+                  //  $scope.isOpenDashBoard=true;
+                    //$scope.opened = true;
                     $scope.dashboardName="";
                    
                   }, function (){
