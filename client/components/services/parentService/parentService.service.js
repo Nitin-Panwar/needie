@@ -29,7 +29,7 @@ angular.module('sasaWebApp')
         $rootScope.placeholder[type].push(data);
       
         //Flash message displayed should be specific once a user removes one of the metric card
-				messageCenterService.add('success',data.name +  ' metric is added to dashboard', {timeout: 5000});
+				messageCenterService.add('success',data.name +  ' is added to dashboard', {timeout: 5000});
 			}, function (err) {
 				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
 			})
@@ -44,7 +44,7 @@ angular.module('sasaWebApp')
             $rootScope.placeholder.metric[index].name=undefined;
         
         //Flash message displayed should be specific once a user removes one of the metric card       
-    	messageCenterService.add('success', itemName +' metric is removed from dashboard',{timeout: 3000})
+    	messageCenterService.add('success', itemName +'  is removed from dashboard',{timeout: 3000})
 		}
 	}
 
