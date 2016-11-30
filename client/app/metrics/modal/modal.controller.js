@@ -180,7 +180,11 @@ angular.module('sasaWebApp')
   
   
   //Toggles active state
-  $scope.toggelActive = function (argument) {        
+  $scope.toggelActive = function (argument) {   
+  if($scope.measureInfo[argument].active === false)
+  {
+    $rootScope.cnt++;    
+  }
     if($scope.measureInfo[argument].active == undefined){
       $scope.measureInfo[argument].active = false;
     }
