@@ -45,7 +45,7 @@
         </section>
         <!-- metric Card Body -->
         <section class="panel-body" id="waitloader" cg-busy="{promise:metricLoader,templateUrl:'assets/waitLoader.html',message:'', backdrop:true,delay:0,minDuration:0}" > 
-  	      <section>
+          <section>
              <section class="pull-right" ng-if="metricData['distributions'][0] && !advanceVisualization">
                 <!-- <span>X-Axis:</span> --><!-- !metricData['distributions'][0]['advance_viz'] || -->
                 <span class="badge" ng-click="changeXaxis('WW')" style="cursor:pointer" role="presentation" tabindex="-1">WW</span>
@@ -102,6 +102,11 @@
                     </li>
                 </ul>  
         </section>
+        <div ng-if="isEnableMeasureMsg === true">
+        <span class="text-muted" style="font-size:15px">Some measures are  disabled,To Enable</span>
+        <a class="text-muted enableMeasureMsg"  ng-click="launch($event,'measure',metricData,mydata)">Click here</a>
+        </div>
+        <br>
     </section>
 </section>
 

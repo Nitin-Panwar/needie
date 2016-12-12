@@ -98,6 +98,7 @@ angular.module('sasaWebApp')
                   scope.metricData.gridColumns = data;  
                   break;
                 case 'filter':
+                 $rootScope.cnt++;
                   scope.metricData.filters = data;
                   for(var key in scope.metricData.filters){
                     if(scope.metricData.filters[key].length === 0)
@@ -128,13 +129,16 @@ angular.module('sasaWebApp')
           });  
         }
     
+
+       $rootScope.cnt=0;
         //This function watches the changes in global filter values
         scope.$watch(function () {
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
             scope.getMetric();
-            scope.APIcall = false;
+            $rootScope.cnt++;
+           // scope.APIcall = false;
           }          
         });
 
@@ -157,7 +161,7 @@ angular.module('sasaWebApp')
               var callAPI = false;
               for (var i = 0; i < scope.metricData.measures.length; i++) {
                 if(scope.metricData.measures[i]['scorecard_data']){
-                  if(scope.metricData.measures[i]['scorecard_data'].length ===0 && scope.metricData.measures[i].active){
+                  if(scope.metricData.measures[i]['scorecard_data'].length ===0 && scope.metricData.measures[i].active && $rootScope.cnt > 0){
                     callAPI = true;
                     break;
                   }
@@ -165,6 +169,7 @@ angular.module('sasaWebApp')
               };
               if(callAPI == true){
                 scope.getMetric();
+                $rootScope.cnt=0;
               }
             }
           }
@@ -174,32 +179,7 @@ angular.module('sasaWebApp')
           }            
         });
 
-        // scope.$watch(function () {
-        //   return $rootScope.meta.view_type;
-        // }, function(newValue, oldValue, scope) {   
-        //   if(scope.metricData['distributions']){
-        //     if(newValue !== oldValue  && newValue === 'scorecard' && scope.metricData['distributions'].length>0){
-        //       for (var i = 0; i < scope.metricData.measures.length; i++) {
-        //         if(scope.metricData.measures[i]['scorecard_data']){
-        //           if(scope.metricData.measures[i]['scorecard_data'].length ===0){
-        //             scope.getMetric();
-        //             break;
-        //           }
-        //         }
-        //       };
-        //     }
-        //     if($rootScope.placeholder.dashboard.name !== undefined){
-        //       if(newValue !== oldValue && $rootScope.placeholder.dashboard.name.length>0 && scope.APIcall){
-        //         scope.getMetric();
-        //         scope.APIcall =false;
-        //       }
-        //     }
-        //   }
-        //   //Refresh chart while changing the view from scorecard to metriccard 
-        //    if(newValue !== oldValue){
-        //     scope.refreshVisualization = scope.refreshVisualization +1;
-        //   }            
-        // });
+       
 
         //This function gets latest values of metrics
         $rootScope.promiseObject = {};
@@ -208,6 +188,7 @@ angular.module('sasaWebApp')
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               //console.log(response);
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
+              $rootScope.cnt=0;
               delete $rootScope.promiseObject[scope.metricIndex];                                 
             });
             $rootScope.promiseObject[scope.metricIndex] = scope.requestPromise;
@@ -216,6 +197,7 @@ angular.module('sasaWebApp')
               arr.push($rootScope.promiseObject[key])
             }          
             $rootScope.myPromise = arr; 
+            $rootScope.cnt=0;
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
@@ -259,13 +241,23 @@ angular.module('sasaWebApp')
           });
           return filtered;
         }
-
+        scope.isEnableMeasureMsg=false;
         //This function validates changes in measure thresholds
         scope.$watch('[options5,metricData["measures"]]',function(){
           scope.warningBreached = false;
           scope.alertBreached = false;    
           scope.measure_color_red=[]
           scope.measure_color_green=[]  
+          //code To display a message to the user if some measures are disable.
+          for(var i=0;i<scope.metricData['measures'].length;i++){
+                if(scope.metricData['measures'][i].active === false){
+                    scope.isEnableMeasureMsg=true;
+                    break;
+                }
+                else{
+                  scope.isEnableMeasureMsg=false;
+                }
+          }
           for(var key in scope.metricData['measures']){ 
             var measure=scope.metricData.measures[key];
             if(measure.goal && measure.active){
