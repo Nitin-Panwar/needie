@@ -98,6 +98,7 @@ angular.module('sasaWebApp')
                   scope.metricData.gridColumns = data;  
                   break;
                 case 'filter':
+                 $rootScope.cnt++;
                   scope.metricData.filters = data;
                   for(var key in scope.metricData.filters){
                     if(scope.metricData.filters[key].length === 0)
@@ -128,13 +129,16 @@ angular.module('sasaWebApp')
           });  
         }
     
+
+       $rootScope.cnt=0;
         //This function watches the changes in global filter values
         scope.$watch(function () {
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
             scope.getMetric();
-            scope.APIcall = false;
+            $rootScope.cnt++;
+           // scope.APIcall = false;
           }          
         });
 
@@ -157,7 +161,7 @@ angular.module('sasaWebApp')
               var callAPI = false;
               for (var i = 0; i < scope.metricData.measures.length; i++) {
                 if(scope.metricData.measures[i]['scorecard_data']){
-                  if(scope.metricData.measures[i]['scorecard_data'].length ===0 && scope.metricData.measures[i].active){
+                  if(scope.metricData.measures[i]['scorecard_data'].length ===0 && scope.metricData.measures[i].active && $rootScope.cnt > 0){
                     callAPI = true;
                     break;
                   }
@@ -165,6 +169,7 @@ angular.module('sasaWebApp')
               };
               if(callAPI == true){
                 scope.getMetric();
+                $rootScope.cnt=0;
               }
             }
           }
@@ -183,6 +188,7 @@ angular.module('sasaWebApp')
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               //console.log(response);
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
+              $rootScope.cnt=0;
               delete $rootScope.promiseObject[scope.metricIndex];                                 
             });
             $rootScope.promiseObject[scope.metricIndex] = scope.requestPromise;
@@ -191,6 +197,7 @@ angular.module('sasaWebApp')
               arr.push($rootScope.promiseObject[key])
             }          
             $rootScope.myPromise = arr; 
+            $rootScope.cnt=0;
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
