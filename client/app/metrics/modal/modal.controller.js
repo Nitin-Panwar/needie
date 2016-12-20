@@ -2,7 +2,7 @@
 
 angular.module('sasaWebApp')
   .controller('ModalCtrl', function ($scope,data,$rootScope,metricsFactory,filtersFactory,messageCenterService,$mdSelect,$mdDialog,tab) {
-
+  $scope.cnt =0
   $scope.showColumns = true;
   $scope.showApplyButton = false;
   $scope.validate = false;
@@ -183,7 +183,7 @@ angular.module('sasaWebApp')
   $scope.toggelActive = function (argument) {   
   if($scope.measureInfo[argument].active === false)
   {
-    $rootScope.cnt++;    
+    $scope.cnt++;    
   }
     if($scope.measureInfo[argument].active == undefined){
       $scope.measureInfo[argument].active = false;
@@ -600,6 +600,7 @@ angular.module('sasaWebApp')
         delete $scope.tempThreshold;
         delete $scope.goal;
         $scope.measureInfo['tab']=which
+        $scope.measureInfo['cnt']=$scope.cnt
         $mdDialog.hide($scope.measureInfo);
         break;
       case 'data':
