@@ -64,7 +64,6 @@
     <![endif]-->
     <!-- build:js({client,node_modules}) app/vendor.js -->
       <!-- bower:js -->
-      <script src="bower_components/jquery/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -73,6 +72,7 @@
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/jquery/jquery.js"></script>
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/angular-route/angular-route.js"></script>
       <script src="bower_components/message-center/message-center.js"></script>
@@ -94,11 +94,21 @@
       <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
+       <!-- build:js app/ng-idle.js -->
+             <script src="assets/js/ng-idle/angular-idle.js"></script>
+       <!--endbuild--> 
        <!-- build:js app/a-material.js -->
        <script src="assets/js/angular-aria/angular-aria.min.js"></script>
        <script src="assets/js/angular-messages/angular-messages.js"></script>
        <script src="assets/js/angular-material/angular-material.js"></script>
        <!-- endbuild -->
+
+       <!-- build:js app/intc-worker-picker.js -->
+       <script src="assets/js/intcWorkerPicker/intcPicker.js"></script>
+       <script src="assets/js/intcWorkerPicker/intcBeacon.js"></script>
+       <script src="assets/js/intcWorkerPicker/intcWorkerPicker.js"></script>
+       <!-- endbuild -->
+
        <!-- build:js app/intc-analytics.js -->
        <script type="text/javascript" src="assets/js/intcAnalytics.js"></script>
        <!-- endbuild -->
@@ -124,6 +134,7 @@
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
+          <script src="app/access/eamLinkController.js"></script>
           <script src="app/accessDenied/accessDenied.controller.js"></script>
           <script src="app/accessDenied/accessDenied.js"></script>
           <script src="app/admin/admin.controller.js"></script>
@@ -144,6 +155,8 @@
           <script src="app/metrics/metric-card/metric-card.directive.js"></script>
           <script src="app/metrics/modal/modal.controller.js"></script>
           <script src="app/score-card/score-card.directive.js"></script>
+          <script src="app/template/templateController.js"></script>
+          <script src="app/template/uniqueEamListController.js"></script>
           <script src="components/constants/constants.service.js"></script>
           <script src="components/directives/barChart/barChart.directive.js"></script>
           <script src="components/directives/barChart/barChartFactory/barChartFactory.service.js"></script>

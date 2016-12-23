@@ -161,6 +161,26 @@ html, body { height: 100%}
     overflow: hidden;
     transition: box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+.iwp-row-active {
+    background-color: #00aeef;
+    color: #fff;
+}
+.iwp-row {
+    border-top: 1px solid #b1babf;
+    cursor: pointer;
+    font-size: 12px;
+    position: relative;
+}
+.ipk-loading li, .iwp-row {
+    padding: 10px;
+}
+.iwp-row-active .iwp-name, .iwp-row-active .iwp-photo i {
+    color: #fff;
+}
+.iwp-row .iwp-name {
+    font-size: 15px;
+    font-weight: 700;
+}
 
 /** angular-materials style css start from here */
   .md-tabs.md-default-theme md-ink-bar, md-tabs md-ink-bar {

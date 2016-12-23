@@ -38,17 +38,22 @@ angular.module('sasaWebApp')
   $scope.myclass="applyBtnEnableMode";
   $scope.isGroupByOptionsApply=false;
   $scope.isGoalToBeSet=false;
+  $scope.vizInputflag=false;//means no change in visualization input object
+  $scope.vizConfgflag=false;//means no change in visualization configuartion object
+
   /*
   Variable for advance visualization Dialog
    */  
 
+  
   
   $scope.viz_details = {
     x_data:[],
     y_data:[],
     group_by:[],
     x_options:{},
-    advance_viz:true
+    advance_viz:true,
+    
   };
   $scope.tab= tab;
   
@@ -63,9 +68,17 @@ angular.module('sasaWebApp')
     advance_viz:true,
     sortByyaxis:false,
     descOrder:false
+    
 
   };
   
+  $scope.avDataConfig={
+     show_dataLabel:false
+  }
+  $scope.viz_details_conf={
+    show_dataLabel:false,
+    flag:false
+  }
     /*
       Description:function to reset the goal value of measure object 
     */
@@ -128,8 +141,20 @@ angular.module('sasaWebApp')
         $scope.avData.sortByyaxis = data['distributions'][0]['sortByyaxis'][0]['yaxis'];
         $scope.avData.descOrder = data['distributions'][0]['sortByyaxis'][0]['descOrder']
       }
+      $scope.avDataConfig.show_dataLabel=data['distributions'][0]['show_dataLabel'];
   } 
+
+      //storing the fetch data for visualization deatils
+      $scope.original_viz_details= angular.toJson($scope.avData);
+    //  $scope.getVizDetailsObjectState();
+   
   var loadingYdata=$scope.avData.y_data[0];
+
+  // $scope.getShowDataLabel=function(showdataLabel){
+  //   if(showdataLabel){
+  //       $scope.data.measures['temp']=0;
+  //   }
+  // }
   /*
    To set default Values in vizualization and filter tab.Method will invoke
    when an user click on Reset button in filter and visualization modal
@@ -138,8 +163,9 @@ angular.module('sasaWebApp')
     $scope.isGroupByOptionsApply = false;
     if(tab==='visualization'){
        $scope.isDisplayMeasureUnitMessage=false;
-        $scope.isDisableApplyClick=false;
-        $scope.myclass="applyBtnEnableMode";
+        $scope.isDisableApplyClick=true;
+        $scope.myclass="applyBtnDisableMode";
+        $scope.avDataConfig.show_dataLabel=false
       if($scope.defaultViz === false){
         $scope.defaultViz =true
         $scope.avData = {
@@ -149,7 +175,8 @@ angular.module('sasaWebApp')
           x_options:{"quarter":[1,2,3,4]},
           advance_viz:true,
           sortByyaxis:false,
-          descOrder:false
+          descOrder:false,
+          show_dataLabel:false
         };
      for (var i=0;i<data.measures.length;i++){
               if(data.measures[i].distribution === true)
@@ -177,8 +204,25 @@ angular.module('sasaWebApp')
       $scope.tempData.filterkey = null
     }
   }
-  
-  
+  $scope.getX_Axis=function(){
+    $scope.getVizDetailsObjectState();
+  };
+  $scope.getX_AxisValues=function(){
+     $scope.getVizDetailsObjectState();
+  };
+  // $scope.getShowDataLabel=function(){
+  //   $scope.checkShowDataLabel();
+    
+  // };
+  $scope.getGroup_by=function(){
+    $scope.getVizDetailsObjectState();
+  }
+  $scope.getSortByAxis=function(){
+    $scope.getVizDetailsObjectState();
+  };
+  $scope.getDescendingOrder=function(){
+    $scope.getVizDetailsObjectState();
+  };
   //Toggles active state
   $scope.toggelActive = function (argument) {   
   if($scope.measureInfo[argument].active === false)
@@ -446,7 +490,7 @@ angular.module('sasaWebApp')
       $scope.updateGlobalFilters();
   };
 
-  
+   
 
   /**
    * Function to set values of visualization when user click on apply in case of visualization section
@@ -455,6 +499,7 @@ angular.module('sasaWebApp')
   $scope.formatVizData = function() {
     // $scope.viz_details.sort_by = $scope.avData.sort_by;
     $scope.viz_details.sortByyaxis = [{yaxis:$scope.avData.sortByyaxis,descOrder:$scope.avData.descOrder}]
+ //  $scope.viz_details.show_dataLabel=$scope.avDataConfig.show_dataLabel;
     
     $scope.viz_details.advance_viz = $scope.avData.advance_viz;
     
@@ -494,9 +539,43 @@ angular.module('sasaWebApp')
     $scope.isDisableApplyClick=false;
     $scope.myclass="applyBtnEnableMode";
 
-
+    if($scope.vizInputflag === true){
+      $scope.viz_details.vizInputflag=$scope.vizInputflag;
+    }
+    else{
+      $scope.viz_details.vizInputflag=$scope.vizInputflag;
+    }
+    // if($scope.vizConfgflag === true){
+    //   $scope.viz_details.vizConfgflag=$scope.vizConfgflag;
+    // }
+    // else{
+    //    $scope.viz_details.vizConfgflag=$scope.vizConfgflag;
+    // }
+   
   };
+   
+  
 
+   $scope.getVizDetailsObjectState=function(){
+           $scope.vizInputflag=false;
+           $scope.defaultViz=false;
+           if($scope.original_viz_details !== angular.toJson($scope.avData)){
+                  $scope.vizInputflag=true;
+                  $scope.isDisableApplyClick=false
+                 $scope.myclass="applyBtnEnableMode";
+                }
+                else{
+                  $scope.vizInputflag=false;
+                  $scope.isDisableApplyClick=true
+                  $scope.myclass="applyBtnDisableMode";
+                  
+                }
+
+                
+        
+   };
+  
+   
  /*
    Method will invoke when user select filter options in metric card to load the default value for filter modal
  */
@@ -727,6 +806,7 @@ method will invoke inside getAllFilters method.
           $scope.isDisplayMeasureUnitMessage=false;
           $scope.isDisableApplyClick=false;
           $scope.myclass="applyBtnEnableMode";
+          $scope.getVizDetailsObjectState();
           return;
     }
        for(var i=0;i<listOfmeasures.length;i++){
@@ -740,6 +820,7 @@ method will invoke inside getAllFilters method.
                   $scope.isDisplayMeasureUnitMessage=false;
                   $scope.isDisableApplyClick=false;
                   $scope.myclass="applyBtnEnableMode";
+                  $scope.getVizDetailsObjectState();
                }
                else{
                 $scope.isDisplayMeasureUnitMessage=true;
@@ -751,6 +832,7 @@ method will invoke inside getAllFilters method.
              }
          }
        }
+       $scope.getVizDetailsObjectState();
   };
 
 

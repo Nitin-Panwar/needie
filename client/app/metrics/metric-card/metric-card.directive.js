@@ -49,7 +49,7 @@ angular.module('sasaWebApp')
 
 
         //function to change x axis 
-        
+            
         scope.changeXaxis=function(type){
           scope.options5.changeXaxis=true
           if(type=='WW'){
@@ -75,7 +75,27 @@ angular.module('sasaWebApp')
           parentService.placeholderAdd('duplicatemetric',metricData);
         }
 
-        // this function launches the dialogs
+        scope.openEamLink=function(metricName,url){
+          if(url !== undefined){
+                var items={
+                  metricName:metricName,
+                  url:url
+                };
+                 $mdDialog.show({
+                    controller: 'eamLinkController',
+                        clickOutsideToClose: false,
+                        templateUrl: 'app/access/eamLink.html',
+                        locals: {
+                        item: items
+                        }
+                        
+                     });
+         }
+            
+        };
+
+
+        //this function launches the dialogs
         scope.launch = function(ev,which,metricData){
           var tab = which
           $mdDialog.show({
@@ -120,9 +140,20 @@ angular.module('sasaWebApp')
                     for(var key in data){
                         scope.metricData['distributions'][0][key] = data[key];
                       
+                     }
                     }
-                  }
-                  scope.getMetric();
+                    var vizInputflag=scope.metricData['distributions'][0]['vizInputflag'];
+                    //var vizConfgflag=scope.metricData['distributions'][0]['vizConfgflag'];
+
+                    if(vizInputflag === true){
+                      scope.getMetric();
+                     }
+                     // if(vizInputflag === false && vizConfgflag === true){
+                     //  scope.options5.showLabels=true;
+                     // }
+                     // if(vizInputflag === false && vizConfgflag === false){
+                     //  scope.options5.showLabels=false;
+                     // }
                   break;
                 default:
                   return
@@ -138,9 +169,10 @@ angular.module('sasaWebApp')
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
-            scope.getMetric();
-            scope.cnt++;
-           // scope.APIcall = false;
+              if(scope.metricData.secured !== true && scope.metricData._id !== undefined){
+                scope.getMetric();
+                scope.cnt++;
+              }
           }          
         });
 

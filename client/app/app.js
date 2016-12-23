@@ -20,9 +20,11 @@ angular.module('sasaWebApp', [
   'ngCsv',
   'xeditable',
   'ngMaterial',
-  'intcAnalytics'
+  'intcAnalytics',
+  'intcWorkerPicker',
+  'ngIdle'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider,$provide,$mdThemingProvider,intcAnalyticsProvider,$animateProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider,$provide,$mdThemingProvider,intcAnalyticsProvider,$animateProvider,KeepaliveProvider,IdleProvider) {
      $urlRouterProvider
       .otherwise('/');
     $locationProvider.html5Mode(true); 
@@ -39,7 +41,11 @@ angular.module('sasaWebApp', [
     intcAnalyticsProvider.setDebugging(true);                   //Optional line - for debugging
     intcAnalyticsProvider.setLocalhostMode(true);               //Optional line - for local dev testing
     intcAnalyticsProvider.setAppId(13806);
-   // intcAnalyticsProvider.setGoogleAnalyticsId('UA-XXXXXXX-X');
+   
+   
+   IdleProvider.idle(1000); //by default the value in seconds //20 second idle
+   IdleProvider.timeout(20);//10 second warning
+
   })
 
 .config(['dialogsProvider','$translateProvider',function(dialogsProvider){
@@ -63,20 +69,21 @@ angular.module('sasaWebApp', [
 })
 
 .run(
-  function ($rootScope, $http, webServiceURL, messageCenterService,dashBoardsFactory,$location, usersFactory,$stateParams) {
+  function ($rootScope, $http, webServiceURL, messageCenterService,dashBoardsFactory,$location, usersFactory,$stateParams,Idle) {
          if(webServiceURL.url === "http://sminsights-api.intel.com"){
                  var dynamicScript = document.createElement('script'); 
                   dynamicScript.src = 'http://appusage.intel.com/Service/api/loguser/13806';
                   dynamicScript.async = 'false';
                   document.body.appendChild(dynamicScript);
           }
+      Idle.watch();
     //Login user if not logged in
     if($rootScope.user == undefined){ 
       $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
         $rootScope.userDetails = response.data.user;
         $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase(); 
-        // $rootScope.user = "gar\\npanwar" 
         //find user homepage    
+        //$rootScope.user = 'gar\\pjenax'
         $rootScope.myPromise= usersFactory.get({user:$rootScope.user}).$promise.then(function (data) {
              // console.log("user info",data)
              // var defaultDashboardId="567c56df3e18090c546187c5"

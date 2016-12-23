@@ -11,7 +11,8 @@ angular.module('sasaWebApp')
         url:url+"/workFlows",
         responseType: 'json',
         isArray: true,
-        param: {          
+        param: {
+         idsid: {}          
         }
       }
     });
