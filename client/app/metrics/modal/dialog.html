@@ -43,10 +43,10 @@
     </md-dialog-content>
 
     <md-dialog-actions layout="row" style="margin-bottom: 10px;margin-right: 20px">
-      <md-button ng-show="tab==='visualization' || tab==='filter'" ng-click="setDefaultValues(tab)" class="md-raised" style="margin-right: 5px;">Reset</md-button>
-      <input type="button" ng-hide="tab==='metric' || tab==='data'" ng-click="save(tab)" value="Apply" ng-disabled="isDisableApplyClick" ng-class="myclass"/>
+      <md-button id="btnReset" ng-show="tab==='visualization' || tab==='filter'" ng-click="setDefaultValues(tab)" class="md-raised" style="margin-right: 5px;">Reset</md-button>
+      <input id="btnApply" type="button" ng-hide="tab==='metric' || tab==='data'" ng-click="save(tab)" value="Apply" ng-disabled="isDisableApplyClick" ng-class="myclass"/>
       <!-- <md-button ng-hide="tab==='metric' || tab==='data'" ng-click="save(tab)" class="md-raised" style="background-color:#0071C5;color:white;margin-right: 5px;" ng-disabled="isDisableApplyClick">Apply</md-button> -->
-      <md-button ng-click="cancel()" class="md-raised">Close</md-button>
+      <md-button id="btnClose" ng-click="cancel()" class="md-raised">Close</md-button>
       
     </md-dialog-actions>
   </form>

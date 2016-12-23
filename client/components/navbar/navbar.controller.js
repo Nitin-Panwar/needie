@@ -64,7 +64,8 @@ angular.module('sasaWebApp')
      * @return {[type]} [description]
      */
     $scope.searchableItems = function () {
-      $scope.searchLoader=dashBoardsFactory.index().$promise.then(function(data){
+      var idsid=$rootScope.user;
+      $scope.searchLoader=dashBoardsFactory.index({idsid:idsid}).$promise.then(function(data){
         $scope.searchedDashboard = data;
         }, function (){
           messageCenterService.add('danger', 'Dashboard search failed', { timeout: 5000 });
@@ -112,10 +113,12 @@ angular.module('sasaWebApp')
        Request Parameter : idsid
        Response:Array of dashboard values which will populates for dashboard typeahead input component
      */
-    $scope.getDashboardNameByIDSID=function(idsid){
+    $scope.getDashboardNameByIDSID=function(owner_idsid){
       $scope.dashboardName="";
-      var idsid=idsid.idsid;
-      $scope.dashboardNameLoader=dashBoardsFactory.getDashboardNamebyIdsid({idsid: idsid}).$promise.then(function(data){
+      var owner_idsid=owner_idsid.idsid;
+      var idsid=$rootScope.user;
+
+      $scope.dashboardNameLoader=dashBoardsFactory.getDashboardNamebyIdsid({idsid: idsid,owner_idsid:owner_idsid}).$promise.then(function(data){
                     $scope.dashboardNames = data;
                     if($scope.dashboardNames.length === 0){
                       $scope.noResponses=true;
@@ -125,8 +128,6 @@ angular.module('sasaWebApp')
                       $scope.noResponses=false;
                       $scope.isOpenDashBoard=true;
                     }
-                  //  $scope.isOpenDashBoard=true;
-                    //$scope.opened = true;
                     $scope.dashboardName="";
                    
                   }, function (){

@@ -1,0 +1,52 @@
+<md-dialog aria-label="Visualization" style="width:50%" ng-cloak>
+  
+    <md-toolbar layout="row">
+      <div class="md-toolbar-tools" layout-align="space-around center" style="background-color:#0071C5;color:white">
+        <h2><h3 style="margin-right:285px">Unique EAM List</h3></h2> 
+      </div>
+    </md-toolbar>
+   
+
+    <md-dialog-content style="margin-top:20px;margin-left:10px;margin-right:10px">
+        
+        <table class="table table-bordered table-hover">
+               <thead class="thead-inverse">
+               <tr>
+                  <th>Metric Name</th>
+                  <th>URL</th>
+               </tr>
+               </thead>
+               
+               <tr ng-repeat = "nameUrllist in uniqueNameUrlList  track by $index">
+                  <td  >{{nameUrllist.name}}</td>
+                  <td ><a ng-href="{{nameUrllist.url}}" target="_blank">{{nameUrllist.url}} </a></td>
+               </tr>
+              
+       </table>
+
+       
+       <table>
+         <thead>
+           
+           <th>
+           </th>
+
+           <th>
+           </th>
+         </thead>
+
+       </table>
+
+      
+       
+      <md-divider ></md-divider>
+    </md-dialog-content>
+        
+    
+
+    <md-dialog-actions layout="row">
+      <md-button id="btnClose" ng-click="cancel()" class="md-raised">Close</md-button>
+      
+    </md-dialog-actions>
+
+</md-dialog>

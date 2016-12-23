@@ -320,6 +320,16 @@ angular.module('sasaWebApp')
 
           //scope.chartObject.subscribe()
         }
+        if(!scope.chartObject || scope.options.showLabels === true || scope.options.showLabels === false)
+        {
+          scope.chartObject = (scope.stackBarChartObject
+            .container(scope.container)
+            //.width(parseInt(d3.select('#'+scope.container).style('width')))
+            //.height(parseInt(d3.select('#'+scope.container).style('height')))
+          )();
+
+          //scope.chartObject.subscribe()
+        }
         if(scope.options.orderList){
           scope.stackBarChartObject
               .orderList(scope.options.orderList)
