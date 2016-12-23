@@ -169,12 +169,10 @@ angular.module('sasaWebApp')
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
-
               if(scope.metricData.secured !== true && scope.metricData._id !== undefined){
                 scope.getMetric();
                 scope.cnt++;
               }
-           
           }          
         });
 
