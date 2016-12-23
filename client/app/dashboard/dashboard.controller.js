@@ -76,9 +76,8 @@ angular.module('sasaWebApp')
                   
                });
       });
-
-
    //session timeout code end here
+
     var listOfDashboard;
     $rootScope.score_card_test =0;
     //Here system checks if there is an existing dashboard that user wants to see  
@@ -88,10 +87,16 @@ angular.module('sasaWebApp')
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({idsid:idsid,dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) { 
         $rootScope.placeholder.dashboard = data; 
-        listOfDashboard=angular.copy(data)
+        listOfDashboard=angular.copy(data);//copy the dashboard list to a local variable for sending data to eam url list modal.
+
+          /*
+             Code for checking if any secured metric are there in the dashboard list ,
+              if there disable some action  like save,send mail etc in metric card view  and display a warning 
+              message in metric card and score card view 
+              
+            */
         if(data !== undefined && data.components !== undefined){
                   for(var i=0;i<data.components.length;i++){
-
                      if(data.components[i].secured !== undefined && data.components[i].secured){
                         $scope.isDisableAction=true;
                         break;
@@ -124,6 +129,7 @@ angular.module('sasaWebApp')
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
       });
 
+      
     }
 
     // Print Dashboard to document
@@ -163,10 +169,11 @@ angular.module('sasaWebApp')
         });   
     }  
     
+   /*
+      if one of the metric is secured ,on click on entitlement button it will open a eam list modal 
+      where we will see the metric name and its url
+   */ 
    $scope.openUniqueEamListModal=function(){
-                // var items={
-                //   uniqueNameUrlList:uniqueNameUrlList
-                // };
                  $mdDialog.show({
                     controller: 'uniqueEamListController',
                         clickOutsideToClose: false,

@@ -74,7 +74,10 @@ angular.module('sasaWebApp')
         scope.createDuplicate = function(metricData){
           parentService.placeholderAdd('duplicatemetric',metricData);
         }
-
+        
+        /*
+          open an EAM link from metric card view if any metric is secured.
+        */
         scope.openEamLink=function(metricName,url){
           if(url !== undefined){
                 var items={
@@ -145,7 +148,7 @@ angular.module('sasaWebApp')
                     var vizInputflag=scope.metricData['distributions'][0]['vizInputflag'];
                     //var vizConfgflag=scope.metricData['distributions'][0]['vizConfgflag'];
 
-                    if(vizInputflag === true){
+                    if(vizInputflag === true){//if any input is got changed in the visualization screen
                       scope.getMetric();
                      }
                      // if(vizInputflag === false && vizConfgflag === true){
@@ -169,6 +172,7 @@ angular.module('sasaWebApp')
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
+            //In case of secured metrics we are not going call getMetrics api for global filter
               if(scope.metricData.secured !== true && scope.metricData._id !== undefined){
                 scope.getMetric();
                 scope.cnt++;

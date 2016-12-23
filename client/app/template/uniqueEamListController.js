@@ -1,5 +1,4 @@
 angular.module('sasaWebApp').controller('uniqueEamListController',['$scope','$mdDialog','item',function($scope,$mdDialog,item){
-
   var uniqueEamList = []
   $scope.uniqueNameUrlList=[];
   for (var i = 0; i< item.length; i++) {

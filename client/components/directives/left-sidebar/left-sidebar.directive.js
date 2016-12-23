@@ -75,7 +75,7 @@ angular.module('sasaWebApp')
 	    		scope.showmydashboards = false;
 	    		scope.showfilters = false;
 	    	}
-       // $http.get('data/workflow.json').success(function (data){
+       // $http.get('app/data/workflow.json').success(function (data){
        //        scope.dashboardList = data;  
 
 

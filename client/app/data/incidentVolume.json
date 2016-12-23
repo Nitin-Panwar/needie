@@ -1,0 +1,708 @@
+{
+    "_id": "583e761efdad1bdfac954fc9",
+    "name": "Incidents Volume",
+    "author": "raghav",
+    "config": {
+        "ytd": true
+    },
+    "measures": [{
+        "measure_details": {
+            "m_condition": [],
+            "m_formula": "Count(Number of Submitted Incidents)"
+        },
+        "plottable": true,
+        "name": "Submitted",
+        "datatype": "int",
+        "expression": "m1",
+        "value": 703946,
+        "label": "Submitted Incidents",
+        "measure_mappings": {
+            "m1": {
+                "formula": "COUNT(incident_number)",
+                "conditions": {}
+            }
+        },
+        "active": true,
+        "distribution": true,
+        "type": "number",
+        "unit": "Number of Incidents"
+    }, {
+        "measure_details": {
+            "m_condition": [
+                "Status Class is 'Closed'"
+            ],
+            "m_formula": "Count(Number of Closed Incidents)"
+        },
+        "plottable": true,
+        "name": "Closed",
+        "datatype": "int",
+        "expression": "m1",
+        "value": 539753,
+        "label": "Closed Incidents",
+        "measure_mappings": {
+            "m1": {
+                "formula": "COUNT(incident_number)",
+                "conditions": {
+                    "status_class": "Closed"
+                }
+            }
+        },
+        "active": true,
+        "distribution": true,
+        "type": "number",
+        "unit": "Number of Incidents"
+    }, {
+        "measure_details": {
+            "m_condition": [
+                "Status Class is 'open'"
+            ],
+            "m_formula": "Count(Number of Open Incidents)"
+        },
+        "plottable": true,
+        "name": "Open",
+        "datatype": "int",
+        "expression": "m1",
+        "value": 7487,
+        "label": "Open Incidents",
+        "measure_mappings": {
+            "m1": {
+                "formula": "COUNT(incident_number)",
+                "conditions": {
+                    "status_class": "Open"
+                }
+            }
+        },
+        "active": true,
+        "distribution": true,
+        "type": "number",
+        "unit": "Number of Incidents"
+    }, {
+        "measure_details": {
+            "m_condition": [
+                "Status Class is 'Cancelled'"
+            ],
+            "m_formula": "Count(Number of Cancelled Incidents)"
+        },
+        "plottable": true,
+        "name": "Cancelled",
+        "datatype": "int",
+        "expression": "m1",
+        "value": 156706,
+        "label": "Cancelled Incidents",
+        "measure_mappings": {
+            "m1": {
+                "formula": "COUNT(incident_number)",
+                "conditions": {
+                    "status_class": "Cancelled"
+                }
+            }
+        },
+        "active": true,
+        "distribution": true,
+        "type": "number",
+        "unit": "Number of Incidents"
+    }, {
+        "measure_details": {
+            "m_condition": [
+                "Knowledge Article Use Count > 1"
+            ],
+            "m_formula": "Count(Number of Repeated Incidents)"
+        },
+        "plottable": true,
+        "name": "Repeated",
+        "datatype": "int",
+        "expression": "m1",
+        "value": 481950,
+        "label": "Repeated Incidents",
+        "measure_mappings": {
+            "m1": {
+                "formula": "SUM(repeated_incident)",
+                "conditions": {}
+            }
+        },
+        "active": true,
+        "distribution": true,
+        "type": "number",
+        "unit": "Number of Incidents"
+    }],
+    "db_conditions": [
+        "Incident Service Type is 'User Service Restoration' or 'Infrastructure Restore' or Incident service subtype is 'How Do I'",
+        "Incident Portfolio Service Type is 'Restores'",
+        "Portfolio Service Type is ‘IT’"
+    ],
+    "dataset": "incidents",
+    "alias": "Incidents Volume",
+    "created_on": "2015-07-27",
+    "metric_filter_id": "696e636964656e746d657472",
+    "filters": {
+        "incident_type": [
+            "User Service Restoration"
+        ]
+    },
+    "modified_on": "2016-12-11",
+    "ytd": "Submit Date",
+    "distributions": [{
+        "current_values": {
+            "quarter": {
+                "Cancelled Incidents": 27482.0,
+                "Repeated Incidents": 76578.0,
+                "Open Incidents": 5778.0,
+                "Submitted Incidents": 119096.0,
+                "Closed Incidents": 85836.0
+            },
+            "month": {
+                "Cancelled Incidents": 0.0,
+                "Repeated Incidents": 0.0,
+                "Open Incidents": 0.0,
+                "Submitted Incidents": 0.0,
+                "Closed Incidents": 0.0
+            },
+            "work_week": {
+                "Cancelled Incidents": 0.0,
+                "Repeated Incidents": 0.0,
+                "Open Incidents": 0.0,
+                "Submitted Incidents": 0.0,
+                "Closed Incidents": 0.0
+            }
+        },
+        "distribution_data": {
+            "x_label": "work_week",
+            "y_label": "Number of Incidents",
+            "data": [{
+                "Cancelled Incidents": 1658.0,
+                "work_week": 1,
+                "Repeated Incidents": 6041.0,
+                "month": 1,
+                "quarter": 1,
+                "Submitted Incidents": 8365.0,
+                "year": "2016",
+                "Open Incidents": 4.0,
+                "Closed Incidents": 6703.0
+            }, {
+                "Cancelled Incidents": 2829.0,
+                "work_week": 2,
+                "Repeated Incidents": 10891.0,
+                "month": 1,
+                "quarter": 1,
+                "Submitted Incidents": 14553.0,
+                "year": "2016",
+                "Open Incidents": 7.0,
+                "Closed Incidents": 11717.0
+            }, {
+                "Cancelled Incidents": 3010.0,
+                "work_week": 3,
+                "Repeated Incidents": 10384.0,
+                "month": 1,
+                "quarter": 1,
+                "Submitted Incidents": 14257.0,
+                "year": "2016",
+                "Open Incidents": 14.0,
+                "Closed Incidents": 11233.0
+            }, {
+                "Cancelled Incidents": 2718.0,
+                "work_week": 4,
+                "Repeated Incidents": 10202.0,
+                "month": 1,
+                "quarter": 1,
+                "Submitted Incidents": 13980.0,
+                "year": "2016",
+                "Open Incidents": 7.0,
+                "Closed Incidents": 11255.0
+            }, {
+                "Cancelled Incidents": 2781.0,
+                "work_week": 5,
+                "Repeated Incidents": 9959.0,
+                "month": 1,
+                "quarter": 1,
+                "Submitted Incidents": 13724.0,
+                "year": "2016",
+                "Open Incidents": 9.0,
+                "Closed Incidents": 10934.0
+            }, {
+                "Cancelled Incidents": 3104.0,
+                "work_week": 6,
+                "Repeated Incidents": 10562.0,
+                "month": 2,
+                "quarter": 1,
+                "Submitted Incidents": 14805.0,
+                "year": "2016",
+                "Open Incidents": 16.0,
+                "Closed Incidents": 11685.0
+            }, {
+                "Cancelled Incidents": 2583.0,
+                "work_week": 7,
+                "Repeated Incidents": 9400.0,
+                "month": 2,
+                "quarter": 1,
+                "Submitted Incidents": 12900.0,
+                "year": "2016",
+                "Open Incidents": 8.0,
+                "Closed Incidents": 10309.0
+            }, {
+                "Cancelled Incidents": 3161.0,
+                "work_week": 8,
+                "Repeated Incidents": 10780.0,
+                "month": 2,
+                "quarter": 1,
+                "Submitted Incidents": 14860.0,
+                "year": "2016",
+                "Open Incidents": 14.0,
+                "Closed Incidents": 11685.0
+            }, {
+                "Cancelled Incidents": 3133.0,
+                "work_week": 9,
+                "Repeated Incidents": 10746.0,
+                "month": 2,
+                "quarter": 1,
+                "Submitted Incidents": 14766.0,
+                "year": "2016",
+                "Open Incidents": 12.0,
+                "Closed Incidents": 11621.0
+            }, {
+                "Cancelled Incidents": 3170.0,
+                "work_week": 10,
+                "Repeated Incidents": 11105.0,
+                "month": 3,
+                "quarter": 1,
+                "Submitted Incidents": 15369.0,
+                "year": "2016",
+                "Open Incidents": 12.0,
+                "Closed Incidents": 12187.0
+            }, {
+                "Cancelled Incidents": 3211.0,
+                "work_week": 11,
+                "Repeated Incidents": 10463.0,
+                "month": 3,
+                "quarter": 1,
+                "Submitted Incidents": 14966.0,
+                "year": "2016",
+                "Open Incidents": 19.0,
+                "Closed Incidents": 11736.0
+            }, {
+                "Cancelled Incidents": 3782.0,
+                "work_week": 12,
+                "Repeated Incidents": 11108.0,
+                "month": 3,
+                "quarter": 1,
+                "Submitted Incidents": 16078.0,
+                "year": "2016",
+                "Open Incidents": 8.0,
+                "Closed Incidents": 12288.0
+            }, {
+                "Cancelled Incidents": 2903.0,
+                "work_week": 13,
+                "Repeated Incidents": 9877.0,
+                "month": 3,
+                "quarter": 1,
+                "Submitted Incidents": 13955.0,
+                "year": "2016",
+                "Open Incidents": 13.0,
+                "Closed Incidents": 11039.0
+            }, {
+                "Cancelled Incidents": 3001.0,
+                "work_week": 14,
+                "Repeated Incidents": 10275.0,
+                "month": 3,
+                "quarter": 1,
+                "Submitted Incidents": 14400.0,
+                "year": "2016",
+                "Open Incidents": 13.0,
+                "Closed Incidents": 11386.0
+            }, {
+                "Cancelled Incidents": 2823.0,
+                "work_week": 15,
+                "Repeated Incidents": 10231.0,
+                "month": 4,
+                "quarter": 2,
+                "Submitted Incidents": 14213.0,
+                "year": "2016",
+                "Open Incidents": 20.0,
+                "Closed Incidents": 11370.0
+            }, {
+                "Cancelled Incidents": 3229.0,
+                "work_week": 16,
+                "Repeated Incidents": 10262.0,
+                "month": 4,
+                "quarter": 2,
+                "Submitted Incidents": 14718.0,
+                "year": "2016",
+                "Open Incidents": 25.0,
+                "Closed Incidents": 11464.0
+            }, {
+                "Cancelled Incidents": 3618.0,
+                "work_week": 17,
+                "Repeated Incidents": 11262.0,
+                "month": 4,
+                "quarter": 2,
+                "Submitted Incidents": 16167.0,
+                "year": "2016",
+                "Open Incidents": 30.0,
+                "Closed Incidents": 12519.0
+            }, {
+                "Cancelled Incidents": 3384.0,
+                "work_week": 18,
+                "Repeated Incidents": 10367.0,
+                "month": 4,
+                "quarter": 2,
+                "Submitted Incidents": 14961.0,
+                "year": "2016",
+                "Open Incidents": 14.0,
+                "Closed Incidents": 11563.0
+            }, {
+                "Cancelled Incidents": 3032.0,
+                "work_week": 19,
+                "Repeated Incidents": 9224.0,
+                "month": 5,
+                "quarter": 2,
+                "Submitted Incidents": 13406.0,
+                "year": "2016",
+                "Open Incidents": 17.0,
+                "Closed Incidents": 10357.0
+            }, {
+                "Cancelled Incidents": 3227.0,
+                "work_week": 20,
+                "Repeated Incidents": 9999.0,
+                "month": 5,
+                "quarter": 2,
+                "Submitted Incidents": 14792.0,
+                "year": "2016",
+                "Open Incidents": 24.0,
+                "Closed Incidents": 11541.0
+            }, {
+                "Cancelled Incidents": 3084.0,
+                "work_week": 21,
+                "Repeated Incidents": 11238.0,
+                "month": 5,
+                "quarter": 2,
+                "Submitted Incidents": 15684.0,
+                "year": "2016",
+                "Open Incidents": 17.0,
+                "Closed Incidents": 12583.0
+            }, {
+                "Cancelled Incidents": 3578.0,
+                "work_week": 22,
+                "Repeated Incidents": 9857.0,
+                "month": 5,
+                "quarter": 2,
+                "Submitted Incidents": 14684.0,
+                "year": "2016",
+                "Open Incidents": 30.0,
+                "Closed Incidents": 11076.0
+            }, {
+                "Cancelled Incidents": 3425.0,
+                "work_week": 23,
+                "Repeated Incidents": 9912.0,
+                "month": 6,
+                "quarter": 2,
+                "Submitted Incidents": 14577.0,
+                "year": "2016",
+                "Open Incidents": 29.0,
+                "Closed Incidents": 11123.0
+            }, {
+                "Cancelled Incidents": 3143.0,
+                "work_week": 24,
+                "Repeated Incidents": 10121.0,
+                "month": 6,
+                "quarter": 2,
+                "Submitted Incidents": 14408.0,
+                "year": "2016",
+                "Open Incidents": 33.0,
+                "Closed Incidents": 11232.0
+            }, {
+                "Cancelled Incidents": 3487.0,
+                "work_week": 25,
+                "Repeated Incidents": 10241.0,
+                "month": 6,
+                "quarter": 2,
+                "Submitted Incidents": 14933.0,
+                "year": "2016",
+                "Open Incidents": 32.0,
+                "Closed Incidents": 11414.0
+            }, {
+                "Cancelled Incidents": 3698.0,
+                "work_week": 26,
+                "Repeated Incidents": 10758.0,
+                "month": 6,
+                "quarter": 2,
+                "Submitted Incidents": 15816.0,
+                "year": "2016",
+                "Open Incidents": 142.0,
+                "Closed Incidents": 11976.0
+            }, {
+                "Cancelled Incidents": 3643.0,
+                "work_week": 27,
+                "Repeated Incidents": 10894.0,
+                "month": 6,
+                "quarter": 2,
+                "Submitted Incidents": 16090.0,
+                "year": "2016",
+                "Open Incidents": 261.0,
+                "Closed Incidents": 12186.0
+            }, {
+                "Cancelled Incidents": 2658.0,
+                "work_week": 28,
+                "Repeated Incidents": 8421.0,
+                "month": 7,
+                "quarter": 3,
+                "Submitted Incidents": 12201.0,
+                "year": "2016",
+                "Open Incidents": 36.0,
+                "Closed Incidents": 9507.0
+            }, {
+                "Cancelled Incidents": 2951.0,
+                "work_week": 29,
+                "Repeated Incidents": 9823.0,
+                "month": 7,
+                "quarter": 3,
+                "Submitted Incidents": 14167.0,
+                "year": "2016",
+                "Open Incidents": 34.0,
+                "Closed Incidents": 11182.0
+            }, {
+                "Cancelled Incidents": 3315.0,
+                "work_week": 30,
+                "Repeated Incidents": 9997.0,
+                "month": 7,
+                "quarter": 3,
+                "Submitted Incidents": 14801.0,
+                "year": "2016",
+                "Open Incidents": 38.0,
+                "Closed Incidents": 11448.0
+            }, {
+                "Cancelled Incidents": 3184.0,
+                "work_week": 31,
+                "Repeated Incidents": 9816.0,
+                "month": 7,
+                "quarter": 3,
+                "Submitted Incidents": 14802.0,
+                "year": "2016",
+                "Open Incidents": 36.0,
+                "Closed Incidents": 11582.0
+            }, {
+                "Cancelled Incidents": 2949.0,
+                "work_week": 32,
+                "Repeated Incidents": 9487.0,
+                "month": 8,
+                "quarter": 3,
+                "Submitted Incidents": 13739.0,
+                "year": "2016",
+                "Open Incidents": 32.0,
+                "Closed Incidents": 10758.0
+            }, {
+                "Cancelled Incidents": 3422.0,
+                "work_week": 33,
+                "Repeated Incidents": 9404.0,
+                "month": 8,
+                "quarter": 3,
+                "Submitted Incidents": 14262.0,
+                "year": "2016",
+                "Open Incidents": 61.0,
+                "Closed Incidents": 10779.0
+            }, {
+                "Cancelled Incidents": 3546.0,
+                "work_week": 34,
+                "Repeated Incidents": 8977.0,
+                "month": 8,
+                "quarter": 3,
+                "Submitted Incidents": 13903.0,
+                "year": "2016",
+                "Open Incidents": 50.0,
+                "Closed Incidents": 10307.0
+            }, {
+                "Cancelled Incidents": 3719.0,
+                "work_week": 35,
+                "Repeated Incidents": 10569.0,
+                "month": 8,
+                "quarter": 3,
+                "Submitted Incidents": 15724.0,
+                "year": "2016",
+                "Open Incidents": 53.0,
+                "Closed Incidents": 11952.0
+            }, {
+                "Cancelled Incidents": 3546.0,
+                "work_week": 36,
+                "Repeated Incidents": 10567.0,
+                "month": 9,
+                "quarter": 3,
+                "Submitted Incidents": 15531.0,
+                "year": "2016",
+                "Open Incidents": 71.0,
+                "Closed Incidents": 11914.0
+            }, {
+                "Cancelled Incidents": 3443.0,
+                "work_week": 37,
+                "Repeated Incidents": 10023.0,
+                "month": 9,
+                "quarter": 3,
+                "Submitted Incidents": 15104.0,
+                "year": "2016",
+                "Open Incidents": 69.0,
+                "Closed Incidents": 11592.0
+            }, {
+                "Cancelled Incidents": 3900.0,
+                "work_week": 38,
+                "Repeated Incidents": 10984.0,
+                "month": 9,
+                "quarter": 3,
+                "Submitted Incidents": 16356.0,
+                "year": "2016",
+                "Open Incidents": 83.0,
+                "Closed Incidents": 12373.0
+            }, {
+                "Cancelled Incidents": 3754.0,
+                "work_week": 39,
+                "Repeated Incidents": 10833.0,
+                "month": 9,
+                "quarter": 3,
+                "Submitted Incidents": 16340.0,
+                "year": "2016",
+                "Open Incidents": 105.0,
+                "Closed Incidents": 12481.0
+            }, {
+                "Cancelled Incidents": 4422.0,
+                "work_week": 40,
+                "Repeated Incidents": 10312.0,
+                "month": 9,
+                "quarter": 3,
+                "Submitted Incidents": 16493.0,
+                "year": "2016",
+                "Open Incidents": 211.0,
+                "Closed Incidents": 11860.0
+            }, {
+                "Cancelled Incidents": 3958.0,
+                "work_week": 41,
+                "Repeated Incidents": 9745.0,
+                "month": 10,
+                "quarter": 4,
+                "Submitted Incidents": 15279.0,
+                "year": "2016",
+                "Open Incidents": 209.0,
+                "Closed Incidents": 11112.0
+            }, {
+                "Cancelled Incidents": 3546.0,
+                "work_week": 42,
+                "Repeated Incidents": 10154.0,
+                "month": 10,
+                "quarter": 4,
+                "Submitted Incidents": 15086.0,
+                "year": "2016",
+                "Open Incidents": 151.0,
+                "Closed Incidents": 11389.0
+            }, {
+                "Cancelled Incidents": 3458.0,
+                "work_week": 43,
+                "Repeated Incidents": 11553.0,
+                "month": 10,
+                "quarter": 4,
+                "Submitted Incidents": 16514.0,
+                "year": "2016",
+                "Open Incidents": 193.0,
+                "Closed Incidents": 12863.0
+            }, {
+                "Cancelled Incidents": 3947.0,
+                "work_week": 44,
+                "Repeated Incidents": 11090.0,
+                "month": 10,
+                "quarter": 4,
+                "Submitted Incidents": 16860.0,
+                "year": "2016",
+                "Open Incidents": 305.0,
+                "Closed Incidents": 12608.0
+            }, {
+                "Cancelled Incidents": 4162.0,
+                "work_week": 45,
+                "Repeated Incidents": 9978.0,
+                "month": 11,
+                "quarter": 4,
+                "Submitted Incidents": 16134.0,
+                "year": "2016",
+                "Open Incidents": 413.0,
+                "Closed Incidents": 11559.0
+            }, {
+                "Cancelled Incidents": 4280.0,
+                "work_week": 46,
+                "Repeated Incidents": 11126.0,
+                "month": 11,
+                "quarter": 4,
+                "Submitted Incidents": 17694.0,
+                "year": "2016",
+                "Open Incidents": 816.0,
+                "Closed Incidents": 12598.0
+            }, {
+                "Cancelled Incidents": 3448.0,
+                "work_week": 47,
+                "Repeated Incidents": 10630.0,
+                "month": 11,
+                "quarter": 4,
+                "Submitted Incidents": 17474.0,
+                "year": "2016",
+                "Open Incidents": 2348.0,
+                "Closed Incidents": 11678.0
+            }, {
+                "Cancelled Incidents": 683.0,
+                "work_week": 48,
+                "Repeated Incidents": 2302.0,
+                "month": 11,
+                "quarter": 4,
+                "Submitted Incidents": 4055.0,
+                "year": "2016",
+                "Open Incidents": 1343.0,
+                "Closed Incidents": 2029.0
+            }, {
+                "Cancelled Incidents": 0.0,
+                "work_week": 49,
+                "Repeated Incidents": 0.0,
+                "month": 12,
+                "quarter": 4,
+                "Submitted Incidents": 0.0,
+                "year": "2016",
+                "Open Incidents": 0.0,
+                "Closed Incidents": 0.0
+            }, {
+                "Cancelled Incidents": 0.0,
+                "work_week": 50,
+                "Repeated Incidents": 0.0,
+                "month": 12,
+                "quarter": 4,
+                "Submitted Incidents": 0.0,
+                "year": "2016",
+                "Open Incidents": 0.0,
+                "Closed Incidents": 0.0
+            }, {
+                "Cancelled Incidents": 0.0,
+                "work_week": 51,
+                "Repeated Incidents": 0.0,
+                "month": 12,
+                "quarter": 4,
+                "Submitted Incidents": 0.0,
+                "year": "2016",
+                "Open Incidents": 0.0,
+                "Closed Incidents": 0.0
+            }]
+        },
+        "name": "Incident Count Trend",
+        "y_data": [{
+            "label": "Submitted Incidents"
+        }, {
+            "label": "Cancelled Incidents"
+        }, {
+            "label": "Closed Incidents"
+        }, {
+            "label": "Open Incidents"
+        }, {
+            "label": "Repeated Incidents"
+        }],
+        "sort_by": [{
+            "field": "work_week",
+            "order": "asc"
+        }],
+        "x_data": [
+            "year",
+            "quarter",
+            "month",
+            "work_week"
+        ],
+        "viztype": "line"
+    }],
+    "description": "Provides information about Incidents Volume. **Metric values are YTD (Current Year for entire IT by default. Use metric filters to filter by year."
+}
