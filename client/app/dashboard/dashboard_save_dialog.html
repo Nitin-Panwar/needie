@@ -16,7 +16,43 @@
 	<br>
 	<div>
 		<textarea placeholder="Dashboard Description" ng-model="data.description" class="form-control"></textarea>		
-	</div>	
+	</div>
+	<br>
+    <div layout="row" layout-sm="column">
+		    <div flex="25">
+			       <md-radio-group ng-model="dashboardType.defaultDashboard" ng-change="getDashboardType()" class="md-primary" layout="row"
+			       >		
+					   <md-radio-button ng-repeat="dashboardType in dashboardType.lstDashboard"
+		               ng-value="dashboardType.value"
+		              >
+		               {{ dashboardType.label }}<br/>
+		            </md-radio-button>
+				   </md-radio-group>
+			</div>
+
+			<div flex="75">
+		      <input class="form-control" type="text"  data-intc-worker-picker="intc_worker_config" data-ng-model="intc_worker_config.worker" ng-show="isShowintc_worker"/>
+		    </div>
+		    
+    </div>  
+    
+    
+    <br>
+    <div style="border:1px solid #b1babf;" ng-show="isVisibleDiv" >
+        <ul class="list-inline">
+        <li ng-repeat="name in accessList track by $index" style="margin-left:10px;margin-top:10px" ng-click="deleteSelectedItem(name)" >
+           <span class="badge" style="cursor:pointer">{{name}}</span>
+           <span class="glyphicon glyphicon-remove"></span>
+        </li>
+        </ul>
+      	
+		 
+	</div>
+	<div ng-show="isUserExist">
+	   <span style="color:red">User already exists</span> 
+	</div>         
+
+
 </div>
 <div class="modal-footer">	
 	<button type="button" class="btn btn-primary" ng-click="save(true)" ng-show="data.name.toUpperCase() !== OldName.toUpperCase() || data.name === undefined">Create</button>

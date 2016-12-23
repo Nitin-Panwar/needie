@@ -1,11 +1,12 @@
 <section ng-model="metricModel" class="ng-animate-disabled">
     <section class="panel panel-default metric-card-panel" ng-class="{'panel-danger':alertBreached, 'panel-warning': warningBreached}" >
-        <section class="panel-heading">
+        <section class="panel-heading" >
             <ul class="panel-title list-inline mover-handle">
-                <li class="pull-left" uib-dropdown on-toggle="toggled(open)">
-                    <a href id="simple-dropdown" uib-dropdown-toggle>
+                <li class="pull-left" uib-dropdown on-toggle="toggled(open)" ng-if="metricData.secured !== true">
+                    <a href id="simple-dropdown" uib-dropdown-toggle >
                     <i class="fa fa-align-justify"></i>
                     </a>
+
                     <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown" >
                         
                         <li ng-click="launch('actions')" class="disabled"><a href="#">Actions</a></li>
@@ -25,15 +26,15 @@
                 </li> 
                 <!-- <li class="fa fa-bar-chart pull-left" style="cursor: pointer; margin-top:3px;"ng-click="changeViz('bar')" ng-if="metricData['distributions'][0]['distribution_data']"></li>
                 <li class="fa fa-line-chart pull-left" style="cursor: pointer; margin-top:3px;" ng-click="changeViz('line')" ng-if="metricData['distributions'][0]['distribution_data']"></li> -->
-                <li class="pull-left">
+                <li class="pull-left" ng-show="metricData.secured !== true">
                     <span  ng-if="!isEmpty(metricData.filters)"><a class="fa fa-exclamation-circle" tooltip-class="appliedFilter" tooltip-placement="right-bottom" uib-tooltip-template="'app/metrics/metric-card/metricFilters.html'"></a>
                     </span>
                 </li> 
-                <li class="pull-right">
+                <li class="pull-right" ng-if="metricData.secured !== true">
                     <span ng-click="createDuplicate(metricData)" role="presentation" tabindex="-1"><a class="fa fa-files-o"  uib-tooltip="Create Metric Copy" tooltip-placement="left-bottom"></a>
                     </span>
                 </li> 
-                <li class="pull-right">
+                <li class="pull-right" ng-if="metricData.secured !== true">
                     <span role="presentation" tabindex="-1"><a class="fa fa-question"  ng-click="launch($event,'metric',metricData)" uib-tooltip="Click to open metric details" tooltip-placement="left-bottom"></a>
                     </span>
                 </li>
@@ -60,6 +61,10 @@
             <section ng-if="metricData['distributions'][0]" class="ng-animate-disabled">
                 <smm-multi-chart options="options5" data="metricData['distributions'][0]['distribution_data']['data']" measures="metricData['measures']" refresh="refreshVisualization" ng-show="!line"></smm-multi-chart>
             </section>
+            <div class="divglyphicon" style="margin-top:10px;" ng-if="metricData.secured === true" ng-click="openEamLink(metricData.name,metricData.url);">
+                <a><span class="glyphicon glyphicon-lock gi-2x"></span></a>
+               
+            </div>
           </section> 
                 <ul class="list-inline" >
                     <li ng-repeat= "measure in metricData['measures'] track by $index" ng-if="measure.type !== 'percentile' && measure.type !== 'breakup'" class="measure-card" 
@@ -103,7 +108,7 @@
                 </ul>  
         </section>
         <div ng-if="isEnableMeasureMsg === true">
-        <span class="text-muted" style="font-size:15px">Some measures are  disabled,To Enable</span>
+        <span class="text-muted" style="font-size:15px">Some measures are disabled. To enable</span>
         <a class="text-muted enableMeasureMsg"  ng-click="launch($event,'measure',metricData,mydata)">Click here</a>
         </div>
         <br>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs,$mdDialog) {   
+  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs,$mdDialog,$http,Idle,Keepalive) {   
     //loading image
       //$scope.showLoading=true;
     //Creating placeholder 
@@ -18,7 +18,8 @@ angular.module('sasaWebApp')
     $rootScope.applyFilter = 0;
     //Code to detect browser info.
     var objAgent = navigator.userAgent; 
-    $scope.objbrowserName = navigator.appName; 
+    $scope.objbrowserName = navigator.appName;
+    $scope.isDisableAction=false; 
     //In Chrome 
     if ((objAgent.indexOf("Chrome"))!=-1) { $scope.objbrowserName = "Chrome"; } 
     //In Microsoft internet explorer 
@@ -28,14 +29,75 @@ angular.module('sasaWebApp')
     // In Safari 
     else if ((objAgent.indexOf("Safari"))!=-1) { $scope.objbrowserName = "Safari";  
     }  
+    
+   //session timeout code start here
+       function closeModals() {
+        if ($scope.warning) {
+           $mdDialog.hide()
+          $scope.warning = null;
+        }
 
+        if ($scope.timedout) {
+          $mdDialog.hide()
+          $scope.timedout = null;
+          //HTTP request to end the user's session and send them to a log in screen.
+        }
+      }
+
+     $scope.$on('IdleStart', function() {
+        closeModals();
+       $scope.warning=$mdDialog.show({
+              controller: 'templateController',
+                  clickOutsideToClose: false,
+                  templateUrl: 'app/template/warning.html'
+                  
+               });
+      });
+      $scope.$on('IdleWarn', function(e, countdown) {
+        //console.log(countdown);
+        // follows after the IdleStart event, but includes a countdown until the user is considered timed out
+        // the countdown arg is the number of seconds remaining until then.
+        // you can change the title or display a warning dialog from here.
+        // you can let them resume their session by calling Idle.watch()
+       // Idle.watch();
+    });
+
+     $scope.$on('IdleEnd', function() {
+        closeModals();
+      });
+
+
+     $scope.$on('IdleTimeout', function() {
+        closeModals();
+        $scope.timedout = $mdDialog.show({
+              controller: 'templateController',
+                  clickOutsideToClose: true,
+                  templateUrl: 'app/template/logout.html'
+                  
+               });
+      });
+
+
+   //session timeout code end here
+    var listOfDashboard;
     $rootScope.score_card_test =0;
     //Here system checks if there is an existing dashboard that user wants to see  
     if($stateParams.dashboardId){
        $rootScope.createNew = false;
+       var idsid=$rootScope.user;
       //Making API call to get dashboard data
-      $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
+      $rootScope.myPromise = dashBoardsFactory.show({idsid:idsid,dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) { 
         $rootScope.placeholder.dashboard = data; 
+        listOfDashboard=angular.copy(data)
+        if(data !== undefined && data.components !== undefined){
+                  for(var i=0;i<data.components.length;i++){
+
+                     if(data.components[i].secured !== undefined && data.components[i].secured){
+                        $scope.isDisableAction=true;
+                        break;
+                     }
+                  }
+                }
         if($rootScope.placeholder.dashboard.meta){
           $rootScope.meta =  $rootScope.placeholder.dashboard.meta
           if(!$rootScope.meta.details[3]){
@@ -55,15 +117,13 @@ angular.module('sasaWebApp')
             $rootScope.placeholder.textBoxes.push(data['components'][i]);
           }
         }
-        // $timeout( function(){ 
-          //$scope.showLoading=false;
-          //  }, 
-          // 3000);
+       
           
         messageCenterService.add('success','Dashboard loaded successfully',{timeout: 10000});
       }, function (err) {
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
       });
+
     }
 
     // Print Dashboard to document
@@ -94,13 +154,31 @@ angular.module('sasaWebApp')
     $scope.launchSave = function () {
       var dlg = dialogs.create('app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
+
           $rootScope.placeholder.dashboard["name"] = data.name;
           $rootScope.placeholder.dashboard["description"] = data.description;
+          
           parentService.createDBoard();
           $rootScope.placeholder.edited = false;
         });   
     }  
-
+    
+   $scope.openUniqueEamListModal=function(){
+                // var items={
+                //   uniqueNameUrlList:uniqueNameUrlList
+                // };
+                 $mdDialog.show({
+                    controller: 'uniqueEamListController',
+                        clickOutsideToClose: false,
+                        templateUrl: 'app/template/uniqueEamList.html',
+                        locals: {
+                        item: listOfDashboard.components
+                        }
+                        
+                     });
+         
+            
+        };
     //Watch leftsidebar
     $scope.$watch(function () {
           return $rootScope.closeLeftSidebar;
@@ -157,15 +235,26 @@ angular.module('sasaWebApp')
                         $scope.status = 'Could not delete dashboard.';
                   });
             };
-
+    $rootScope.resizeDone=false;
     //Below it watches for any changes in movement of metrics on the dashboard and resize 
     $scope.gridsterDashboardOpts = {
       resizable: {
          enabled: true,
          handles: ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'],
-         start: function(event, $element, widget) {}, // optional callback fired when resize is started,
-         resize: function(event, $element, widget) {}, // optional callback fired when item is resized,
-         stop: function(event, $element, widget) {$rootScope.placeholder.edited = true;} // optional callback fired when item is finished resizing
+         start: function(event, $element, widget) {
+          $rootScope.resizeDone=true;
+         }, // optional callback fired when resize is started,
+         resize: function(event, $element, widget) {
+          //console.log("i am here");
+           
+
+         }, // optional callback fired when item is resized,
+         stop: function(event, $element, widget) {
+          $rootScope.$broadcast('myCustomeEvent',"data");
+            $rootScope.resizeDone=true;
+            $rootScope.placeholder.edited = true;
+         // console.log($rootScope.placeholder.edited);
+         } // optional callback fired when item is finished resizing
       },
       draggable: {
          enabled: true, // whether dragging items is supported
@@ -440,6 +529,7 @@ $scope.isExist=function(key,value,list){
       for (var i = 0; i<metrics.length; i++) {
         if(metrics[i].name!==undefined){
           var k=true;
+          if(!angular.isUndefined(metrics[i].measures)){
           for (var j = 0; j < metrics[i].measures.length;j++) {
           if(metrics[i].measures[j].scorecard_data && metrics[i].measures[j].active && metrics[i].measures[j].plottable){
             if(k){
@@ -452,6 +542,8 @@ $scope.isExist=function(key,value,list){
             $scope.measureList.push(obj);
           }
           }
+        }
+
         } 
       };
       //Loop to handle missing values that are being passed from back end

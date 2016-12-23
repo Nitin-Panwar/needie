@@ -12,6 +12,7 @@ angular.module('sasaWebApp')
         responseType: 'json',
         isArray: true,
         param: {
+          idsid: {}
         }
       },
       delete:{
@@ -28,7 +29,8 @@ angular.module('sasaWebApp')
         headers:config,
         responseType:'json',
         param:{
-          dashBoard:{}
+          dashBoard:{},
+          idsid: {}
         }
       },
       save: {
@@ -45,6 +47,7 @@ angular.module('sasaWebApp')
         headers: config,
         responseType: 'json',
         param: {
+          idsid: {},
           dashboardId:{},
           filters:{}
         }
@@ -75,7 +78,8 @@ angular.module('sasaWebApp')
         responseType: 'json',
         isArray: true,
         param: {
-          idsid: {}
+          idsid: {},
+          owner_idsid:{}
           
         }
       }

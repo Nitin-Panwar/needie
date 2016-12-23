@@ -49,7 +49,7 @@ angular.module('sasaWebApp')
 
 
         //function to change x axis 
-        
+            
         scope.changeXaxis=function(type){
           scope.options5.changeXaxis=true
           if(type=='WW'){
@@ -75,7 +75,27 @@ angular.module('sasaWebApp')
           parentService.placeholderAdd('duplicatemetric',metricData);
         }
 
-        // this function launches the dialogs
+        scope.openEamLink=function(metricName,url){
+          if(url !== undefined){
+                var items={
+                  metricName:metricName,
+                  url:url
+                };
+                 $mdDialog.show({
+                    controller: 'eamLinkController',
+                        clickOutsideToClose: false,
+                        templateUrl: 'app/access/eamLink.html',
+                        locals: {
+                        item: items
+                        }
+                        
+                     });
+         }
+            
+        };
+
+
+        //this function launches the dialogs
         scope.launch = function(ev,which,metricData){
           var tab = which
           $mdDialog.show({
@@ -98,7 +118,7 @@ angular.module('sasaWebApp')
                   scope.metricData.gridColumns = data;  
                   break;
                 case 'filter':
-                 $rootScope.cnt++;
+                 scope.cnt++;
                   scope.metricData.filters = data;
                   for(var key in scope.metricData.filters){
                     if(scope.metricData.filters[key].length === 0)
@@ -112,15 +132,28 @@ angular.module('sasaWebApp')
                       metricData.measures[i][key] = data[i][key];
                     }
                   }
+                  scope.cnt = data['cnt'];
+                  delete data['cnt'];
                   break;
                 case 'visualization':
                   if(scope.metricData['distributions'] && scope.metricData['distributions'].length>0) {
                     for(var key in data){
                         scope.metricData['distributions'][0][key] = data[key];
                       
+                     }
                     }
-                  }
-                  scope.getMetric();
+                    var vizInputflag=scope.metricData['distributions'][0]['vizInputflag'];
+                    //var vizConfgflag=scope.metricData['distributions'][0]['vizConfgflag'];
+
+                    if(vizInputflag === true){
+                      scope.getMetric();
+                     }
+                     // if(vizInputflag === false && vizConfgflag === true){
+                     //  scope.options5.showLabels=true;
+                     // }
+                     // if(vizInputflag === false && vizConfgflag === false){
+                     //  scope.options5.showLabels=false;
+                     // }
                   break;
                 default:
                   return
@@ -130,15 +163,18 @@ angular.module('sasaWebApp')
         }
     
 
-       $rootScope.cnt=0;
+       scope.cnt=0;
         //This function watches the changes in global filter values
         scope.$watch(function () {
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
-            scope.getMetric();
-            $rootScope.cnt++;
-           // scope.APIcall = false;
+
+              if(scope.metricData.secured !== true && scope.metricData._id !== undefined){
+                scope.getMetric();
+                scope.cnt++;
+              }
+           
           }          
         });
 
@@ -161,7 +197,7 @@ angular.module('sasaWebApp')
               var callAPI = false;
               for (var i = 0; i < scope.metricData.measures.length; i++) {
                 if(scope.metricData.measures[i]['scorecard_data']){
-                  if(scope.metricData.measures[i]['scorecard_data'].length ===0 && scope.metricData.measures[i].active && $rootScope.cnt > 0){
+                  if(scope.metricData.measures[i]['scorecard_data'].length ===0 && scope.metricData.measures[i].active && scope.cnt > 0){
                     callAPI = true;
                     break;
                   }
@@ -169,7 +205,7 @@ angular.module('sasaWebApp')
               };
               if(callAPI == true){
                 scope.getMetric();
-                $rootScope.cnt=0;
+                scope.cnt=0;
               }
             }
           }
@@ -188,7 +224,7 @@ angular.module('sasaWebApp')
             scope.requestPromise = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
               //console.log(response);
               $rootScope.placeholder['metric'][scope.metricIndex]=response;
-              $rootScope.cnt=0;
+              scope.cnt=0;
               delete $rootScope.promiseObject[scope.metricIndex];                                 
             });
             $rootScope.promiseObject[scope.metricIndex] = scope.requestPromise;
@@ -197,7 +233,7 @@ angular.module('sasaWebApp')
               arr.push($rootScope.promiseObject[key])
             }          
             $rootScope.myPromise = arr; 
-            $rootScope.cnt=0;
+            scope.cnt=0;
           }
           else{
             scope.metricLoader = metricsFactory.getByObject({metric: scope.metricData, filters: $rootScope.globalQuery,meta:$rootScope.meta}).$promise.then(function (response) {
