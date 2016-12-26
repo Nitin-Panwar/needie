@@ -204,9 +204,12 @@ angular.module('sasaWebApp')
       $scope.tempData.filterkey = null
     }
   }
+  //Check if any  changes for x_Axis dropdown values
   $scope.getX_Axis=function(){
     $scope.getVizDetailsObjectState();
   };
+
+  //Check if any  changes for x_AxisValues dropdown values
   $scope.getX_AxisValues=function(){
      $scope.getVizDetailsObjectState();
   };
@@ -214,9 +217,13 @@ angular.module('sasaWebApp')
   //   $scope.checkShowDataLabel();
     
   // };
+
+  //Check if any  changes for group_by dropdown values
   $scope.getGroup_by=function(){
     $scope.getVizDetailsObjectState();
   }
+
+  //Check if any  changes for sortbyaxis radio button values
   $scope.getSortByAxis=function(){
     $scope.getVizDetailsObjectState();
   };
@@ -555,7 +562,9 @@ angular.module('sasaWebApp')
   };
    
   
-
+/*
+  Check if any changes happend in visualization objects.based on the we enable and disable the apply button
+*/
    $scope.getVizDetailsObjectState=function(){
            $scope.vizInputflag=false;
            $scope.defaultViz=false;

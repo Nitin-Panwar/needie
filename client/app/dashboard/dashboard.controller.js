@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs,$mdDialog,$http,Idle,Keepalive) {   
+  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs,$mdDialog) {   
     //loading image
       //$scope.showLoading=true;
     //Creating placeholder 
@@ -30,55 +30,7 @@ angular.module('sasaWebApp')
     else if ((objAgent.indexOf("Safari"))!=-1) { $scope.objbrowserName = "Safari";  
     }  
     
-   //session timeout code start here
-       function closeModals() {
-        if ($scope.warning) {
-           $mdDialog.hide()
-          $scope.warning = null;
-        }
-
-        if ($scope.timedout) {
-          $mdDialog.hide()
-          $scope.timedout = null;
-          //HTTP request to end the user's session and send them to a log in screen.
-        }
-      }
-
-     $scope.$on('IdleStart', function() {
-        closeModals();
-       $scope.warning=$mdDialog.show({
-              controller: 'templateController',
-                  clickOutsideToClose: false,
-                  templateUrl: 'app/template/warning.html'
-                  
-               });
-      });
-      $scope.$on('IdleWarn', function(e, countdown) {
-        //console.log(countdown);
-        // follows after the IdleStart event, but includes a countdown until the user is considered timed out
-        // the countdown arg is the number of seconds remaining until then.
-        // you can change the title or display a warning dialog from here.
-        // you can let them resume their session by calling Idle.watch()
-       // Idle.watch();
-    });
-
-     $scope.$on('IdleEnd', function() {
-        closeModals();
-      });
-
-
-     $scope.$on('IdleTimeout', function() {
-        closeModals();
-        $scope.timedout = $mdDialog.show({
-              controller: 'templateController',
-                  clickOutsideToClose: true,
-                  templateUrl: 'app/template/logout.html'
-                  
-               });
-      });
-
-
-   //session timeout code end here
+   
     var listOfDashboard;
     $rootScope.score_card_test =0;
     //Here system checks if there is an existing dashboard that user wants to see  
@@ -88,10 +40,16 @@ angular.module('sasaWebApp')
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({idsid:idsid,dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) { 
         $rootScope.placeholder.dashboard = data; 
-        listOfDashboard=angular.copy(data)
+        listOfDashboard=angular.copy(data);//copy the dashboard list to a local variable for sending data to eam url list modal.
+
+          /*
+             Code for checking if any secured metric are there in the dashboard list ,
+              if there disable some action  like save,send mail etc in metric card view  and display a warning 
+              message in metric card and score card view 
+              
+            */
         if(data !== undefined && data.components !== undefined){
                   for(var i=0;i<data.components.length;i++){
-
                      if(data.components[i].secured !== undefined && data.components[i].secured){
                         $scope.isDisableAction=true;
                         break;
@@ -124,6 +82,7 @@ angular.module('sasaWebApp')
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
       });
 
+      
     }
 
     // Print Dashboard to document
@@ -163,10 +122,11 @@ angular.module('sasaWebApp')
         });   
     }  
     
+   /*
+      if one of the metric is secured ,on click on entitlement button it will open a eam list modal 
+      where we will see the metric name and its url
+   */ 
    $scope.openUniqueEamListModal=function(){
-                // var items={
-                //   uniqueNameUrlList:uniqueNameUrlList
-                // };
                  $mdDialog.show({
                     controller: 'uniqueEamListController',
                         clickOutsideToClose: false,

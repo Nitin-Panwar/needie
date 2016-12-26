@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('leftSidebar', function ($window,$rootScope, filtersFactory, messageCenterService, $stateParams, workflow, parentService, usersFactory,$http,$mdDialog) {
+  .directive('leftSidebar', function ($window,$rootScope, filtersFactory, messageCenterService, $stateParams, workflow, parentService, usersFactory,$mdDialog) {
     return {
       templateUrl: 'components/directives/left-sidebar/left-sidebar.html',
       restrict: 'EA',
@@ -75,7 +75,7 @@ angular.module('sasaWebApp')
 	    		scope.showmydashboards = false;
 	    		scope.showfilters = false;
 	    	}
-       // $http.get('data/workflow.json').success(function (data){
+       // $http.get('app/data/workflow.json').success(function (data){
        //        scope.dashboardList = data;  
 
 
