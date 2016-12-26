@@ -37,6 +37,7 @@ angular.module('sasaWebApp')
     if($stateParams.dashboardId){
        $rootScope.createNew = false;
        var idsid=$rootScope.user;
+       console.log(idsid)
       //Making API call to get dashboard data
       $rootScope.myPromise = dashBoardsFactory.show({idsid:idsid,dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) { 
         $rootScope.placeholder.dashboard = data; 
