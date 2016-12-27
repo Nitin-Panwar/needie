@@ -49,7 +49,7 @@ angular.module('sasaWebApp')
 
 
         //function to change x axis 
-        
+            
         scope.changeXaxis=function(type){
           scope.options5.changeXaxis=true
           if(type=='WW'){
@@ -74,8 +74,31 @@ angular.module('sasaWebApp')
         scope.createDuplicate = function(metricData){
           parentService.placeholderAdd('duplicatemetric',metricData);
         }
+        
+        /*
+          open an EAM link from metric card view if any metric is secured.
+        */
+        scope.openEamLink=function(metricName,url){
+          if(url !== undefined){
+                var items={
+                  metricName:metricName,
+                  url:url
+                };
+                 $mdDialog.show({
+                    controller: 'eamLinkController',
+                        clickOutsideToClose: false,
+                        templateUrl: 'app/access/eamLink.html',
+                        locals: {
+                        item: items
+                        }
+                        
+                     });
+         }
+            
+        };
 
-        // this function launches the dialogs
+
+        //this function launches the dialogs
         scope.launch = function(ev,which,metricData){
           var tab = which
           $mdDialog.show({
@@ -120,9 +143,20 @@ angular.module('sasaWebApp')
                     for(var key in data){
                         scope.metricData['distributions'][0][key] = data[key];
                       
+                     }
                     }
-                  }
-                  scope.getMetric();
+                    var vizInputflag=scope.metricData['distributions'][0]['vizInputflag'];
+                    //var vizConfgflag=scope.metricData['distributions'][0]['vizConfgflag'];
+
+                    if(vizInputflag === true){//if any input is got changed in the visualization screen
+                      scope.getMetric();
+                     }
+                     // if(vizInputflag === false && vizConfgflag === true){
+                     //  scope.options5.showLabels=true;
+                     // }
+                     // if(vizInputflag === false && vizConfgflag === false){
+                     //  scope.options5.showLabels=false;
+                     // }
                   break;
                 default:
                   return
@@ -138,9 +172,11 @@ angular.module('sasaWebApp')
           return $rootScope.applyFilter;
         }, function(newValue, oldValue, scope) {       
           if(newValue !== oldValue){
-            scope.getMetric();
-            scope.cnt++;
-           // scope.APIcall = false;
+            //In case of secured metrics we are not going call getMetrics api for global filter
+              if(scope.metricData.secured !== true && scope.metricData._id !== undefined){
+                scope.getMetric();
+                scope.cnt++;
+              }
           }          
         });
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs,$mdDialog) {   
+  .controller('DashboardCtrl', function ($scope, $rootScope,$timeout, filtersFactory, $stateParams, dashBoardsFactory, usersFactory, $location, messageCenterService, parentService, dialogs,$mdDialog,webServiceURL,$http) {   
     //loading image
       //$scope.showLoading=true;
     //Creating placeholder 
@@ -18,7 +18,8 @@ angular.module('sasaWebApp')
     $rootScope.applyFilter = 0;
     //Code to detect browser info.
     var objAgent = navigator.userAgent; 
-    $scope.objbrowserName = navigator.appName; 
+    $scope.objbrowserName = navigator.appName;
+    $scope.isDisableAction=false; 
     //In Chrome 
     if ((objAgent.indexOf("Chrome"))!=-1) { $scope.objbrowserName = "Chrome"; } 
     //In Microsoft internet explorer 
@@ -28,14 +29,53 @@ angular.module('sasaWebApp')
     // In Safari 
     else if ((objAgent.indexOf("Safari"))!=-1) { $scope.objbrowserName = "Safari";  
     }  
-
+    
+   
+    var listOfDashboard;
     $rootScope.score_card_test =0;
     //Here system checks if there is an existing dashboard that user wants to see  
     if($stateParams.dashboardId){
        $rootScope.createNew = false;
+       var idsid=$rootScope.user;
       //Making API call to get dashboard data
-      $rootScope.myPromise = dashBoardsFactory.show({dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) {         
-        $rootScope.placeholder.dashboard = data; 
+        if(idsid === undefined){
+               $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
+                      $rootScope.userDetails = response.data.user;
+                      $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase(); 
+                      var idsid=$rootScope.user;
+                      getDashboard(idsid);
+                      
+                      },function (err) {
+                          // redirect user to access denied page
+                          $location.url('/accessDenied')
+                          messageCenterService.add('danger','Could not login!!!',{ status: messageCenterService.status.permanent });
+                      }) 
+
+        }
+        else{
+             getDashboard(idsid);
+            }
+    }
+
+    function getDashboard(idsid){
+         $rootScope.myPromise = dashBoardsFactory.show({idsid:idsid,dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) { 
+                  $rootScope.placeholder.dashboard = data; 
+                  listOfDashboard=angular.copy(data);//copy the dashboard list to a local variable for sending data to eam url list modal.
+
+          /*
+             Code for checking if any secured metric are there in the dashboard list ,
+              if there disable some action  like save,send mail etc in metric card view  and display a warning 
+              message in metric card and score card view 
+              
+            */
+        if(data !== undefined && data.components !== undefined){
+                  for(var i=0;i<data.components.length;i++){
+                     if(data.components[i].secured !== undefined && data.components[i].secured){
+                        $scope.isDisableAction=true;
+                        break;
+                     }
+                  }
+                }
         if($rootScope.placeholder.dashboard.meta){
           $rootScope.meta =  $rootScope.placeholder.dashboard.meta
           if(!$rootScope.meta.details[3]){
@@ -46,25 +86,31 @@ angular.module('sasaWebApp')
         // update filters on front end
         $rootScope.globalQuery = $rootScope.placeholder.dashboard.filters;      
         //Add data to placeholder
-        for(var i=0;i<data['components'].length;i++)
-        {
-          if(data['components'][i]['type']=='metric'){
-            $rootScope.placeholder.metric.push(data['components'][i]);
-          }
-          if(data['components'][i]['type']=='textBox'){
-            $rootScope.placeholder.textBoxes.push(data['components'][i]);
-          }
-        }
-        // $timeout( function(){ 
-          //$scope.showLoading=false;
-          //  }, 
-          // 3000);
+        if(data['components'] !==undefined){
+            for(var i=0;i<data['components'].length;i++)
+            {
+              if(data['components'][i]['type']=='metric'){
+                $rootScope.placeholder.metric.push(data['components'][i]);
+              }
+              if(data['components'][i]['type']=='textBox'){
+                $rootScope.placeholder.textBoxes.push(data['components'][i]);
+              }
+            }
+       }
           
         messageCenterService.add('success','Dashboard loaded successfully',{timeout: 10000});
       }, function (err) {
-        messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
+        
+        if(err.statusText === "UNAUTHORIZED"){
+           messageCenterService.add('danger',err.data.message,{timeout: 10000});
+
+         }
+         else{
+               messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
+         }
       });
-    }
+
+    };
 
     // Print Dashboard to document
     $scope.save2document = function (argument) {
@@ -94,13 +140,32 @@ angular.module('sasaWebApp')
     $scope.launchSave = function () {
       var dlg = dialogs.create('app/dashboard/dashboard_save_dialog.html','DashboardSaveCtrl', $rootScope.placeholder.dashboard,'sm');              
         dlg.result.then(function(data){
+
           $rootScope.placeholder.dashboard["name"] = data.name;
           $rootScope.placeholder.dashboard["description"] = data.description;
+          
           parentService.createDBoard();
           $rootScope.placeholder.edited = false;
         });   
     }  
-
+    
+   /*
+      if one of the metric is secured ,on click on entitlement button it will open a eam list modal 
+      where we will see the metric name and its url
+   */ 
+   $scope.openUniqueEamListModal=function(){
+                 $mdDialog.show({
+                    controller: 'uniqueEamListController',
+                        clickOutsideToClose: false,
+                        templateUrl: 'app/template/uniqueEamList.html',
+                        locals: {
+                        item: listOfDashboard.components
+                        }
+                        
+                     });
+         
+            
+        };
     //Watch leftsidebar
     $scope.$watch(function () {
           return $rootScope.closeLeftSidebar;
@@ -157,15 +222,26 @@ angular.module('sasaWebApp')
                         $scope.status = 'Could not delete dashboard.';
                   });
             };
-
+    $rootScope.resizeDone=false;
     //Below it watches for any changes in movement of metrics on the dashboard and resize 
     $scope.gridsterDashboardOpts = {
       resizable: {
          enabled: true,
          handles: ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'],
-         start: function(event, $element, widget) {}, // optional callback fired when resize is started,
-         resize: function(event, $element, widget) {}, // optional callback fired when item is resized,
-         stop: function(event, $element, widget) {$rootScope.placeholder.edited = true;} // optional callback fired when item is finished resizing
+         start: function(event, $element, widget) {
+          $rootScope.resizeDone=true;
+         }, // optional callback fired when resize is started,
+         resize: function(event, $element, widget) {
+          //console.log("i am here");
+           
+
+         }, // optional callback fired when item is resized,
+         stop: function(event, $element, widget) {
+          $rootScope.$broadcast('myCustomeEvent',"data");
+            $rootScope.resizeDone=true;
+            $rootScope.placeholder.edited = true;
+         // console.log($rootScope.placeholder.edited);
+         } // optional callback fired when item is finished resizing
       },
       draggable: {
          enabled: true, // whether dragging items is supported
@@ -440,6 +516,7 @@ $scope.isExist=function(key,value,list){
       for (var i = 0; i<metrics.length; i++) {
         if(metrics[i].name!==undefined){
           var k=true;
+          if(!angular.isUndefined(metrics[i].measures)){
           for (var j = 0; j < metrics[i].measures.length;j++) {
           if(metrics[i].measures[j].scorecard_data && metrics[i].measures[j].active && metrics[i].measures[j].plottable){
             if(k){
@@ -452,6 +529,8 @@ $scope.isExist=function(key,value,list){
             $scope.measureList.push(obj);
           }
           }
+        }
+
         } 
       };
       //Loop to handle missing values that are being passed from back end

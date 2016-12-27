@@ -57,12 +57,14 @@
 			<!--Dashboard buttons section end  -->
 			<span class="col-sm-10">	
 				<span class="pull-right">
-					<button type="button" class="btn btn-primary" ng-click="launchSave()">Save</button>
-				  	<button type="button" class="btn btn-default btn-md" ng-click="addTextBox()" ng-if="meta.view_type=='metriccard'"><i class="fa fa-text-width"></i> Add Text</button>	
+				    <button  type="button" class="btn btn-default" ng-show="isDisableAction" ng-click="openUniqueEamListModal()">
+				    	<i class="glyphicon glyphicon-lock gi-2x"></i> Entitlement </button>
+					<button type="button" class="btn btn-primary" ng-disabled="isDisableAction" ng-click="launchSave()">Save</button>
+				  	<button type="button" class="btn btn-default btn-md" ng-disabled="isDisableAction"  ng-click="addTextBox()" ng-if="meta.view_type=='metriccard'"><i class="fa fa-text-width"></i> Add Text</button>	
 				  	<span ng-hide ="placeholder.dashboard._id === undefined || placeholder.dashboard._id === 1">
 						<button type="button" class="btn btn-default btn-md" ng-click="setHomepage()"><i class="fa fa-home"></i> Set HomePage </button>
 						<button type="button" class="btn btn-default btn-md" ng-click="setFavorite()"><i class="fa fa-heart"></i> Set Favorite </button>		
-						<button type="button" class="btn btn-default btn-md" ng-click="save2document()" ><i class="fa fa-envelope-o"></i> Send Mail </button>
+						<button type="button" ng-disabled="isDisableAction" class="btn btn-default btn-md" ng-click="save2document()" ><i class="fa fa-envelope-o"></i> Send Mail </button>
 						<button type="button" class="btn btn-default btn-md" ng-click="deleteConfirm($event)" ng-hide="placeholder.dashboard.owner.toUpperCase() !== user.toUpperCase()"><i class="fa fa-trash"></i> Delete </button>
 					</span>
 					<form class="form-inline pull-right" style="margin-left: 13px">
@@ -80,6 +82,11 @@
 		<!-- MetriccardView view -->
 		<section ng-show="meta.view_type=='metriccard'" ng-include="'app/dashboard/metriccardView.html'"></section>
 		<!-- MetriccardView end -->
+
+		<section class="progress-bar progress-bar-warning col-md-11 container-fluid row"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+		 style="position: fixed;z-index: 1000000;overflow: hidden;bottom: 0px;left: 0px;height: 25px;width: 100%;" ng-show="isDisableAction">
+   			<span style="color:black;font-size:15;">This dashboard contains secured metrics. To get access   </span><a style="margin-left:5px;font-weight:bold;text-decoration: underline;cursor: pointer" ng-click="openUniqueEamListModal()">click here</a>
+    		</section>
 	</section>
 </section>
 

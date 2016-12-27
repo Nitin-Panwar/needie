@@ -33,6 +33,16 @@ angular.module('sasaWebApp')
 			}, function (err) {
 				messageCenterService.add('danger', 'Could not add metric to dashbaord', {timeout: 5000});
 			})
+
+      // var id=item;
+      // $http.get('data/MIVolumeMetric.json').success(function (data){
+      //         console.log(data);
+      //           data.size = {x: 2};
+      //           data.type='metric';                 
+      //           $rootScope.placeholder[type].push(data);
+
+
+      //      }); 
 		}   
 	};
 
@@ -50,6 +60,7 @@ angular.module('sasaWebApp')
 
 	//Function to create new dashboard
 	this.createDBoard=function(){	
+    var idsid=$rootScope.user;
       var dashboardObj = {};
       dashboardObj.components = [];
       var placeholder = {};
@@ -65,7 +76,9 @@ angular.module('sasaWebApp')
       for (var i = 0; i < $rootScope.placeholder.textBoxes.length; i++) {	        	      	
         dashboardObj.components[dashboardObj.components.length] = $rootScope.placeholder.textBoxes[i];	        
       };
-      dashboardObj.name = $rootScope.placeholder.dashboard.name;	      
+      dashboardObj.name = $rootScope.placeholder.dashboard.name;
+      dashboardObj.view_restriction=$rootScope.placeholder.dashboard.view_restriction;
+      dashboardObj.access_list=	$rootScope.placeholder.dashboard.access_list;      
       if($rootScope.placeholder.dashboard.description){
         dashboardObj.description = $rootScope.placeholder.dashboard.description;  
       }
@@ -86,14 +99,14 @@ angular.module('sasaWebApp')
       if($rootScope.placeholder.dashboard._id){	              
       	dashboardObj._id = $rootScope.placeholder.dashboard._id;            
         //Calling update dashboard factory service
-        $rootScope.myPromise=dashBoardsFactory.update({dashBoard:dashboardObj}).$promise.then(function (data){
+        $rootScope.myPromise=dashBoardsFactory.update({dashboard:dashboardObj,idsid:idsid}).$promise.then(function (data){
         	messageCenterService.add('success', 'Dashboard updated successfully', { timeout: 5000 });
       	},function (err) {
       		messageCenterService.add('danger','Not able to save dashboard',{timeout: 10000});
       	})
       }
-      else{   	        
-        $rootScope.myPromise=dashBoardsFactory.save({dashboard:dashboardObj}).$promise.then(function (data) {
+      else{  
+        $rootScope.myPromise=dashBoardsFactory.save({dashboard:dashboardObj,idsid:idsid}).$promise.then(function (data) {
           var dashboardId = data['_id'];
           messageCenterService.add('success', 'Dashboard saved successfully', { timeout: 5000 }); 
           //Save dashboardid in user metadata

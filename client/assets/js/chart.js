@@ -272,6 +272,7 @@
       */
       if(chartType[0] != "pie" && x!=undefined)
       {
+
         if(orderList.length > 0)
         {
           x.addOrderRule(yAxis[0],orderList[1]);
@@ -279,7 +280,9 @@
         else
         {
           x.addOrderRule(xAxis);
+
         }
+
 
       }
 
@@ -522,6 +525,7 @@
 
       if(showLabels)
       {
+
         if(!aggrStackLabels)
           addRectLabels(s[0]);
         else
@@ -743,6 +747,7 @@
     
     function addHLines(chart)
     {
+    //  console.log(svg.selectAll("text"))
       var temp=0;
       if(chartType[0]=="pie") return;
       hLines.forEach(function (d,i){
@@ -754,18 +759,25 @@
           .style("stroke", d.color)
           .attr("dy", "5em")
           .attr("class", "hLines");
-        // if(temp==0){
-        //   svg.append("text")
-        //     .attr("x", chart1._xPixels()/2 + chart1._widthPixels()/2)
-        //     .attr("y", y[0]._scale(d.y)+10)
-        //     .attr("dy", ".35em")
-        //     .attr("text-anchor", "start")
-        //     .style("fill", d.color)
-        //     .text("Open");  
-        //     temp=1;
-        // }
+          // .attr('text','i am here');
+        if(temp==0){
+          svg.append("text")
+            .attr("x", chart1._xPixels()/2 + chart1._widthPixels()/2)
+            .attr("y", y[0]._scale(d.y)+-10)
+            .attr("dy", ".35em")
+            .attr("text-anchor", "start")
+            .style("fill", 'black')
+            .style("margin-to",'120px')
+            .text("Goal value: "+d.y);  
+           
+        }
       });
-
+// svg.append("text")
+//     .attr("transform", "translate(" + (width+3) + "," + y[0]._scale(d.y) + ")")
+//     .attr("dy", ".35em")
+//     .attr("text-anchor", "start")
+//     .style("fill", "steelblue")
+//     .text("Close");
       /*if(chartType[0]=="pie") return;
        var obj = {};
        if(sHLines==undefined)
@@ -845,11 +857,14 @@
       //chart1.series.pop();
     }
 
-    function addRectLabels(s)
+    
+   function addRectLabels(s)
     {
-      //if(aggrStackLabels) return;
+     // var temp=[]
+      var temp=0
       s.afterDraw = function (shape, data) {
-        // Get the shape as a d3 selection
+
+        //var id = shape["id"]
         var s = d3.select(shape),
           rect = {
             x: parseFloat(s.attr("x")),
@@ -857,26 +872,30 @@
             width: parseFloat(s.attr("width")),
             height: parseFloat(s.attr("height"))
           };
-        // Only label bars where the text can fit
-        if (rect.height >= 8) {
+        if (rect.height >= 8){
+          //temp.push(id);
           // Add a text label for the value
           svg.append("text")
             // Position in the centre of the shape (vertical position is
             // manually set due to cross-browser problems with baseline)
             .attr("x", rect.x + rect.width / 2)
-            .attr("y", rect.y + rect.height / 2+3.5)  //rect.y + rect.height / 2 + 3.5
+            .attr("y", rect.y -12)  //rect.y -12/rect.y + rect.height / 2+3.5
             .attr("class","labelConfig")
             // Centre align
             .style("text-anchor", "middle")
+            .style("fill", "#111")
+            //#696969
             //.style("font-size", "10px")
             //.style("font-family", "sans-serif")
             // Make it a little transparent to tone down the black
-            .style("opacity", checkOverlap)
+            .style("opacity", 0.5)
             // Format the number
             //.text(d3.format(",.1f")(data.yValue / 1000) + "k")
             //.text(d3.round((data.yValue/1000))+"k");
             .text(d3.round(chartType[0]=="bar"?data.yValue:data.xValue));
         }
+       temp++;
+        
       }
 
     }
@@ -885,7 +904,7 @@
     {
       s[0].afterDraw = function (shp, d, i) {
         var shapes = svg.selectAll("circle");
-
+           
         for (var i = 0; i < shapes[0].length; i++) {
           svg.append("text")
             .attr("x", parseFloat(shapes[0][i].getAttribute("cx")))
@@ -1298,8 +1317,9 @@
 
       //return plotChart_;
     }
-
+ 
     plotChart_.resize = function(){
+     
 
       svg.selectAll(".hLines").remove();
       //svg.selectAll(".vLines").remove();
@@ -1356,7 +1376,7 @@
       replaceCategories();
       if(x!=undefined)
         x.categLabels = categLabels;
-      //return plotChart_;
+               
     }
 
     function clone(obj)
