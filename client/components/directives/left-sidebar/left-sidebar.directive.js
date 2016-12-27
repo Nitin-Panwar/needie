@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sasaWebApp')
-  .directive('leftSidebar', function ($window,$rootScope, filtersFactory, messageCenterService, $stateParams, workflow, parentService, usersFactory) {
+  .directive('leftSidebar', function ($window,$rootScope, filtersFactory, messageCenterService, $stateParams, workflow, parentService, usersFactory,$mdDialog) {
     return {
       templateUrl: 'components/directives/left-sidebar/left-sidebar.html',
       restrict: 'EA',
@@ -69,23 +69,50 @@ angular.module('sasaWebApp')
 
 	    //This function gets a list of metrics and their workflows
 	    scope.getMetrics=function () {
+	    	var idsid = $rootScope.user;
 	    	scope.metriclist = !scope.metriclist;	    	
 	    	if(scope.metriclist){
 	    		scope.showmydashboards = false;
 	    		scope.showfilters = false;
 	    	}
-	    	workflow.get().$promise.then(function (data) {
+       // $http.get('app/data/workflow.json').success(function (data){
+       //        scope.dashboardList = data;  
+
+
+       //     }); 
+	    	workflow.get({idsid:idsid}).$promise.then(function (data) {
 	    		scope.dashboardList = data;
 	    	},function (err) {
 	    		messageCenterService.add('danger', 'Could Not Load Metrics', {timeout: 5000});	    		
 	    	});
-	    }
-
+	    };
+        
+        scope.openEamModal=function(metricName,url){
+        	var items={
+        		metricName:metricName,
+        		url:url
+        	};
+           $mdDialog.show({
+    		      controller: 'eamLinkController',
+                  clickOutsideToClose: false,
+                  templateUrl: 'app/access/eamLink.html',
+                  locals: {
+                  item: items
+                  }
+                  
+               });
+        }; 
 	    //This function adds metrics to dashboard
-	    scope.addMetric2Dashboard = function (argument) {
+	    scope.addMetric2Dashboard = function (argument,metricName,url) {
 	    	//Calling parent service function to add metric to dashbord
-	    	parentService.placeholderAdd('metric',argument);
-	    	$rootScope.placeholder.edited = true;
+            //if item.id is undefined .it means that user doesn't have access the particular metric and open the EAM link modal.
+	    	if(!angular.isUndefined(argument)){
+			    	parentService.placeholderAdd('metric',argument);
+			    	$rootScope.placeholder.edited = true;
+			    }
+			    else{
+			    	 scope.openEamModal(metricName,url);
+			    }
 	    };
 
 	    //This function is being used to determine whether 
