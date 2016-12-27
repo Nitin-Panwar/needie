@@ -1,12 +1,9 @@
 <md-dialog aria-label="Visualization" style="width:50%" ng-cloak>
-  
     <md-toolbar layout="row">
       <div class="md-toolbar-tools" layout-align="space-around center" style="background-color:#0071C5;color:white">
-        <h2><h3 style="margin-right:285px">Secured Metric</h3></h2> 
+        <h2><h3 style="margin-right:285px; margin-left: 180px;" >Secured Metric</h3></h2> 
       </div>
     </md-toolbar>
-   
-
     <md-dialog-content style="margin-top:20px;">
         <p style="text-align:center">
         You don't have permission to access <span style="font-weight:bold" ng-bind="metricName"></span> metric
@@ -14,15 +11,9 @@
        <p style="text-align:center">
         To access this  metric, please  <a ng-href="{{url}}" target="_blank" ng-click="closeModal()">Click Here</a>
        </p>
-       
       <md-divider ></md-divider>
     </md-dialog-content>
-        
-    
-
     <md-dialog-actions layout="row">
       <md-button id="btnClose" ng-click="cancel()" class="md-raised">Close</md-button>
-      
     </md-dialog-actions>
-
 </md-dialog>
