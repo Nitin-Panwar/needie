@@ -86,20 +86,28 @@ angular.module('sasaWebApp')
         // update filters on front end
         $rootScope.globalQuery = $rootScope.placeholder.dashboard.filters;      
         //Add data to placeholder
-        for(var i=0;i<data['components'].length;i++)
-        {
-          if(data['components'][i]['type']=='metric'){
-            $rootScope.placeholder.metric.push(data['components'][i]);
-          }
-          if(data['components'][i]['type']=='textBox'){
-            $rootScope.placeholder.textBoxes.push(data['components'][i]);
-          }
-        }
-       
+        if(data['components'] !==undefined){
+            for(var i=0;i<data['components'].length;i++)
+            {
+              if(data['components'][i]['type']=='metric'){
+                $rootScope.placeholder.metric.push(data['components'][i]);
+              }
+              if(data['components'][i]['type']=='textBox'){
+                $rootScope.placeholder.textBoxes.push(data['components'][i]);
+              }
+            }
+       }
           
         messageCenterService.add('success','Dashboard loaded successfully',{timeout: 10000});
       }, function (err) {
-        messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
+        
+        if(err.statusText === "UNAUTHORIZED"){
+           messageCenterService.add('danger',err.data.message,{timeout: 10000});
+
+         }
+         else{
+               messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
+         }
       });
 
     };
