@@ -18,8 +18,8 @@
                </thead>
                
                <tr ng-repeat = "nameUrllist in uniqueNameUrlList  track by $index">
-                  <td>{{nameUrllist.name}}</td>
-                  <td ><a ng-href="{{nameUrllist.url}}" target="_blank">{{nameUrllist.url}} </a></td>
+                  <td ng-bind="nameUrllist.name"></td>
+                  <td ><a ng-href="{{nameUrllist.url}}" target="_blank" ng-bind="nameUrllist.url"></a></td>
                </tr>
               
        </table>
