@@ -90,9 +90,9 @@
 						<section ng-show="isCollapsed">
 							<ul class="list-group" >
 								<li class="list-group-item text-capitalize" ng-repeat="item in value.members" ng-click="addMetric2Dashboard(item.id,item.name,item.url)" id="listItem">
-									<span class="sidebar-hover-effect blue-text">
+									<span class="sidebar-hover-effect blue-text" style="margin-right:18px">
 										 {{item.name}} &nbsp;&nbsp;&nbsp;
-										<span ng-show="show(item.id)"><i class="fa fa-check"></i></span>
+										<span ng-show="show(item.id)" ><i class="fa fa-check"></i></span>
 									</span>	
 									<span ng-if="item.secured === true" style="position: absolute;right: 5px;top: 8px" 
 									class="glyphicon glyphicon-lock"
