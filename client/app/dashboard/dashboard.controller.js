@@ -37,72 +37,30 @@ angular.module('sasaWebApp')
     if($stateParams.dashboardId){
        $rootScope.createNew = false;
        var idsid=$rootScope.user;
-       console.log(idsid+":   before call get idsid API")
       //Making API call to get dashboard data
         if(idsid === undefined){
                $rootScope.myPromise = $http.get(webServiceURL.loginUrl,{withCredentials:true}).then(function (response) {     
                       $rootScope.userDetails = response.data.user;
                       $rootScope.user = $rootScope.userDetails['idsid'].toLowerCase(); 
                       var idsid=$rootScope.user;
-                        console.log(idsid+":  after  get idsid value from API")
-                       $rootScope.myPromise = dashBoardsFactory.show({idsid:idsid,dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) { 
-                          $rootScope.placeholder.dashboard = data; 
-                          listOfDashboard=angular.copy(data);//copy the dashboard list to a local variable for sending data to eam url list modal.
-
-                                      /*
-                                         Code for checking if any secured metric are there in the dashboard list ,
-                                          if there disable some action  like save,send mail etc in metric card view  and display a warning 
-                                          message in metric card and score card view 
-                                          
-                                        */
-                                    if(data !== undefined && data.components !== undefined){
-                                              for(var i=0;i<data.components.length;i++){
-                                                 if(data.components[i].secured !== undefined && data.components[i].secured){
-                                                    $scope.isDisableAction=true;
-                                                    break;
-                                                 }
-                                              }
-                                            }
-                                    if($rootScope.placeholder.dashboard.meta){
-                                      $rootScope.meta =  $rootScope.placeholder.dashboard.meta
-                                      if(!$rootScope.meta.details[3]){
-                                        $rootScope.meta.details[3] = {'timeframe': 'historical','dimension': 'year','window_size': 0,"sequence":4}
-                                      }
-                                    }
-                              
-                                    // update filters on front end
-                                    $rootScope.globalQuery = $rootScope.placeholder.dashboard.filters;      
-                                    //Add data to placeholder
-                                    for(var i=0;i<data['components'].length;i++)
-                                    {
-                                      if(data['components'][i]['type']=='metric'){
-                                        $rootScope.placeholder.metric.push(data['components'][i]);
-                                      }
-                                      if(data['components'][i]['type']=='textBox'){
-                                        $rootScope.placeholder.textBoxes.push(data['components'][i]);
-                                      }
-                                    }
-                                   
-                                      
-                                    messageCenterService.add('success','Dashboard loaded successfully',{timeout: 10000});
-                                  }, function (err) {
-                                    messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
-                                  });
-
+                      getDashboard(idsid);
+                      
                       },function (err) {
                           // redirect user to access denied page
                           $location.url('/accessDenied')
                           messageCenterService.add('danger','Could not login!!!',{ status: messageCenterService.status.permanent });
                       }) 
 
-
-
         }
         else{
+             getDashboard(idsid);
+            }
+    }
 
-          $rootScope.myPromise = dashBoardsFactory.show({idsid:idsid,dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) { 
-        $rootScope.placeholder.dashboard = data; 
-        listOfDashboard=angular.copy(data);//copy the dashboard list to a local variable for sending data to eam url list modal.
+    function getDashboard(idsid){
+         $rootScope.myPromise = dashBoardsFactory.show({idsid:idsid,dashboardId:$stateParams.dashboardId, filters:{}}).$promise.then(function (data) { 
+                  $rootScope.placeholder.dashboard = data; 
+                  listOfDashboard=angular.copy(data);//copy the dashboard list to a local variable for sending data to eam url list modal.
 
           /*
              Code for checking if any secured metric are there in the dashboard list ,
@@ -144,13 +102,7 @@ angular.module('sasaWebApp')
         messageCenterService.add('danger','Could not load dashboard',{timeout: 10000});
       });
 
-
-        }
-
-
-      
-      
-    }
+    };
 
     // Print Dashboard to document
     $scope.save2document = function (argument) {
